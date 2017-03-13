@@ -1,15 +1,25 @@
-# opencvµ¼ÈëAndroid Studio·½·¨
+# opencvå¯¼å…¥Android Studioæ–¹æ³•
 
-¾­¹ýÒ»·¬¼èÄÑµÄ²Ù×÷£¬ÎÒ×Ü½á³öÁËÈçÏÂ·½·¨
+ç»è¿‡ä¸€ç•ªè‰°éš¾çš„æ“ä½œï¼Œæˆ‘æ€»ç»“å‡ºäº†å¦‚ä¸‹æ–¹æ³•
 
-0¡¢ÓÉÓÚÎÒ¸Ä¹ý¹¤³ÌµÄgradleÅäÖÃÎÄ¼þ£¬µ«ÊÇopencvÃ»´«ÉÏÀ´£¬ËùÒÔÄã´ó¸ÅÂÊ»ágradleÊ§°Ü
-1¡¢¹ÙÍøÉÏÏÂÔØopencv for android 3.2£¬È»ºó½âÑ¹Ëõ
-2¡¢AS->File->New->Import Module Ñ¡Ôñµ¼Èë(Ñ¹Ëõ°üÂ·¾¶)/sdk/javaÎÄ¼þ¼Ð£¬È»ºóµ¼ÈëÄ£¿éµÄÎÄ¼þ¼ÐÃûÍ³Ò»ÃüÃûÎªopenCVLibrary320
-3¡¢ÔÚµ¼ÈëµÄopenCVLibrary320ÎÄ¼þ¼ÐÄ¿Â¼ÏÂÐÞ¸Äbuild.gradleÎÄ¼þµÄ¸÷ÖÖ°æ±¾ºÅÓëÏîÄ¿Í¬²½
-4¡¢AS->File->Project Structure-->app->Dependenciesµã»÷¼ÓºÅÌí¼ÓModule Dependency£¬Ñ¡ÔñopenCVLibrary²¢È·ÈÏ
-5¡¢ÔÚapp/src/mainÄ¿Â¼ÏÂÐÂ½¨ÎÄ¼þ¼ÐjniLibs£¬È»ºó°Ñ(Ñ¹Ëõ°üÂ·¾¶)/sdk/native/libsÎÄ¼þ¼ÐÄ¿Â¼ÏÂËùÓÐÎÄ¼þ¿½ÖÁapp/src/main/jniLibs
-6¡¢ÖØÐÂGradle£¬ÈôÃ»ÓÐ±¨´íÔòµ¼Èë³É¹¦
-7¡¢Ê¹ÓÃopencvµÄÊ±ºòÐèÒªÔÚÃ¿¸öjavaÎÄ¼þ¿ªÍ·³öÐ´  static{ System.loadLibrary("opencv_java3"); } Óï¾ä£¬´Ó¶ø¿ÉÒÔ±ÜÃâÊÖ»ú¶ËÐè°²×°opencvManagerµÄÀ§¾³
-8¡¢¾­¹ýÒÔÉÏ²Ù×÷Ö®ºóÈç¹ûÓÐÕæ»ú¿ÉÒÔ³¢ÊÔÒ»ÏÂÔËÐÐapp£¨ÑùÀýÎÄ¼þMainActivity.java£©£¬Èç¹ûµã»÷°´Å¥ÄÜ¹»Õý³£ÇÐ»»£¬Ôò´ó¹¦¸æ³É
 
-Èç¹û»¹ÓÐÒÉÎÊ£¬ÇëÁªÏµÎÒ
+0ã€ç”±äºŽæˆ‘æ”¹è¿‡å·¥ç¨‹çš„gradleé…ç½®æ–‡ä»¶ï¼Œä½†æ˜¯opencvæ²¡ä¼ ä¸Šæ¥ï¼Œæ‰€ä»¥ä½ å¤§æ¦‚çŽ‡ä¼šgradleå¤±è´¥
+
+1ã€å®˜ç½‘ä¸Šä¸‹è½½opencv for android 3.2ï¼Œç„¶åŽè§£åŽ‹ç¼©
+
+2ã€AS->File->New->Import Module é€‰æ‹©å¯¼å…¥(åŽ‹ç¼©åŒ…è·¯å¾„)/sdk/javaæ–‡ä»¶å¤¹ï¼Œç„¶åŽå¯¼å…¥æ¨¡å—çš„æ–‡ä»¶å¤¹åç»Ÿä¸€å‘½åä¸ºopenCVLibrary320
+
+3ã€åœ¨å¯¼å…¥çš„openCVLibrary320æ–‡ä»¶å¤¹ç›®å½•ä¸‹ä¿®æ”¹build.gradleæ–‡ä»¶çš„å„ç§ç‰ˆæœ¬å·ä¸Žé¡¹ç›®åŒæ­¥
+
+4ã€AS->File->Project Structure-->app->Dependenciesç‚¹å‡»åŠ å·æ·»åŠ Module Dependencyï¼Œé€‰æ‹©openCVLibraryå¹¶ç¡®è®¤
+
+5ã€åœ¨app/src/mainç›®å½•ä¸‹æ–°å»ºæ–‡ä»¶å¤¹jniLibsï¼Œç„¶åŽæŠŠ(åŽ‹ç¼©åŒ…è·¯å¾„)/sdk/native/libsæ–‡ä»¶å¤¹ç›®å½•ä¸‹æ‰€æœ‰æ–‡ä»¶æ‹·è‡³app/src/main/jniLibs
+
+6ã€é‡æ–°Gradleï¼Œè‹¥æ²¡æœ‰æŠ¥é”™åˆ™å¯¼å…¥æˆåŠŸ
+
+7ã€ä½¿ç”¨opencvçš„æ—¶å€™éœ€è¦åœ¨æ¯ä¸ªjavaæ–‡ä»¶å¼€å¤´å‡ºå†™  static{ System.loadLibrary("opencv_java3"); } è¯­å¥ï¼Œä»Žè€Œå¯ä»¥é¿å…æ‰‹æœºç«¯éœ€å®‰è£…opencvManagerçš„å›°å¢ƒ
+
+8ã€ç»è¿‡ä»¥ä¸Šæ“ä½œä¹‹åŽå¦‚æžœæœ‰çœŸæœºå¯ä»¥å°è¯•ä¸€ä¸‹è¿è¡Œappï¼ˆæ ·ä¾‹æ–‡ä»¶MainActivity.javaï¼‰ï¼Œå¦‚æžœç‚¹å‡»æŒ‰é’®èƒ½å¤Ÿæ­£å¸¸åˆ‡æ¢ï¼Œåˆ™å¤§åŠŸå‘Šæˆ
+
+
+å¦‚æžœè¿˜æœ‰ç–‘é—®ï¼Œè¯·è”ç³»æˆ‘

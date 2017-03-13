@@ -6,3 +6,5 @@
 /build
 /captures
 .externalNativeBuild
+/openCVLibrary320
+/app/src/main/jniLibs

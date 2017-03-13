@@ -1,4 +1,4 @@
-package software.com.softwareengineering;
+package com.papermelody;
 
 import org.junit.Test;
 

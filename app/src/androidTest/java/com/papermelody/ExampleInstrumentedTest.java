@@ -1,4 +1,4 @@
-package software.com.softwareengineering;
+package com.papermelody;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("software.com.softwareengineering", appContext.getPackageName());
+        assertEquals("com.softwareengineering", appContext.getPackageName());
     }
 }

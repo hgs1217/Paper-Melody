@@ -1,9 +1,9 @@
-package software.com.softwareengineering.activity;
+package com.papermelody.activity;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-import software.com.softwareengineering.R;
+import com.papermelody.R;
 
 public class MainActivity extends AppCompatActivity {
 

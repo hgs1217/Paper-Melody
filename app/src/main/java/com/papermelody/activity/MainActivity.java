@@ -3,39 +3,42 @@ package com.papermelody.activity;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 
 import com.papermelody.R;
+import com.papermelody.R2;
 
 import org.opencv.android.Utils;
 import org.opencv.core.Mat;
 import org.opencv.imgproc.Imgproc;
 
-public class MainActivity extends AppCompatActivity {
+import butterknife.BindView;
 
-    static{ System.loadLibrary("opencv_java3"); }
+public class MainActivity extends BaseActivity {
+    /**
+     * 主页面
+     * 当前页面供导入opencv包时测试使用，之后的版本需要将整个页面重做
+     * 这个页面现在的一些写法，例如ButterKnife和lambda写法的使用，可作将来代码的模板风格参考
+     */
 
-    int i=0;
+    @BindView(R2.id.imageView)
+    ImageView imageView;
+    @BindView(R2.id.button)
+    Button button2;
+
+    private int i=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        ImageView imageView = (ImageView)findViewById(R.id.imageView);
+
         final Bitmap bitmap = ((BitmapDrawable) getResources().getDrawable(R.drawable.pyj)).getBitmap();
         imageView.setImageBitmap(bitmap);
 
-
-        final Button button2 = (Button)findViewById(R.id.button);
         button2.setText("转换");
-        button2.setOnClickListener(new Button.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
+        button2.setOnClickListener((View v) -> {
                 i++;
                 Mat rgbMat = new Mat();
                 Mat grayMat = new Mat();
@@ -52,8 +55,11 @@ public class MainActivity extends AppCompatActivity {
                     imageView.setImageBitmap(grayBmp);
                 else
                     imageView.setImageBitmap(bitmap);
-            }
+            });
+    }
 
-        });
+    @Override
+    protected int getContentViewId() {
+        return R.layout.activity_main;
     }
 }

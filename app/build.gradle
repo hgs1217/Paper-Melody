@@ -38,4 +38,5 @@ dependencies {
     compile 'com.jakewharton:butterknife:8.5.1'
     apt 'com.jakewharton:butterknife-compiler:8.5.1'
     compile project(':openCVLibrary320')
+    compile project(':openCVLibrary320')
 }

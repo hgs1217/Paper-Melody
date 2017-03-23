@@ -11,6 +11,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 
 import com.papermelody.R;
+import com.roughike.bottombar.BottomBar;
+import com.roughike.bottombar.OnTabClickListener;
 
 import org.opencv.android.Utils;
 import org.opencv.core.Mat;
@@ -45,40 +47,40 @@ public class MainActivity extends BaseActivity {
     @BindView(R.id.button_b4)
     Button buttonB4;
 
-    private int[] voiceResId = new int [] {R.raw.c4, R.raw.d4, R.raw.e4, R.raw.f4, R.raw.g4, R.raw.a4, R.raw.b4};
-    private String[] buttonString = new String [] {"C4", "D4", "E4", "F4", "G4", "A4", "B4"};
+    private int[] voiceResId = new int[]{R.raw.c4, R.raw.d4, R.raw.e4, R.raw.f4, R.raw.g4, R.raw.a4, R.raw.b4};
+    private String[] buttonString = new String[]{"C4", "D4", "E4", "F4", "G4", "A4", "B4"};
 
     private SoundPool mSoundPool;
-    private int[] voiceId = new int [7];
-    private int i=0;
+    private int[] voiceId = new int[7];
+    private int i = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Button[] buttonSound = new Button [] {buttonC4, buttonD4, buttonE4, buttonF4, buttonG4, buttonA4, buttonB4};
+        Button[] buttonSound = new Button[]{buttonC4, buttonD4, buttonE4, buttonF4, buttonG4, buttonA4, buttonB4};
 
         final Bitmap bitmap = ((BitmapDrawable) getResources().getDrawable(R.drawable.pyj)).getBitmap();
         imageImg.setImageBitmap(bitmap);
 
         buttonSwitch.setText("转换");
         buttonSwitch.setOnClickListener((View v) -> {
-                i++;
-                Mat rgbMat = new Mat();
-                Mat grayMat = new Mat();
-                //获取lena彩色图像所对应的像素数据
-                Utils.bitmapToMat(bitmap, rgbMat);
-                //将彩色图像数据转换为灰度图像数据并存储到grayMat中
-                Imgproc.cvtColor(rgbMat, grayMat, Imgproc.COLOR_RGB2GRAY);
-                //创建一个灰度图像
-                Bitmap grayBmp = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.RGB_565);
-                //将矩阵grayMat转换为灰度图像
-                Utils.matToBitmap(grayMat, grayBmp);
-                if(i%2==1)
-                    imageImg.setImageBitmap(grayBmp);
-                else
-                    imageImg.setImageBitmap(bitmap);
-            });
+            i++;
+            Mat rgbMat = new Mat();
+            Mat grayMat = new Mat();
+            //获取lena彩色图像所对应的像素数据
+            Utils.bitmapToMat(bitmap, rgbMat);
+            //将彩色图像数据转换为灰度图像数据并存储到grayMat中
+            Imgproc.cvtColor(rgbMat, grayMat, Imgproc.COLOR_RGB2GRAY);
+            //创建一个灰度图像
+            Bitmap grayBmp = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.RGB_565);
+            //将矩阵grayMat转换为灰度图像
+            Utils.matToBitmap(grayMat, grayBmp);
+            if (i % 2 == 1)
+                imageImg.setImageBitmap(grayBmp);
+            else
+                imageImg.setImageBitmap(bitmap);
+        });
 
         SoundPool.Builder spb = new SoundPool.Builder();
         spb.setMaxStreams(10);
@@ -87,7 +89,7 @@ public class MainActivity extends BaseActivity {
         spb.setAudioAttributes(attrBuilder.build());
         mSoundPool = spb.build();
 
-        for (int i=0; i<voiceId.length; ++i) {
+        for (int i = 0; i < voiceId.length; ++i) {
             voiceId[i] = mSoundPool.load(this, voiceResId[i], 1);
             buttonSound[i].setText(buttonString[i]);
             final int fi = i;

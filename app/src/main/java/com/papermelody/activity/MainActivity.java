@@ -6,13 +6,14 @@ import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Bundle;
+import android.support.annotation.IdRes;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.papermelody.R;
 import com.roughike.bottombar.BottomBar;
-import com.roughike.bottombar.OnTabClickListener;
 
 import org.opencv.android.Utils;
 import org.opencv.core.Mat;
@@ -46,6 +47,8 @@ public class MainActivity extends BaseActivity {
     Button buttonA4;
     @BindView(R.id.button_b4)
     Button buttonB4;
+    @BindView(R.id.bottom_bar)
+    BottomBar bottomBar;
 
     private int[] voiceResId = new int[]{R.raw.c4, R.raw.d4, R.raw.e4, R.raw.f4, R.raw.g4, R.raw.a4, R.raw.b4};
     private String[] buttonString = new String[]{"C4", "D4", "E4", "F4", "G4", "A4", "B4"};
@@ -97,6 +100,20 @@ public class MainActivity extends BaseActivity {
                 mSoundPool.play(voiceId[fi], 1, 1, 0, 0, 1);
             });
         }
+
+        bottomBar.setOnTabSelectListener((@IdRes int tabId) -> {
+            if (tabId == R.id.tab_1) {
+                // do something
+                Toast.makeText(getApplicationContext(), "tab1 selected", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        bottomBar.setOnTabReselectListener((@IdRes int tabId) -> {
+            if(tabId == R.id.tab_1){
+                // do something
+                Toast.makeText(getApplicationContext(), "tab1 reselected", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override

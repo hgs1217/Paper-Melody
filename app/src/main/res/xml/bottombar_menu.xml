@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tabs>
+    <tab
+        id="@+id/tab_1"
+        title="Tab1"
+        icon="@mipmap/ic_launcher"
+        barColorWhenSelected="#99e450"
+        />
+    <tab
+        id="@+id/tab_2"
+        title="Tab2"
+        icon="@mipmap/ic_launcher"
+        barColorWhenSelected="#26c8d1"
+        />
+    <tab
+        id="@+id/tab_3"
+        title="Tab3"
+        icon="@mipmap/ic_launcher"
+        barColorWhenSelected="#a252d7"
+        />
+    <tab
+        id="@+id/tab_4"
+        title="Tab4"
+        icon="@mipmap/ic_launcher"
+        barColorWhenSelected="#f29696"
+        />
+</tabs>

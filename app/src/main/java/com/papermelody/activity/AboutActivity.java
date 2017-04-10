@@ -10,6 +10,7 @@ import com.papermelody.R;
 
 public class AboutActivity extends BaseActivity {
     /**
+     * 用例：查看关于
      * 关于页面
      */
 

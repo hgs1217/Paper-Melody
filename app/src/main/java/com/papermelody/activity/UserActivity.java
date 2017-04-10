@@ -5,13 +5,13 @@ import android.os.Bundle;
 import com.papermelody.R;
 
 /**
- * Created by HgS_1217_ on 2017/3/18.
+ * Created by HgS_1217_ on 2017/4/10.
  */
 
-public class SettingsActivity extends BaseActivity {
+public class UserActivity extends BaseActivity {
     /**
-     * 用例：修改设置
-     * 设置主页面
+     * 用例：无
+     * 用户页面，包括个人信息，已上传作品，收藏作品等等
      */
 
     @Override
@@ -21,6 +21,6 @@ public class SettingsActivity extends BaseActivity {
 
     @Override
     protected int getContentViewId() {
-        return R.layout.activity_settings;
+        return R.layout.activity_user;
     }
 }

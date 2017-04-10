@@ -10,6 +10,7 @@ import com.papermelody.R;
 
 public class PlayActivity extends BaseActivity {
     /**
+     * 用例：演奏乐器
      * 弹奏乐器时的界面，可能存在虚拟乐器或曲谱等内容
      */
 

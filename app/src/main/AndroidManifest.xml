@@ -8,7 +8,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.papermelody.activity.MainActivity">
+        <activity android:name=".activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -27,6 +27,46 @@
         <activity
             android:name=".activity.AboutActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.SplashActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.SettingsPlayActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.SettingsPrivacyActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.TutorialActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.LogInActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.CommentActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.LocalListenActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.MusicHallActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.OnlineListenActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.PlayListenActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.SaveActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.UploadActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.UserActivity"
+            android:screenOrientation="portrait" />
+
     </application>
 
 </manifest>

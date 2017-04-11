@@ -23,7 +23,7 @@ import butterknife.BindView;
 
 public class MainActivity extends BaseActivity {
     /**
-     * 主菜单
+     * 主菜单，将由四个Fragment组成，实现方式为底部toolbar
      * 当前页面供导入opencv包时测试使用，之后的版本需要将整个页面重做
      * 这个页面现在的一些写法，例如ButterKnife和lambda写法的使用，可作将来代码的模板风格参考
      * 同时首页放入了音效播放的实现，可供参考

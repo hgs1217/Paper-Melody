@@ -5,13 +5,13 @@ import android.os.Bundle;
 import com.papermelody.R;
 
 /**
- * Created by HgS_1217_ on 2017/3/18.
+ * Created by HgS_1217_ on 2017/4/10.
  */
 
-public class SettingsActivity extends BaseActivity {
+public class CalibrationActivity extends BaseActivity {
     /**
-     * 用例：修改设置
-     * 设置主页面
+     * 用例：演奏乐器（流程四）
+     * 标定界面，用于标定演奏纸的演奏合法位置
      */
 
     @Override
@@ -21,6 +21,6 @@ public class SettingsActivity extends BaseActivity {
 
     @Override
     protected int getContentViewId() {
-        return R.layout.activity_settings;
+        return R.layout.activity_calibration;
     }
 }

@@ -5,4 +5,7 @@ package com.papermelody.util;
  */
 
 public class CalibrationAPI {
+    /**
+     * 提供标定过程的接口
+     */
 }

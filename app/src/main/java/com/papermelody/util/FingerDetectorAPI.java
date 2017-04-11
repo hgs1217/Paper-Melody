@@ -5,4 +5,7 @@ package com.papermelody.util;
  */
 
 public class FingerDetectorAPI {
+    /**
+     * 提供手指识别过程的接口
+     */
 }

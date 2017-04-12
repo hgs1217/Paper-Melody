@@ -1,123 +1,150 @@
 package com.papermelody.activity;
 
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.media.AudioAttributes;
-import android.media.AudioManager;
-import android.media.SoundPool;
+import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
-import android.support.annotation.IdRes;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.papermelody.R;
-import com.roughike.bottombar.BottomBar;
-
-import org.opencv.android.Utils;
-import org.opencv.core.Mat;
-import org.opencv.imgproc.Imgproc;
+import com.papermelody.fragment.ModeFragment;
+import com.papermelody.fragment.MusicHallFragment;
+import com.papermelody.fragment.SettingsFragment;
+import com.papermelody.fragment.UserFragment;
+import com.papermelody.widget.NoScrollViewPager;
 
 import butterknife.BindView;
 
 public class MainActivity extends BaseActivity {
     /**
      * 主菜单，将由四个Fragment组成，实现方式为底部toolbar
-     * 当前页面供导入opencv包时测试使用，之后的版本需要将整个页面重做
-     * 这个页面现在的一些写法，例如ButterKnife和lambda写法的使用，可作将来代码的模板风格参考
-     * 同时首页放入了音效播放的实现，可供参考
      */
 
-    @BindView(R.id.image_img)
-    ImageView imageImg;
-    @BindView(R.id.button_switch)
-    Button buttonSwitch;
-    @BindView(R.id.button_c4)
-    Button buttonC4;
-    @BindView(R.id.button_d4)
-    Button buttonD4;
-    @BindView(R.id.button_e4)
-    Button buttonE4;
-    @BindView(R.id.button_f4)
-    Button buttonF4;
-    @BindView(R.id.button_g4)
-    Button buttonG4;
-    @BindView(R.id.button_a4)
-    Button buttonA4;
-    @BindView(R.id.button_b4)
-    Button buttonB4;
-    @BindView(R.id.bottom_bar)
-    BottomBar bottomBar;
+    @BindView(R.id.container)
+    NoScrollViewPager container;
+    @BindView(R.id.tabs)
+    TabLayout tabLayout;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+    @BindView(R.id.toolbar_title)
+    TextView toolbarTitle;
 
-    private int[] voiceResId = new int[]{R.raw.c4, R.raw.d4, R.raw.e4, R.raw.f4, R.raw.g4, R.raw.a4, R.raw.b4};
-    private String[] buttonString = new String[]{"C4", "D4", "E4", "F4", "G4", "A4", "B4"};
-
-    private SoundPool mSoundPool;
-    private int[] voiceId = new int[7];
-    private int i = 0;
+    private FragmentManager fragmentManager;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Button[] buttonSound = new Button[]{buttonC4, buttonD4, buttonE4, buttonF4, buttonG4, buttonA4, buttonB4};
+        Intent intent = getIntent();
+        int currentTab = intent.getIntExtra("currentTab", 0);
+        fragmentManager = getSupportFragmentManager();
 
-        final Bitmap bitmap = ((BitmapDrawable) getResources().getDrawable(R.drawable.pyj)).getBitmap();
-        imageImg.setImageBitmap(bitmap);
+        initTabView();
+        updateToolbar(currentTab);
 
-        buttonSwitch.setText("转换");
-        buttonSwitch.setOnClickListener((View v) -> {
-            i++;
-            Mat rgbMat = new Mat();
-            Mat grayMat = new Mat();
-            //获取lena彩色图像所对应的像素数据
-            Utils.bitmapToMat(bitmap, rgbMat);
-            //将彩色图像数据转换为灰度图像数据并存储到grayMat中
-            Imgproc.cvtColor(rgbMat, grayMat, Imgproc.COLOR_RGB2GRAY);
-            //创建一个灰度图像
-            Bitmap grayBmp = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.RGB_565);
-            //将矩阵grayMat转换为灰度图像
-            Utils.matToBitmap(grayMat, grayBmp);
-            if (i % 2 == 1)
-                imageImg.setImageBitmap(grayBmp);
-            else
-                imageImg.setImageBitmap(bitmap);
-        });
+        TabPagerAdapter tabPagerAdapter = new TabPagerAdapter(fragmentManager);
+        container.setAdapter(tabPagerAdapter);
+        container.setCurrentItem(currentTab);
+    }
 
-        SoundPool.Builder spb = new SoundPool.Builder();
-        spb.setMaxStreams(10);
-        AudioAttributes.Builder attrBuilder = new AudioAttributes.Builder();
-        attrBuilder.setLegacyStreamType(AudioManager.STREAM_MUSIC);
-        spb.setAudioAttributes(attrBuilder.build());
-        mSoundPool = spb.build();
-
-        for (int i = 0; i < voiceId.length; ++i) {
-            voiceId[i] = mSoundPool.load(this, voiceResId[i], 1);
-            buttonSound[i].setText(buttonString[i]);
-            final int fi = i;
-            buttonSound[i].setOnClickListener((View v) -> {
-                mSoundPool.play(voiceId[fi], 1, 1, 0, 0, 1);
-            });
+    private void updateToolbar(int position) {
+        toolbar.setLogo(null);
+        toolbar.setTitle(null);
+        switch (position) {
+            case 0:
+                toolbarTitle.setText(R.string.tab_mode);
+                break;
+            case 1:
+                toolbarTitle.setText(R.string.tab_settings);
+                break;
+            case 2:
+                toolbarTitle.setText(R.string.tab_music_hall);
+                break;
+            case 3:
+                toolbarTitle.setText(R.string.tab_user);
+                break;
+            default:
+                break;
         }
+        toolbar.getMenu().clear();
+    }
 
-        bottomBar.setOnTabSelectListener((@IdRes int tabId) -> {
-            if (tabId == R.id.tab_1) {
-                // do something
-                Toast.makeText(getApplicationContext(), "tab1 selected", Toast.LENGTH_SHORT).show();
-            }
-        });
+    private void initTabView() {
+        View indicatorMode = getLayoutInflater().inflate(R.layout.item_tab, null);
+        View indicatorSettings = getLayoutInflater().inflate(R.layout.item_tab, null);
+        View indicatorHall = getLayoutInflater().inflate(R.layout.item_tab, null);
+        View indicatorUser = getLayoutInflater().inflate(R.layout.item_tab, null);
 
-        bottomBar.setOnTabReselectListener((@IdRes int tabId) -> {
-            if(tabId == R.id.tab_1){
-                // do something
-                Toast.makeText(getApplicationContext(), "tab1 reselected", Toast.LENGTH_SHORT).show();
+        TextView textViewMode = (TextView) indicatorMode.findViewById(R.id.text_item_tab);
+        TextView textViewSettings = (TextView) indicatorSettings.findViewById(R.id.text_item_tab);
+        TextView textViewHall = (TextView) indicatorHall.findViewById(R.id.text_item_tab);
+        TextView textViewUser = (TextView) indicatorUser.findViewById(R.id.text_item_tab);
+
+        textViewMode.setText(R.string.tab_mode);
+        textViewSettings.setText(R.string.tab_settings);
+        textViewHall.setText(R.string.tab_music_hall);
+        textViewUser.setText(R.string.tab_user);
+
+        tabLayout.addTab(tabLayout.newTab().setCustomView(indicatorMode));
+        tabLayout.addTab(tabLayout.newTab().setCustomView(indicatorSettings));
+        tabLayout.addTab(tabLayout.newTab().setCustomView(indicatorHall));
+        tabLayout.addTab(tabLayout.newTab().setCustomView(indicatorUser));
+
+        tabLayout.setSelectedTabIndicatorColor(Color.TRANSPARENT);
+
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                int currentPage = tab.getPosition();
+                updateToolbar(currentPage);
+                container.setCurrentItem(currentPage, false);
             }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) { }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) { }
         });
     }
 
     @Override
     protected int getContentViewId() {
         return R.layout.activity_main;
+    }
+
+    public class TabPagerAdapter extends FragmentStatePagerAdapter {
+
+        private final int pageCount = 4;
+
+        public TabPagerAdapter(FragmentManager fragmentManager) {
+            super(fragmentManager);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            switch (position) {
+                case 0:
+                    return ModeFragment.newInstance();
+                case 1:
+                    return SettingsFragment.newInstance();
+                case 2:
+                    return MusicHallFragment.newInstance();
+                case 3:
+                    return UserFragment.newInstance();
+                default:
+                    return null;
+            }
+        }
+
+        @Override
+        public int getCount() {
+            return pageCount;
+        }
     }
 }

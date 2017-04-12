@@ -9,88 +9,23 @@
     android:orientation="vertical"
     tools:context="com.papermelody.activity.MainActivity">
 
-    <LinearLayout
+    <include layout="@layout/item_toolbar" />
+
+    <com.papermelody.widget.NoScrollViewPager
+        android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:orientation="vertical">
+        android:background="@color/white">
 
-        <ImageView
-            android:id="@+id/image_img"
-            android:layout_width="250dp"
-            android:layout_height="250dp" />
+    </com.papermelody.widget.NoScrollViewPager>
 
-        <Button
-            android:id="@+id/button_switch"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/button_c4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="" />
-
-            <Button
-                android:id="@+id/button_d4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="" />
-
-            <Button
-                android:id="@+id/button_e4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="" />
-
-            <Button
-                android:id="@+id/button_f4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/button_g4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="" />
-
-            <Button
-                android:id="@+id/button_a4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="" />
-
-            <Button
-                android:id="@+id/button_b4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="" />
-
-        </LinearLayout>
-    </LinearLayout>
-
-
-    <com.roughike.bottombar.BottomBar
-        android:id="@+id/bottom_bar"
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tabs"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_gravity="end"
-        app:bb_activeTabColor="#ffffff"
-        app:bb_behavior="underNavbar"
-        app:bb_inActiveTabColor="#c2c2c2"
-        app:bb_tabXmlResource="@xml/bottombar_menu" />
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        app:tabIndicatorHeight="50dp"
+        app:tabMode="fixed"/>
+
 </LinearLayout>

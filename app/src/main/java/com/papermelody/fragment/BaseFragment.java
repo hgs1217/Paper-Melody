@@ -1,6 +1,6 @@
 package com.papermelody.fragment;
 
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 
 import rx.Subscription;
 import rx.subscriptions.CompositeSubscription;

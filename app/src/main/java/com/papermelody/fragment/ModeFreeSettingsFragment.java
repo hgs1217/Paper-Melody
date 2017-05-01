@@ -9,4 +9,9 @@ public class ModeFreeSettingsFragment extends BaseFragment {
      * 用例：演奏乐器（流程三）
      * 自由模式演奏前设置页面
      */
+
+    public static ModeFreeSettingsFragment newInstance() {
+        ModeFreeSettingsFragment fragment = new ModeFreeSettingsFragment();
+        return fragment;
+    }
 }

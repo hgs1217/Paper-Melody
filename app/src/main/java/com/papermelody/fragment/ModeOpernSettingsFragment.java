@@ -9,4 +9,9 @@ public class ModeOpernSettingsFragment extends BaseFragment {
      * 用例：演奏乐器（流程三）
      * 跟谱模式演奏前设置页面
      */
+
+    public static ModeOpernSettingsFragment newInstance() {
+        ModeOpernSettingsFragment fragment = new ModeOpernSettingsFragment();
+        return fragment;
+    }
 }

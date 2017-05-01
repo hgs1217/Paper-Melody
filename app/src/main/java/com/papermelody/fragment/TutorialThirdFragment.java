@@ -8,4 +8,9 @@ public class TutorialThirdFragment extends BaseFragment {
     /**
      * 教程的第三个页面
      */
+
+    public static TutorialThirdFragment newInstance() {
+        TutorialThirdFragment fragment = new TutorialThirdFragment();
+        return fragment;
+    }
 }

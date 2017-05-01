@@ -8,4 +8,9 @@ public class RegisterFragment extends BaseFragment {
     /**
      * 注册页面
      */
+
+    public static RegisterFragment newInstance() {
+        RegisterFragment fragment = new RegisterFragment();
+        return fragment;
+    }
 }

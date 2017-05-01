@@ -8,4 +8,9 @@ public class TutorialFirstFragment extends BaseFragment {
     /**
      * 教程的第一个页面
      */
+
+    public static TutorialFirstFragment newInstance() {
+        TutorialFirstFragment fragment = new TutorialFirstFragment();
+        return fragment;
+    }
 }

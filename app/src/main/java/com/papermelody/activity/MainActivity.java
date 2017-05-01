@@ -13,6 +13,8 @@ import android.widget.TextView;
 
 import com.papermelody.R;
 import com.papermelody.fragment.ModeFragment;
+import com.papermelody.fragment.ModeFreeSettingsFragment;
+import com.papermelody.fragment.ModeOpernSettingsFragment;
 import com.papermelody.fragment.MusicHallFragment;
 import com.papermelody.fragment.SettingsFragment;
 import com.papermelody.fragment.UserFragment;
@@ -33,6 +35,9 @@ public class MainActivity extends BaseActivity {
     Toolbar toolbar;
     @BindView(R.id.toolbar_title)
     TextView toolbarTitle;
+
+    public static final int MODE_FREE = 4;
+    public static final int MODE_OPERN = 5;
 
     private FragmentManager fragmentManager;
 
@@ -67,6 +72,12 @@ public class MainActivity extends BaseActivity {
                 break;
             case 3:
                 toolbarTitle.setText(R.string.tab_user);
+                break;
+            case MODE_FREE:
+                toolbarTitle.setText(R.string.mode_free);
+                break;
+            case MODE_OPERN:
+                toolbarTitle.setText(R.string.mode_opern);
                 break;
             default:
                 break;
@@ -113,6 +124,13 @@ public class MainActivity extends BaseActivity {
         });
     }
 
+    public void updateFragment(int position) {
+        /* 用于切换至模式设置页面调用 */
+
+        updateToolbar(position);
+        container.setCurrentItem(position, false);
+    }
+
     @Override
     protected int getContentViewId() {
         return R.layout.activity_main;
@@ -120,7 +138,7 @@ public class MainActivity extends BaseActivity {
 
     public class TabPagerAdapter extends FragmentStatePagerAdapter {
 
-        private final int pageCount = 4;
+        private final int pageCount = 6;
 
         public TabPagerAdapter(FragmentManager fragmentManager) {
             super(fragmentManager);
@@ -137,6 +155,11 @@ public class MainActivity extends BaseActivity {
                     return MusicHallFragment.newInstance();
                 case 3:
                     return UserFragment.newInstance();
+                /* 以下case 不能通过tab键切换达到，合并到这里便于实现mode至演奏设置的跳转 */
+                case MODE_FREE:
+                    return ModeFreeSettingsFragment.newInstance();
+                case MODE_OPERN:
+                    return ModeOpernSettingsFragment.newInstance();
                 default:
                     return null;
             }

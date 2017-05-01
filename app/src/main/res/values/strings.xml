@@ -4,4 +4,6 @@
     <string name="tab_settings">设置</string>
     <string name="tab_music_hall">音乐圈</string>
     <string name="tab_user">用户管理</string>
+    <string name="mode_free">自由模式</string>
+    <string name="mode_opern">跟谱模式</string>
 </resources>

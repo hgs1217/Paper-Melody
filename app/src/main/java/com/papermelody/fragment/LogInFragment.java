@@ -8,4 +8,9 @@ public class LogInFragment extends BaseFragment {
     /**
      * 登录页面
      */
+
+    public static LogInFragment newInstance() {
+        LogInFragment fragment = new LogInFragment();
+        return fragment;
+    }
 }

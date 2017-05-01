@@ -6,4 +6,17 @@
     <string name="tab_user">用户管理</string>
     <string name="mode_free">自由模式</string>
     <string name="mode_opern">跟谱模式</string>
+    <string name="settings_play">演奏设置</string>
+    <string name="settings_privacy">账号与隐私</string>
+    <string name="about">关于</string>
+    <string name="view_tutorial">浏览教程</string>
+    <string name="user_info">用户信息</string>
+    <string name="history_musics">历史作品</string>
+    <string name="upload_musics">上传作品</string>
+    <string name="favorite_musics">收藏作品</string>
+    <string name="user_log_in">点击登录</string>
+    <string name="user_change">切换账号</string>
+    <string name="un_log_in">未登录</string>
+    <string name="log_in">登录</string>
+    <string name="register">注册</string>
 </resources>

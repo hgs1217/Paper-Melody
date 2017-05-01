@@ -22,7 +22,6 @@ public class OnlineMusic extends Music {
     private ArrayList<Comment> comments;
     private int upvoteNum;
 
-
     @Override
     public String getFilename() {
         return filename;

@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.papermelody.R;
+import com.papermelody.fragment.LogInFragment;
 import com.papermelody.fragment.ModeFragment;
 import com.papermelody.fragment.ModeFreeSettingsFragment;
 import com.papermelody.fragment.ModeOpernSettingsFragment;
@@ -38,6 +39,7 @@ public class MainActivity extends BaseActivity {
 
     public static final int MODE_FREE = 4;
     public static final int MODE_OPERN = 5;
+    public static final int LOG_IN = 6;
 
     private FragmentManager fragmentManager;
 
@@ -65,19 +67,22 @@ public class MainActivity extends BaseActivity {
                 toolbarTitle.setText(R.string.tab_mode);
                 break;
             case 1:
-                toolbarTitle.setText(R.string.tab_settings);
-                break;
-            case 2:
                 toolbarTitle.setText(R.string.tab_music_hall);
                 break;
-            case 3:
+            case 2:
                 toolbarTitle.setText(R.string.tab_user);
+                break;
+            case 3:
+                toolbarTitle.setText(R.string.tab_settings);
                 break;
             case MODE_FREE:
                 toolbarTitle.setText(R.string.mode_free);
                 break;
             case MODE_OPERN:
                 toolbarTitle.setText(R.string.mode_opern);
+                break;
+            case LOG_IN:
+                toolbarTitle.setText(R.string.log_in);
                 break;
             default:
                 break;
@@ -102,9 +107,9 @@ public class MainActivity extends BaseActivity {
         textViewUser.setText(R.string.tab_user);
 
         tabLayout.addTab(tabLayout.newTab().setCustomView(indicatorMode));
-        tabLayout.addTab(tabLayout.newTab().setCustomView(indicatorSettings));
         tabLayout.addTab(tabLayout.newTab().setCustomView(indicatorHall));
         tabLayout.addTab(tabLayout.newTab().setCustomView(indicatorUser));
+        tabLayout.addTab(tabLayout.newTab().setCustomView(indicatorSettings));
 
         tabLayout.setSelectedTabIndicatorColor(Color.TRANSPARENT);
 
@@ -138,7 +143,7 @@ public class MainActivity extends BaseActivity {
 
     public class TabPagerAdapter extends FragmentStatePagerAdapter {
 
-        private final int pageCount = 6;
+        private final int pageCount = 7;
 
         public TabPagerAdapter(FragmentManager fragmentManager) {
             super(fragmentManager);
@@ -150,16 +155,18 @@ public class MainActivity extends BaseActivity {
                 case 0:
                     return ModeFragment.newInstance();
                 case 1:
-                    return SettingsFragment.newInstance();
-                case 2:
                     return MusicHallFragment.newInstance();
-                case 3:
+                case 2:
                     return UserFragment.newInstance();
-                /* 以下case 不能通过tab键切换达到，合并到这里便于实现mode至演奏设置的跳转 */
+                case 3:
+                    return SettingsFragment.newInstance();
+                /* 以下case 不能通过tab栏切换达到，合并到这里便于实现一些需要对主页面的部分元素进行交互的操作 */
                 case MODE_FREE:
                     return ModeFreeSettingsFragment.newInstance();
                 case MODE_OPERN:
                     return ModeOpernSettingsFragment.newInstance();
+                case LOG_IN:
+                    return LogInFragment.newInstance();
                 default:
                     return null;
             }

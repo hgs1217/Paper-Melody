@@ -4,6 +4,7 @@
 
     <application
         android:allowBackup="true"
+        android:name=".util.App"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
@@ -40,7 +41,7 @@
             android:name=".activity.TutorialActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.LogInActivity"
+            android:name=".fragment.LogInFragment"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.CommentActivity"

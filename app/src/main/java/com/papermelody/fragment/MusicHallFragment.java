@@ -1,12 +1,25 @@
 package com.papermelody.fragment;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.papermelody.R;
+import com.papermelody.activity.OnlineListenActivity;
+import com.papermelody.model.OnlineMusic;
+import com.papermelody.widget.MusicHallRecyclerViewAdapter;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -18,6 +31,22 @@ public class MusicHallFragment extends BaseFragment {
      * 用例：浏览音乐圈
      * 音乐圈页面，上传作品使用recyclerView排序
      */
+
+    @BindView(R.id.img_hall_poster)
+    ImageView imgPoster;
+    @BindView(R.id.recycler_view_hall)
+    RecyclerView recyclerViewHall;
+
+    private Context context;
+    private MusicHallRecyclerViewAdapter adapter;
+    private MusicHallRecyclerViewAdapter.OnItemClickListener hallOnItemClickListener = new
+            MusicHallRecyclerViewAdapter.OnItemClickListener() {
+                @Override
+                public void OnItemClick(OnlineMusic music) {
+                    Intent intent = new Intent(context, OnlineListenActivity.class);
+                    startActivity(intent);
+                }
+            };
 
     public static MusicHallFragment newInstance() {
         MusicHallFragment fragment = new MusicHallFragment();
@@ -34,6 +63,32 @@ public class MusicHallFragment extends BaseFragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_music_hall, container, false);
         ButterKnife.bind(this, view);
+        context = view.getContext();
+        initRecyclerView();
         return view;
+    }
+
+    private void initRecyclerView() {
+        adapter = new MusicHallRecyclerViewAdapter(context, testCreateMusics());
+        adapter.setOnItemClickListener(hallOnItemClickListener);
+        recyclerViewHall.setAdapter(adapter);
+        recyclerViewHall.setLayoutManager(new GridLayoutManager(context, 1));
+        recyclerViewHall.setItemAnimator(new DefaultItemAnimator());
+    }
+
+    private List<OnlineMusic> testCreateMusics() {
+        ArrayList<OnlineMusic> musics = new ArrayList<>();
+        OnlineMusic testMusic1 = new OnlineMusic(), testMusic2 = new OnlineMusic(),
+                testMusic3 = new OnlineMusic();
+        testMusic1.setMusicName("国歌");
+        testMusic1.setMusicAuthor("作者：zb");
+        testMusic2.setMusicName("共青团团歌");
+        testMusic2.setMusicAuthor("作者：pyj");
+        testMusic3.setMusicName("少先队队歌");
+        testMusic3.setMusicAuthor("作者：tth");
+        musics.add(testMusic1);
+        musics.add(testMusic2);
+        musics.add(testMusic3);
+        return musics;
     }
 }

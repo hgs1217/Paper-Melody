@@ -16,10 +16,35 @@ public class User {
     private String userInfo;
     private ArrayList<Music> userMusics;
 
-    public User() {
-
+    public String getUsername() {
+        return username;
     }
 
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
+    public String getPhotoURL() {
+        return photoURL;
+    }
 
+    public void setPhotoURL(String photoURL) {
+        this.photoURL = photoURL;
+    }
+
+    public String getUserInfo() {
+        return userInfo;
+    }
+
+    public void setUserInfo(String userInfo) {
+        this.userInfo = userInfo;
+    }
+
+    public ArrayList<Music> getUserMusics() {
+        return userMusics;
+    }
+
+    public void setUserMusics(ArrayList<Music> userMusics) {
+        this.userMusics = userMusics;
+    }
 }

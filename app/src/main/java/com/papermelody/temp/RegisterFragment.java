@@ -1,4 +1,6 @@
-package com.papermelody.fragment;
+package com.papermelody.temp;
+
+import com.papermelody.fragment.BaseFragment;
 
 /**
  * Created by HgS_1217_ on 2017/4/10.
@@ -6,7 +8,7 @@ package com.papermelody.fragment;
 
 public class RegisterFragment extends BaseFragment {
     /**
-     * 注册页面
+     * 注册页面（暂弃用）
      */
 
     public static RegisterFragment newInstance() {

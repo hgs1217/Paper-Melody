@@ -2,6 +2,47 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:gravity="center">
+
+    <Button
+        android:id="@+id/btn_settings_play"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:text="@string/settings_play"
+        android:textColor="@color/black"
+        android:textSize="12sp" />
+
+    <Button
+        android:id="@+id/btn_settings_privacy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:text="@string/settings_privacy"
+        android:textColor="@color/black"
+        android:textSize="12sp" />
+
+    <Button
+        android:id="@+id/btn_about"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:text="@string/about"
+        android:textColor="@color/black"
+        android:textSize="12sp" />
+
+    <Button
+        android:id="@+id/btn_tutorial"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:text="@string/view_tutorial"
+        android:textColor="@color/black"
+        android:textSize="12sp" />
 
 </LinearLayout>

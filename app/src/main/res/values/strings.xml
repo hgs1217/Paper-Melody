@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">Paper Melody</string>
+    <string name="server_ip">http://192.168.0.106:8080/</string>
     <string name="tab_mode">开始演奏</string>
     <string name="tab_settings">设置</string>
     <string name="tab_music_hall">音乐圈</string>
@@ -36,4 +37,5 @@
         <item>共青团团歌</item>
         <item>少先队队歌</item>
     </string-array>
+    <string name="network_failure">网络故障</string>
 </resources>

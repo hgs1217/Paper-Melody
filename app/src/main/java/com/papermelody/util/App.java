@@ -1,6 +1,7 @@
 package com.papermelody.util;
 
 import android.app.Application;
+import android.content.Context;
 
 import com.papermelody.model.User;
 
@@ -14,8 +15,16 @@ public class App extends Application {
      */
 
     private User user;
+    private static Context context;
 
-    public App() {
+    public static Context getInstance(){
+        return context;
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        context = this;
         user = null;
     }
 

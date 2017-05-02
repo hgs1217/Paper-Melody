@@ -51,15 +51,14 @@ public class ModeOpernSettingsFragment extends BaseFragment {
         super.onCreate(savedInstanceState);
     }
 
-//    这里貌似会引起闪退
-//    @Override
-//    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-//                             Bundle savedInstanceBundle) {
-//        View view = inflater.inflate(R.layout.fragment_mode_opern_settings, container);
-//        ButterKnife.bind(this, view);
-//        initView();
-//        return view;
-//    }
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceBundle) {
+        View view = inflater.inflate(R.layout.fragment_mode_opern_settings, container, false);
+        ButterKnife.bind(this, view);
+        initView();
+        return view;
+    }
 
     private void initView() {
         arrayAdapterOpern = ArrayAdapter.createFromResource(getContext(), R.array.spinner_opern, android.R.layout.simple_spinner_item);

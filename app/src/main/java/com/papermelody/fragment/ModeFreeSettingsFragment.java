@@ -33,7 +33,7 @@ public class ModeFreeSettingsFragment extends BaseFragment {
     @BindView(R.id.spinner_free_category)
     Spinner spinnerCategory;
     @BindView(R.id.btn_free_cfm)
-    Button btn_free_cfm;
+    Button btnFreeConfirm;
 
     private int instrument, category;
     private ArrayAdapter<CharSequence> arrayAdapterInstrument, arrayAdapterCategory;
@@ -92,7 +92,7 @@ public class ModeFreeSettingsFragment extends BaseFragment {
 
             }
         });
-        btn_free_cfm.setOnClickListener((View v) -> {
+        btnFreeConfirm.setOnClickListener((View v) -> {
             Intent intent = new Intent(getContext(), PlayActivity.class);
             intent.putExtra("mode", 0);
             intent.putExtra("instrument", instrument);

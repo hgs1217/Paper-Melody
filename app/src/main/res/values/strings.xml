@@ -31,4 +31,9 @@
     <string-array name="spinner_category_flute">
         <item>7孔笛</item>
     </string-array>
+    <string-array name="spinner_opern">
+        <item>国歌</item>
+        <item>共青团团歌</item>
+        <item>少先队队歌</item>
+    </string-array>
 </resources>

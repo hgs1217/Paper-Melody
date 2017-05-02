@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.Spinner;
 
 import com.papermelody.R;
+import com.papermelody.activity.MainActivity;
 import com.papermelody.activity.PlayActivity;
 
 import butterknife.BindView;
@@ -27,15 +28,14 @@ public class ModeFreeSettingsFragment extends BaseFragment {
      * 自由模式演奏前设置页面
      */
 
-    @BindView(R.id.spinner1)
+    @BindView(R.id.spinner_free_instrument)
     Spinner spinnerInstrument;
-    @BindView(R.id.spinner2)
+    @BindView(R.id.spinner_free_category)
     Spinner spinnerCategory;
     @BindView(R.id.btn_free_cfm)
     Button btn_free_cfm;
 
     private int instrument, category;
-    private Context context;
     private ArrayAdapter<CharSequence> arrayAdapterInstrument, arrayAdapterCategory;
 
     public static ModeFreeSettingsFragment newInstance() {
@@ -53,25 +53,23 @@ public class ModeFreeSettingsFragment extends BaseFragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_mode_free_settings, container, false);
         ButterKnife.bind(this, view);
-        context = view.getContext();
         initView();
         return view;
     }
 
     private void initView() {
-        arrayAdapterInstrument = ArrayAdapter.createFromResource(context, R.array.spinner_instrument, android.R.layout.simple_spinner_item);
+        arrayAdapterInstrument = ArrayAdapter.createFromResource(getContext(), R.array.spinner_instrument, android.R.layout.simple_spinner_item);
         arrayAdapterInstrument.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerInstrument.setAdapter(arrayAdapterInstrument);
         spinnerInstrument.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (position == 0) {
-                    arrayAdapterCategory = ArrayAdapter.createFromResource(context, R.array.spinner_category_piano, android.R.layout.simple_spinner_item);
-                    instrument = 0;
+                    arrayAdapterCategory = ArrayAdapter.createFromResource(getContext(), R.array.spinner_category_piano, android.R.layout.simple_spinner_item);
                 } else {
-                    arrayAdapterCategory = ArrayAdapter.createFromResource(context, R.array.spinner_category_flute, android.R.layout.simple_spinner_item);
-                    instrument = 1;
+                    arrayAdapterCategory = ArrayAdapter.createFromResource(getContext(), R.array.spinner_category_flute, android.R.layout.simple_spinner_item);
                 }
+                instrument = position;
                 arrayAdapterCategory.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 spinnerCategory.setAdapter(arrayAdapterCategory);
             }
@@ -94,8 +92,8 @@ public class ModeFreeSettingsFragment extends BaseFragment {
 
             }
         });
-        btn_free_cfm.setOnClickListener((View v)->{
-            Intent intent = new Intent(context, PlayActivity.class);
+        btn_free_cfm.setOnClickListener((View v) -> {
+            Intent intent = new Intent(getContext(), PlayActivity.class);
             intent.putExtra("mode", 0);
             intent.putExtra("instrument", instrument);
             intent.putExtra("category", category);

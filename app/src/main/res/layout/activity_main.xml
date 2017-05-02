@@ -26,6 +26,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
         app:tabIndicatorHeight="50dp"
-        app:tabMode="fixed"/>
+        app:tabMode="fixed" />
 
 </LinearLayout>

@@ -2,20 +2,21 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:gravity="center">
+    android:gravity="center"
+    android:orientation="vertical">
 
     <Spinner
-        android:id="@+id/spinner1"
+        android:id="@+id/spinner_free_instrument"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"/>
 
     <Spinner
-        android:id="@+id/spinner2"
+        android:id="@+id/spinner_free_category"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"/>
+
     <Button
         android:id="@+id/btn_free_cfm"
         android:layout_width="wrap_content"

@@ -1,7 +1,6 @@
 package com.papermelody.fragment;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -75,10 +74,10 @@ public class LogInFragment extends BaseFragment {
                     .map(response -> ((UserResponse) response).getResult())
                     .subscribe(
                             userInfo -> {
-                                ToastUtils.showShort("register success");
+                                ToastUtils.showShort(R.string.register_success);
                                 updateUser(userInfo);
                             },
-                            NetworkFailureHandler.basicErrorHandler
+                            NetworkFailureHandler.loginErrorHandler
                     ));
         });
         btnLogIn.setOnClickListener((View v) -> {
@@ -91,11 +90,10 @@ public class LogInFragment extends BaseFragment {
                     .map(response -> ((UserResponse) response).getResult())
                     .subscribe(
                             userInfo -> {
-                                ToastUtils.showShort("login success");
-                                Log.d("TEST", String.valueOf(userInfo));
+                                ToastUtils.showShort(R.string.login_success);
                                 updateUser(userInfo);
                             },
-                            NetworkFailureHandler.basicErrorHandler
+                            NetworkFailureHandler.loginErrorHandler
                     ));
         });
     }
@@ -105,7 +103,6 @@ public class LogInFragment extends BaseFragment {
         user.setUsername(userInfo.getName());
         ((App) getActivity().getApplication()).setUser(user);
         MainActivity mainActivity = (MainActivity) getActivity();
-        Log.d("TEST", "UPDATE");
         mainActivity.updateFragment(2);
     }
 }

@@ -32,12 +32,35 @@ public class NetworkFailureHandler {
         e.printStackTrace();
     }
 
+    static public void onLogInError(Throwable e) {
+        if (e instanceof HttpException) {
+            int code = ((HttpException) e).code();
+            switch (code) {
+                case 403:   ToastUtils.showShort(R.string.wrong_password);   break;
+                case 404:   ToastUtils.showShort(R.string.user_not_exist);  break;
+                case 409:   ToastUtils.showShort(R.string.user_already_exist);  break;
+                default:    ToastUtils.showShort(R.string.network_failure); break;
+            }
+        } else {
+            if (TextUtils.isEmpty(e.getMessage())) {
+                ToastUtils.showShort(R.string.network_failure);
+            } else {
+                ToastUtils.showShort(e.getMessage());
+            }
+        }
+        e.printStackTrace();
+    }
+
     static public final Action1<Throwable> basicErrorHandler = throwable -> onError(throwable);
+    static public final Action1<Throwable> loginErrorHandler = throwable -> onLogInError(throwable);
 
     static public final Func1<HttpResponse, Observable<HttpResponse>> httpFailureFilter =
             httpResponse -> {
-                if (httpResponse.getError() == 0) return Observable.just(httpResponse);
-                else
+                if (httpResponse.getError() == 0) {
+                    return Observable.just(httpResponse);
+                } else {
+                    ToastUtils.showShort(httpResponse.getMsg());
                     return Observable.error(new Exception(httpResponse.getMsg()));
+                }
             };
 }

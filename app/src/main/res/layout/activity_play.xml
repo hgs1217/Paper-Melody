@@ -13,18 +13,27 @@
         android:id="@+id/text_mode"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center"/>
+        android:gravity="center"
+        android:text="mode"
+        android:textColor="@color/black"
+        android:textSize="14sp"/>
 
     <TextView
         android:id="@+id/text_opern"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center" />
+        android:gravity="center"
+        android:text="opern"
+        android:textColor="@color/black"
+        android:textSize="14sp"/>
 
     <TextView
         android:id="@+id/text_instrument"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center" />
+        android:gravity="center"
+        android:text="instrument"
+        android:textColor="@color/black"
+        android:textSize="14sp"/>
 
 </LinearLayout>

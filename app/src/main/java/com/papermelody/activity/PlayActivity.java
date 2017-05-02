@@ -1,15 +1,12 @@
 package com.papermelody.activity;
 
 import android.content.Intent;
-import android.content.res.Resources;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.util.Log;
 import android.widget.TextView;
 
 import com.papermelody.R;
 
-import butterknife.BindInt;
 import butterknife.BindView;
 
 /**
@@ -33,11 +30,12 @@ public class PlayActivity extends BaseActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_play);
+
         Intent intent = getIntent();
         mode = intent.getIntExtra("mode", 0);
         instrument = intent.getIntExtra("instrument", 0);
         category = intent.getIntExtra("category", 0);
+
 //        TextView textViewOpern = (TextView)findViewById(R.id.text_opern);
 //        textViewOpern.setText("regrewger");
         if (mode == 0) {

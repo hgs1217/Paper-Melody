@@ -15,6 +15,7 @@ import com.papermelody.activity.HistoryActivity;
 import com.papermelody.activity.MainActivity;
 import com.papermelody.model.User;
 import com.papermelody.util.App;
+import com.papermelody.util.ToastUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -69,8 +70,15 @@ public class UserFragment extends BaseFragment {
         updateUser();
 
         btnLogIn.setOnClickListener((View v) -> {
-            MainActivity mainActivity = (MainActivity) getActivity();
-            mainActivity.updateFragment(MainActivity.LOG_IN);
+            if (user == null) {
+                MainActivity mainActivity = (MainActivity) getActivity();
+                mainActivity.updateFragment(MainActivity.LOG_IN);
+            } else {
+                ((App) getActivity().getApplication()).setUser(null);
+                user = null;
+                ToastUtils.showShort(R.string.user_log_out);
+                updateUser();
+            }
         });
 
         btnUserInfo.setOnClickListener((View v) -> {
@@ -97,7 +105,7 @@ public class UserFragment extends BaseFragment {
         } else {
             Log.d("TEST3", user.getUsername());
             textUsername.setText(user.getUsername());
-            btnLogIn.setText(R.string.user_change);
+            btnLogIn.setText(R.string.user_log_out);
         }
     }
 }

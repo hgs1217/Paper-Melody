@@ -21,6 +21,7 @@ public class RetrofitClient {
      * retrofit用于网络通信的client，提供SocialSystemAPI
      */
 
+    // url改为当前寝室网络的ip地址，详见server的文档
     private static final String BASE_URL = App.getInstance().getString(R.string.server_ip);
 
     private static SocialSystemAPI socialSystemAPI;

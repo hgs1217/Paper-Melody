@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Paper Melody</string>
-    <string name="server_ip">http://192.168.0.106:8080/</string>
+    <string name="server_ip">http://192.168.0.102:8080/</string>
     <string name="tab_mode">开始演奏</string>
     <string name="tab_settings">设置</string>
     <string name="tab_music_hall">音乐圈</string>
@@ -16,7 +16,7 @@
     <string name="upload_musics">上传作品</string>
     <string name="favorite_musics">收藏作品</string>
     <string name="user_log_in">点击登录</string>
-    <string name="user_change">切换账号</string>
+    <string name="user_log_out">退出登录</string>
     <string name="un_log_in">未登录</string>
     <string name="log_in">登录</string>
     <string name="register">注册</string>

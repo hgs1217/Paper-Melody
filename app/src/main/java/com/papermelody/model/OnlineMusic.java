@@ -1,6 +1,9 @@
 package com.papermelody.model;
 
+import com.papermelody.model.response.OnlineMusicInfo;
+
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by HgS_1217_ on 2017/4/10.
@@ -16,11 +19,24 @@ public class OnlineMusic extends Music {
     private String musicName;
     private String musicAuthor;
     private String musicInfo;
+    private Date musicCreateDate;
+    private String musicLink;
     private String uploadName;
     private String uploadUser;
     private String uploadInfo;
     private ArrayList<Comment> comments;
     private int upvoteNum;
+
+    public OnlineMusic() {
+
+    }
+
+    public OnlineMusic(OnlineMusicInfo info) {
+        musicName = info.getName();
+        musicAuthor = info.getAuthor();
+        musicCreateDate = info.getDate();
+        musicLink = info.getLink();
+    }
 
     @Override
     public String getFilename() {
@@ -70,5 +86,61 @@ public class OnlineMusic extends Music {
     @Override
     public void setMusicInfo(String musicInfo) {
         this.musicInfo = musicInfo;
+    }
+
+    public Date getMusicCreateDate() {
+        return musicCreateDate;
+    }
+
+    public void setMusicCreateDate(Date musicCreateDate) {
+        this.musicCreateDate = musicCreateDate;
+    }
+
+    public String getMusicLink() {
+        return musicLink;
+    }
+
+    public void setMusicLink(String musicLink) {
+        this.musicLink = musicLink;
+    }
+
+    public String getUploadName() {
+        return uploadName;
+    }
+
+    public void setUploadName(String uploadName) {
+        this.uploadName = uploadName;
+    }
+
+    public String getUploadUser() {
+        return uploadUser;
+    }
+
+    public void setUploadUser(String uploadUser) {
+        this.uploadUser = uploadUser;
+    }
+
+    public String getUploadInfo() {
+        return uploadInfo;
+    }
+
+    public void setUploadInfo(String uploadInfo) {
+        this.uploadInfo = uploadInfo;
+    }
+
+    public ArrayList<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(ArrayList<Comment> comments) {
+        this.comments = comments;
+    }
+
+    public int getUpvoteNum() {
+        return upvoteNum;
+    }
+
+    public void setUpvoteNum(int upvoteNum) {
+        this.upvoteNum = upvoteNum;
     }
 }

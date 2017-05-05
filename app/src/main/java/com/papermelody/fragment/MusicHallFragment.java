@@ -14,6 +14,11 @@ import android.widget.ImageView;
 import com.papermelody.R;
 import com.papermelody.activity.OnlineListenActivity;
 import com.papermelody.model.OnlineMusic;
+import com.papermelody.model.response.OnlineMusicInfo;
+import com.papermelody.model.response.OnlineMusicListResponse;
+import com.papermelody.util.NetworkFailureHandler;
+import com.papermelody.util.RetrofitClient;
+import com.papermelody.util.SocialSystemAPI;
 import com.papermelody.widget.MusicHallRecyclerViewAdapter;
 
 import java.util.ArrayList;
@@ -21,6 +26,8 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by HgS_1217_ on 2017/4/10.
@@ -64,12 +71,30 @@ public class MusicHallFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_music_hall, container, false);
         ButterKnife.bind(this, view);
         context = view.getContext();
-        initRecyclerView();
+        initGetMusicList();
         return view;
     }
 
-    private void initRecyclerView() {
-        adapter = new MusicHallRecyclerViewAdapter(context, testCreateMusics());
+    private void initGetMusicList() {
+        SocialSystemAPI api = RetrofitClient.getSocialSystemAPI();
+        addSubscription(api.getOnlineMusicList()
+                .flatMap(NetworkFailureHandler.httpFailureFilter)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .map(response -> ((OnlineMusicListResponse) response).getResult().getMusics())
+                .subscribe(
+                        musicList -> {
+                            List<OnlineMusic> musics = new ArrayList<>();
+                            for (OnlineMusicInfo info : musicList) {
+                                musics.add(new OnlineMusic(info));
+                            }
+                            initRecyclerView(musics);
+                        }
+                ));
+    }
+
+    private void initRecyclerView(List<OnlineMusic> musics) {
+        adapter = new MusicHallRecyclerViewAdapter(context, musics);
         adapter.setOnItemClickListener(hallOnItemClickListener);
         recyclerViewHall.setAdapter(adapter);
         recyclerViewHall.setLayoutManager(new GridLayoutManager(context, 1));

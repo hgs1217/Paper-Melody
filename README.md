@@ -2,7 +2,9 @@
 一款清新脱俗的手机应用
 
 ## High Up!
-### High Up!
+
+项目服务器端部分请移步gigaflw/Paper-Melody.server  
+URL：https://github.com/gigaflw/Paper-Melody.server
 
 请大家先把项目获取至本地，导入Android Studio进行配置，Gradle版本2.14.1，配置时如有问题请在群里交流
 

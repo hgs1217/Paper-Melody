@@ -36,16 +36,15 @@ public class PlayActivity extends BaseActivity {
         instrument = intent.getIntExtra("instrument", 0);
         category = intent.getIntExtra("category", 0);
 
-//        TextView textViewOpern = (TextView)findViewById(R.id.text_opern);
-//        textViewOpern.setText("regrewger");
         if (mode == 0) {
             Log.i("s","mode==0");
             textViewMode.setText("模式：自由演奏");
+            textViewOpern.setText("");
         } else {
             Log.i("s","mode==1");
             opern = intent.getIntExtra("opern", 0);
             textViewMode.setText("模式：跟谱演奏");
-            textViewOpern.setText(getResources().getStringArray(R.array.spinner_opern)[opern]);
+            textViewOpern.setText("曲谱："+getResources().getStringArray(R.array.spinner_opern)[opern]);
         }
         if (instrument == 0 && category == 0) {
             Log.i("s","instrument == 0 && category == 0");

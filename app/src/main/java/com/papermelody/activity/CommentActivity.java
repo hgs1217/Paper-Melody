@@ -13,6 +13,7 @@ public class CommentActivity extends BaseActivity {
      * 用例：用户评论
      * 用户评论页面
      */
+	 /*表明一下自己开始码代码了*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

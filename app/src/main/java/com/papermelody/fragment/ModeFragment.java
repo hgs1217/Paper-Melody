@@ -1,5 +1,6 @@
 package com.papermelody.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +9,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 
 import com.papermelody.R;
+import com.papermelody.activity.CalibrationActivity;
 import com.papermelody.activity.MainActivity;
 
 import butterknife.BindView;
@@ -51,8 +53,10 @@ public class ModeFragment extends BaseFragment {
 
     public void initView() {
         btnModeFree.setOnClickListener((View v) -> {
-            MainActivity mainActivity = (MainActivity) getActivity();
-            mainActivity.updateFragment(MainActivity.MODE_FREE);
+            /*MainActivity mainActivity = (MainActivity) getActivity();
+            mainActivity.updateFragment(MainActivity.MODE_FREE);*/
+            Intent intent = new Intent(getActivity(), CalibrationActivity.class);
+            startActivity(intent);
         });
         btnModeOpern.setOnClickListener((View v) -> {
             MainActivity mainActivity = (MainActivity) getActivity();

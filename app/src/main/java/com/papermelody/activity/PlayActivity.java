@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.papermelody.R;
+import com.papermelody.util.ToastUtils;
 
 import butterknife.BindView;
 
@@ -26,8 +27,8 @@ public class PlayActivity extends BaseActivity {
     TextView textViewOpern;
     @BindView(R.id.text_instrument)
     TextView textViewInstrument;
-    @BindView(R.id.btn_play_listen)
-    Button btnPlayListen;
+    @BindView(R.id.btn_play_over)
+    Button btnPlayOver;
 
     private int mode, instrument, category, opern;
 
@@ -46,7 +47,7 @@ public class PlayActivity extends BaseActivity {
         } else {
             opern = intent.getIntExtra("opern", 0);
             textViewMode.setText("模式：跟谱演奏");
-            textViewOpern.setText("曲谱："+getResources().getStringArray(R.array.spinner_opern)[opern]);
+            textViewOpern.setText("曲谱：" + getResources().getStringArray(R.array.spinner_opern)[opern]);
         }
         if (instrument == 0 && category == 0) {
             textViewInstrument.setText("乐器：15键钢琴");
@@ -55,8 +56,8 @@ public class PlayActivity extends BaseActivity {
         } else {
             textViewInstrument.setText("乐器：7孔笛");
         }
-        btnPlayListen.setOnClickListener((View v)->{
-            Intent intent1 = new Intent(getApplicationContext(), SaveActivity.class);
+        btnPlayOver.setOnClickListener((View v)->{
+            Intent intent1 = new Intent(getApplicationContext(), PlayListenActivity.class);
             startActivity(intent1);
         });
         // TODO;

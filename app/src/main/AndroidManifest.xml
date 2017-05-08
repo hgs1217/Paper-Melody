@@ -61,9 +61,6 @@
             android:name=".activity.PlayListenActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.SaveActivity"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".activity.UploadActivity"
             android:screenOrientation="portrait" />
 

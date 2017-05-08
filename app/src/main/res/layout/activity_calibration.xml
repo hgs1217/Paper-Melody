@@ -6,12 +6,13 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:orientation="vertical"
+    android:gravity="center"
     tools:context="com.papermelody.activity.CalibrationActivity">
 
     <SurfaceView
         android:id="@+id/view_calibration"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="wrap_content" />
 
     <ImageView
         android:id="@+id/img_calibration"

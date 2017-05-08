@@ -20,13 +20,18 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.util.Log;
+import android.util.SparseIntArray;
+import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.papermelody.R;
 import com.papermelody.util.ToastUtils;
+import com.papermelody.util.ViewUtil;
 
 import java.nio.ByteBuffer;
 import java.util.Arrays;
@@ -54,6 +59,17 @@ public class CalibrationActivity extends BaseActivity {
     @BindView(R.id.img_calibration)
     ImageView imgCalibration;
 
+    private static double STANDARD_SIZE_RATE = 1.33333; // 4: 3
+    private static final SparseIntArray ORIENTATIONS = new SparseIntArray();
+
+    ///为了使照片竖直显示
+    static {
+        ORIENTATIONS.append(Surface.ROTATION_0, 90);
+        ORIENTATIONS.append(Surface.ROTATION_90, 0);
+        ORIENTATIONS.append(Surface.ROTATION_180, 270);
+        ORIENTATIONS.append(Surface.ROTATION_270, 180);
+    }
+
     private CameraManager cameraManager;
     private CameraDevice cameraDevice;
     private SurfaceHolder surfaceHolder;
@@ -62,11 +78,20 @@ public class CalibrationActivity extends BaseActivity {
     private CameraCaptureSession cameraCaptureSession;
     private ImageReader imageReader;
 
+    private int cnt = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         initSurfaceView();
+    }
+
+    private void initSurfaceSize() {
+        int height = ViewUtil.getScreenHeight(this);
+        int width = (int) (height / STANDARD_SIZE_RATE);
+        Log.d("TEST", height+"\t"+width);
+        viewCalibration.setLayoutParams(new LinearLayout.LayoutParams(width, height));
     }
 
     private void initSurfaceView() {
@@ -80,7 +105,7 @@ public class CalibrationActivity extends BaseActivity {
 
             @Override
             public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-
+                initSurfaceSize();
             }
 
             @Override
@@ -98,7 +123,7 @@ public class CalibrationActivity extends BaseActivity {
         handlerThread.start();
         childHandler = new Handler(handlerThread.getLooper());
         mainHandler = new Handler(getMainLooper());
-        cameraID = "" + CameraCharacteristics.LENS_FACING_BACK;  //前摄像头
+        cameraID = "" + CameraCharacteristics.LENS_FACING_FRONT;  //前摄像头
         imageReader = ImageReader.newInstance(1080, 1920, ImageFormat.JPEG, 1);
         imageReader.setOnImageAvailableListener(new ImageReader.OnImageAvailableListener() {
             /* 可以在这里处理拍照得到的临时照片 例如，写入本地 */
@@ -109,6 +134,8 @@ public class CalibrationActivity extends BaseActivity {
                 viewCalibration.setVisibility(View.GONE);
                 imgCalibration.setVisibility(View.VISIBLE);
 
+                cnt++;
+                Log.d("TEST", "img"+cnt);
                 Image image = reader.acquireNextImage();
                 ByteBuffer buffer = image.getPlanes()[0].getBuffer();
                 byte[] bytes = new byte[buffer.remaining()];
@@ -184,6 +211,10 @@ public class CalibrationActivity extends BaseActivity {
                         // 显示预览
                         CaptureRequest previewRequest = previewRequestBuilder.build();
                         cameraCaptureSession.setRepeatingRequest(previewRequest, null, childHandler);
+                        // 获取手机方向
+                        int rotation = ViewUtil.getWindowRotation(CalibrationActivity.this);
+                        // 根据设备方向计算设置照片的方向
+                        previewRequestBuilder.set(CaptureRequest.JPEG_ORIENTATION, ORIENTATIONS.get(rotation));
                     } catch (CameraAccessException e) {
                         e.printStackTrace();
                     }
@@ -198,6 +229,8 @@ public class CalibrationActivity extends BaseActivity {
             e.printStackTrace();
         }
     }
+
+
 
     private void onFinished() {
         Intent intent = new Intent(this, PlayActivity.class);

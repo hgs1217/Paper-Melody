@@ -3,6 +3,8 @@ package com.papermelody.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.papermelody.R;
@@ -24,6 +26,8 @@ public class PlayActivity extends BaseActivity {
     TextView textViewOpern;
     @BindView(R.id.text_instrument)
     TextView textViewInstrument;
+    @BindView(R.id.btn_play_listen)
+    Button btnPlayListen;
 
     private int mode, instrument, category, opern;
 
@@ -37,25 +41,24 @@ public class PlayActivity extends BaseActivity {
         category = intent.getIntExtra("category", 0);
 
         if (mode == 0) {
-            Log.i("s","mode==0");
             textViewMode.setText("模式：自由演奏");
             textViewOpern.setText("");
         } else {
-            Log.i("s","mode==1");
             opern = intent.getIntExtra("opern", 0);
             textViewMode.setText("模式：跟谱演奏");
             textViewOpern.setText("曲谱："+getResources().getStringArray(R.array.spinner_opern)[opern]);
         }
         if (instrument == 0 && category == 0) {
-            Log.i("s","instrument == 0 && category == 0");
             textViewInstrument.setText("乐器：15键钢琴");
         } else if (instrument == 0 && category == 1) {
-            Log.i("s","instrument == 0 && category == 1");
             textViewInstrument.setText("乐器：21键钢琴");
         } else {
-            Log.i("s","instrument == 1");
             textViewInstrument.setText("乐器：7孔笛");
         }
+        btnPlayListen.setOnClickListener((View v)->{
+            Intent intent1 = new Intent(getApplicationContext(), SaveActivity.class);
+            startActivity(intent1);
+        });
         // TODO;
     }
 

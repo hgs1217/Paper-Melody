@@ -1,6 +1,5 @@
 package com.papermelody.activity;
 
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.WindowManager;
@@ -38,10 +37,8 @@ public abstract class BaseActivity extends AppCompatActivity {
         /**
          * 设置手机状态栏为透明，注意activity的layout需设置fitsSystemWindows参数为true，否则界面会占用状态栏
          */
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            WindowManager.LayoutParams localLayoutParams = getWindow().getAttributes();
-            localLayoutParams.flags = (WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS | localLayoutParams.flags);
-        }
+        WindowManager.LayoutParams localLayoutParams = getWindow().getAttributes();
+        localLayoutParams.flags = (WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS | localLayoutParams.flags);
     }
 
     public CompositeSubscription getCompositeSubscription() {

@@ -15,7 +15,7 @@ import com.papermelody.util.App;
 import com.papermelody.util.NetworkFailureHandler;
 import com.papermelody.util.RetrofitClient;
 import com.papermelody.util.SocialSystemAPI;
-import com.papermelody.util.ToastUtils;
+import com.papermelody.util.ToastUtil;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -74,7 +74,7 @@ public class LogInFragment extends BaseFragment {
                     .map(response -> ((UserResponse) response).getResult())
                     .subscribe(
                             userInfo -> {
-                                ToastUtils.showShort(R.string.register_success);
+                                ToastUtil.showShort(R.string.register_success);
                                 updateUser(userInfo);
                             },
                             NetworkFailureHandler.loginErrorHandler
@@ -90,7 +90,7 @@ public class LogInFragment extends BaseFragment {
                     .map(response -> ((UserResponse) response).getResult())
                     .subscribe(
                             userInfo -> {
-                                ToastUtils.showShort(R.string.login_success);
+                                ToastUtil.showShort(R.string.login_success);
                                 updateUser(userInfo);
                             },
                             NetworkFailureHandler.loginErrorHandler

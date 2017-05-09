@@ -29,10 +29,10 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.PlayActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="landscape" />
         <activity
             android:name=".activity.CalibrationActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="landscape"/>
         <activity
             android:name=".activity.AboutActivity"
             android:screenOrientation="portrait" />

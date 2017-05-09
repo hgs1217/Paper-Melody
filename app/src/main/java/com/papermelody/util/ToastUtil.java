@@ -6,7 +6,7 @@ import android.widget.Toast;
  * Created by HgS_1217_ on 2017/5/2.
  */
 
-public class ToastUtils {
+public class ToastUtil {
     /**
      * 处理Toast工具类
      */

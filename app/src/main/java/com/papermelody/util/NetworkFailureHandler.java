@@ -21,12 +21,12 @@ public class NetworkFailureHandler {
 
     static public void onError(Throwable e) {
         if (e instanceof HttpException) {
-            ToastUtils.showShort("Error code " + ((HttpException) e).code());
+            ToastUtil.showShort("Error code " + ((HttpException) e).code());
         } else {
             if (TextUtils.isEmpty(e.getMessage())) {
-                ToastUtils.showShort(R.string.network_failure);
+                ToastUtil.showShort(R.string.network_failure);
             } else {
-                ToastUtils.showShort(e.getMessage());
+                ToastUtil.showShort(e.getMessage());
             }
         }
         e.printStackTrace();
@@ -36,16 +36,16 @@ public class NetworkFailureHandler {
         if (e instanceof HttpException) {
             int code = ((HttpException) e).code();
             switch (code) {
-                case 403:   ToastUtils.showShort(R.string.wrong_password);   break;
-                case 404:   ToastUtils.showShort(R.string.user_not_exist);  break;
-                case 409:   ToastUtils.showShort(R.string.user_already_exist);  break;
-                default:    ToastUtils.showShort(R.string.network_failure); break;
+                case 403:   ToastUtil.showShort(R.string.wrong_password);   break;
+                case 404:   ToastUtil.showShort(R.string.user_not_exist);  break;
+                case 409:   ToastUtil.showShort(R.string.user_already_exist);  break;
+                default:    ToastUtil.showShort(R.string.network_failure); break;
             }
         } else {
             if (TextUtils.isEmpty(e.getMessage())) {
-                ToastUtils.showShort(R.string.network_failure);
+                ToastUtil.showShort(R.string.network_failure);
             } else {
-                ToastUtils.showShort(e.getMessage());
+                ToastUtil.showShort(e.getMessage());
             }
         }
         e.printStackTrace();
@@ -55,14 +55,14 @@ public class NetworkFailureHandler {
         if (e instanceof HttpException) {
             int code = ((HttpException) e).code();
             switch (code) {
-                case 409:   ToastUtils.showShort(R.string.name_already_exist);  break;
-                default:    ToastUtils.showShort(R.string.network_failure); break;
+                case 409:   ToastUtil.showShort(R.string.name_already_exist);  break;
+                default:    ToastUtil.showShort(R.string.network_failure); break;
             }
         } else {
             if (TextUtils.isEmpty(e.getMessage())) {
-                ToastUtils.showShort(R.string.network_failure);
+                ToastUtil.showShort(R.string.network_failure);
             } else {
-                ToastUtils.showShort(e.getMessage());
+                ToastUtil.showShort(e.getMessage());
             }
         }
         e.printStackTrace();
@@ -77,7 +77,7 @@ public class NetworkFailureHandler {
                 if (httpResponse.getError() == 0) {
                     return Observable.just(httpResponse);
                 } else {
-                    ToastUtils.showShort(httpResponse.getMsg());
+                    ToastUtil.showShort(httpResponse.getMsg());
                     return Observable.error(new Exception(httpResponse.getMsg()));
                 }
             };

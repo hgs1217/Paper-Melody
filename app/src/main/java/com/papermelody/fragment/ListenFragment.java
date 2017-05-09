@@ -1,10 +1,8 @@
 package com.papermelody.fragment;
 
-import android.content.Context;
 import android.content.res.AssetFileDescriptor;
 import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +10,7 @@ import android.widget.Button;
 import android.widget.SeekBar;
 
 import com.papermelody.R;
-import com.papermelody.util.ToastUtils;
+import com.papermelody.util.ToastUtil;
 
 import java.io.IOException;
 import java.util.Timer;
@@ -56,7 +54,7 @@ public class ListenFragment extends BaseFragment {
             mediaPlayer.prepare();
             mediaPlayer.start();
         } catch (IOException e) {
-            ToastUtils.showShort(R.string.unable_to_play);
+            ToastUtil.showShort(R.string.unable_to_play);
         }
     }
 

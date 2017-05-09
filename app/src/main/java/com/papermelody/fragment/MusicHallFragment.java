@@ -71,7 +71,7 @@ public class MusicHallFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_music_hall, container, false);
         ButterKnife.bind(this, view);
         context = view.getContext();
-        initGetMusicList();
+        //initGetMusicList();
         return view;
     }
 

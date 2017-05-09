@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.ImageFormat;
 import android.hardware.camera2.CameraAccessException;
 import android.hardware.camera2.CameraCaptureSession;
@@ -26,14 +26,15 @@ import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.FrameLayout;
 
 import com.papermelody.R;
-import com.papermelody.util.ToastUtils;
+import com.papermelody.util.ImageUtil;
+import com.papermelody.util.ToastUtil;
 import com.papermelody.util.ViewUtil;
 
-import java.nio.ByteBuffer;
 import java.util.Arrays;
 
 import butterknife.BindView;
@@ -56,8 +57,8 @@ public class CalibrationActivity extends BaseActivity {
 
     @BindView(R.id.view_calibration)
     SurfaceView viewCalibration;
-    @BindView(R.id.img_calibration)
-    ImageView imgCalibration;
+    @BindView(R.id.btn_calibration)
+    Button btnCalibration;
 
     private static double STANDARD_SIZE_RATE = 1.33333; // 4: 3
     private static final SparseIntArray ORIENTATIONS = new SparseIntArray();
@@ -78,20 +79,24 @@ public class CalibrationActivity extends BaseActivity {
     private CameraCaptureSession cameraCaptureSession;
     private ImageReader imageReader;
 
+    private boolean canNext = false;
     private int cnt = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,  WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
         initSurfaceView();
+        initNextButton();
     }
 
     private void initSurfaceSize() {
-        int height = ViewUtil.getScreenHeight(this);
-        int width = (int) (height / STANDARD_SIZE_RATE);
-        Log.d("TEST", height+"\t"+width);
-        viewCalibration.setLayoutParams(new LinearLayout.LayoutParams(width, height));
+        /* 横屏导致长宽交换 */
+        int width = ViewUtil.getScreenWidth(this);
+        int height = (int) (width / STANDARD_SIZE_RATE);
+        viewCalibration.setLayoutParams(new FrameLayout.LayoutParams(width, height));
     }
 
     private void initSurfaceView() {
@@ -118,31 +123,47 @@ public class CalibrationActivity extends BaseActivity {
         });
     }
 
+    private void initNextButton() {
+        btnCalibration.setOnClickListener((View v)->{
+            if (canNext) {
+                Intent intent = new Intent(this, PlayActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+    }
+
     private void initCamera() {
         HandlerThread handlerThread = new HandlerThread("Camera2");
         handlerThread.start();
         childHandler = new Handler(handlerThread.getLooper());
         mainHandler = new Handler(getMainLooper());
-        cameraID = "" + CameraCharacteristics.LENS_FACING_FRONT;  //前摄像头
-        imageReader = ImageReader.newInstance(1080, 1920, ImageFormat.JPEG, 1);
+        cameraID = String.valueOf(CameraCharacteristics.LENS_FACING_BACK);  //前摄像头
+        // 设置imageReader的尺寸与采样频率
+        imageReader = ImageReader.newInstance(1080, 1920, ImageFormat.YUV_420_888, 1);
         imageReader.setOnImageAvailableListener(new ImageReader.OnImageAvailableListener() {
             /* 可以在这里处理拍照得到的临时照片 例如，写入本地 */
 
             @Override
             public void onImageAvailable(ImageReader reader) {
-                cameraDevice.close();
-                viewCalibration.setVisibility(View.GONE);
-                imgCalibration.setVisibility(View.VISIBLE);
-
-                cnt++;
-                Log.d("TEST", "img"+cnt);
-                Image image = reader.acquireNextImage();
-                ByteBuffer buffer = image.getPlanes()[0].getBuffer();
-                byte[] bytes = new byte[buffer.remaining()];
-                buffer.get(bytes);  //由缓冲区存入字节数组
-                final Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                if (bitmap != null) {
-                    imgCalibration.setImageBitmap(bitmap);
+                Image image = null;
+                try {
+                    image = reader.acquireLatestImage();
+                    Log.d("PreviewListener", "GetPreviewImage");
+                    Bitmap bitmap = ImageUtil.imageToByteArray(image);
+                    cnt++;
+                    Log.d("TESTCNT", "img"+cnt);
+                    if (cnt % 100 > 50) {
+                        btnCalibration.setBackgroundColor(Color.GREEN);
+                        canNext = true;
+                    } else {
+                        btnCalibration.setBackgroundColor(Color.GRAY);
+                        canNext = false;
+                    }
+                } finally {
+                    if (image != null) {
+                        image.close();
+                    }
                 }
             }
         }, mainHandler);
@@ -163,7 +184,7 @@ public class CalibrationActivity extends BaseActivity {
 
         @Override
         public void onOpened(@NonNull CameraDevice camera) {
-            ToastUtils.showShort("开启成功");
+            ToastUtil.showShort("开启成功");
             cameraDevice = camera;
             takePreview();
         }
@@ -178,7 +199,7 @@ public class CalibrationActivity extends BaseActivity {
 
         @Override
         public void onError(@NonNull CameraDevice camera, int error) {
-            ToastUtils.showShort("摄像头开启失败");
+            ToastUtil.showShort("摄像头开启失败");
         }
     };
 
@@ -191,6 +212,8 @@ public class CalibrationActivity extends BaseActivity {
                     cameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW);
             // 将SurfaceView的surface作为CaptureRequest.Builder的目标
             previewRequestBuilder.addTarget(surfaceHolder.getSurface());
+            // 将imageReader的surface作为CaptureRequest.Builder的目标
+            previewRequestBuilder.addTarget(imageReader.getSurface());
             // 创建CameraCaptureSession，该对象负责管理处理预览请求和拍照请求
             cameraDevice.createCaptureSession(Arrays.asList(surfaceHolder.getSurface(),
                     imageReader.getSurface()), new CameraCaptureSession.StateCallback() {
@@ -222,19 +245,12 @@ public class CalibrationActivity extends BaseActivity {
 
                 @Override
                 public void onConfigureFailed(@NonNull CameraCaptureSession session) {
-                    ToastUtils.showShort("配置失败");
+                    ToastUtil.showShort("配置失败");
                 }
             }, childHandler);
         } catch (CameraAccessException e) {
             e.printStackTrace();
         }
-    }
-
-
-
-    private void onFinished() {
-        Intent intent = new Intent(this, PlayActivity.class);
-        startActivity(intent);
     }
 
     @Override

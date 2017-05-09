@@ -9,7 +9,7 @@ import android.widget.Button;
 
 import com.papermelody.R;
 import com.papermelody.fragment.ListenFragment;
-import com.papermelody.util.ToastUtils;
+import com.papermelody.util.ToastUtil;
 
 import butterknife.BindView;
 
@@ -39,7 +39,7 @@ public class PlayListenActivity extends BaseActivity {
         transaction.add(R.id.fragment_play, ListenFragment.newInstance());
         transaction.commit();
         btnSaveToLocal.setOnClickListener((View v) -> {
-            ToastUtils.showShort("保存成功（才怪嘞");
+            ToastUtil.showShort("保存成功（才怪嘞");
         });
         btnUpload.setOnClickListener((View v) -> {
             Intent intent = new Intent(getApplicationContext(), UploadActivity.class);

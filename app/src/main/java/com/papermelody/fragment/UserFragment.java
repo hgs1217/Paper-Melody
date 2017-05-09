@@ -15,7 +15,7 @@ import com.papermelody.activity.HistoryActivity;
 import com.papermelody.activity.MainActivity;
 import com.papermelody.model.User;
 import com.papermelody.util.App;
-import com.papermelody.util.ToastUtils;
+import com.papermelody.util.ToastUtil;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -76,7 +76,7 @@ public class UserFragment extends BaseFragment {
             } else {
                 ((App) getActivity().getApplication()).setUser(null);
                 user = null;
-                ToastUtils.showShort(R.string.user_log_out);
+                ToastUtil.showShort(R.string.user_log_out);
                 updateUser();
             }
         });

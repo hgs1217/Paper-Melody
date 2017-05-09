@@ -2,13 +2,12 @@ package com.papermelody.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
 import com.papermelody.R;
-import com.papermelody.util.ToastUtils;
 
 import butterknife.BindView;
 
@@ -23,10 +22,12 @@ public class PlayActivity extends BaseActivity {
      */
     @BindView(R.id.text_mode)
     TextView textViewMode;
-    @BindView(R.id.text_opern)
-    TextView textViewOpern;
     @BindView(R.id.text_instrument)
     TextView textViewInstrument;
+    @BindView(R.id.text_mode_name)
+    TextView textViewModeName;
+    @BindView(R.id.text_instrument_name)
+    TextView textViewInstrumentName;
     @BindView(R.id.btn_play_over)
     Button btnPlayOver;
 
@@ -36,31 +37,37 @@ public class PlayActivity extends BaseActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,  WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
         Intent intent = getIntent();
         mode = intent.getIntExtra("mode", 0);
         instrument = intent.getIntExtra("instrument", 0);
         category = intent.getIntExtra("category", 0);
+        //opern = intent.getIntExtra("opern", 0);
 
+        initView();
+    }
+
+    private void initView() {
         if (mode == 0) {
-            textViewMode.setText("模式：自由演奏");
-            textViewOpern.setText("");
+            textViewModeName.setText(R.string.mode_free);
+            //textViewOpern.setText("");
         } else {
-            opern = intent.getIntExtra("opern", 0);
-            textViewMode.setText("模式：跟谱演奏");
-            textViewOpern.setText("曲谱：" + getResources().getStringArray(R.array.spinner_opern)[opern]);
+            textViewModeName.setText(R.string.mode_opern);
+            //textViewOpern.setText("曲谱：" + getResources().getStringArray(R.array.spinner_opern)[opern]);
         }
         if (instrument == 0 && category == 0) {
-            textViewInstrument.setText("乐器：15键钢琴");
+            textViewInstrumentName.setText(R.string.piano_with_21_keys);
         } else if (instrument == 0 && category == 1) {
-            textViewInstrument.setText("乐器：21键钢琴");
+            textViewInstrumentName.setText("乐器：15键钢琴");
         } else {
-            textViewInstrument.setText("乐器：7孔笛");
+            textViewInstrumentName.setText("乐器：7孔笛");
         }
         btnPlayOver.setOnClickListener((View v)->{
-            Intent intent1 = new Intent(getApplicationContext(), PlayListenActivity.class);
-            startActivity(intent1);
+            Intent intent = new Intent(this, PlayListenActivity.class);
+            startActivity(intent);
+            finish();
         });
-        // TODO;
     }
 
     @Override

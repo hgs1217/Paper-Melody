@@ -15,6 +15,99 @@
         android:src="@drawable/piano_key21"/>
 
     <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="285dp"
+        android:layout_marginLeft="1.2dp">
+
+        <include
+            android:id="@+id/key_effect_c3"
+            layout="@layout/item_key_gradient_white" />
+
+        <include
+            android:id="@+id/key_effect_d3"
+            layout="@layout/item_key_gradient_white" />
+
+        <include
+            android:id="@+id/key_effect_e3"
+            layout="@layout/item_key_gradient_white" />
+
+        <include
+            android:id="@+id/key_effect_f3"
+            layout="@layout/item_key_gradient_white" />
+
+        <include
+            android:id="@+id/key_effect_g3"
+            layout="@layout/item_key_gradient_white" />
+
+        <include
+            android:id="@+id/key_effect_a3"
+            layout="@layout/item_key_gradient_white" />
+
+        <include
+            android:id="@+id/key_effect_b3"
+            layout="@layout/item_key_gradient_white" />
+
+        <include
+            android:id="@+id/key_effect_c4"
+            layout="@layout/item_key_gradient_white" />
+
+        <include
+            android:id="@+id/key_effect_d4"
+            layout="@layout/item_key_gradient_white" />
+
+        <include
+            android:id="@+id/key_effect_e4"
+            layout="@layout/item_key_gradient_white" />
+
+        <include
+            android:id="@+id/key_effect_f4"
+            layout="@layout/item_key_gradient_white" />
+
+        <include
+            android:id="@+id/key_effect_g4"
+            layout="@layout/item_key_gradient_white" />
+
+        <include
+            android:id="@+id/key_effect_a4"
+            layout="@layout/item_key_gradient_white" />
+
+        <include
+            android:id="@+id/key_effect_b4"
+            layout="@layout/item_key_gradient_white" />
+
+        <include
+            android:id="@+id/key_effect_c5"
+            layout="@layout/item_key_gradient_white" />
+
+        <include
+            android:id="@+id/key_effect_d5"
+            layout="@layout/item_key_gradient_white" />
+
+        <include
+            android:id="@+id/key_effect_e5"
+            layout="@layout/item_key_gradient_white" />
+
+        <include
+            android:id="@+id/key_effect_f5"
+            layout="@layout/item_key_gradient_white" />
+
+        <include
+            android:id="@+id/key_effect_g5"
+            layout="@layout/item_key_gradient_white" />
+
+        <include
+            android:id="@+id/key_effect_a5"
+            layout="@layout/item_key_gradient_white" />
+
+        <include
+            android:id="@+id/key_effect_b5"
+            layout="@layout/item_key_gradient_white" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_marginTop="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

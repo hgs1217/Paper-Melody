@@ -15,9 +15,6 @@ import org.opencv.imgproc.Moments;
 import java.util.ArrayList;
 import java.util.List;
 
-impo import static android.R.attr.y;
-import static android.os.Build.VERSION_CODES.M;
-
 public class Calibration {
     public static int []  main(Mat srcImage){
         Mat dstImage = new Mat();
@@ -86,7 +83,7 @@ public class Calibration {
             }
         }
         temp=a2[temp];
-        int leftlow_x,leftlow_y,leftup_x,leftup_y,rightlow_x,rightlow_y,rightup_x,rightup_y;
+        int leftlow_x = 0, leftlow_y = 1200, leftup_x = 0, leftup_y = 0, rightlow_x = 0, rightlow_y = 0, rightup_x = 0, rightup_y = 0;
         for (int i=0;i<lencontour;i++){
             if (a1[i]==temp_order){
                 int cx,cy,uptemp;
@@ -100,9 +97,11 @@ public class Calibration {
                 double d2 =(m.get_m10()/m.get_m00());
                 Double D2=new Double(d2);
                 cx=D2.intValue();
-                org.opencv.core.Point leftmost ;
-                org.opencv.core.Point rightmost ;
+
                 org.opencv.core.Point[] points = item.toArray();
+                org.opencv.core.Point leftmost = points[0];
+                org.opencv.core.Point rightmost = points[0];
+
 
                 for (int iii = 0; iii < points.length; i++)
                 {
@@ -133,7 +132,7 @@ public class Calibration {
                     uptemp=(int)leftmost.x;
                     rightup_y=(int)leftmost.y;
                         for (int j=0;j<item.height();j++ ){
-                        if (Math.abs(points[j].x-uptemp)<5{
+                            if (Math.abs(points[j].x - uptemp) < 5) {
                     if (points[j].y>rightup_y){
                     rightup_y=(int)points[j].y;
                     rightup_x=uptemp;}}}}

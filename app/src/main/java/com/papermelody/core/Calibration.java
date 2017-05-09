@@ -19,7 +19,7 @@ impo import static android.R.attr.y;
 import static android.os.Build.VERSION_CODES.M;
 
 public class Calibration {
-    public static Mat  main(Mat srcImage){
+    public static int []  main(Mat srcImage){
         Mat dstImage = new Mat();
         Mat grayImage = new Mat();
         Mat dilateImage = new Mat();
@@ -144,6 +144,7 @@ public class Calibration {
         }
         Mat src = new Mat(4,1, CvType.CV_32FC2);
         src.put(leftlow_y,leftlow_x,leftup_y,leftup_x, rightlow_y,rightlow_x, rightup_y,rightup_x);
+        int output[ ] =new int []{leftlow_y,leftlow_x,leftup_y,leftup_x, rightlow_y,rightlow_x, rightup_y,rightup_x} ;
 
         Mat dst = new Mat(4,1,CvType.CV_32FC2);
         dst.put(-250,0, -250,100,250,0,250,100);
@@ -154,7 +155,7 @@ public class Calibration {
         Src.put(660,728);
         Mat Dst=new Mat(1,1,CvType.CV_32FC2);
         Core.perspectiveTransform(Src,Dst,perspectiveTransform);
-        return src;
+        return output;
     }
 
 }

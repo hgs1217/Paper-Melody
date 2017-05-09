@@ -43,6 +43,7 @@ public class Calibration {
             a3[j]=0;
         }
         int count=0;
+        int contournumber=0;
         boolean flag=false;
         for (int i=0;i<lencontour;i++){
             MatOfPoint item=contours.get(i);
@@ -52,6 +53,8 @@ public class Calibration {
                Double D1=new Double(d1);
                int cy=D1.intValue();
                 if (cy>dstImage.height()/2){
+                    contournumber+=1;
+
                     flag=false;
                     for (int j=0;j<count;j++){
                         if (Math.abs(cy-a2[j])<20){
@@ -72,6 +75,7 @@ public class Calibration {
                 }
             }
         }
+        if (contournumber==0){return new int []{0,0,0,0,0,0,0,0};}
 
 
         int temp_order=0;

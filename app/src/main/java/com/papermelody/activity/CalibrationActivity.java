@@ -31,9 +31,11 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 
 import com.papermelody.R;
+import com.papermelody.util.CalibrationAPI;
 import com.papermelody.util.ImageUtil;
 import com.papermelody.util.ToastUtil;
 import com.papermelody.util.ViewUtil;
+import com.papermelody.widget.CalibrationView;
 
 import java.util.Arrays;
 
@@ -59,6 +61,8 @@ public class CalibrationActivity extends BaseActivity {
     SurfaceView viewCalibration;
     @BindView(R.id.btn_calibration)
     Button btnCalibration;
+    @BindView(R.id.canvas_calibration)
+    CalibrationView canvasCalibration;
 
     private static double STANDARD_SIZE_RATE = 1.33333; // 4: 3
     private static final SparseIntArray ORIENTATIONS = new SparseIntArray();
@@ -152,7 +156,9 @@ public class CalibrationActivity extends BaseActivity {
                     Log.d("PreviewListener", "GetPreviewImage");
                     Bitmap bitmap = ImageUtil.imageToByteArray(image);
                     cnt++;
-                    Log.d("TESTCNT", "img"+cnt);
+                    Log.d("CALIBRATION", "imgReader"+cnt);
+                    int[] coordinates = CalibrationAPI.getCalibrationCoordinate(bitmap);
+                    canvasCalibration.updateCalibrationCoordinates(coordinates);
                     if (cnt % 100 > 50) {
                         btnCalibration.setBackgroundColor(Color.GREEN);
                         canNext = true;
@@ -176,6 +182,12 @@ public class CalibrationActivity extends BaseActivity {
             cameraManager.openCamera(cameraID, deviceStateCallback, mainHandler);
         } catch (CameraAccessException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void drawCalibrationLine(int[] coordinatesArray) {
+        if (coordinatesArray.length == 8) {
+
         }
     }
 

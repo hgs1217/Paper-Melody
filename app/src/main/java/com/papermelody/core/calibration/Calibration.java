@@ -1,4 +1,4 @@
-package com.papermelody.core;
+package com.papermelody.core.calibration;
 
 /**
  * Created by tangtonghui on 17/5/9.
@@ -16,7 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Calibration {
-    public static int []  main(Mat srcImage){
+
+    public static int [] main(Mat srcImage){
         Mat dstImage = new Mat();
         Mat grayImage = new Mat();
         Mat dilateImage = new Mat();
@@ -156,5 +157,4 @@ public class Calibration {
         Core.perspectiveTransform(Src,Dst,perspectiveTransform);
         return output;
     }
-
 }

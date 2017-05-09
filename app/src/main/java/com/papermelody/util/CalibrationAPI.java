@@ -2,7 +2,7 @@ package com.papermelody.util;
 
 import android.graphics.Bitmap;
 
-import com.papermelody.core.Calibration;
+import com.papermelody.core.calibration.Calibration;
 
 import org.opencv.android.Utils;
 import org.opencv.core.Mat;
@@ -16,12 +16,12 @@ public class CalibrationAPI {
      * 提供标定过程的接口
      */
 
-    public static int[] calibration(Bitmap bitmap) {
+    public static int[] getCalibrationCoordinate(Bitmap bitmap) {
         Mat rgbMat = new Mat();
         Utils.bitmapToMat(bitmap, rgbMat);
 
         int[ ] a  ;
-        a=Calibration.main(rgbMat);
+        a= Calibration.main(rgbMat);
         return a;
     }
 }

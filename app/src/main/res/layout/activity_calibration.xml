@@ -25,7 +25,8 @@
             android:layout_weight="1"
             android:layout_gravity="top" />
 
-        <LinearLayout
+        <com.papermelody.widget.CalibrationView
+            android:id="@+id/canvas_calibration"
             android:background="#44000000"
             android:layout_width="match_parent"
             android:layout_height="160dp"

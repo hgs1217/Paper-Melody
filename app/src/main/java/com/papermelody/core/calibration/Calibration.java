@@ -5,6 +5,7 @@ package com.papermelody.core.calibration;
  */
 
 import org.opencv.core.Core;
+
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
@@ -15,16 +16,25 @@ import org.opencv.imgproc.Moments;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class Calibration {
+    public static int[]  main(Mat srcImage){
 
-    static{ System.loadLibrary("opencv_java3"); }
+        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 
-    public static int [] main(Mat srcImage){
+
+
+
+
         Mat dstImage = new Mat();
         Mat grayImage = new Mat();
         Mat dilateImage = new Mat();
         List<MatOfPoint> contours = new ArrayList<MatOfPoint>();
+
         //System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+
+
+
 
         Imgproc.cvtColor(srcImage, grayImage, Imgproc.COLOR_BGR2GRAY);
         Mat element = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, (new Size(15,5)));
@@ -36,6 +46,7 @@ public class Calibration {
         Imgproc.findContours(dstImage, contours, new Mat(), Imgproc.RETR_TREE,
                 Imgproc.CHAIN_APPROX_SIMPLE);
         int lencontour=contours.size();
+        System.out.println( lencontour);
         int[ ] a1 = new int[ lencontour] ;
         int[ ] a2 = new int[ lencontour] ;
         int[ ] a3 = new int[ lencontour] ;
@@ -45,19 +56,18 @@ public class Calibration {
             a2[j]=0;
             a3[j]=0;
         }
+        int nnn=0;
         int count=0;
-        int contournumber=0;
         boolean flag=false;
         for (int i=0;i<lencontour;i++){
             MatOfPoint item=contours.get(i);
             Moments m=Imgproc.moments(item);
             if ((m.get_m00()!=0)&&(Imgproc.contourArea(item)>20)){
-                 double d1 =(m.get_m01()/m.get_m00());
-               Double D1=new Double(d1);
-               int cy=D1.intValue();
+                double d1 =(m.get_m01()/m.get_m00());
+                Double D1=new Double(d1);
+                int cy=D1.intValue();
                 if (cy>dstImage.height()/2){
-                    contournumber+=1;
-
+                    nnn+=1;
                     flag=false;
                     for (int j=0;j<count;j++){
                         if (Math.abs(cy-a2[j])<20){
@@ -78,8 +88,7 @@ public class Calibration {
                 }
             }
         }
-        if (contournumber==0){return new int []{0,0,0,0,0,0,0,0};}
-
+        if (nnn==0){int o[]=new int[]{0,0,0,0,0,0,0,0};return o;};
 
         int temp_order=0;
         int temp=0;
@@ -88,17 +97,19 @@ public class Calibration {
             if (a3[i]>temp){
                 temp=a3[i];
                 temp_order=i;
+
             }
         }
-        temp=a2[temp];
-        int leftlow_x = 0, leftlow_y = 1200, leftup_x = 0, leftup_y = 0, rightlow_x = 0, rightlow_y = 0, rightup_x = 0, rightup_y = 0;
+
+        temp=a2[temp_order];
+        int leftlow_x=dstImage.width(),leftlow_y=0,leftup_x=0,leftup_y=0,rightlow_x=0,rightlow_y=0,rightup_x=0,rightup_y=0;
+        System.out.println( leftlow_x);
         for (int i=0;i<lencontour;i++){
             if (a1[i]==temp_order){
                 int cx,cy,uptemp;
                 MatOfPoint item=contours.get(i);
-                item.depth();
                 Moments m=Imgproc.moments(item);
-               
+
                 double d1 =(m.get_m01()/m.get_m00());
                 Double D1=new Double(d1);
                 cy=D1.intValue();
@@ -107,43 +118,42 @@ public class Calibration {
                 cx=D2.intValue();
 
                 org.opencv.core.Point[] points = item.toArray();
-                org.opencv.core.Point leftmost = points[0];
-                org.opencv.core.Point rightmost = points[0];
+                org.opencv.core.Point leftmost=points[0] ;
+                org.opencv.core.Point rightmost=points[0] ;
 
-
-                for (int iii = 0; iii < points.length; i++)
-                {
-                    if (leftmost.y>points[iii].y){leftmost=points[iii];}
-                    if (rightmost.y<points[iii].y){rightmost=points[iii];}
+                for (int iii = 0; iii < points.length; iii++)
+                {                    if (leftmost.x>points[iii].x){leftmost=points[iii];}
+                    if (rightmost.x<points[iii].x){rightmost=points[iii];}
                 }
 
 
+
                 if (Math.abs(cy-temp)<20){
-                    if (leftmost.y<leftlow_y){
-                    leftlow_y=(int)leftmost.y;
-                    leftlow_x=(int)leftmost.x;
+                    if (leftmost.x<leftlow_x){
+                        leftlow_x=(int)leftmost.x;
+                        leftlow_y=(int)leftmost.y;
 
-                    uptemp=(int)rightmost.x;
-                    leftup_y=(int)rightmost.y;
-                    for (int ii=0;i<points.length;i++ ) {
-                        if (Math.abs(points[ii].x - uptemp) < 5){
-                        if (points[ii].y < leftup_y){
-                        leftup_y =(int) points[ii].y;
-                            leftup_x=uptemp;
-                        }}}}
+                        uptemp=(int)rightmost.y;
+                        leftup_x=(int)rightmost.x;
+                        for (int ii=0;ii<points.length;ii++ ) {
+                            if (Math.abs(points[ii].y - uptemp) < 5){
+                                if (points[ii].x < leftup_x){
+                                    leftup_x =(int) points[ii].x;
+                                    leftup_y=uptemp;
+                                }}}}
 
 
 
-                   if (rightmost.y>rightlow_y){
-                    rightlow_y=(int)rightmost.y;
-                    rightlow_x=(int)rightmost.x;
-                    uptemp=(int)leftmost.x;
-                    rightup_y=(int)leftmost.y;
-                        for (int j=0;j<item.height();j++ ){
-                            if (Math.abs(points[j].x - uptemp) < 5) {
-                    if (points[j].y>rightup_y){
-                    rightup_y=(int)points[j].y;
-                    rightup_x=uptemp;}}}}
+                    if (rightmost.x>rightlow_x){
+                        rightlow_x=(int)rightmost.x;
+                        rightlow_y=(int)rightmost.y;
+                        uptemp=(int)leftmost.y;
+                        rightup_x=(int)leftmost.x;
+                        for (int j=0;j<points.length;j++ ){
+                            if (Math.abs(points[j].y-uptemp)<5){
+                                if (points[j].x>rightup_x){
+                                    rightup_x=(int)points[j].x;
+                                    rightup_y=uptemp;}}}}
                 }
 
 
@@ -164,5 +174,10 @@ public class Calibration {
         Mat Dst=new Mat(1,1,CvType.CV_32FC2);
         Core.perspectiveTransform(Src,Dst,perspectiveTransform);
         return output;
+
+
+
+
     }
+
 }

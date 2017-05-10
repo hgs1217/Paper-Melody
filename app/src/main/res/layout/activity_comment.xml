@@ -6,6 +6,27 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:orientation="vertical"
-    tools:context="com.papermelody.activity.CommentActivity">
+    tools:context="com.papermelody.activity.CommentActivity"
+    android:weightSum="1">
 
+    <ListView
+        android:id="@+id/current_comment_list"
+        android:layout_width="match_parent"
+        android:layout_height="216dp"
+        android:layout_weight="0.36" />
+
+    <EditText
+        android:id="@+id/add_new_comment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textMultiLine"
+        android:text="@string/add_new_comment" />
+
+    <Button
+        android:id="@+id/upload_comment_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.36"
+        android:text="@string/upload_comment" />
 </LinearLayout>

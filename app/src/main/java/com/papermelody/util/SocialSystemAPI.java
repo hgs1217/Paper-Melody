@@ -5,6 +5,7 @@ import com.papermelody.model.response.OnlineMusicListResponse;
 import com.papermelody.model.response.UserResponse;
 
 import java.util.Date;
+import java.util.StringJoiner;
 
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
@@ -44,4 +45,13 @@ public interface SocialSystemAPI {
     // 音乐圈作品获取
     @GET("onlinemusics")
     Observable<OnlineMusicListResponse> getOnlineMusicList();
+
+    //upload comment
+    @FormUrlEncoded
+    @POST("uploadcomment")
+    Observable<HttpResponse> uploadComment(@Field("musicID") String musicID,
+                                           @Field("user") String user,
+                                           @Field("comment") String comment,
+                                           @Field("time") String time);
+
 }

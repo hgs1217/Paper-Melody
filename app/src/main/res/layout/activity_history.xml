@@ -8,4 +8,9 @@
     android:orientation="vertical"
     tools:context="com.papermelody.activity.HistoryActivity">
 
+    <Button
+        android:id="@+id/upload_comment_btn2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Button" />
 </LinearLayout>

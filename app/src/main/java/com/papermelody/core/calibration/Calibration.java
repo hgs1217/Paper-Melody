@@ -4,8 +4,6 @@ package com.papermelody.core.calibration;
  * Created by tangtonghui on 17/5/9.
  */
 
-import org.opencv.core.Core;
-
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
@@ -18,13 +16,10 @@ import java.util.List;
 
 
 public class Calibration {
+
+    static{ System.loadLibrary("opencv_java3"); }
+
     public static int[]  main(Mat srcImage){
-
-        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-
-
-
-
 
         Mat dstImage = new Mat();
         Mat grayImage = new Mat();
@@ -32,9 +27,6 @@ public class Calibration {
         List<MatOfPoint> contours = new ArrayList<MatOfPoint>();
 
         //System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-
-
-
 
         Imgproc.cvtColor(srcImage, grayImage, Imgproc.COLOR_BGR2GRAY);
         Mat element = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, (new Size(15,5)));
@@ -100,7 +92,6 @@ public class Calibration {
 
             }
         }
-
         temp=a2[temp_order];
         int leftlow_x=dstImage.width(),leftlow_y=0,leftup_x=0,leftup_y=0,rightlow_x=0,rightlow_y=0,rightup_x=0,rightup_y=0;
         System.out.println( leftlow_x);
@@ -159,25 +150,21 @@ public class Calibration {
 
             }
         }
-
         Mat src = new Mat(4,1, CvType.CV_32FC2);
         src.put(leftlow_y,leftlow_x,leftup_y,leftup_x, rightlow_y,rightlow_x, rightup_y,rightup_x);
         int output[ ] =new int []{leftlow_y,leftlow_x,leftup_y,leftup_x, rightlow_y,rightlow_x, rightup_y,rightup_x} ;
 
-        Mat dst = new Mat(4,1,CvType.CV_32FC2);
-        dst.put(-250,0, -250,100,250,0,250,100);
-        Mat perspectiveTransform = Imgproc.getPerspectiveTransform(src, dst);
+            /*Mat dst = new Mat(4,1, CvType.CV_32FC2);
+            dst.put(-250,0, -250,100,250,0,250,100);
+            Mat perspectiveTransform = Imgproc.getPerspectiveTransform(src, dst);
 
 
-        Mat Src=new Mat(1,1,CvType.CV_32FC2);
-        Src.put(660,728);
-        Mat Dst=new Mat(1,1,CvType.CV_32FC2);
-        Core.perspectiveTransform(Src,Dst,perspectiveTransform);
+            Mat Src=new Mat(1,1,CvType.CV_32FC2);
+            Src.put(660,728);
+            Mat Dst=new Mat(1,1,CvType.CV_32FC2);
+            Core.perspectiveTransform(Src,Dst,perspectiveTransform);
+            Log.d("TESTC5", String.valueOf(srcImage));*/
         return output;
-
-
-
-
     }
 
 }

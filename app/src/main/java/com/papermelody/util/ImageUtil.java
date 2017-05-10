@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.ImageFormat;
 import android.media.Image;
+import android.util.Log;
 
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
@@ -78,6 +79,7 @@ public class ImageUtil {
         }
 
         Mat mat = new Mat(height + height / 2, width, CvType.CV_8UC1);
+        Log.d("TESTMAT", mat.rows()+" "+mat.cols());
         mat.put(0, 0, data);
 
         return mat;

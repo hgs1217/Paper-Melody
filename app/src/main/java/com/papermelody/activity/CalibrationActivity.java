@@ -172,7 +172,7 @@ public class CalibrationActivity extends BaseActivity {
 
                         Mat rgbaMat = ImageUtil.imageToRgba(image);
                         int[] coordinates = CalibrationAPI.getCalibrationCoordinate(rgbaMat);
-                        canvasCalibration.updateCalibrationCoordinates(coordinates);
+                        canvasCalibration.updateCalibrationCoordinates(coordinates, largest.getHeight(), largest.getWidth());
 
                         Log.d("TESTCAL", rgbaMat.rows() + " " + rgbaMat.cols());
                         cnt++;

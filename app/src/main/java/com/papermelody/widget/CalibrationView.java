@@ -15,6 +15,8 @@ import android.view.View;
 public class CalibrationView extends View {
 
     private int[] coordinates = new int[8];
+    private int photoHeight = 1280;
+    private int photoWidth = 960;
 
     public CalibrationView(Context c) {
         super(c);
@@ -33,21 +35,38 @@ public class CalibrationView extends View {
         super.onDraw(canvas);
 
         if (coordinates.length == 8 && coordinates[0] != 0) {
-            Log.d("CALIBRATION", "point1"+coordinates[0]+coordinates[1]);
-            int point1X = coordinates[0], point1Y = coordinates[1], point2X = coordinates[2],
+            double heightScalar = (double)canvas.getHeight() / photoHeight;
+            double widthScalar = (double)canvas.getWidth() / photoWidth;
+            Log.d("CANVAS", canvas.getHeight()+" "+canvas.getWidth());
+            Log.d("CANVASSCA", heightScalar+" "+widthScalar);
+            /*int point1X = coordinates[0], point1Y = coordinates[1], point2X = coordinates[2],
                     point2Y = coordinates[3], point3X = coordinates[4], point3Y = coordinates[5],
-                    point4X = coordinates[6], point4Y = coordinates[7];
+                    point4X = coordinates[6], point4Y = coordinates[7];*/
+
+            int point1Y = (int) (coordinates[0] * heightScalar), point1X = (int) (coordinates[1] * widthScalar),
+                    point2Y = (int) (coordinates[2] * heightScalar), point2X = (int) (coordinates[3] * widthScalar),
+                    point3Y = (int) (coordinates[4] * heightScalar), point3X = (int) (coordinates[5] * widthScalar),
+                    point4Y = (int) (coordinates[6] * heightScalar), point4X = (int) (coordinates[7] * widthScalar);
+
             Paint p = new Paint();
-            p.setColor(Color.GREEN);
+            p.setColor(Color.RED);
+            p.setStrokeWidth(6);
             canvas.drawLine(point1X, point1Y, point2X, point2Y, p);
-            canvas.drawLine(point1X, point1Y, point4X, point4Y, p);
-            canvas.drawLine(point2X, point2Y, point3X, point3Y, p);
+            canvas.drawLine(point1X, point1Y, point3X, point3Y, p);
+            canvas.drawLine(point2X, point2Y, point4X, point4Y, p);
             canvas.drawLine(point3X, point3Y, point4X, point4Y, p);
+            /*try {
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }*/
         }
     }
 
-    public void updateCalibrationCoordinates(int[] coordinates) {
+    public void updateCalibrationCoordinates(int[] coordinates, int height, int width) {
         System.arraycopy(coordinates, 0, this.coordinates, 0, 8);
+        photoHeight = height;
+        photoWidth = width;
         invalidate();
     }
 

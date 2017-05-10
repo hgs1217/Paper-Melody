@@ -1,5 +1,9 @@
 package com.papermelody.util;
 
+import android.util.Log;
+
+import com.papermelody.core.calibration.Calibration;
+
 import org.opencv.core.Mat;
 
 /**
@@ -15,10 +19,10 @@ public class CalibrationAPI {
 
     public static int[] getCalibrationCoordinate(Mat rgbaMat) {
         int[ ] a = new int []{0, 0, 0, 0, 0, 0, 0, 0};
-        //a = Calibration.main(rgbaMat);
-        /*for (int i=0; i<a.length; ++i) {
+        a = Calibration.main(rgbaMat);
+        for (int i=0; i<a.length; ++i) {
             Log.d("TESTA"+i, a[i]+" ");
-        }*/
+        }
         return a;
     }
 }

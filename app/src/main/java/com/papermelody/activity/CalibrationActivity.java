@@ -4,7 +4,6 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.ImageFormat;
 import android.hardware.camera2.CameraAccessException;
@@ -13,6 +12,7 @@ import android.hardware.camera2.CameraCharacteristics;
 import android.hardware.camera2.CameraDevice;
 import android.hardware.camera2.CameraManager;
 import android.hardware.camera2.CaptureRequest;
+import android.hardware.camera2.params.StreamConfigurationMap;
 import android.media.Image;
 import android.media.ImageReader;
 import android.os.Bundle;
@@ -21,6 +21,7 @@ import android.os.HandlerThread;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
+import android.util.Size;
 import android.util.SparseIntArray;
 import android.view.Surface;
 import android.view.SurfaceHolder;
@@ -37,7 +38,11 @@ import com.papermelody.util.ToastUtil;
 import com.papermelody.util.ViewUtil;
 import com.papermelody.widget.CalibrationView;
 
+import org.opencv.core.Mat;
+
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 
 import butterknife.BindView;
 
@@ -142,52 +147,59 @@ public class CalibrationActivity extends BaseActivity {
         handlerThread.start();
         childHandler = new Handler(handlerThread.getLooper());
         mainHandler = new Handler(getMainLooper());
+        cameraManager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
         cameraID = String.valueOf(CameraCharacteristics.LENS_FACING_BACK);  //前摄像头
         // 设置imageReader的尺寸与采样频率
-        imageReader = ImageReader.newInstance(1080, 1920, ImageFormat.YUV_420_888, 1);
-        imageReader.setOnImageAvailableListener(new ImageReader.OnImageAvailableListener() {
-            /* 可以在这里处理拍照得到的临时照片 例如，写入本地 */
+        try {
+            CameraCharacteristics characteristics = cameraManager.getCameraCharacteristics(cameraID);
+            StreamConfigurationMap map = characteristics.get(
+                    CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
+            Size largest = Collections.max(Arrays.asList(map.getOutputSizes(ImageFormat.YUV_420_888)),
+                    new CompareSizesByArea());
+            Log.d("TESTSIZE", largest.getWidth()+" "+largest.getHeight());
+            imageReader = ImageReader.newInstance(largest.getWidth(), largest.getHeight(), ImageFormat.YUV_420_888, 2);
+            imageReader.setOnImageAvailableListener(new ImageReader.OnImageAvailableListener() {
+                    /* 可以在这里处理拍照得到的临时照片 */
 
-            @Override
-            public void onImageAvailable(ImageReader reader) {
-                Image image = null;
-                try {
-                    image = reader.acquireLatestImage();
-                    Log.d("PreviewListener", "GetPreviewImage");
-                    Bitmap bitmap = ImageUtil.imageToByteArray(image);
-                    cnt++;
-                    Log.d("CALIBRATION", "imgReader"+cnt);
-                    int[] coordinates = CalibrationAPI.getCalibrationCoordinate(bitmap);
-                    canvasCalibration.updateCalibrationCoordinates(coordinates);
-                    if (cnt % 100 > 50) {
-                        btnCalibration.setBackgroundColor(Color.GREEN);
-                        canNext = true;
-                    } else {
-                        btnCalibration.setBackgroundColor(Color.GRAY);
-                        canNext = false;
-                    }
-                } finally {
-                    if (image != null) {
-                        image.close();
+                @Override
+                public void onImageAvailable(ImageReader reader) {
+                    Image image = null;
+                    try {
+                        image = imageReader.acquireLatestImage();
+                        if (image == null) {
+                            return;
+                        }
+
+                        Mat rgbaMat = ImageUtil.imageToRgba(image);
+                        int[] coordinates = CalibrationAPI.getCalibrationCoordinate(rgbaMat);
+                        canvasCalibration.updateCalibrationCoordinates(coordinates);
+
+                        Log.d("TESTCAL", rgbaMat.rows() + " " + rgbaMat.cols());
+                        Log.d("TESTMAT", String.valueOf(rgbaMat));
+                        cnt++;
+                        Log.d("CALIBRATION", "imgReader" + cnt);
+
+                        if (cnt % 100 > 50) {
+                            btnCalibration.setBackgroundColor(Color.GREEN);
+                            canNext = true;
+                        } else {
+                            btnCalibration.setBackgroundColor(Color.GRAY);
+                            canNext = false;
+                        }
+                    } finally {
+                        if (image != null) {
+                            image.close();
+                        }
                     }
                 }
-            }
-        }, mainHandler);
-        cameraManager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
-        try {
-            // TODO: 权限请求
+            }, mainHandler);
+
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
                 return;
             }
             cameraManager.openCamera(cameraID, deviceStateCallback, mainHandler);
         } catch (CameraAccessException e) {
             e.printStackTrace();
-        }
-    }
-
-    private void drawCalibrationLine(int[] coordinatesArray) {
-        if (coordinatesArray.length == 8) {
-
         }
     }
 
@@ -268,5 +280,15 @@ public class CalibrationActivity extends BaseActivity {
     @Override
     protected int getContentViewId() {
         return R.layout.activity_calibration;
+    }
+
+    private class CompareSizesByArea implements Comparator<Size> {
+
+        @Override
+        public int compare(Size lhs, Size rhs) {
+            // We cast here to ensure the multiplications won't overflow
+            return Long.signum((long) lhs.getWidth() * lhs.getHeight() -
+                    (long) rhs.getWidth() * rhs.getHeight());
+        }
     }
 }

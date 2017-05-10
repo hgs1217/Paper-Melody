@@ -3,7 +3,7 @@
     <alpha
         android:fromAlpha="1.0"
         android:toAlpha="0.0"
-        android:duration="200"/>
+        android:duration="100"/>
     <!-- 透明度控制动画效果 alpha
             浮点型值：
                 fromAlpha 属性为动画起始时透明度  0.0表示完全透明

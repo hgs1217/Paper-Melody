@@ -17,12 +17,15 @@ import java.util.List;
 
 public class Calibration {
 
+    static{ System.loadLibrary("opencv_java3"); }
+
     public static int [] main(Mat srcImage){
         Mat dstImage = new Mat();
         Mat grayImage = new Mat();
         Mat dilateImage = new Mat();
         List<MatOfPoint> contours = new ArrayList<MatOfPoint>();
-        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+        //System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+
         Imgproc.cvtColor(srcImage, grayImage, Imgproc.COLOR_BGR2GRAY);
         Mat element = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, (new Size(15,5)));
 
@@ -146,6 +149,7 @@ public class Calibration {
 
             }
         }
+
         Mat src = new Mat(4,1, CvType.CV_32FC2);
         src.put(leftlow_y,leftlow_x,leftup_y,leftup_x, rightlow_y,rightlow_x, rightup_y,rightup_x);
         int output[ ] =new int []{leftlow_y,leftlow_x,leftup_y,leftup_x, rightlow_y,rightlow_x, rightup_y,rightup_x} ;

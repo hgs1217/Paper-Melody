@@ -16,6 +16,9 @@ public class CalibrationAPI {
     public static int[] getCalibrationCoordinate(Mat rgbaMat) {
         int[ ] a = new int []{0, 0, 0, 0, 0, 0, 0, 0};
         //a = Calibration.main(rgbaMat);
+        /*for (int i=0; i<a.length; ++i) {
+            Log.d("TESTA"+i, a[i]+" ");
+        }*/
         return a;
     }
 }

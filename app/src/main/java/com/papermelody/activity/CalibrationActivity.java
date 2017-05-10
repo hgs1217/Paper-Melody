@@ -157,7 +157,7 @@ public class CalibrationActivity extends BaseActivity {
             Size largest = Collections.max(Arrays.asList(map.getOutputSizes(ImageFormat.YUV_420_888)),
                     new CompareSizesByArea());
             Log.d("TESTSIZE", largest.getWidth()+" "+largest.getHeight());
-            imageReader = ImageReader.newInstance(largest.getWidth(), largest.getHeight(), ImageFormat.YUV_420_888, 2);
+            imageReader = ImageReader.newInstance(largest.getWidth(), largest.getHeight(), ImageFormat.YUV_420_888, 5);
             imageReader.setOnImageAvailableListener(new ImageReader.OnImageAvailableListener() {
                     /* 可以在这里处理拍照得到的临时照片 */
 
@@ -175,7 +175,6 @@ public class CalibrationActivity extends BaseActivity {
                         canvasCalibration.updateCalibrationCoordinates(coordinates);
 
                         Log.d("TESTCAL", rgbaMat.rows() + " " + rgbaMat.cols());
-                        Log.d("TESTMAT", String.valueOf(rgbaMat));
                         cnt++;
                         Log.d("CALIBRATION", "imgReader" + cnt);
 

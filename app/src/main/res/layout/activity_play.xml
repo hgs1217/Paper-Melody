@@ -17,8 +17,146 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="160dp"
+        android:layout_marginLeft="18dp">
+
+        <include
+            android:id="@+id/key_effect_c3m"
+            layout="@layout/item_key_gradient_black" />
+
+        <ImageView
+            android:layout_marginLeft="17dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <include
+            android:id="@+id/key_effect_d3m"
+            layout="@layout/item_key_gradient_black" />
+
+        <ImageView
+            android:layout_marginLeft="33dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <include
+            android:id="@+id/key_effect_f3m"
+            layout="@layout/item_key_gradient_black" />
+
+        <ImageView
+            android:layout_marginLeft="15dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <include
+            android:id="@+id/key_effect_g3m"
+            layout="@layout/item_key_gradient_black" />
+
+        <ImageView
+            android:layout_marginLeft="15dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <include
+            android:id="@+id/key_effect_a3m"
+            layout="@layout/item_key_gradient_black" />
+
+        <ImageView
+            android:layout_marginLeft="33dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <include
+            android:id="@+id/key_effect_c4m"
+            layout="@layout/item_key_gradient_black" />
+
+        <ImageView
+            android:layout_marginLeft="17dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <include
+            android:id="@+id/key_effect_d4m"
+            layout="@layout/item_key_gradient_black" />
+
+        <ImageView
+            android:layout_marginLeft="33dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <include
+            android:id="@+id/key_effect_f4m"
+            layout="@layout/item_key_gradient_black" />
+
+        <ImageView
+            android:layout_marginLeft="15dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <include
+            android:id="@+id/key_effect_g4m"
+            layout="@layout/item_key_gradient_black" />
+
+        <ImageView
+            android:layout_marginLeft="15dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <include
+            android:id="@+id/key_effect_a4m"
+            layout="@layout/item_key_gradient_black" />
+
+        <ImageView
+            android:layout_marginLeft="33dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <include
+            android:id="@+id/key_effect_c5m"
+            layout="@layout/item_key_gradient_black" />
+
+        <ImageView
+            android:layout_marginLeft="17dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <include
+            android:id="@+id/key_effect_d5m"
+            layout="@layout/item_key_gradient_black" />
+
+        <ImageView
+            android:layout_marginLeft="33dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <include
+            android:id="@+id/key_effect_f5m"
+            layout="@layout/item_key_gradient_black" />
+
+        <ImageView
+            android:layout_marginLeft="15dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <include
+            android:id="@+id/key_effect_g5m"
+            layout="@layout/item_key_gradient_black" />
+
+        <ImageView
+            android:layout_marginLeft="15dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <include
+            android:id="@+id/key_effect_a5m"
+            layout="@layout/item_key_gradient_black" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_marginTop="285dp"
-        android:layout_marginLeft="1.2dp">
+        android:layout_marginLeft="1.5dp">
 
         <include
             android:id="@+id/key_effect_c3"
@@ -59,6 +197,11 @@
         <include
             android:id="@+id/key_effect_e4"
             layout="@layout/item_key_gradient_white" />
+
+        <ImageView
+            android:layout_marginLeft="-0.4dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
         <include
             android:id="@+id/key_effect_f4"
@@ -103,7 +246,6 @@
         <include
             android:id="@+id/key_effect_b5"
             layout="@layout/item_key_gradient_white" />
-
 
     </LinearLayout>
 

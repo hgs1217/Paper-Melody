@@ -18,12 +18,19 @@
         android:id="@+id/edit_music_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:selectAllOnFocus="true"
-        android:hint="@string/edit_music_title"/>
+        android:hint="@string/edit_music_title"
+        android:selectAllOnFocus="true" />
+
     <EditText
         android:id="@+id/edit_music_des"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:hint="@string/edit_music_des"/>
+        android:hint="@string/edit_music_des" />
+
+    <Button
+        android:id="@+id/btn_confirm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/submit" />
 
 </LinearLayout>

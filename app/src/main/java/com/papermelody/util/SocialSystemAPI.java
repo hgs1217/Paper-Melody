@@ -2,6 +2,7 @@ package com.papermelody.util;
 
 import com.papermelody.model.response.HttpResponse;
 import com.papermelody.model.response.OnlineMusicListResponse;
+import com.papermelody.model.response.UploadResponse;
 import com.papermelody.model.response.UserResponse;
 
 import java.util.Date;
@@ -37,10 +38,10 @@ public interface SocialSystemAPI {
     // 上传作品
     @FormUrlEncoded
     @POST("uploadmusic")
-    Observable<HttpResponse> uploadMusic(@Field("name") String name,
-                                         @Field("author") String author,
-                                         @Field("date") Date date,
-                                         @Field("link") String link);
+    Observable<UploadResponse> uploadMusic(@Field("name") String name,
+                                           @Field("author") String author,
+                                           @Field("date") Date date,
+                                           @Field("link") String link);
 
     // 音乐圈作品获取
     @GET("onlinemusics")

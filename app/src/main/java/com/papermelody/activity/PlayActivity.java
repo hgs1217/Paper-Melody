@@ -46,6 +46,11 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+
 import butterknife.BindView;
 
 /**
@@ -197,7 +202,7 @@ public class PlayActivity extends BaseActivity {
 
     private int mode, instrument, category, opern;
     private LinearLayout[] keys = new LinearLayout[36];
-    private int[] voiceResId = new int[] {R.raw.c3, R.raw.d3, R.raw.e3, R.raw.f3, R.raw.g3, R.raw.a3, R.raw.b3,
+    private int[] voiceResId = new int[]{R.raw.c3, R.raw.d3, R.raw.e3, R.raw.f3, R.raw.g3, R.raw.a3, R.raw.b3,
             R.raw.c4, R.raw.d4, R.raw.e4, R.raw.f4, R.raw.g4, R.raw.a4, R.raw.b4, R.raw.c5, R.raw.d5, R.raw.e5,
             R.raw.f5, R.raw.g5, R.raw.a5, R.raw.b5, R.raw.c3m, R.raw.d3m, R.raw.f3m, R.raw.g3m, R.raw.a3m,
             R.raw.c4m, R.raw.d4m, R.raw.f4m, R.raw.g4m, R.raw.a4m, R.raw.c5m, R.raw.d5m, R.raw.f5m, R.raw.g5m,
@@ -212,37 +217,43 @@ public class PlayActivity extends BaseActivity {
     private CameraCaptureSession cameraCaptureSession;
     private ImageReader imageReader;
 
-    private final Handler viewStartHandler = new Handler(){
+    private final Handler viewStartHandler = new Handler() {
         public void handleMessage(Message msg) {
             int i = msg.what;
             keys[i].clearAnimation();
-            Animation animation= AnimationUtils.loadAnimation(PlayActivity.this, R.anim.alpha_key_show);
+            Animation animation = AnimationUtils.loadAnimation(PlayActivity.this, R.anim.alpha_key_show);
             keys[i].setAlpha(1);
             keys[i].startAnimation(animation);
-        };
+        }
+
+        ;
     };
 
-    private final Handler viewGoneHandler = new Handler(){
+    private final Handler viewGoneHandler = new Handler() {
         public void handleMessage(Message msg) {
             int i = msg.what;
             keys[i].clearAnimation();
-            Animation animation= AnimationUtils.loadAnimation(PlayActivity.this, R.anim.alpha_key_gone);
+            Animation animation = AnimationUtils.loadAnimation(PlayActivity.this, R.anim.alpha_key_gone);
             keys[i].startAnimation(animation);
-        };
+        }
+
+        ;
     };
 
-    private final Handler viewEndHandler = new Handler(){
+    private final Handler viewEndHandler = new Handler() {
         public void handleMessage(Message msg) {
             int i = msg.what;
             keys[i].setAlpha(0);
-        };
+        }
+
+        ;
     };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,  WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         Intent intent = getIntent();
         mode = intent.getIntExtra(EXTRA_MODE, 0);
@@ -281,13 +292,16 @@ public class PlayActivity extends BaseActivity {
             textViewInstrumentName.setText("乐器：7孔笛");
         }
 
-        btnPlayOver.setOnClickListener((View v)->{
+        btnPlayOver.setOnClickListener((View v) -> {
+//          先假装生成一个midi文件（实际上是从assets里复制的），
+//          存放在应用的数据目录（data/data/com.papermelody/）下
+            copyMusicToData();
             Intent intent = new Intent(this, PlayListenActivity.class);
             startActivity(intent);
             finish();
         });
 
-        keys = new LinearLayout[] {keyC3, keyD3, keyE3, keyF3, keyG3, keyA3, keyB3, keyC4, keyD4,
+        keys = new LinearLayout[]{keyC3, keyD3, keyE3, keyF3, keyG3, keyA3, keyB3, keyC4, keyD4,
                 keyE4, keyF4, keyG4, keyA4, keyB4, keyC5, keyD5, keyE5, keyF5, keyG5, keyA5, keyB5,
                 keyC3M, keyD3M, keyF3M, keyG3M, keyA3M, keyC4M, keyD4M, keyF4M, keyG4M, keyA4M,
                 keyC5M, keyD5M, keyF5M, keyG5M, keyA5M};
@@ -340,7 +354,7 @@ public class PlayActivity extends BaseActivity {
                     CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
             Size largest = Collections.max(Arrays.asList(map.getOutputSizes(ImageFormat.YUV_420_888)),
                     new CompareSizesByArea());
-            Log.d("TESTSIZE", largest.getWidth()+" "+largest.getHeight());
+            Log.d("TESTSIZE", largest.getWidth() + " " + largest.getHeight());
             imageReader = ImageReader.newInstance(largest.getWidth(), largest.getHeight(), ImageFormat.YUV_420_888, 5);
             imageReader.setOnImageAvailableListener(new ImageReader.OnImageAvailableListener() {
                     /* 可以在这里处理拍照得到的临时照片 */
@@ -458,10 +472,10 @@ public class PlayActivity extends BaseActivity {
                     msg2.what = keyID;
                     msg3.what = keyID;
                     viewStartHandler.sendMessage(msg1);
-                    Log.d("TEST","THREAD1");
+                    Log.d("TEST", "THREAD1");
                     Thread.sleep(100);
                     viewGoneHandler.sendMessage(msg2);
-                    Log.d("TEST","THREAD2");
+                    Log.d("TEST", "THREAD2");
                     Thread.sleep(100);
                     viewEndHandler.sendMessage(msg3);
                 } catch (InterruptedException e) {
@@ -484,5 +498,46 @@ public class PlayActivity extends BaseActivity {
             return Long.signum((long) lhs.getWidth() * lhs.getHeight() -
                     (long) rhs.getWidth() * rhs.getHeight());
         }
+
+    }
+
+    private void copyMusicToData() {
+        InputStream in = null;
+        FileOutputStream out = null;
+        String path = getApplicationContext().getFilesDir()
+                .getAbsolutePath() + "/Kissbye.mid"; // data/data目录
+        File file = new File(path);
+        if (!file.exists()) {
+            try {
+                in = getAssets().open("Kissbye.mid"); // 从assets目录下复制
+                out = new FileOutputStream(file);
+                int length = -1;
+                byte[] buf = new byte[1024];
+                while ((length = in.read(buf)) != -1) {
+                    out.write(buf, 0, length);
+                }
+                out.flush();
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                if (in != null) {
+                    try {
+                        in.close();
+                    } catch (IOException e1) {
+                        // TODO Auto-generated catch block
+                        e1.printStackTrace();
+                    }
+                }
+                if (out != null) {
+                    try {
+                        out.close();
+                    } catch (IOException e1) {
+                        // TODO Auto-generated catch block
+                        e1.printStackTrace();
+                    }
+                }
+            }
+        }
+        ToastUtil.showShort("文件已保存至data/data/com.papermelody/下");
     }
 }

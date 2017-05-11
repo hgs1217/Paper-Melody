@@ -6,6 +6,20 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:orientation="vertical"
+    android:gravity="center"
     tools:context="com.papermelody.activity.LocalListenActivity">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="这是LocalListenActivity"/>
+
+    <LinearLayout
+        android:id="@+id/fragment_play"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+    </LinearLayout>
 
 </LinearLayout>

@@ -33,7 +33,7 @@ public class ListenFragment extends BaseFragment {
     Button btnPause;
 
     private MediaPlayer mediaPlayer;
-    private AssetFileDescriptor afd;
+    //    private AssetFileDescriptor afd;
     private TimerTask timerTask;
     private Timer timer;
     private boolean playState;
@@ -49,8 +49,10 @@ public class ListenFragment extends BaseFragment {
         mediaPlayer = new MediaPlayer();
         playState = true;
         try {
-            afd = getResources().getAssets().openFd("Kissbye.mid");
-            mediaPlayer.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
+//            afd = getResources().getAssets().openFd("Kissbye.mid");
+//            mediaPlayer.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
+            mediaPlayer.setDataSource(getContext().getFilesDir()
+                    .getAbsolutePath() + "/Kissbye.mid");
             mediaPlayer.prepare();
             mediaPlayer.start();
         } catch (IOException e) {
@@ -104,15 +106,10 @@ public class ListenFragment extends BaseFragment {
     }
 
     @Override
-    public void onPause(){
+    public void onPause() {
         super.onPause();
-        timer.cancel();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
         timer.cancel();
         mediaPlayer.release();
     }
+
 }

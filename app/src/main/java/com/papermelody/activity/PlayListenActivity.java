@@ -39,6 +39,7 @@ public class PlayListenActivity extends BaseActivity {
         transaction.add(R.id.fragment_play, ListenFragment.newInstance());
         transaction.commit();
         btnSaveToLocal.setOnClickListener((View v) -> {
+            copyToAndroidData();
             ToastUtil.showShort("保存成功（才怪嘞");
         });
         btnUpload.setOnClickListener((View v) -> {
@@ -50,5 +51,11 @@ public class PlayListenActivity extends BaseActivity {
     @Override
     protected int getContentViewId() {
         return R.layout.activity_play_listen;
+    }
+
+//    从data/data/packagename复制到sdcard/Android/data/packagename
+//    以便于其他应用访问，同时也属于应用数据
+    private void copyToAndroidData() {
+//        TODO: 以后再说吧
     }
 }

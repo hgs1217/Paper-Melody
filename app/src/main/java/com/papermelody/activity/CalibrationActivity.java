@@ -34,12 +34,9 @@ import android.widget.FrameLayout;
 import com.papermelody.R;
 import com.papermelody.util.App;
 import com.papermelody.util.CalibrationAPI;
-import com.papermelody.util.ImageUtil;
 import com.papermelody.util.ToastUtil;
 import com.papermelody.util.ViewUtil;
 import com.papermelody.widget.CalibrationView;
-
-import org.opencv.core.Mat;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -174,7 +171,6 @@ public class CalibrationActivity extends BaseActivity {
                         int[] coordinates = CalibrationAPI.getCalibrationCoordinate(image);
                         canvasCalibration.updateCalibrationCoordinates(coordinates, largest.getHeight(), largest.getWidth());
 
-                        Log.d("TESTCAL", rgbaMat.rows() + " " + rgbaMat.cols());
                         cnt++;
                         Log.d("CALIBRATION", "imgReader" + cnt);
 

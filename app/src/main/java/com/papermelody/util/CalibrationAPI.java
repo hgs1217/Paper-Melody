@@ -20,6 +20,7 @@ public class CalibrationAPI {
 
     public static int[] getCalibrationCoordinate(Image image) {
         Mat rgbaMat = ImageUtil.imageToRgba(image);
+        Log.d("TESTCAL", rgbaMat.rows() + " " + rgbaMat.cols());
 
         int[ ] a = new int []{0, 0, 0, 0, 0, 0, 0, 0};
         a = Calibration.main(rgbaMat);

@@ -60,35 +60,35 @@ public class UploadActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         api = RetrofitClient.getSocialSystemAPI();
         btnConfirm.setOnClickListener((View v) -> {
-            Thread thread = new Thread(new Runnable() {
-                @Override
-                public void run() {
-//                这里上传的是data/data/目录下已经存在的文件
-                    isSuccess = uploadMusic("http://59.78.0.200:8080/uploadFile",
-                            "Kissbye.mid", new File(getApplicationContext().getFilesDir()
-                                    .getAbsolutePath() + "/Kissbye.mid"));
-                    Log.i("nib", "isSuccess1==" + isSuccess);
-                }
-            });
-            thread.start();
+            boolean hasUser = true;
+            String author = null;
             try {
-                thread.join();
-            } catch (InterruptedException e) {
-                ToastUtil.showShort("InterruptedException");
-                Log.i("nib", "InterruptedException");
-//                e.printStackTrace();
+                author = ((App) getApplication()).getUser().getUsername();
+            } catch (NullPointerException e) {
+                ToastUtil.showShort("登录了才能上传哦！");
+                hasUser = false;
             }
-            Log.i("nib", "isSuccess2==" + isSuccess);
-            if (isSuccess) {
-                boolean hasUser = true;
-                String author = null;
+            if (hasUser) {
+                Thread thread = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+//                这里上传的是data/data/目录下已经存在的文件
+                        isSuccess = uploadMusic("http://59.78.0.200:8080/uploadFile",
+                                "Kissbye.mid", new File(getApplicationContext().getFilesDir()
+                                        .getAbsolutePath() + "/Kissbye.mid"));
+                        Log.i("nib", "isSuccess1==" + isSuccess);
+                    }
+                });
+                thread.start();
                 try {
-                    author = ((App) getApplication()).getUser().getUsername();
-                } catch (NullPointerException e) {
-                    ToastUtil.showShort("登录了才能上传哦！");
-                    hasUser = false;
+                    thread.join();
+                } catch (InterruptedException e) {
+//                    ToastUtil.showShort("InterruptedException");
+                    Log.i("nib", "InterruptedException");
+//                e.printStackTrace();
                 }
-                if (hasUser) {
+                Log.i("nib", "isSuccess2==" + isSuccess);
+                if (isSuccess) {
                     String name = editMusicTitle.getText().toString();
                     Date date = new Date(System.currentTimeMillis());
                     Log.i("nib", date.toString());
@@ -111,13 +111,11 @@ public class UploadActivity extends BaseActivity {
                                     ,
                                     NetworkFailureHandler.uploadErrorHandler
                             ));
+                } else {
+                    Log.i("nib", "isSuccess==false");
+                    ToastUtil.showShort(R.string.upload_failed);
                 }
-
-            } else {
-                Log.i("nib", "isSuccess==false");
-                ToastUtil.showShort(R.string.upload_failed);
             }
-
         });
     }
 

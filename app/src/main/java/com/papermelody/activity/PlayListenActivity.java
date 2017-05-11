@@ -4,12 +4,20 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
 import com.papermelody.R;
 import com.papermelody.fragment.ListenFragment;
 import com.papermelody.util.ToastUtil;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 import butterknife.BindView;
 
@@ -41,14 +49,19 @@ public class PlayListenActivity extends BaseActivity {
         transaction.add(R.id.fragment_play, ListenFragment.newInstance());
         transaction.commit();
         btnSaveToLocal.setOnClickListener((View v) -> {
-            copyToAndroidData();
-            ToastUtil.showShort("保存成功（才怪嘞");
+            String filename = "Kissbye.mid";
+            String destPath = getApplicationContext().getExternalFilesDir("") + "/" + filename;
+            String sourcePath = getApplicationContext().getFilesDir() + "/" + filename;
+            copyToAndroidData(sourcePath, destPath);
+            Log.i("nib", "fuck 我的log呢???");
+            ToastUtil.showShort("保存成功");
+            btnSaveToLocal.setClickable(false);
         });
         btnUpload.setOnClickListener((View v) -> {
             Intent intent = new Intent(getApplicationContext(), UploadActivity.class);
             startActivity(intent);
         });
-        btnQuitUpload.setOnClickListener((View v)->{
+        btnQuitUpload.setOnClickListener((View v) -> {
             Intent intent = new Intent();
             intent.setClass(this, MainActivity.class);
             startActivity(intent);
@@ -61,9 +74,23 @@ public class PlayListenActivity extends BaseActivity {
         return R.layout.activity_play_listen;
     }
 
-//    从data/data/packagename复制到sdcard/Android/data/packagename
+    //    从data/data/packagename复制到sdcard/Android/data/packagename
 //    以便于其他应用访问，同时也属于应用数据
-    private void copyToAndroidData() {
-//        TODO: 以后再说吧
+    private void copyToAndroidData(String sourcePath, String destPath) {
+        Log.i("nib", "dest: " + destPath + "\n" + "source:" + sourcePath);
+        try {
+            InputStream inputStream = new FileInputStream(sourcePath);
+            OutputStream outputStream = new FileOutputStream(destPath);
+            byte bt[] = new byte[1024];
+            int c;
+            while ((c = inputStream.read(bt)) > 0) {
+                outputStream.write(bt, 0, c);
+            }
+            inputStream.close();
+            outputStream.close();
+            Log.i("nib", "复制完成");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

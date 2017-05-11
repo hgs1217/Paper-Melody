@@ -27,6 +27,8 @@ public class PlayListenActivity extends BaseActivity {
     Button btnSaveToLocal;
     @BindView(R.id.btn_upload)
     Button btnUpload;
+    @BindView(R.id.btn_quit_upload)
+    Button btnQuitUpload;
 
     private FragmentManager fragmentManager;
     private FragmentTransaction transaction;
@@ -45,6 +47,12 @@ public class PlayListenActivity extends BaseActivity {
         btnUpload.setOnClickListener((View v) -> {
             Intent intent = new Intent(getApplicationContext(), UploadActivity.class);
             startActivity(intent);
+        });
+        btnQuitUpload.setOnClickListener((View v)->{
+            Intent intent = new Intent();
+            intent.setClass(this, MainActivity.class);
+            startActivity(intent);
+            finish();
         });
     }
 

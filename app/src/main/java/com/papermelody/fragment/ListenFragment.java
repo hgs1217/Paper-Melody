@@ -47,14 +47,14 @@ public class ListenFragment extends BaseFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mediaPlayer = new MediaPlayer();
-        playState = true;
+        playState = false;
         try {
 //            afd = getResources().getAssets().openFd("Kissbye.mid");
 //            mediaPlayer.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
             mediaPlayer.setDataSource(getContext().getFilesDir()
                     .getAbsolutePath() + "/Kissbye.mid");
             mediaPlayer.prepare();
-            mediaPlayer.start();
+//            mediaPlayer.start();
         } catch (IOException e) {
             ToastUtil.showShort(R.string.unable_to_play);
         }

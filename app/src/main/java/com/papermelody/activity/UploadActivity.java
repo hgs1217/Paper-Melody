@@ -102,7 +102,10 @@ public class UploadActivity extends BaseActivity {
                                         if (errorCode == 0) {
                                             Log.i("nib", "errCode==0");
                                             ToastUtil.showShort(R.string.upload_success);
-//                                        this.onDestroy();
+                                            Intent intent = new Intent();
+                                            intent.setClass(this, MainActivity.class);
+                                            startActivity(intent);
+                                            finish();
                                         } else {
                                             Log.i("nib", "errCode!=0");
                                             ToastUtil.showShort(R.string.upload_failed);

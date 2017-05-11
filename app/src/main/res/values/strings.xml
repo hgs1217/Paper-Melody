@@ -62,7 +62,7 @@
     <string name="register_success">注册成功</string>
     <string name="login_success">登录成功</string>
     <string name="name_already_exist">该名称已存在</string>
-    <string name="add" />
     <string name="add_new_comment">这首音乐好赞啊！（demo)</string>
-    <string name="upload_comment">上传评论</string>
+    <string name="calibration_cancel">重新标定</string>
+    <string name="calibration_complete">完成标定</string>
 </resources>

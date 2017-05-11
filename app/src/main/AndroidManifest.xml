@@ -34,6 +34,9 @@
             android:name=".activity.CalibrationActivity"
             android:screenOrientation="landscape"/>
         <activity
+            android:name=".activity.CalibrationConfirmActivity"
+            android:screenOrientation="landscape" />
+        <activity
             android:name=".activity.AboutActivity"
             android:screenOrientation="portrait" />
         <activity

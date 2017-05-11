@@ -2,9 +2,7 @@ package com.papermelody.activity;
 
 import android.Manifest;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.graphics.ImageFormat;
 import android.hardware.camera2.CameraAccessException;
 import android.hardware.camera2.CameraCaptureSession;
@@ -26,9 +24,7 @@ import android.util.SparseIntArray;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.View;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.FrameLayout;
 
 import com.papermelody.R;
@@ -62,8 +58,6 @@ public class CalibrationActivity extends BaseActivity {
 
     @BindView(R.id.view_calibration)
     SurfaceView viewCalibration;
-    @BindView(R.id.btn_calibration)
-    Button btnCalibration;
     @BindView(R.id.canvas_calibration)
     CalibrationView canvasCalibration;
 
@@ -95,7 +89,6 @@ public class CalibrationActivity extends BaseActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,  WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         initSurfaceView();
-        initNextButton();
     }
 
     private void initSurfaceSize() {
@@ -129,15 +122,7 @@ public class CalibrationActivity extends BaseActivity {
         });
     }
 
-    private void initNextButton() {
-        btnCalibration.setOnClickListener((View v)->{
-            if (canNext) {
-                Intent intent = new Intent(this, PlayActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        });
-    }
+
 
     private void initCamera() {
         HandlerThread handlerThread = new HandlerThread("Camera2");
@@ -167,20 +152,11 @@ public class CalibrationActivity extends BaseActivity {
                             return;
                         }
 
-
                         int[] coordinates = CalibrationAPI.getCalibrationCoordinate(image);
                         canvasCalibration.updateCalibrationCoordinates(coordinates, largest.getHeight(), largest.getWidth());
 
                         cnt++;
                         Log.d("CALIBRATION", "imgReader" + cnt);
-
-                        if (cnt % 100 > 50) {
-                            btnCalibration.setBackgroundColor(Color.GREEN);
-                            canNext = true;
-                        } else {
-                            btnCalibration.setBackgroundColor(Color.GRAY);
-                            canNext = false;
-                        }
                     } finally {
                         if (image != null) {
                             image.close();

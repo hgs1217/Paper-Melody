@@ -78,7 +78,7 @@ public class MusicHallFragment extends BaseFragment {
         context = view.getContext();
 
         // TODO: 开了服务器再调用此函数，否则就关了
-        initGetMusicList();
+        //initGetMusicList();
         return view;
     }
 

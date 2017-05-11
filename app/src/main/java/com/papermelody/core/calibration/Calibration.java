@@ -4,9 +4,10 @@ package com.papermelody.core.calibration;
  * Created by tangtonghui on 17/5/9.
  */
 
-import org.opencv.core.CvType;
+import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
+import org.opencv.core.MatOfPoint2f;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.imgproc.Moments;
@@ -17,9 +18,11 @@ import java.util.List;
 
 public class Calibration {
 
+
     static{ System.loadLibrary("opencv_java3"); }
 
-    public static int[]  main(Mat srcImage){
+
+    public static Calibration_result  main(Mat srcImage){
 
         Mat dstImage = new Mat();
         Mat grayImage = new Mat();
@@ -80,7 +83,8 @@ public class Calibration {
                 }
             }
         }
-        if (nnn==0){int o[]=new int[]{0,0,0,0,0,0,0,0};return o;};
+        Calibration_result out = new Calibration_result();
+        if (nnn==0){return out;}
 
         int temp_order=0;
         int temp=0;
@@ -150,9 +154,15 @@ public class Calibration {
 
             }
         }
-        Mat src = new Mat(4,1, CvType.CV_32FC2);
-        src.put(leftlow_y,leftlow_x,leftup_y,leftup_x, rightlow_y,rightlow_x, rightup_y,rightup_x);
-        int output[ ] =new int []{leftlow_y,leftlow_x,leftup_y,leftup_x, rightlow_y,rightlow_x, rightup_y,rightup_x} ;
+        out.leftlow_x=leftlow_x;
+        out.leftlow_y=leftlow_y;
+        out.leftup_x=leftup_x;
+        out.leftup_y=leftup_y;
+        out.rightup_x=rightup_x;
+        out.rightup_y=leftup_y;
+        out.rightlow_x=leftlow_x;
+        out.rightlow_y=rightlow_y;
+
 
             /*Mat dst = new Mat(4,1, CvType.CV_32FC2);
             dst.put(-250,0, -250,100,250,0,250,100);
@@ -164,7 +174,75 @@ public class Calibration {
             Mat Dst=new Mat(1,1,CvType.CV_32FC2);
             Core.perspectiveTransform(Src,Dst,perspectiveTransform);
             Log.d("TESTC5", String.valueOf(srcImage));*/
-        return output;
+        return out;
+    }
+    public static Mat transform(int b[]){
+        MatOfPoint2f src = new MatOfPoint2f(
+                new org.opencv.core.Point(b[1],b[0]), // tl
+                new org.opencv.core.Point(b[3],b[2]), // tr
+                new org.opencv.core.Point(b[5],b[4]), // br
+                new org.opencv.core.Point(b[7],b[6]) // bl
+        );
+        MatOfPoint2f dst = new MatOfPoint2f(
+                new org.opencv.core.Point(-250,0), // tl
+                new org.opencv.core.Point(-250,100), // tr
+                new org.opencv.core.Point(250,0), // br
+                new org.opencv.core.Point(250,100) // bl
+        );
+
+
+
+
+
+
+        Mat perspectiveTransform = Imgproc.getPerspectiveTransform(src, dst);
+        return perspectiveTransform;
+
+    }
+    public static int[] key(Mat m,int []fingerpoint){
+
+
+
+        MatOfPoint2f Src = new MatOfPoint2f(
+
+                new org.opencv.core.Point(fingerpoint[0],fingerpoint[1]) // bl
+        );
+        MatOfPoint2f Dst= new MatOfPoint2f(
+
+                new org.opencv.core.Point(fingerpoint[0],fingerpoint[1]) // bl
+        );
+        System.out.println( Dst.get(0,0)[1]);
+        System.out.println( Dst.get(0,0)[0]);
+
+        Core.perspectiveTransform(Src,Dst,m);
+        System.out.println( Dst.get(0,0)[1]);
+        System.out.println( Dst.get(0,0)[0]);
+        int output[ ] =new int []{(int)Dst.get(0,0)[0],(int)Dst.get(0,0)[1]} ;
+
+return output;
+    }
+
+    public static class Calibration_result{
+
+
+        boolean flag;
+        int leftlow_x,leftlow_y,leftup_x,leftup_y, rightlow_x,rightlow_y, rightup_x,rightup_y;
+
+
+        Calibration_result(){
+            flag=false;
+            leftlow_x=0;
+            leftlow_y=0;
+            leftup_x=0;
+            leftup_y=0;
+            rightlow_x=0;
+            rightlow_y=0;
+            rightup_x=0;
+            rightup_y=0;
+
+        }
+
+
     }
 
 }

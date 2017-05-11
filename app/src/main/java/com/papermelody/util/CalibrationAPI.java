@@ -18,15 +18,14 @@ public class CalibrationAPI {
 
     static{ System.loadLibrary("opencv_java3"); }
 
-    public static int[] getCalibrationCoordinate(Image image) {
+    public static Calibration.Calibration_result getCalibrationCoordinate(Image image) {
         Mat rgbaMat = ImageUtil.imageToRgba(image);
         Log.d("TESTCAL", rgbaMat.rows() + " " + rgbaMat.cols());
 
-        int[ ] a = new int []{0, 0, 0, 0, 0, 0, 0, 0};
+       Calibration.Calibration_result a;
         a = Calibration.main(rgbaMat);
-        for (int i=0; i<a.length; ++i) {
-            Log.d("TESTA"+i, a[i]+" ");
-        }
+
         return a;
     }
 }
+

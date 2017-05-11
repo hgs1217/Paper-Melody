@@ -85,11 +85,16 @@ public class ImageUtil {
         return mat;
     }
 
+
+
     public static Mat yuvToRgba(Image image, Mat yuvMat) {
         Mat bgrMat = new Mat(image.getHeight(), image.getWidth(), CvType.CV_8UC4);
+        Log.d("TESTCALL", bgrMat.rows() + " " + bgrMat.cols());
         Imgproc.cvtColor(yuvMat, bgrMat, Imgproc.COLOR_YUV2BGR_I420);
-        Mat rgbaMat = new Mat();
-        Imgproc.cvtColor(bgrMat, rgbaMat, Imgproc.COLOR_BGR2RGBA, 0);
-        return rgbaMat;
+        Log.d("TESTCALL", yuvMat.rows() + " " + yuvMat.cols());
+
+
+
+        return bgrMat;
     }
 }

@@ -12,6 +12,7 @@ import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.imgproc.Moments;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +23,7 @@ public class Calibration {
     static{ System.loadLibrary("opencv_java3"); }
 
 
-    public static Calibration_result  main(Mat srcImage){
+    public static CalibrationResult main(Mat srcImage){
 
         Mat dstImage = new Mat();
         Mat grayImage = new Mat();
@@ -83,7 +84,7 @@ public class Calibration {
                 }
             }
         }
-        Calibration_result out = new Calibration_result();
+        CalibrationResult out = new CalibrationResult();
         if (nnn==0){return out;}
 
         int temp_order=0;
@@ -154,14 +155,14 @@ public class Calibration {
 
             }
         }
-        out.leftlow_x=leftlow_x;
-        out.leftlow_y=leftlow_y;
-        out.leftup_x=leftup_x;
-        out.leftup_y=leftup_y;
-        out.rightup_x=rightup_x;
-        out.rightup_y=leftup_y;
-        out.rightlow_x=leftlow_x;
-        out.rightlow_y=rightlow_y;
+        out.leftLowX=leftlow_x;
+        out.leftLowY=leftlow_y;
+        out.leftUpX=leftup_x;
+        out.leftUpY=leftup_y;
+        out.rightUpX=rightup_x;
+        out.rightUpY=leftup_y;
+        out.rightLowX=leftlow_x;
+        out.rightLowY=rightlow_y;
 
 
             /*Mat dst = new Mat(4,1, CvType.CV_32FC2);
@@ -222,27 +223,61 @@ public class Calibration {
 return output;
     }
 
-    public static class Calibration_result{
+    public static class CalibrationResult implements Serializable {
 
 
         boolean flag;
-        int leftlow_x,leftlow_y,leftup_x,leftup_y, rightlow_x,rightlow_y, rightup_x,rightup_y;
+        int leftLowX,leftLowY,leftUpX,leftUpY, rightLowX,rightLowY, rightUpX,rightUpY;
 
 
-        Calibration_result(){
+        CalibrationResult(){
             flag=false;
-            leftlow_x=0;
-            leftlow_y=0;
-            leftup_x=0;
-            leftup_y=0;
-            rightlow_x=0;
-            rightlow_y=0;
-            rightup_x=0;
-            rightup_y=0;
+            leftLowX=0;
+            leftLowY=0;
+            leftUpX=0;
+            leftUpY=0;
+            rightLowX=0;
+            rightLowY=0;
+            rightUpX=0;
+            rightUpY=0;
 
         }
 
+        public boolean isFlag() {
+            return flag;
+        }
 
+        public int getLeftLowX() {
+            return leftLowX;
+        }
+
+        public int getLeftLowY() {
+            return leftLowY;
+        }
+
+        public int getLeftUpX() {
+            return leftUpX;
+        }
+
+        public int getLeftUpY() {
+            return leftUpY;
+        }
+
+        public int getRightLowX() {
+            return rightLowX;
+        }
+
+        public int getRightLowY() {
+            return rightLowY;
+        }
+
+        public int getRightUpX() {
+            return rightUpX;
+        }
+
+        public int getRightUpY() {
+            return rightUpY;
+        }
     }
 
 }

@@ -18,11 +18,11 @@ public class CalibrationAPI {
 
     static{ System.loadLibrary("opencv_java3"); }
 
-    public static Calibration.Calibration_result getCalibrationCoordinate(Image image) {
+    public static Calibration.CalibrationResult getCalibrationCoordinate(Image image) {
         Mat rgbaMat = ImageUtil.imageToRgba(image);
         Log.d("TESTCAL", rgbaMat.rows() + " " + rgbaMat.cols());
 
-       Calibration.Calibration_result a;
+       Calibration.CalibrationResult a;
         a = Calibration.main(rgbaMat);
 
         return a;

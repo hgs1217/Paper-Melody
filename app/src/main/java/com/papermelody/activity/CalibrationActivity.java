@@ -2,6 +2,7 @@ package com.papermelody.activity;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.ImageFormat;
 import android.hardware.camera2.CameraAccessException;
@@ -28,6 +29,7 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 
 import com.papermelody.R;
+import com.papermelody.core.calibration.Calibration;
 import com.papermelody.util.App;
 import com.papermelody.util.CalibrationAPI;
 import com.papermelody.util.ToastUtil;
@@ -60,6 +62,10 @@ public class CalibrationActivity extends BaseActivity {
     SurfaceView viewCalibration;
     @BindView(R.id.canvas_calibration)
     CalibrationView canvasCalibration;
+
+    public static final String EXTRA_RESULT = "EXTRA_RESULT";
+    public static final String EXTRA_HEIGHT = "EXTRA_HEIGHT";
+    public static final String EXTRA_WIDTH = "EXTRA_WIDTH";
 
     private static final SparseIntArray ORIENTATIONS = new SparseIntArray();
 
@@ -152,8 +158,18 @@ public class CalibrationActivity extends BaseActivity {
                             return;
                         }
 
-                        int[] coordinates = CalibrationAPI.getCalibrationCoordinate(image);
-                        canvasCalibration.updateCalibrationCoordinates(coordinates, largest.getHeight(), largest.getWidth());
+                        Calibration.CalibrationResult calibrationResult = CalibrationAPI.getCalibrationCoordinate(image);
+                        canvasCalibration.updateCalibrationCoordinates(calibrationResult, largest.getHeight(), largest.getWidth());
+                        if (calibrationResult.isFlag()) {
+                            Intent intent = new Intent(CalibrationActivity.this, CalibrationConfirmActivity.class);
+                            Bundle bundle = new Bundle();
+                            bundle.putSerializable(EXTRA_RESULT, calibrationResult);
+                            intent.putExtras(bundle);
+                            intent.putExtra(EXTRA_HEIGHT, largest.getHeight());
+                            intent.putExtra(EXTRA_WIDTH, largest.getWidth());
+                            startActivity(intent);
+                            finish();
+                        }
 
                         cnt++;
                         Log.d("CALIBRATION", "imgReader" + cnt);

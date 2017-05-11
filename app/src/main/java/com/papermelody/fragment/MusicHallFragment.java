@@ -44,6 +44,8 @@ public class MusicHallFragment extends BaseFragment {
     @BindView(R.id.recycler_view_hall)
     RecyclerView recyclerViewHall;
 
+    public static final String SERIAL_ONLINEMUSIC = "SERIAL_ONLINEMUSIC";
+
     private Context context;
     private MusicHallRecyclerViewAdapter adapter;
     private MusicHallRecyclerViewAdapter.OnItemClickListener hallOnItemClickListener = new
@@ -51,6 +53,9 @@ public class MusicHallFragment extends BaseFragment {
                 @Override
                 public void OnItemClick(OnlineMusic music) {
                     Intent intent = new Intent(context, OnlineListenActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable(SERIAL_ONLINEMUSIC, music);
+                    intent.putExtras(bundle);
                     startActivity(intent);
                 }
             };
@@ -71,6 +76,8 @@ public class MusicHallFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_music_hall, container, false);
         ButterKnife.bind(this, view);
         context = view.getContext();
+
+        // TODO: 开了服务器再调用此函数，否则就关了
         //initGetMusicList();
         return view;
     }

@@ -1,10 +1,12 @@
 package com.papermelody.model;
 
+import java.io.Serializable;
+
 /**
  * Created by HgS_1217_ on 2017/4/10.
  */
 
-public class LocalMusic extends Music {
+public class LocalMusic extends Music implements Serializable {
     /**
      * 本地音乐类
      */

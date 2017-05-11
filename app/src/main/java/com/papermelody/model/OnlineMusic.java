@@ -2,6 +2,7 @@ package com.papermelody.model;
 
 import com.papermelody.model.response.OnlineMusicInfo;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -9,7 +10,7 @@ import java.util.Date;
  * Created by HgS_1217_ on 2017/4/10.
  */
 
-public class OnlineMusic extends Music {
+public class OnlineMusic extends Music implements Serializable {
     /**
      * 上传音乐类
      */

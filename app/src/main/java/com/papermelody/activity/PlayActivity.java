@@ -39,11 +39,8 @@ import android.widget.TextView;
 
 import com.papermelody.R;
 import com.papermelody.util.FingerDetectorAPI;
-import com.papermelody.util.ImageUtil;
 import com.papermelody.util.ToastUtil;
 import com.papermelody.util.ViewUtil;
-
-import org.opencv.core.Mat;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -183,6 +180,11 @@ public class PlayActivity extends BaseActivity {
     public static final int KEY_G5M = 34;
     public static final int KEY_A5M = 35;
 
+    public static final String EXTRA_MODE = "EXTRA_MODE";
+    public static final String EXTRA_INSTRUMENT = "EXTRA_INSTRUMENT";
+    public static final String EXTRA_CATIGORY = "EXTRA_CATIGORY";
+    public static final String EXTRA_OPERN = "EXTRA_OPERN";
+
     private static final SparseIntArray ORIENTATIONS = new SparseIntArray();
 
     ///为了使照片竖直显示
@@ -243,10 +245,10 @@ public class PlayActivity extends BaseActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,  WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         Intent intent = getIntent();
-        mode = intent.getIntExtra("mode", 0);
-        instrument = intent.getIntExtra("instrument", 0);
-        category = intent.getIntExtra("category", 0);
-        //opern = intent.getIntExtra("opern", 0);
+        mode = intent.getIntExtra(EXTRA_MODE, 0);
+        instrument = intent.getIntExtra(EXTRA_INSTRUMENT, 0);
+        category = intent.getIntExtra(EXTRA_CATIGORY, 0);
+        //opern = intent.getIntExtra(EXTRA_OPERN, 0);
 
         initSoundPool();
         initView();

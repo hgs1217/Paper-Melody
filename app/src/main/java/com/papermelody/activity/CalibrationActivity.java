@@ -32,6 +32,7 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 
 import com.papermelody.R;
+import com.papermelody.util.App;
 import com.papermelody.util.CalibrationAPI;
 import com.papermelody.util.ImageUtil;
 import com.papermelody.util.ToastUtil;
@@ -69,7 +70,6 @@ public class CalibrationActivity extends BaseActivity {
     @BindView(R.id.canvas_calibration)
     CalibrationView canvasCalibration;
 
-    private static double STANDARD_SIZE_RATE = 1.33333; // 4: 3
     private static final SparseIntArray ORIENTATIONS = new SparseIntArray();
 
     ///为了使照片竖直显示
@@ -104,7 +104,7 @@ public class CalibrationActivity extends BaseActivity {
     private void initSurfaceSize() {
         /* 横屏导致长宽交换 */
         int width = ViewUtil.getScreenWidth(this);
-        int height = (int) (width / STANDARD_SIZE_RATE);
+        int height = (int) (width / App.STANDARD_SIZE_RATE);
         viewCalibration.setLayoutParams(new FrameLayout.LayoutParams(width, height));
     }
 
@@ -170,8 +170,8 @@ public class CalibrationActivity extends BaseActivity {
                             return;
                         }
 
-                        Mat rgbaMat = ImageUtil.imageToRgba(image);
-                        int[] coordinates = CalibrationAPI.getCalibrationCoordinate(rgbaMat);
+
+                        int[] coordinates = CalibrationAPI.getCalibrationCoordinate(image);
                         canvasCalibration.updateCalibrationCoordinates(coordinates, largest.getHeight(), largest.getWidth());
 
                         Log.d("TESTCAL", rgbaMat.rows() + " " + rgbaMat.cols());

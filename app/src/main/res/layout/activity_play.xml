@@ -7,6 +7,11 @@
     android:fitsSystemWindows="true"
     tools:context="com.papermelody.activity.PlayActivity">
 
+    <SurfaceView
+        android:id="@+id/view_play"
+        android:layout_width="1dp"
+        android:layout_height="1dp" />
+
     <ImageView
         android:id="@+id/img_instrument_background"
         android:layout_width="match_parent"

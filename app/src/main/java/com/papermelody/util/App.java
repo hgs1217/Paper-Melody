@@ -14,6 +14,8 @@ public class App extends Application {
      * 用于记录各类数据的应用类，例如用户，设置等应用全局变量
      */
 
+    public static final double STANDARD_SIZE_RATE = 1.33333; // 4: 3
+
     private User user;
     private static Context context;
 

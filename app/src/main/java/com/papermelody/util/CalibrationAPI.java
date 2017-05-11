@@ -1,5 +1,6 @@
 package com.papermelody.util;
 
+import android.media.Image;
 import android.util.Log;
 
 import com.papermelody.core.calibration.Calibration;
@@ -17,7 +18,9 @@ public class CalibrationAPI {
 
     static{ System.loadLibrary("opencv_java3"); }
 
-    public static int[] getCalibrationCoordinate(Mat rgbaMat) {
+    public static int[] getCalibrationCoordinate(Image image) {
+        Mat rgbaMat = ImageUtil.imageToRgba(image);
+
         int[ ] a = new int []{0, 0, 0, 0, 0, 0, 0, 0};
         a = Calibration.main(rgbaMat);
         for (int i=0; i<a.length; ++i) {

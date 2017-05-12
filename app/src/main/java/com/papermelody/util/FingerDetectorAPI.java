@@ -17,7 +17,7 @@ public class FingerDetectorAPI {
 
     public static int getKey(Image image) {
         // TODO:
-        Mat rgbaMat = ImageUtil.imageToRgba(image);
+        Mat rgbaMat = ImageUtil.imageToBgr(image);
         //Log.d("TESTMAT", rgbaMat.rows()+" "+rgbaMat.cols());
         int key = PlayActivity.KEY_A3;
         return key;

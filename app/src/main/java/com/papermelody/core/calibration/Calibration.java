@@ -160,8 +160,8 @@ public class Calibration {
         out.leftUpX=leftup_x;
         out.leftUpY=leftup_y;
         out.rightUpX=rightup_x;
-        out.rightUpY=leftup_y;
-        out.rightLowX=leftlow_x;
+        out.rightUpY=rightup_y;
+        out.rightLowX=rightlow_x;
         out.rightLowY=rightlow_y;
 
 

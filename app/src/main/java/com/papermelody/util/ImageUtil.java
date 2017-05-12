@@ -1,13 +1,14 @@
 package com.papermelody.util;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.ImageFormat;
 import android.media.Image;
 import android.util.Log;
 
+import org.opencv.android.Utils;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
+import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 
 import java.nio.ByteBuffer;
@@ -21,16 +22,18 @@ public class ImageUtil {
      * 用于处理图像的工具类
      */
 
-    public static Bitmap imageToBitmap(Image image) {
-        ByteBuffer buffer = image.getPlanes()[0].getBuffer();
-        byte[] bytes = new byte[buffer.remaining()];
-        buffer.get(bytes);  //由缓冲区存入字节数组
-        return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+    public static Bitmap imageToBitmap(Mat bgr) {
+        Log.d("TESTB", bgr.rows()+" "+bgr.cols());
+        Mat rgbaMat = new Mat (bgr.cols(), bgr.rows(), CvType.CV_8U, new Scalar(4));
+        Imgproc.cvtColor(bgr, rgbaMat, Imgproc.COLOR_BGR2RGBA, 0);
+        Bitmap bmp = Bitmap.createBitmap(rgbaMat.cols(), rgbaMat.rows(), Bitmap.Config.ARGB_8888);
+        Utils.matToBitmap(bgr, bmp);
+        return bmp;
     }
 
-    public static Mat imageToRgba(Image image) {
+    public static Mat imageToBgr(Image image) {
         Mat yuvMat = imageToMat(image);
-        return yuvToRgba(image, yuvMat);
+        return yuvToBgr(image, yuvMat);
     }
 
     public static Mat imageToMat(Image image) {
@@ -87,14 +90,11 @@ public class ImageUtil {
 
 
 
-    public static Mat yuvToRgba(Image image, Mat yuvMat) {
+    public static Mat yuvToBgr(Image image, Mat yuvMat) {
         Mat bgrMat = new Mat(image.getHeight(), image.getWidth(), CvType.CV_8UC4);
         Log.d("TESTCALL", bgrMat.rows() + " " + bgrMat.cols());
         Imgproc.cvtColor(yuvMat, bgrMat, Imgproc.COLOR_YUV2BGR_I420);
         Log.d("TESTCALL", yuvMat.rows() + " " + yuvMat.cols());
-
-
-
         return bgrMat;
     }
 }

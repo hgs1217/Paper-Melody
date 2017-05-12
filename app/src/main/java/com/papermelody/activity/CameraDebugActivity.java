@@ -2,11 +2,8 @@ package com.papermelody.activity;
 
 import android.Manifest;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.graphics.ImageFormat;
-import android.hardware.Camera;
 import android.hardware.camera2.CameraAccessException;
 import android.hardware.camera2.CameraCaptureSession;
 import android.hardware.camera2.CameraCharacteristics;
@@ -21,23 +18,19 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
-import android.util.Log;
 import android.util.Size;
 import android.util.SparseIntArray;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.View;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 
 import com.papermelody.R;
 import com.papermelody.util.App;
-import com.papermelody.util.CalibrationAPI;
 import com.papermelody.util.TapDetectorAPI;
 import com.papermelody.util.ToastUtil;
 import com.papermelody.util.ViewUtil;
-import com.papermelody.widget.CalibrationView;
 import com.papermelody.widget.CameraDebugView;
 
 import org.opencv.core.Point;
@@ -90,7 +83,7 @@ public class CameraDebugActivity extends BaseActivity {
          * Process image here
          */
 //        Log.w("test", "hello?" + image.getWidth());
-        List<List<Point>> ret = TapDetectorAPI.getTap(image);
+        List<List<Point>> ret = TapDetectorAPI.getAllForDebug(image);
         canvasCameraDebug.updatePoints(ret.get(0), ret.get(1), ret.get(2), image.getHeight(), image.getWidth());
     }
 

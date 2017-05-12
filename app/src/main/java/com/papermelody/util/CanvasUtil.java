@@ -30,8 +30,8 @@ public class CanvasUtil {
         float widthScalar =  (float) canvas.getWidth() / photoWidth;
 
         for (Point pt: points) {
-            canvas.drawCircle((float)pt.x * widthScalar , (float)pt.y * heightScalar, 10, p);
+            canvas.drawCircle((photoWidth - (float)pt.x) * widthScalar , (float)pt.y * heightScalar, 10, p);
+            // subtracted by photoWidth because the point is reversed in X from front camera
         }
-
     }
 }

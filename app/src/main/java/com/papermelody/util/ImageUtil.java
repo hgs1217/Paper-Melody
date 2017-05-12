@@ -23,8 +23,8 @@ public class ImageUtil {
      */
 
     public static Bitmap imageToBitmap(Mat bgr) {
-        Log.d("TESTB", bgr.rows()+" "+bgr.cols());
-        Mat rgbaMat = new Mat (bgr.cols(), bgr.rows(), CvType.CV_8U, new Scalar(4));
+        Log.d("TESTB", bgr.rows() + " " + bgr.cols());
+        Mat rgbaMat = new Mat(bgr.cols(), bgr.rows(), CvType.CV_8U, new Scalar(4));
         Imgproc.cvtColor(bgr, rgbaMat, Imgproc.COLOR_BGR2RGBA, 0);
         Bitmap bmp = Bitmap.createBitmap(rgbaMat.cols(), rgbaMat.rows(), Bitmap.Config.ARGB_8888);
         Utils.matToBitmap(bgr, bmp);
@@ -83,12 +83,11 @@ public class ImageUtil {
         }
 
         Mat mat = new Mat(height + height / 2, width, CvType.CV_8UC1);
-        Log.d("TESTMAT", mat.rows()+" "+mat.cols());
+        Log.d("TESTMAT", mat.rows() + " " + mat.cols());
         mat.put(0, 0, data);
 
         return mat;
     }
-
 
 
     public static Mat yuvToBgr(Image image, Mat yuvMat) {

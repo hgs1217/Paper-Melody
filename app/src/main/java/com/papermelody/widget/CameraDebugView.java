@@ -3,9 +3,7 @@ package com.papermelody.widget;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 
 import com.papermelody.util.CanvasUtil;
@@ -53,14 +51,14 @@ public class CameraDebugView extends View {
         if (!tapping.isEmpty()) {
             CanvasUtil.drawPoints(canvas, tapping, Color.GREEN);
         }
-
     }
 
-    public void updatePoints(List<Point> handContours, List<Point> fingerTips,List<Point> tapping, int height, int width) {
+    public void updatePoints(List<Point> handContours, List<Point> fingerTips,List<Point> tapping,
+                             int height, int width, Context context, int surViewHeight) {
         this.handContours = new ArrayList<>(handContours);
         this.fingerTips = new ArrayList<>(fingerTips);
         this.tapping = new ArrayList<>(tapping);
-        CanvasUtil.updateSize(height, width);
+        CanvasUtil.updateSize(height, width, context, surViewHeight);
         invalidate();
     }
 

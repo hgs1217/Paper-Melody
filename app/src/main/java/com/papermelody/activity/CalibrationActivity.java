@@ -35,7 +35,6 @@ import android.widget.LinearLayout;
 
 import com.papermelody.R;
 import com.papermelody.core.calibration.Calibration;
-import com.papermelody.util.App;
 import com.papermelody.util.ImageProcessor;
 import com.papermelody.util.ImageUtil;
 import com.papermelody.util.ToastUtil;
@@ -116,10 +115,10 @@ public class CalibrationActivity extends BaseActivity {
         initView();
     }
 
-    private void initSurfaceSize() {
+    private void initSurfaceSize(double scalar) {
         /* 横屏导致长宽交换 */
         int width = ViewUtil.getScreenWidth(this);
-        int height = (int) (width / App.STANDARD_SIZE_RATE);
+        int height = (int) (width / scalar);
         viewCalibration.setLayoutParams(new FrameLayout.LayoutParams(width, height));
         imgCalibration.setLayoutParams(new FrameLayout.LayoutParams(width, height));
         canvasCalibration.setSize(width, height);
@@ -136,7 +135,7 @@ public class CalibrationActivity extends BaseActivity {
 
             @Override
             public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-                initSurfaceSize();
+
             }
 
             @Override
@@ -183,11 +182,13 @@ public class CalibrationActivity extends BaseActivity {
                     new CompareSizesByArea());
             Log.d("TESTSIZE", largest.getWidth()+" "+largest.getHeight());
             imageReader = ImageReader.newInstance(largest.getWidth(), largest.getHeight(), ImageFormat.YUV_420_888, 5);
+            initSurfaceSize((double) largest.getWidth()/largest.getHeight());
             // 计算合法区域范围
             int targetHeightStart = getHeightRelativeCoordinate(ViewUtil.getScreenHeight
                     (CalibrationActivity.this) - layoutLegal.getHeight(), largest.getHeight());
             int targetHeightEnd = getHeightRelativeCoordinate(ViewUtil.getScreenHeight
                     (CalibrationActivity.this), largest.getHeight());
+
             Log.d("TESTTAR", targetHeightStart+" "+targetHeightEnd);
             imageReader.setOnImageAvailableListener(new ImageReader.OnImageAvailableListener() {
                     /* 可以在这里处理拍照得到的临时照片 */

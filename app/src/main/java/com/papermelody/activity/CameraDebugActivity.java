@@ -18,6 +18,7 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.util.Log;
 import android.util.Size;
 import android.util.SparseIntArray;
 import android.view.Surface;
@@ -27,7 +28,6 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 
 import com.papermelody.R;
-import com.papermelody.util.App;
 import com.papermelody.util.TapDetectorAPI;
 import com.papermelody.util.ToastUtil;
 import com.papermelody.util.ViewUtil;
@@ -84,7 +84,8 @@ public class CameraDebugActivity extends BaseActivity {
          */
 //        Log.w("test", "hello?" + image.getWidth());
         List<List<Point>> ret = TapDetectorAPI.getAllForDebug(image);
-        canvasCameraDebug.updatePoints(ret.get(0), ret.get(1), ret.get(2), image.getHeight(), image.getWidth());
+        canvasCameraDebug.updatePoints(ret.get(0), ret.get(1), ret.get(2), image.getHeight(),
+                image.getWidth(), this, viewCameraDebug.getHeight());
     }
 
 
@@ -97,11 +98,12 @@ public class CameraDebugActivity extends BaseActivity {
         initSurfaceView();
     }
 
-    private void initSurfaceSize() {
+    private void initSurfaceSize(double scalar) {
         /* 横屏导致长宽交换 */
         int width = ViewUtil.getScreenWidth(this);
-        int height = (int) (width / App.STANDARD_SIZE_RATE);
+        int height = (int) (width / scalar);
         viewCameraDebug.setLayoutParams(new FrameLayout.LayoutParams(width, height));
+        Log.d("TESTV", width+" "+height);
     }
 
     private void initSurfaceView() {
@@ -115,7 +117,7 @@ public class CameraDebugActivity extends BaseActivity {
 
             @Override
             public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-                initSurfaceSize();
+
             }
 
             @Override
@@ -144,7 +146,8 @@ public class CameraDebugActivity extends BaseActivity {
                     CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
             Size largest = Collections.max(Arrays.asList(map.getOutputSizes(ImageFormat.YUV_420_888)),
                     new CompareSizesByArea());
-
+            initSurfaceSize((double) largest.getWidth()/largest.getHeight());
+            Log.d("TESTVL", largest.getWidth()+" "+largest.getHeight());
             imageReader = ImageReader.newInstance(largest.getWidth(), largest.getHeight(), ImageFormat.YUV_420_888, 5);
             imageReader.setOnImageAvailableListener(reader -> {
                 Image image = null;

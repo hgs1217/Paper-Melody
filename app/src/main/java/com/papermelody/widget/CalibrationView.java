@@ -51,8 +51,8 @@ public class CalibrationView extends View {
             double heightScalar = (double) height / photoHeight;
             double widthScalar = (double) width / photoWidth;
             int screenHeight = ViewUtil.getScreenHeight(context);
-            double offset = (canvas.getHeight() - screenHeight) / 2.0;
-            Log.d("CANVAS", canvas.getHeight()+" "+canvas.getWidth());
+            double offset = (height - screenHeight) / 2.0;
+            Log.d("CANVAS", height+" "+canvas.getWidth());
 
             int point1X = (int) (leftUpX * widthScalar), point1Y = (int) (leftUpY * heightScalar - offset),
                     point2X = (int) (leftLowX * widthScalar), point2Y = (int) (leftLowY * heightScalar - offset),
@@ -84,6 +84,7 @@ public class CalibrationView extends View {
         rightLowY = calibrationResult.getRightLowY();
         rightUpX = calibrationResult.getRightUpX();
         rightUpY = calibrationResult.getRightUpY();
+
         photoHeight = height;
         photoWidth = width;
         this.context = context;

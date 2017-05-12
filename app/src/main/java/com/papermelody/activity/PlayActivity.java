@@ -38,6 +38,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.papermelody.R;
+import com.papermelody.core.calibration.Calibration;
 import com.papermelody.util.ImageProcessor;
 import com.papermelody.util.ImageUtil;
 import com.papermelody.util.ToastUtil;
@@ -219,6 +220,7 @@ public class PlayActivity extends BaseActivity {
     private String cameraID;
     private CameraCaptureSession cameraCaptureSession;
     private ImageReader imageReader;
+    private Calibration.CalibrationResult calibrationResult;
 
     private final Handler viewStartHandler = new Handler() {
         public void handleMessage(Message msg) {
@@ -263,6 +265,7 @@ public class PlayActivity extends BaseActivity {
         instrument = intent.getIntExtra(EXTRA_INSTRUMENT, 0);
         category = intent.getIntExtra(EXTRA_CATIGORY, 0);
         //opern = intent.getIntExtra(EXTRA_OPERN, 0);
+        calibrationResult = (Calibration.CalibrationResult) intent.getSerializableExtra(CalibrationActivity.EXTRA_RESULT);
 
         initSoundPool();
         initView();
@@ -372,7 +375,7 @@ public class PlayActivity extends BaseActivity {
                         }
 
                         Mat mat = ImageUtil.imageToBgr(image);
-                        List<Integer> keys = ImageProcessor.getPlaySoundKey(mat);
+                        List<Integer> keys = ImageProcessor.getPlaySoundKey(mat, calibrationResult);
                         for (Integer key : keys) {
                             playSound(key);
                         }

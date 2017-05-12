@@ -82,8 +82,6 @@ public class CalibrationActivity extends BaseActivity {
     LinearLayout layoutLegal;
 
     public static final String EXTRA_RESULT = "EXTRA_RESULT";
-    public static final String EXTRA_HEIGHT = "EXTRA_HEIGHT";
-    public static final String EXTRA_WIDTH = "EXTRA_WIDTH";
 
     private static final SparseIntArray ORIENTATIONS = new SparseIntArray();
 
@@ -102,6 +100,7 @@ public class CalibrationActivity extends BaseActivity {
     private String cameraID;
     private CameraCaptureSession cameraCaptureSession;
     private ImageReader imageReader;
+    private Calibration.CalibrationResult calibrationResult;
     private int targetHeightStart = 0;
     private int targetHeightEnd = 1000;
 
@@ -151,6 +150,9 @@ public class CalibrationActivity extends BaseActivity {
 
         btnCalibrationComplete.setOnClickListener((View v)->{
             Intent intent = new Intent(this, PlayActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable(EXTRA_RESULT, calibrationResult);
+            intent.putExtras(bundle);
             startActivity(intent);
             finish();
         });
@@ -203,8 +205,7 @@ public class CalibrationActivity extends BaseActivity {
                         }
 
                         Mat mat = ImageUtil.imageToBgr(image);
-                        Calibration.CalibrationResult calibrationResult = ImageProcessor.getCalibrationCoordinate
-                                (mat, targetHeightStart, targetHeightEnd);
+                        calibrationResult = ImageProcessor.getCalibrationCoordinate(mat, targetHeightStart, targetHeightEnd);
                         canvasCalibration.updateCalibrationCoordinates(calibrationResult,
                                 largest.getHeight(), largest.getWidth(), CalibrationActivity.this);
                         if (calibrationResult.isFlag()) {

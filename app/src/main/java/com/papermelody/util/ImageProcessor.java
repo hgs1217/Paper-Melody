@@ -30,7 +30,7 @@ public class ImageProcessor {
         return a;
     }
 
-    public static List<Integer> getPlaySoundKey(Mat bgrMat) {
+    public static List<Integer> getPlaySoundKey(Mat bgrMat, Calibration.CalibrationResult result) {
         List<Integer> keys = new ArrayList<>();
         return keys;
     }

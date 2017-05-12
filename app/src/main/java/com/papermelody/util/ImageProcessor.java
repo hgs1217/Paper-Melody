@@ -5,6 +5,7 @@ import android.util.Log;
 import com.papermelody.core.calibration.Calibration;
 
 import org.opencv.core.Mat;
+import org.opencv.core.Point;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,9 +13,6 @@ import java.util.List;
 /**
  * Created by HgS_1217_ on 2017/4/10.
  */
-import org.opencv.core.Point;
-
-import static android.R.attr.key;
 
 public class ImageProcessor {
     /**
@@ -32,6 +30,7 @@ public class ImageProcessor {
 
         return a;
     }
+
     public static Calibration.TranformResult getKeyTranform(Calibration.CalibrationResult result){
         return Calibration.transform(result);
 

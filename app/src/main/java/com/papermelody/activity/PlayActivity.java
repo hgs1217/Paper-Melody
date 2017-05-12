@@ -205,6 +205,7 @@ public class PlayActivity extends BaseActivity {
     }
 
     private int mode, instrument, category, opern;
+    private Calibration.CalibrationResult calibrationResult;
     private LinearLayout[] keys = new LinearLayout[36];
     private int[] voiceResId = new int[]{R.raw.c3, R.raw.d3, R.raw.e3, R.raw.f3, R.raw.g3, R.raw.a3, R.raw.b3,
             R.raw.c4, R.raw.d4, R.raw.e4, R.raw.f4, R.raw.g4, R.raw.a4, R.raw.b4, R.raw.c5, R.raw.d5, R.raw.e5,
@@ -220,7 +221,7 @@ public class PlayActivity extends BaseActivity {
     private String cameraID;
     private CameraCaptureSession cameraCaptureSession;
     private ImageReader imageReader;
-    private Calibration.CalibrationResult calibrationResult;
+
 
     private final Handler viewStartHandler = new Handler() {
         public void handleMessage(Message msg) {
@@ -362,6 +363,7 @@ public class PlayActivity extends BaseActivity {
                     new CompareSizesByArea());
             Log.d("TESTSIZE", largest.getWidth() + " " + largest.getHeight());
             imageReader = ImageReader.newInstance(largest.getWidth(), largest.getHeight(), ImageFormat.YUV_420_888, 5);
+            Calibration.TranformResult tranformResult = ImageProcessor.getKeyTranform(calibrationResult);
             imageReader.setOnImageAvailableListener(new ImageReader.OnImageAvailableListener() {
                     /* 可以在这里处理拍照得到的临时照片 */
 
@@ -375,7 +377,7 @@ public class PlayActivity extends BaseActivity {
                         }
 
                         Mat mat = ImageUtil.imageToBgr(image);
-                        List<Integer> keys = ImageProcessor.getPlaySoundKey(mat, calibrationResult);
+                        List<Integer> keys = ImageProcessor.getPlaySoundKey(mat, tranformResult);
                         for (Integer key : keys) {
                             playSound(key);
                         }

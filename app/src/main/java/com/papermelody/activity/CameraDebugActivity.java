@@ -2,6 +2,7 @@ package com.papermelody.activity;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.ImageFormat;
 import android.hardware.camera2.CameraAccessException;
@@ -11,8 +12,11 @@ import android.hardware.camera2.CameraDevice;
 import android.hardware.camera2.CameraManager;
 import android.hardware.camera2.CaptureRequest;
 import android.hardware.camera2.params.StreamConfigurationMap;
+import android.media.AudioAttributes;
+import android.media.AudioManager;
 import android.media.Image;
 import android.media.ImageReader;
+import android.media.SoundPool;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -28,11 +32,15 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 
 import com.papermelody.R;
+import com.papermelody.core.calibration.Calibration;
+import com.papermelody.util.ImageProcessor;
+import com.papermelody.util.ImageUtil;
 import com.papermelody.util.TapDetectorAPI;
 import com.papermelody.util.ToastUtil;
 import com.papermelody.util.ViewUtil;
 import com.papermelody.widget.CameraDebugView;
 
+import org.opencv.core.Mat;
 import org.opencv.core.Point;
 
 import java.util.Arrays;
@@ -78,12 +86,21 @@ public class CameraDebugActivity extends BaseActivity {
     private CameraCaptureSession cameraCaptureSession;
     private ImageReader imageReader;
 
-    public void processImage(Image image) {
+    private Calibration.CalibrationResult calibrationResult;
+    private int[] voiceResId = new int[]{R.raw.c3, R.raw.d3, R.raw.e3, R.raw.f3, R.raw.g3, R.raw.a3, R.raw.b3,
+            R.raw.c4, R.raw.d4, R.raw.e4, R.raw.f4, R.raw.g4, R.raw.a4, R.raw.b4, R.raw.c5, R.raw.d5, R.raw.e5,
+            R.raw.f5, R.raw.g5, R.raw.a5, R.raw.b5, R.raw.c3m, R.raw.d3m, R.raw.f3m, R.raw.g3m, R.raw.a3m,
+            R.raw.c4m, R.raw.d4m, R.raw.f4m, R.raw.g4m, R.raw.a4m, R.raw.c5m, R.raw.d5m, R.raw.f5m, R.raw.g5m,
+            R.raw.a5m};
+    private int[] voiceId = new int[36];
+    private SoundPool soundPool;
+
+    public void processImage(Image image, Mat bgrMat) {
         /**
          * Process image here
          */
 //        Log.w("test", "hello?" + image.getWidth());
-        List<List<Point>> ret = TapDetectorAPI.getAllForDebug(image);
+        List<List<Point>> ret = TapDetectorAPI.getAllForDebug(bgrMat);
         canvasCameraDebug.updatePoints(ret.get(0), ret.get(1), ret.get(2), image.getHeight(),
                 image.getWidth(), this, viewCameraDebug.getHeight());
     }
@@ -95,7 +112,20 @@ public class CameraDebugActivity extends BaseActivity {
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
+        Intent intent = getIntent();
+        calibrationResult = (Calibration.CalibrationResult) intent.getSerializableExtra(CalibrationActivity.EXTRA_RESULT);
+
+        initSoundPool();
         initSurfaceView();
+    }
+
+    private void initSoundPool() {
+        SoundPool.Builder spb = new SoundPool.Builder();
+        spb.setMaxStreams(10);
+        AudioAttributes.Builder attrBuilder = new AudioAttributes.Builder();
+        attrBuilder.setLegacyStreamType(AudioManager.STREAM_MUSIC);
+        spb.setAudioAttributes(attrBuilder.build());
+        soundPool = spb.build();
     }
 
     private void initSurfaceSize(double scalar) {
@@ -128,6 +158,10 @@ public class CameraDebugActivity extends BaseActivity {
                 }
             }
         });
+
+        for (int i = 0; i < voiceId.length; ++i) {
+            voiceId[i] = soundPool.load(this, voiceResId[i], 1);
+        }
     }
 
 
@@ -149,13 +183,21 @@ public class CameraDebugActivity extends BaseActivity {
             initSurfaceSize((double) largest.getWidth()/largest.getHeight());
             Log.d("TESTVL", largest.getWidth()+" "+largest.getHeight());
             imageReader = ImageReader.newInstance(largest.getWidth(), largest.getHeight(), ImageFormat.YUV_420_888, 5);
+            Calibration.TranformResult tranformResult = ImageProcessor.getKeyTranform(calibrationResult);
             imageReader.setOnImageAvailableListener(reader -> {
                 Image image = null;
                 try {
                     image = imageReader.acquireLatestImage();
                     if (image == null) { return; }
 
-                    processImage(image);
+                    Mat mat = ImageUtil.imageToBgr(image);
+                    Mat mat2 = mat.clone();
+                    List<Integer> keys = ImageProcessor.getPlaySoundKey(mat, tranformResult);
+                    processImage(image, mat2);
+                    for (Integer key : keys) {
+                        playSound(key);
+                        Log.d("TESTK", key+"");
+                    }
 
                 } finally {
                     if (image != null) { image.close(); }
@@ -243,6 +285,10 @@ public class CameraDebugActivity extends BaseActivity {
         } catch (CameraAccessException e) {
             e.printStackTrace();
         }
+    }
+
+    public void playSound(int keyID) {
+        soundPool.play(voiceId[keyID], 1, 1, 0, 0, 1);
     }
 
     @Override

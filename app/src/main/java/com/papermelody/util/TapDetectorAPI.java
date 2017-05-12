@@ -1,8 +1,5 @@
 package com.papermelody.util;
 
-import java.util.ArrayList;
-import java.util.List;
-import android.media.Image;
 import android.util.Log;
 
 import com.papermelody.tapdetect.FingerDetector;
@@ -11,11 +8,13 @@ import com.papermelody.tapdetect.TapDetector;
 import com.papermelody.tapdetect.Util;
 import com.papermelody.tapdetect.facade.Tap;
 
-import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
 import org.opencv.core.Point;
 import org.opencv.imgproc.Imgproc;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by gigaflw on 2017/5/11.
@@ -44,9 +43,9 @@ public class TapDetectorAPI {
         return taps;
     }
 
-    public static List<List<Point>> getAllForDebug(Image image) {
-        Mat yuv = ImageUtil.imageToMat(image);
-        Mat im = ImageUtil.yuvToBgr(image, yuv);
+    public static List<List<Point>> getAllForDebug(Mat im) {
+//        Mat yuv = ImageUtil.imageToMat(image);
+//        Mat im = ImageUtil.yuvToBgr(image, yuv);
 
         double shrink_ratio = Util.resize(im);
 

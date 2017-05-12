@@ -148,7 +148,8 @@ public class CalibrationActivity extends BaseActivity {
         });
 
         btnCalibrationComplete.setOnClickListener((View v)->{
-            Intent intent = new Intent(this, PlayActivity.class);
+            //Intent intent = new Intent(this, PlayActivity.class);
+            Intent intent = new Intent(this, CameraDebugActivity.class);
             Bundle bundle = new Bundle();
             bundle.putSerializable(EXTRA_RESULT, calibrationResult);
             intent.putExtras(bundle);

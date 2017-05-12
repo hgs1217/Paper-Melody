@@ -30,14 +30,14 @@ public class TapDetectorAPI {
     private static final TapDetector td = new TapDetector();
 
 
-    public static List<Point> getTap(Image image) {
-        Mat yuv = ImageUtil.imageToMat(image);
-        Mat im = ImageUtil.yuvToBgr(image, yuv);
+    public static List<Point> getTap(Mat bgrMat) {
+       // Mat yuv = ImageUtil.imageToMat(image);
+        //Mat im = ImageUtil.yuvToBgr(image, yuv);
 
-        double shrink_ratio = Util.resize(im);
-        Imgproc.cvtColor(im, im, Imgproc.COLOR_BGR2YCrCb);
+        double shrink_ratio = Util.resize(bgrMat);
+        Imgproc.cvtColor(bgrMat, bgrMat, Imgproc.COLOR_BGR2YCrCb);
 
-        List<Point> taps = Tap.getTaps(im);
+        List<Point> taps = Tap.getTaps(bgrMat);
 
         for (Point pt: taps) { pt.x /= shrink_ratio; pt.y /= shrink_ratio; }
 

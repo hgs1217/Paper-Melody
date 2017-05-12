@@ -12,6 +12,9 @@ import java.util.List;
 /**
  * Created by HgS_1217_ on 2017/4/10.
  */
+import org.opencv.core.Point;
+
+import static android.R.attr.key;
 
 public class ImageProcessor {
     /**
@@ -29,10 +32,29 @@ public class ImageProcessor {
 
         return a;
     }
+    public static Calibration.TranformResult getKeyTranform(Calibration.CalibrationResult result){
+        return Calibration.transform(result);
 
-    public static List<Integer> getPlaySoundKey(Mat bgrMat, Calibration.CalibrationResult result) {
+    }
+
+
+    public static List<Integer> getPlaySoundKey(Mat bgrMat, Calibration.TranformResult result) {
         List<Integer> keys = new ArrayList<>();
-        return keys;
+        int count[]=new int [37];
+        for (int i=0;i<count.length;i++){count[i]=0;}
+        List<Point> tap=TapDetectorAPI.getTap(bgrMat);
+        if (tap.isEmpty()){return keys;}
+        else {
+            for (int i=0;i<tap.size();i++){
+                count[Calibration.Key(result,tap.get(i).x,tap.get(i).y)]++;
+
+            }
+            for (int i=0;i<36;i++){if (count[i]!=0)keys.add(i);}
+            return keys;
+
+
+        }
+
     }
 }
 

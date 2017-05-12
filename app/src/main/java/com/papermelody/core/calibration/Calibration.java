@@ -4,6 +4,8 @@ package com.papermelody.core.calibration;
  * Created by tangtonghui on 17/5/9.
  */
 
+import com.papermelody.activity.PlayActivity;
+
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
@@ -16,6 +18,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.R.attr.x;
+import static android.R.attr.y;
 import static com.papermelody.R.raw.b1;
 import static com.papermelody.R.raw.b2;
 import static com.papermelody.R.raw.b3;
@@ -243,88 +247,89 @@ public class Calibration {
         return tranformResult;
 
     }
-    public static int[] key(TranformResult tranformResult,int []fingerpoint){
+    public static int Key(TranformResult tranformResult,double x,double y){
 
 
 
         MatOfPoint2f Src = new MatOfPoint2f(
 
-                new org.opencv.core.Point(fingerpoint[0],fingerpoint[1]) // bl
+                new org.opencv.core.Point(x,y) // bl
         );
         MatOfPoint2f Dst= new MatOfPoint2f(
 
-                new org.opencv.core.Point(fingerpoint[0],fingerpoint[1]) // bl
+                new org.opencv.core.Point(x,y) // bl
         );
-        System.out.println( Dst.get(0,0)[1]);
-        System.out.println( Dst.get(0,0)[0]);
 
-        Core.perspectiveTransform(Src,Dst,m);
-        System.out.println( Dst.get(0,0)[1]);
-        System.out.println( Dst.get(0,0)[0]);
-        int output[ ] =new int []{(int)Dst.get(0,0)[0],(int)Dst.get(0,0)[1]} ;
 
-return output;
+        Core.perspectiveTransform(Src,Dst,tranformResult.m);
+
+        return key(Dst.get(0,0)[0],Dst.get(0,0)[1],tranformResult.blackWidth);
+
+
     }
-    public static int key(int x,int y,int blackWidth){
+    public static int key(double x,double y,double blackWidth){
         double whiteWidth=(500-20*blackWidth)/19;
-        if (y>100||y<0){
-            if (x<blackWidth/2&&x>-whiteWidth)return w1;
-            if (x>=blackWidth*0.5&&x<whiteWidth+blackWidth*1.5)return w2;
-            if (x>=whiteWidth+blackWidth*1.5&&x<whiteWidth*2+blackWidth*2.5)return w3;
-            if (x>=whiteWidth*2+blackWidth*2.5&&x<whiteWidth*3+blackWidth*3.5)return w4;
-            if (x>=whiteWidth*3+blackWidth*3.5&&x<whiteWidth*4+blackWidth*4.5)return w5;
-            if (x>=whiteWidth*4+blackWidth*4.5&&x<whiteWidth*5+blackWidth*5.5)return w6;
-            if (x>=whiteWidth*5+blackWidth*5.5&&x<whiteWidth*6+blackWidth*6.5)return w7;
-            if (x>=whiteWidth*6+blackWidth*6.5&&x<whiteWidth*7+blackWidth*7.5)return w8;
-            if (x>=whiteWidth*7+blackWidth*7.5&&x<whiteWidth*8+blackWidth*8.5)return w9;
-            if (x>=whiteWidth*8+blackWidth*8.5&&x<whiteWidth*9+blackWidth*9.5)return w10;
-            if (x>=whiteWidth*9+blackWidth*9.5&&x<whiteWidth*10+blackWidth*10.5)return w11;
-            if (x>=whiteWidth*10+blackWidth*10.5&&x<whiteWidth*11+blackWidth*11.5)return w12;
-            if (x>=whiteWidth*11+blackWidth*11.5&&x<whiteWidth*12+blackWidth*12.5)return w13;
-            if (x>=whiteWidth*12+blackWidth*12.5&&x<whiteWidth*13+blackWidth*13.5)return w14;
-            if (x>=whiteWidth*13+blackWidth*13.5&&x<whiteWidth*14+blackWidth*14.5)return w15;
-            if (x>=whiteWidth*14+blackWidth*14.5&&x<whiteWidth*15+blackWidth*15.5)return w16;
-            if (x>=whiteWidth*15+blackWidth*15.5&&x<whiteWidth*16+blackWidth*16.5)return w17;
-            if (x>=whiteWidth*16+blackWidth*16.5&&x<whiteWidth*17+blackWidth*17.5)return w18;
-            if (x>=whiteWidth*17+blackWidth*17.5&&x<whiteWidth*18+blackWidth*18.5)return w19;
-            if (x>=whiteWidth*18+blackWidth*18.5&&x<whiteWidth*19+blackWidth*19.5)return w20;
-            if (x>=whiteWidth*19+blackWidth*19.5&&x<whiteWidth*20+blackWidth*20.5)return w21;
+        if (y>=100||y<0){
+            if (x<blackWidth/2&&x>=-whiteWidth)return  PlayActivity.KEY_C3;
+            if (x>=blackWidth*0.5&&x<whiteWidth+blackWidth*1.5)return PlayActivity.KEY_D3;
+            if (x>=whiteWidth+blackWidth*1.5&&x<whiteWidth*2+blackWidth*2.5)return PlayActivity.KEY_E3;
+            if (x>=whiteWidth*2+blackWidth*2.5&&x<whiteWidth*3+blackWidth*3.5)return PlayActivity.KEY_F3;
+            if (x>=whiteWidth*3+blackWidth*3.5&&x<whiteWidth*4+blackWidth*4.5)return PlayActivity.KEY_G3;
+            if (x>=whiteWidth*4+blackWidth*4.5&&x<whiteWidth*5+blackWidth*5.5)return PlayActivity.KEY_A3;
+            if (x>=whiteWidth*5+blackWidth*5.5&&x<whiteWidth*6+blackWidth*6.5)return PlayActivity.KEY_B3;
+            if (x>=whiteWidth*6+blackWidth*6.5&&x<whiteWidth*7+blackWidth*7.5)return PlayActivity.KEY_C4;
+            if (x>=whiteWidth*7+blackWidth*7.5&&x<whiteWidth*8+blackWidth*8.5)return PlayActivity.KEY_D4;
+            if (x>=whiteWidth*8+blackWidth*8.5&&x<whiteWidth*9+blackWidth*9.5)return PlayActivity.KEY_E4;
+            if (x>=whiteWidth*9+blackWidth*9.5&&x<whiteWidth*10+blackWidth*10.5)return PlayActivity.KEY_F4;
+            if (x>=whiteWidth*10+blackWidth*10.5&&x<whiteWidth*11+blackWidth*11.5)return PlayActivity.KEY_G4;
+            if (x>=whiteWidth*11+blackWidth*11.5&&x<whiteWidth*12+blackWidth*12.5)return PlayActivity.KEY_A4;
+            if (x>=whiteWidth*12+blackWidth*12.5&&x<whiteWidth*13+blackWidth*13.5)return PlayActivity.KEY_B4;
+            if (x>=whiteWidth*13+blackWidth*13.5&&x<whiteWidth*14+blackWidth*14.5)return PlayActivity.KEY_C5;
+            if (x>=whiteWidth*14+blackWidth*14.5&&x<whiteWidth*15+blackWidth*15.5)return PlayActivity.KEY_D5;
+            if (x>=whiteWidth*15+blackWidth*15.5&&x<whiteWidth*16+blackWidth*16.5)return PlayActivity.KEY_E5;
+            if (x>=whiteWidth*16+blackWidth*16.5&&x<whiteWidth*17+blackWidth*17.5)return PlayActivity.KEY_F5;
+            if (x>=whiteWidth*17+blackWidth*17.5&&x<whiteWidth*18+blackWidth*18.5)return PlayActivity.KEY_G5;
+            if (x>=whiteWidth*18+blackWidth*18.5&&x<whiteWidth*19+blackWidth*19.5)return PlayActivity.KEY_A5;
+            if (x>=whiteWidth*19+blackWidth*19.5&&x<whiteWidth*20+blackWidth*20.5)return PlayActivity.KEY_B5;
+            else return 36; }
         else {
-                if (x<blackWidth&&x>0)return b1;
-                if (x<blackWidth+whiteWidth&&x>blackWidth)return w2;
-                if (x<2*blackWidth+whiteWidth&&x>blackWidth+whiteWidth)return b2;
-                if (x<2.5*blackWidth+2*whiteWidth&&x>2*blackWidth+whiteWidth)return w3;
-                if (x<3*blackWidth+3*whiteWidth&&x>2.5*blackWidth+2*whiteWidth)return w4;
-                if (x<4*blackWidth+3*whiteWidth&&x>3*blackWidth+3*whiteWidth)return b3;
-                if (x<4*blackWidth+4*whiteWidth&&x>4*blackWidth+3*whiteWidth)return w5;
-                if (x<5*blackWidth+4*whiteWidth&&x>4*blackWidth+4*whiteWidth)return b4;
-                if (x<5*blackWidth+5*whiteWidth&&x>5*blackWidth+4*whiteWidth)return w6;
-                if (x<6*blackWidth+5*whiteWidth&&x>5*blackWidth+5*whiteWidth)return b5;
-                if (x<6.5*blackWidth+6*whiteWidth&&x>6*blackWidth+5*whiteWidth)return w7;
-                if (x<7*blackWidth+7*whiteWidth&&x>6.5*blackWidth+6*whiteWidth)return w8;
-                if (x<8*blackWidth+7*whiteWidth&&x>7*blackWidth+7*whiteWidth)return b6;
-                if (x<8*blackWidth+8*whiteWidth&&x>8*blackWidth+7*whiteWidth)return w9;
-                if (x<9*blackWidth+8*whiteWidth&&x>8*blackWidth+8*whiteWidth)return b7;
-                if (x<9.5*blackWidth+9*whiteWidth&&x>9*blackWidth+8*whiteWidth)return w10;
-                if (x<10*blackWidth+10*whiteWidth&&x>9.5*blackWidth+9*whiteWidth)return w11;
-                if (x<11*blackWidth+10*whiteWidth&&x>10*blackWidth+10*whiteWidth)return b8;
-                if (x<11*blackWidth+11*whiteWidth&&x>11*blackWidth+10*whiteWidth)return w12;
-                if (x<12*blackWidth+11*whiteWidth&&x>11*blackWidth+11*whiteWidth)return b9;
-                if (x<12*blackWidth+12*whiteWidth&&x>12*blackWidth+11*whiteWidth)return w13;
-                if (x<13*blackWidth+12*whiteWidth&&x>12*blackWidth+12*whiteWidth)return b10;
-                if (x<13.5*blackWidth+13*whiteWidth&&x>13*blackWidth+12*whiteWidth)return w14;
-                if (x<14*blackWidth+14*whiteWidth&&x>13.5*blackWidth+13*whiteWidth)return w15;
-                if (x<15*blackWidth+14*whiteWidth&&x>14*blackWidth+14*whiteWidth)return b11;
-                if (x<15*blackWidth+15*whiteWidth&&x>15*blackWidth+14*whiteWidth)return w16;
-                if (x<16*blackWidth+15*whiteWidth&&x>15*blackWidth+15*whiteWidth)return b12;
-                if (x<16.5*blackWidth+16*whiteWidth&&x>16*blackWidth+15*whiteWidth)return w17;
-                if (x<17*blackWidth+17*whiteWidth&&x>16.5*blackWidth+16*whiteWidth)return w18;
-                if (x<18*blackWidth+17*whiteWidth&&x>17*blackWidth+17*whiteWidth)return b13;
-                if (x<18*blackWidth+18*whiteWidth&&x>18*blackWidth+17*whiteWidth)return w19;
-                if (x<19*blackWidth+18*whiteWidth&&x>18*blackWidth+18*whiteWidth)return b14;
-                if (x<19*blackWidth+19*whiteWidth&&x>19*blackWidth+18*whiteWidth)return w20;
-                if (x<20*blackWidth+19*whiteWidth&&x>19*blackWidth+19*whiteWidth)return b15;
-                if (x<20.5*blackWidth+20*whiteWidth&&x>20*blackWidth+19*whiteWidth)return w21;
+                if (x<0&&x>=-0.5*blackWidth+whiteWidth)return PlayActivity.KEY_C3;
+                if (x<blackWidth&&x>=0)return PlayActivity.KEY_C3M;
+                if (x<blackWidth+whiteWidth&&x>=blackWidth)return PlayActivity.KEY_D3;
+                if (x<2*blackWidth+whiteWidth&&x>=blackWidth+whiteWidth)return PlayActivity.KEY_D3M;
+                if (x<2.5*blackWidth+2*whiteWidth&&x>=2*blackWidth+whiteWidth)return PlayActivity.KEY_E3;
+                if (x<3*blackWidth+3*whiteWidth&&x>=2.5*blackWidth+2*whiteWidth)return PlayActivity.KEY_F3;
+                if (x<4*blackWidth+3*whiteWidth&&x>=3*blackWidth+3*whiteWidth)return PlayActivity.KEY_F3M;
+                if (x<4*blackWidth+4*whiteWidth&&x>=4*blackWidth+3*whiteWidth)return PlayActivity.KEY_G3;
+                if (x<5*blackWidth+4*whiteWidth&&x>=4*blackWidth+4*whiteWidth)return PlayActivity.KEY_G3M;
+                if (x<5*blackWidth+5*whiteWidth&&x>=5*blackWidth+4*whiteWidth)return PlayActivity.KEY_A3;
+                if (x<6*blackWidth+5*whiteWidth&&x>=5*blackWidth+5*whiteWidth)return PlayActivity.KEY_A3M;
+                if (x<6.5*blackWidth+6*whiteWidth&&x>=6*blackWidth+5*whiteWidth)return PlayActivity.KEY_B3;
+                if (x<7*blackWidth+7*whiteWidth&&x>=6.5*blackWidth+6*whiteWidth)return PlayActivity.KEY_C4;
+                if (x<8*blackWidth+7*whiteWidth&&x>=7*blackWidth+7*whiteWidth)return PlayActivity.KEY_C4M;
+                if (x<8*blackWidth+8*whiteWidth&&x>=8*blackWidth+7*whiteWidth)return PlayActivity.KEY_D4;
+                if (x<9*blackWidth+8*whiteWidth&&x>=8*blackWidth+8*whiteWidth)return PlayActivity.KEY_D4M;
+                if (x<9.5*blackWidth+9*whiteWidth&&x>=9*blackWidth+8*whiteWidth)return PlayActivity.KEY_E4;
+                if (x<10*blackWidth+10*whiteWidth&&x>=9.5*blackWidth+9*whiteWidth)return PlayActivity.KEY_F4;
+                if (x<11*blackWidth+10*whiteWidth&&x>=10*blackWidth+10*whiteWidth)return PlayActivity.KEY_F4M;
+                if (x<11*blackWidth+11*whiteWidth&&x>=11*blackWidth+10*whiteWidth)return PlayActivity.KEY_G4;
+                if (x<12*blackWidth+11*whiteWidth&&x>=11*blackWidth+11*whiteWidth)return PlayActivity.KEY_G4M;
+                if (x<12*blackWidth+12*whiteWidth&&x>=12*blackWidth+11*whiteWidth)return PlayActivity.KEY_A4;
+                if (x<13*blackWidth+12*whiteWidth&&x>=12*blackWidth+12*whiteWidth)return PlayActivity.KEY_A4M;
+                if (x<13.5*blackWidth+13*whiteWidth&&x>=13*blackWidth+12*whiteWidth)return PlayActivity.KEY_B4;
+                if (x<14*blackWidth+14*whiteWidth&&x>=13.5*blackWidth+13*whiteWidth)return PlayActivity.KEY_C5;
+                if (x<15*blackWidth+14*whiteWidth&&x>=14*blackWidth+14*whiteWidth)return PlayActivity.KEY_C5M;
+                if (x<15*blackWidth+15*whiteWidth&&x>=15*blackWidth+14*whiteWidth)return PlayActivity.KEY_D5;
+                if (x<16*blackWidth+15*whiteWidth&&x>=15*blackWidth+15*whiteWidth)return PlayActivity.KEY_D5M;
+                if (x<16.5*blackWidth+16*whiteWidth&&x>=16*blackWidth+15*whiteWidth)return PlayActivity.KEY_E5;
+                if (x<17*blackWidth+17*whiteWidth&&x>=16.5*blackWidth+16*whiteWidth)return PlayActivity.KEY_F5;
+                if (x<18*blackWidth+17*whiteWidth&&x>=17*blackWidth+17*whiteWidth)return PlayActivity.KEY_F5M;
+                if (x<18*blackWidth+18*whiteWidth&&x>=18*blackWidth+17*whiteWidth)return PlayActivity.KEY_G5;
+                if (x<19*blackWidth+18*whiteWidth&&x>=18*blackWidth+18*whiteWidth)return PlayActivity.KEY_G5M;
+                if (x<19*blackWidth+19*whiteWidth&&x>=19*blackWidth+18*whiteWidth)return PlayActivity.KEY_A5;
+                if (x<20*blackWidth+19*whiteWidth&&x>=19*blackWidth+19*whiteWidth)return PlayActivity.KEY_A5M;
+                if (x<20.5*blackWidth+20*whiteWidth&&x>=20*blackWidth+19*whiteWidth)return PlayActivity.KEY_B5;
+            else return 36;
 
             }
 
@@ -341,7 +346,7 @@ return output;
 
         }
 
-    }
+
 
     public static class CalibrationResult implements Serializable {
 

@@ -9,7 +9,7 @@ package com.papermelody.tapdetect;
 
 import java.util.List;
 import java.util.ArrayList;
-import java.util.stream.Collectors;
+//import java.util.stream.Collectors;
 
 import org.opencv.core.MatOfPoint;
 import org.opencv.core.Point;
@@ -82,7 +82,11 @@ public class FingerDetector {
 
         List<Integer> finger_tips_ind_separate = this.mergeNeighbors(finger_tips_ind, 10);
 
-        return finger_tips_ind_separate.stream().map(contour_pt::get).collect(Collectors.toList());
+        //  FIXME: can't use stream until sdk 24
+        // return finger_tips_ind_separate.stream().map(contour_pt::get).collect(Collectors.toList());
+        List<Point> ret = new ArrayList<>();
+        for (Integer ind: finger_tips_ind_separate) { ret.add(contour_pt.get(ind)); }
+        return ret;
     }
 
     private List<Integer> mergeNeighbors(List<Integer> inds, int tolerance) {
@@ -93,13 +97,19 @@ public class FingerDetector {
             if (series.isEmpty() || Math.abs(ind - series.get(series.size() - 1)) < tolerance) {
                 series.add(ind);
             } else {
-                ret.add(series.stream().reduce(0, (x, y) -> x + y) / series.size());
+                ret.add((int) aver(series));
                 series.clear();
             }
         }
         if (!series.isEmpty()) {
-            ret.add(series.stream().reduce(0, (x, y) -> x + y) / series.size());
+            ret.add((int) aver(series));
         }
         return ret;
+    }
+
+    private double aver(List<Integer> lst) {
+        double sum = 0.0;
+        for (int val: lst) { sum += val; }
+        return sum / lst.size();
     }
 }

@@ -9,7 +9,7 @@ package com.papermelody.tapdetect;
 import java.lang.Math;
 import java.util.List;
 import java.util.ArrayList;
-import java.util.stream.Collectors;
+//import java.util.stream.Collectors;
 
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;

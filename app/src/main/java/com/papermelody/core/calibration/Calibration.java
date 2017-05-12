@@ -16,6 +16,14 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.papermelody.R.raw.b1;
+import static com.papermelody.R.raw.b2;
+import static com.papermelody.R.raw.b3;
+import static com.papermelody.R.raw.b4;
+import static com.papermelody.R.raw.b5;
+import static com.papermelody.R.raw.b6;
+import static com.papermelody.R.raw.b7;
+
 
 public class Calibration {
 
@@ -99,7 +107,7 @@ public class Calibration {
         }
         int temp1 = temp;
         temp=a2[temp_order];
-        int leftlow_x=dstImage.width(),leftlow_y=0,leftup_x=0,leftup_y=0,rightlow_x=0,rightlow_y=0,rightup_x=0,rightup_y=0;
+        int leftlow_x=dstImage.width(),leftlow_y=0,leftup_x=0,leftup_y=0,rightlow_x=0,rightlow_y=0,rightup_x=0,rightup_y=0,leftupright_x=0,leftupright_y=0,rightupleft_x=0,rightupleft_y=0;
         System.out.println( leftlow_x);
         for (int i=0;i<lencontour;i++){
             if (a1[i]==temp_order){
@@ -129,6 +137,9 @@ public class Calibration {
                     if (leftmost.x<leftlow_x){
                         leftlow_x=(int)leftmost.x;
                         leftlow_y=(int)leftmost.y;
+                        leftupright_x=(int)rightmost.x;
+                        leftupright_y=(int)rightmost.y;
+
 
                         uptemp=(int)rightmost.y;
                         leftup_x=(int)rightmost.x;
@@ -144,6 +155,9 @@ public class Calibration {
                     if (rightmost.x>rightlow_x){
                         rightlow_x=(int)rightmost.x;
                         rightlow_y=(int)rightmost.y;
+                        rightupleft_x=(int)leftmost.x;
+                        rightupleft_y=(int)leftmost.y;
+
                         uptemp=(int)leftmost.y;
                         rightup_x=(int)leftmost.x;
                         for (int j=0;j<points.length;j++ ){
@@ -164,6 +178,11 @@ public class Calibration {
         out.rightUpY=rightup_y;
         out.rightLowX=rightlow_x;
         out.rightLowY=rightlow_y;
+        out.leftUpRightX=leftupright_x;
+        out.leftUpRightY=leftupright_y;
+        out.rightUpLeftX=rightupleft_x;
+        out.rightUpLeftY=rightupleft_y;
+
 
         if(Math.abs(leftlow_y-rightlow_y)<10&&Math.abs(leftup_y-rightup_y)<10&&temp1>8)
             out.flag=true;
@@ -181,30 +200,50 @@ public class Calibration {
             Log.d("TESTC5", String.valueOf(srcImage));*/
         return out;
     }
-    public static Mat transform(int b[]){
+    public static TranformResult transform(CalibrationResult calibrationResult){
         MatOfPoint2f src = new MatOfPoint2f(
-                new org.opencv.core.Point(b[1],b[0]), // tl
-                new org.opencv.core.Point(b[3],b[2]), // tr
-                new org.opencv.core.Point(b[5],b[4]), // br
-                new org.opencv.core.Point(b[7],b[6]) // bl
+                new org.opencv.core.Point(calibrationResult.getLeftLowX(),calibrationResult.getLeftLowY()), // tl
+                new org.opencv.core.Point(calibrationResult.getLeftUpX(),calibrationResult.getLeftUpY()), // tr
+                new org.opencv.core.Point(calibrationResult.getRightLowX(),calibrationResult.getRightLowY()), // br
+                new org.opencv.core.Point(calibrationResult.getRightUpX(),calibrationResult.getRightUpY()) // bl
         );
         MatOfPoint2f dst = new MatOfPoint2f(
-                new org.opencv.core.Point(-250,0), // tl
-                new org.opencv.core.Point(-250,100), // tr
-                new org.opencv.core.Point(250,0), // br
-                new org.opencv.core.Point(250,100) // bl
+                new org.opencv.core.Point(0,0), // tl
+                new org.opencv.core.Point(0,100), // tr
+                new org.opencv.core.Point(500,0), // br
+                new org.opencv.core.Point(500,100) // bl
+        );
+
+
+        TranformResult tranformResult=new  TranformResult();
+        MatOfPoint2f Src = new MatOfPoint2f(
+                new org.opencv.core.Point(calibrationResult.getLeftLowX(),calibrationResult.getLeftLowY()), // tl
+                new org.opencv.core.Point(calibrationResult.getLeftUpRightX(),calibrationResult.getLeftUpRightY()), // tr
+                new org.opencv.core.Point(calibrationResult.getRightLowX(),calibrationResult.getRightLowY()), // br
+                new org.opencv.core.Point(calibrationResult.getRightUpLeftX(),calibrationResult.getRightUpLeftY()) // bl
+        );
+        MatOfPoint2f Dst = new MatOfPoint2f(
+                new org.opencv.core.Point(calibrationResult.getLeftLowX(),calibrationResult.getLeftLowY()), // tl
+                new org.opencv.core.Point(calibrationResult.getLeftUpRightX(),calibrationResult.getLeftUpRightY()), // tr
+                new org.opencv.core.Point(calibrationResult.getRightLowX(),calibrationResult.getRightLowY()), // br
+                new org.opencv.core.Point(calibrationResult.getRightUpLeftX(),calibrationResult.getRightUpLeftY()) // bl
         );
 
 
 
 
+        tranformResult.m = Imgproc.getPerspectiveTransform(src, dst);
+        Core.perspectiveTransform(Src,Dst,tranformResult.m);
+        org.opencv.core.Point[] points = Dst.toArray();
+        double widthleft=Math.abs(points[0].x-points[1].x);
+        double widthright=Math.abs(points[2].x-points[3].x);
+        tranformResult.blackWidth=(widthleft+widthright)/2;
 
 
-        Mat perspectiveTransform = Imgproc.getPerspectiveTransform(src, dst);
-        return perspectiveTransform;
+        return tranformResult;
 
     }
-    public static int[] key(Mat m,int []fingerpoint){
+    public static int[] key(TranformResult tranformResult,int []fingerpoint){
 
 
 
@@ -226,12 +265,90 @@ public class Calibration {
 
 return output;
     }
+    public static int key(int x,int y,int blackWidth){
+        double whiteWidth=(500-20*blackWidth)/19;
+        if (y>100||y<0){
+            if (x<blackWidth/2&&x>-whiteWidth)return w1;
+            if (x>=blackWidth*0.5&&x<whiteWidth+blackWidth*1.5)return w2;
+            if (x>=whiteWidth+blackWidth*1.5&&x<whiteWidth*2+blackWidth*2.5)return w3;
+            if (x>=whiteWidth*2+blackWidth*2.5&&x<whiteWidth*3+blackWidth*3.5)return w4;
+            if (x>=whiteWidth*3+blackWidth*3.5&&x<whiteWidth*4+blackWidth*4.5)return w5;
+            if (x>=whiteWidth*4+blackWidth*4.5&&x<whiteWidth*5+blackWidth*5.5)return w6;
+            if (x>=whiteWidth*5+blackWidth*5.5&&x<whiteWidth*6+blackWidth*6.5)return w7;
+            if (x>=whiteWidth*6+blackWidth*6.5&&x<whiteWidth*7+blackWidth*7.5)return w8;
+            if (x>=whiteWidth*7+blackWidth*7.5&&x<whiteWidth*8+blackWidth*8.5)return w9;
+            if (x>=whiteWidth*8+blackWidth*8.5&&x<whiteWidth*9+blackWidth*9.5)return w10;
+            if (x>=whiteWidth*9+blackWidth*9.5&&x<whiteWidth*10+blackWidth*10.5)return w11;
+            if (x>=whiteWidth*10+blackWidth*10.5&&x<whiteWidth*11+blackWidth*11.5)return w12;
+            if (x>=whiteWidth*11+blackWidth*11.5&&x<whiteWidth*12+blackWidth*12.5)return w13;
+            if (x>=whiteWidth*12+blackWidth*12.5&&x<whiteWidth*13+blackWidth*13.5)return w14;
+            if (x>=whiteWidth*13+blackWidth*13.5&&x<whiteWidth*14+blackWidth*14.5)return w15;
+            if (x>=whiteWidth*14+blackWidth*14.5&&x<whiteWidth*15+blackWidth*15.5)return w16;
+            if (x>=whiteWidth*15+blackWidth*15.5&&x<whiteWidth*16+blackWidth*16.5)return w17;
+            if (x>=whiteWidth*16+blackWidth*16.5&&x<whiteWidth*17+blackWidth*17.5)return w18;
+            if (x>=whiteWidth*17+blackWidth*17.5&&x<whiteWidth*18+blackWidth*18.5)return w19;
+            if (x>=whiteWidth*18+blackWidth*18.5&&x<whiteWidth*19+blackWidth*19.5)return w20;
+            if (x>=whiteWidth*19+blackWidth*19.5&&x<whiteWidth*20+blackWidth*20.5)return w21;
+        else {
+                if (x<blackWidth&&x>0)return b1;
+                if (x<blackWidth+whiteWidth&&x>blackWidth)return w2;
+                if (x<2*blackWidth+whiteWidth&&x>blackWidth+whiteWidth)return b2;
+                if (x<2.5*blackWidth+2*whiteWidth&&x>2*blackWidth+whiteWidth)return w3;
+                if (x<3*blackWidth+3*whiteWidth&&x>2.5*blackWidth+2*whiteWidth)return w4;
+                if (x<4*blackWidth+3*whiteWidth&&x>3*blackWidth+3*whiteWidth)return b3;
+                if (x<4*blackWidth+4*whiteWidth&&x>4*blackWidth+3*whiteWidth)return w5;
+                if (x<5*blackWidth+4*whiteWidth&&x>4*blackWidth+4*whiteWidth)return b4;
+                if (x<5*blackWidth+5*whiteWidth&&x>5*blackWidth+4*whiteWidth)return w6;
+                if (x<6*blackWidth+5*whiteWidth&&x>5*blackWidth+5*whiteWidth)return b5;
+                if (x<6.5*blackWidth+6*whiteWidth&&x>6*blackWidth+5*whiteWidth)return w7;
+                if (x<7*blackWidth+7*whiteWidth&&x>6.5*blackWidth+6*whiteWidth)return w8;
+                if (x<8*blackWidth+7*whiteWidth&&x>7*blackWidth+7*whiteWidth)return b6;
+                if (x<8*blackWidth+8*whiteWidth&&x>8*blackWidth+7*whiteWidth)return w9;
+                if (x<9*blackWidth+8*whiteWidth&&x>8*blackWidth+8*whiteWidth)return b7;
+                if (x<9.5*blackWidth+9*whiteWidth&&x>9*blackWidth+8*whiteWidth)return w10;
+                if (x<10*blackWidth+10*whiteWidth&&x>9.5*blackWidth+9*whiteWidth)return w11;
+                if (x<11*blackWidth+10*whiteWidth&&x>10*blackWidth+10*whiteWidth)return b8;
+                if (x<11*blackWidth+11*whiteWidth&&x>11*blackWidth+10*whiteWidth)return w12;
+                if (x<12*blackWidth+11*whiteWidth&&x>11*blackWidth+11*whiteWidth)return b9;
+                if (x<12*blackWidth+12*whiteWidth&&x>12*blackWidth+11*whiteWidth)return w13;
+                if (x<13*blackWidth+12*whiteWidth&&x>12*blackWidth+12*whiteWidth)return b10;
+                if (x<13.5*blackWidth+13*whiteWidth&&x>13*blackWidth+12*whiteWidth)return w14;
+                if (x<14*blackWidth+14*whiteWidth&&x>13.5*blackWidth+13*whiteWidth)return w15;
+                if (x<15*blackWidth+14*whiteWidth&&x>14*blackWidth+14*whiteWidth)return b11;
+                if (x<15*blackWidth+15*whiteWidth&&x>15*blackWidth+14*whiteWidth)return w16;
+                if (x<16*blackWidth+15*whiteWidth&&x>15*blackWidth+15*whiteWidth)return b12;
+                if (x<16.5*blackWidth+16*whiteWidth&&x>16*blackWidth+15*whiteWidth)return w17;
+                if (x<17*blackWidth+17*whiteWidth&&x>16.5*blackWidth+16*whiteWidth)return w18;
+                if (x<18*blackWidth+17*whiteWidth&&x>17*blackWidth+17*whiteWidth)return b13;
+                if (x<18*blackWidth+18*whiteWidth&&x>18*blackWidth+17*whiteWidth)return w19;
+                if (x<19*blackWidth+18*whiteWidth&&x>18*blackWidth+18*whiteWidth)return b14;
+                if (x<19*blackWidth+19*whiteWidth&&x>19*blackWidth+18*whiteWidth)return w20;
+                if (x<20*blackWidth+19*whiteWidth&&x>19*blackWidth+19*whiteWidth)return b15;
+                if (x<20.5*blackWidth+20*whiteWidth&&x>20*blackWidth+19*whiteWidth)return w21;
+
+            }
+
+
+
+
+
+
+
+
+
+
+
+
+        }
+
+    }
 
     public static class CalibrationResult implements Serializable {
 
 
         boolean flag;
-        int leftLowX,leftLowY,leftUpX,leftUpY, rightLowX,rightLowY, rightUpX,rightUpY;
+        int leftLowX,leftLowY,leftUpX,leftUpY, rightLowX,rightLowY, rightUpX,rightUpY,leftUpRightX,leftUpRightY,rightUpLeftX,rightUpLeftY;
+
 
 
         CalibrationResult(){
@@ -244,6 +361,11 @@ return output;
             rightLowY=0;
             rightUpX=0;
             rightUpY=0;
+            leftUpRightX=0;
+            leftUpRightY=0;
+            rightUpLeftX=0;
+            rightUpLeftY=0;
+
 
         }
 
@@ -281,6 +403,22 @@ return output;
 
         public int getRightUpY() {
             return rightUpY;
+        }
+
+        public int getLeftUpRightX() {return leftUpRightX;}
+
+        public int getLeftUpRightY() {return leftUpRightY;}
+
+        public int getRightUpLeftX() {return rightUpLeftX;}
+
+        public int getRightUpLeftY() {return rightUpLeftY;}
+    }
+    public static class TranformResult implements Serializable {
+        Mat m;
+        double blackWidth;
+        TranformResult(){
+            blackWidth=0;
+
         }
     }
 

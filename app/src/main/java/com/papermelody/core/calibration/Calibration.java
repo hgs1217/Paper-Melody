@@ -97,6 +97,7 @@ public class Calibration {
 
             }
         }
+        int temp1 = temp;
         temp=a2[temp_order];
         int leftlow_x=dstImage.width(),leftlow_y=0,leftup_x=0,leftup_y=0,rightlow_x=0,rightlow_y=0,rightup_x=0,rightup_y=0;
         System.out.println( leftlow_x);
@@ -163,6 +164,9 @@ public class Calibration {
         out.rightUpY=rightup_y;
         out.rightLowX=rightlow_x;
         out.rightLowY=rightlow_y;
+
+        if(Math.abs(leftlow_y-rightlow_y)<10&&Math.abs(leftup_y-rightup_y)<10&&temp1>8)
+            out.flag=true;
 
 
             /*Mat dst = new Mat(4,1, CvType.CV_32FC2);

@@ -163,6 +163,7 @@ public class CalibrationActivity extends BaseActivity {
             btnCalibrationCancel.setVisibility(View.GONE);
             btnCalibrationComplete.setVisibility(View.GONE);
             canCalibration = true;
+            cnt = 0;
         });
     }
 
@@ -201,7 +202,7 @@ public class CalibrationActivity extends BaseActivity {
                         Calibration.CalibrationResult calibrationResult = CalibrationAPI.getCalibrationCoordinate(mat);
                         canvasCalibration.updateCalibrationCoordinates(calibrationResult, largest.getHeight(), largest.getWidth());
                         //if (calibrationResult.isFlag()) {
-                        if (cnt == 100) {
+                        if (calibrationResult.isFlag()) {
                             Bitmap bitmap = ImageUtil.imageToBitmap(mat);
 
                             /*layoutCalibration.setVisibility(View.GONE);

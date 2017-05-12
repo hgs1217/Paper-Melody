@@ -63,6 +63,10 @@
         <activity
             android:name=".activity.UploadActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.CameraDebugActivity"
+            android:screenOrientation="landscape"/>
+
 
     </application>
 

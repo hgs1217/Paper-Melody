@@ -8,21 +8,23 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 
+import com.papermelody.util.CanvasUtil;
+
 import org.opencv.core.Point;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by HgS_1217_ on 2017/5/9.
+ * Created by gigaflw on 2017/5/12.
+ * Draw on the canvas as you wish
  */
 
 public class CameraDebugView extends View {
 
+    private List<Point> handContours = new ArrayList<>();
     private List<Point> fingerTips = new ArrayList<>();
-    private Paint p = new Paint();
-    private int photoHeight = 1920;
-    private int photoWidth = 1080;
+    private List<Point> tapping = new ArrayList<>();
 
     public CameraDebugView(Context c) {
         super(c);
@@ -39,25 +41,24 @@ public class CameraDebugView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        Log.w("fingers", "" + fingerTips);
 
-        float heightScalar = (float) canvas.getHeight() / photoHeight;
-        float widthScalar =  (float) canvas.getWidth() / photoWidth;
-
-        if (!fingerTips.isEmpty()) {
-            p.setColor(Color.RED);
-            p.setStrokeWidth(10);
-
-            for (Point pt: fingerTips) {
-                canvas.drawCircle((float)pt.x * widthScalar , (float)pt.y * heightScalar, 10, p);
-            }
+        if (!handContours.isEmpty()) {
+            CanvasUtil.drawPoints(canvas, handContours, Color.BLUE);
         }
+        if (!fingerTips.isEmpty()) {
+            CanvasUtil.drawPoints(canvas, fingerTips, Color.RED);
+        }
+        if (!tapping.isEmpty()) {
+            CanvasUtil.drawPoints(canvas, tapping, Color.GREEN);
+        }
+
     }
 
-    public void updateFingerTips(List<Point> fingerTips, int height, int width) {
+    public void updatePoints(List<Point> handContours, List<Point> fingerTips,List<Point> tapping, int height, int width) {
+        this.handContours = new ArrayList<>(handContours);
         this.fingerTips = new ArrayList<>(fingerTips);
-        photoHeight = height;
-        photoWidth = width;
+        this.tapping = new ArrayList<>(tapping);
+        CanvasUtil.updateSize(height, width);
         invalidate();
     }
 

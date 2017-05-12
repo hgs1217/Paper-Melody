@@ -52,6 +52,14 @@ public class Util {
         return ret;
     }
 
+    public static List<Point> contoursToPoints(List<MatOfPoint> contours) {
+        List<Point> ret = new ArrayList<>();
+        for (MatOfPoint cnt: contours) {
+            ret.addAll(cnt.toList());
+        }
+        return ret;
+    }
+
     public static Mat drawContours(Mat im, List<MatOfPoint> contours, Scalar color) {
         Mat im_cpy = im.clone();
 

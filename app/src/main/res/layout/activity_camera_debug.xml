@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_camera_debug"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    tools:context="com.papermelody.activity.CameraDebugActivity">
+
+    <SurfaceView
+        android:id="@+id/view_camera_debug"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <com.papermelody.widget.CameraDebugView
+        android:id="@+id/canvas_camera_debug"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</FrameLayout>

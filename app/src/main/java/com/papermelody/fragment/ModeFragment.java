@@ -10,6 +10,7 @@ import android.widget.ImageView;
 
 import com.papermelody.R;
 import com.papermelody.activity.CalibrationActivity;
+import com.papermelody.activity.CameraDebugActivity;
 import com.papermelody.activity.MainActivity;
 
 import butterknife.BindView;
@@ -31,6 +32,9 @@ public class ModeFragment extends BaseFragment {
     Button btnModeFree;
     @BindView(R.id.btn_mode_opern)
     Button btnModeOpern;
+
+    @BindView(R.id.btn_mode_camera_debug)
+    Button btnModeCameraDebug;
 
     public static ModeFragment newInstance() {
         ModeFragment fragment = new ModeFragment();
@@ -61,6 +65,10 @@ public class ModeFragment extends BaseFragment {
         btnModeOpern.setOnClickListener((View v) -> {
             MainActivity mainActivity = (MainActivity) getActivity();
             mainActivity.updateFragment(MainActivity.MODE_OPERN);
+        });
+        btnModeCameraDebug.setOnClickListener((View v) -> {
+            Intent intent = new Intent(getActivity(), CameraDebugActivity.class);
+            startActivity(intent);
         });
     }
 }

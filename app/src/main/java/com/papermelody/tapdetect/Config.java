@@ -15,6 +15,6 @@ public class Config {
 
     public static int IM_HEIGHT = 500;
     public static int TAP_THRESHOLD_ROW = 320;
-    public static int FINGER_TIP_STEP = 10;
+    public static int FINGER_TIP_STEP = 20;
     public static int FINGER_TIP_WIDTH = 30;
 }

@@ -27,23 +27,21 @@ public class FingerDetector {
 //        assert im.size().height == Config.IM_HEIGHT;
 
         List<MatOfPoint> contours = Util.largeContours(hand, 100);
-        if (contours.isEmpty()) {
-            return new ArrayList<>();
-        }
+        if (contours.isEmpty()) { return new ArrayList<>(); }
 
-        Mat hand_with_contour = Util.drawContours(im, contours, new Scalar(0, 0, 255));
-        ImgLogger.info("11_contour.jpg", hand_with_contour);
+//        Mat hand_with_contour = Util.drawContours(im, contours, new Scalar(0, 0, 255));
+//        ImgLogger.info("11_contour.jpg", hand_with_contour);
 
         ArrayList<Point> finger_tips = new ArrayList<>();
         for (MatOfPoint cnt : contours) {
             finger_tips.addAll(this.findFingerTips(cnt, hand));
         }
 
-        Mat hand_with_finger_tips = Util.drawPoints(hand_with_contour, finger_tips, new Scalar(255, 0, 0));
+//        Mat hand_with_finger_tips = Util.drawPoints(hand_with_contour, finger_tips, new Scalar(255, 0, 0));
 
-        ImgLogger.info("12_finger_tips.jpg", hand_with_finger_tips);
+//        ImgLogger.info("12_finger_tips.jpg", hand_with_finger_tips);
         // so that the caller can have the `im` with contour and fingertip painted
-        hand_with_finger_tips.assignTo(im);
+//        hand_with_finger_tips.assignTo(im);
 
         return finger_tips;
     }
@@ -63,19 +61,13 @@ public class FingerDetector {
             int center_x = (int) (ahead.x + behind.x + pt.x) / 3;
             int center_y = (int) (ahead.y + behind.y + pt.y) / 3;
 
-            if (center_y > pt.y) {
-                continue;
-            }
+            if (center_y > pt.y) { continue; }
 
-            if ((int) hand.get(center_y, center_x)[0] == 0) {
-                continue;
-            }
+            if ((int) hand.get(center_y, center_x)[0] == 0) { continue; }
 
             double cos = Util.intersectCos(contour_pt.get(i), ahead, behind);
 
-            if (cos > 0.7) {
-                continue;
-            }
+            if (cos > 0.7) { continue; }
 
             finger_tips_ind.add(i);
         }

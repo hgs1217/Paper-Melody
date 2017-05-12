@@ -45,9 +45,11 @@ public class CameraDebugView extends View {
         if (!handContours.isEmpty()) {
             CanvasUtil.drawPoints(canvas, handContours, Color.BLUE);
         }
+//        Log.w("fingers when draw", "" + fingerTips);
         if (!fingerTips.isEmpty()) {
             CanvasUtil.drawPoints(canvas, fingerTips, Color.RED);
         }
+//        Log.w("tapping when draw", "" + tapping);
         if (!tapping.isEmpty()) {
             CanvasUtil.drawPoints(canvas, tapping, Color.GREEN);
         }

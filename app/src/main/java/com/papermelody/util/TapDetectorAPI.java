@@ -61,14 +61,19 @@ public class TapDetectorAPI {
         List<Point> hand_contour_pt = Util.contoursToPoints(hand_contour);
 
         List<Point> fingers = fd.getFingers(im, hand);
-        Log.w("fingers", "" + fingers);
 
         List<Point> taps = td.getTapping(im, fingers);
+
+        Log.w("fingers", "" + fingers);
         Log.w("taps", "" + taps);
 
         for (Point pt: hand_contour_pt) { pt.x /= shrink_ratio; pt.y /= shrink_ratio; }
         for (Point pt: fingers) { pt.x /= shrink_ratio; pt.y /= shrink_ratio; }
-        for (Point pt: taps) { pt.x /= shrink_ratio; pt.y /= shrink_ratio; }
+        //  for (Point pt: taps) { pt.x /= shrink_ratio; pt.y /= shrink_ratio; }
+        // no need because Point in taps and Point in finger have same reference
+
+        // Log.w("fingers", "" + fingers);
+        // Log.w("taps", "" + taps);
 
         List<List<Point>> ret = new ArrayList<>();
         ret.add(hand_contour_pt);

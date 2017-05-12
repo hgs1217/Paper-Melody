@@ -36,7 +36,7 @@ import android.widget.LinearLayout;
 import com.papermelody.R;
 import com.papermelody.core.calibration.Calibration;
 import com.papermelody.util.App;
-import com.papermelody.util.CalibrationAPI;
+import com.papermelody.util.ImageProcessor;
 import com.papermelody.util.ImageUtil;
 import com.papermelody.util.ToastUtil;
 import com.papermelody.util.ViewUtil;
@@ -78,15 +78,12 @@ public class CalibrationActivity extends BaseActivity {
     Button btnCalibrationComplete;
     @BindView(R.id.layout_container)
     LinearLayout layoutContainer;
-    /*@BindView(R.id.layout_calibration)
-    LinearLayout layoutCalibration;
-    @BindView(R.id.layout_calibration_confirm)
-    LinearLayout layoutCalibrationConfirm;*/
+    @BindView(R.id.layout_legal)
+    LinearLayout layoutLegal;
 
     public static final String EXTRA_RESULT = "EXTRA_RESULT";
     public static final String EXTRA_HEIGHT = "EXTRA_HEIGHT";
     public static final String EXTRA_WIDTH = "EXTRA_WIDTH";
-    public static final String EXTRA_BITMAP = "EXTRA_BITMAP";
 
     private static final SparseIntArray ORIENTATIONS = new SparseIntArray();
 
@@ -105,6 +102,8 @@ public class CalibrationActivity extends BaseActivity {
     private String cameraID;
     private CameraCaptureSession cameraCaptureSession;
     private ImageReader imageReader;
+    private int targetHeightStart = 0;
+    private int targetHeightEnd = 1000;
 
     private boolean canCalibration = true;
     private int cnt = 0;
@@ -123,6 +122,8 @@ public class CalibrationActivity extends BaseActivity {
         int width = ViewUtil.getScreenWidth(this);
         int height = (int) (width / App.STANDARD_SIZE_RATE);
         viewCalibration.setLayoutParams(new FrameLayout.LayoutParams(width, height));
+        imgCalibration.setLayoutParams(new FrameLayout.LayoutParams(width, height));
+        canvasCalibration.setSize(width, height);
     }
 
     private void initView() {
@@ -136,7 +137,7 @@ public class CalibrationActivity extends BaseActivity {
 
             @Override
             public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-                //initSurfaceSize();
+                initSurfaceSize();
             }
 
             @Override
@@ -155,15 +156,12 @@ public class CalibrationActivity extends BaseActivity {
         });
 
         btnCalibrationCancel.setOnClickListener((View v)->{
-            /*layoutCalibration.setVisibility(View.VISIBLE);
-            layoutCalibrationConfirm.setVisibility(View.GONE);*/
             viewCalibration.setVisibility(View.VISIBLE);
             layoutContainer.setVisibility(View.VISIBLE);
             imgCalibration.setVisibility(View.GONE);
             btnCalibrationCancel.setVisibility(View.GONE);
             btnCalibrationComplete.setVisibility(View.GONE);
             canCalibration = true;
-            cnt = 0;
         });
     }
 
@@ -183,6 +181,12 @@ public class CalibrationActivity extends BaseActivity {
                     new CompareSizesByArea());
             Log.d("TESTSIZE", largest.getWidth()+" "+largest.getHeight());
             imageReader = ImageReader.newInstance(largest.getWidth(), largest.getHeight(), ImageFormat.YUV_420_888, 5);
+            // 计算合法区域范围
+            int targetHeightStart = getHeightRelativeCoordinate(ViewUtil.getScreenHeight
+                    (CalibrationActivity.this) - layoutLegal.getHeight(), largest.getHeight());
+            int targetHeightEnd = getHeightRelativeCoordinate(ViewUtil.getScreenHeight
+                    (CalibrationActivity.this), largest.getHeight());
+            Log.d("TESTTAR", targetHeightStart+" "+targetHeightEnd);
             imageReader.setOnImageAvailableListener(new ImageReader.OnImageAvailableListener() {
                     /* 可以在这里处理拍照得到的临时照片 */
 
@@ -199,31 +203,21 @@ public class CalibrationActivity extends BaseActivity {
                         }
 
                         Mat mat = ImageUtil.imageToBgr(image);
-                        Calibration.CalibrationResult calibrationResult = CalibrationAPI.getCalibrationCoordinate(mat);
-                        canvasCalibration.updateCalibrationCoordinates(calibrationResult, largest.getHeight(), largest.getWidth());
-                        //if (calibrationResult.isFlag()) {
+                        Calibration.CalibrationResult calibrationResult = ImageProcessor.getCalibrationCoordinate
+                                (mat, targetHeightStart, targetHeightEnd);
+                        canvasCalibration.updateCalibrationCoordinates(calibrationResult,
+                                largest.getHeight(), largest.getWidth(), CalibrationActivity.this);
                         if (calibrationResult.isFlag()) {
                             Bitmap bitmap = ImageUtil.imageToBitmap(mat);
 
-                            /*layoutCalibration.setVisibility(View.GONE);
-                            layoutCalibrationConfirm.setVisibility(View.VISIBLE);*/
                             viewCalibration.setVisibility(View.GONE);
                             layoutContainer.setVisibility(View.GONE);
                             imgCalibration.setVisibility(View.VISIBLE);
                             btnCalibrationCancel.setVisibility(View.VISIBLE);
                             btnCalibrationComplete.setVisibility(View.VISIBLE);
+
                             imgCalibration.setImageBitmap(bitmap);
                             canCalibration = false;
-
-                            /*Intent intent = new Intent(CalibrationActivity.this, CalibrationConfirmActivity.class);
-                            Bundle bundle = new Bundle();
-                            bundle.putSerializable(EXTRA_RESULT, calibrationResult);
-                            intent.putExtras(bundle);
-                            intent.putExtra(EXTRA_BITMAP, bitmapByte);
-                            intent.putExtra(EXTRA_HEIGHT, largest.getHeight());
-                            intent.putExtra(EXTRA_WIDTH, largest.getWidth());
-                            startActivity(intent);
-                            finish();*/
                         }
 
                         cnt++;
@@ -317,6 +311,12 @@ public class CalibrationActivity extends BaseActivity {
         } catch (CameraAccessException e) {
             e.printStackTrace();
         }
+    }
+
+    private int getHeightRelativeCoordinate(int screenY, int photoHeight) {
+        double offset = (imgCalibration.getHeight() - ViewUtil.getScreenHeight(CalibrationActivity.this)) / 2.0;
+        double targetHeightStart = (screenY + offset) / (double) imgCalibration.getHeight() * photoHeight;
+        return (int) targetHeightStart;
     }
 
     @Override

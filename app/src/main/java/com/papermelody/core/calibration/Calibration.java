@@ -35,7 +35,7 @@ public class Calibration {
     static{ System.loadLibrary("opencv_java3"); }
 
 
-    public static CalibrationResult main(Mat srcImage){
+    public static CalibrationResult main(Mat srcImage,int upbound,int lowbound){
 
         Mat dstImage = new Mat();
         Mat grayImage = new Mat();
@@ -70,7 +70,7 @@ public class Calibration {
         for (int i=0;i<lencontour;i++){
             MatOfPoint item=contours.get(i);
             Moments m=Imgproc.moments(item);
-            if ((m.get_m00()!=0)&&(Imgproc.contourArea(item)>20)){
+            if ((m.get_m00()!=0)&&(Imgproc.contourArea(item)>25)){
                 double d1 =(m.get_m01()/m.get_m00());
                 Double D1=new Double(d1);
                 int cy=D1.intValue();
@@ -188,7 +188,7 @@ public class Calibration {
         out.rightUpLeftY=rightupleft_y;
 
 
-        if(Math.abs(leftlow_y-rightlow_y)<10&&Math.abs(leftup_y-rightup_y)<10&&temp1>8)
+        if(Math.abs(leftlow_y-rightlow_y)<10&&Math.abs(leftup_y-rightup_y)<10&&temp1>10&&leftup_y>upbound&&rightup_y>upbound&&leftlow_y<lowbound&&rightlow_y<lowbound)
             out.flag=true;
 
 

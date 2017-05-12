@@ -28,7 +28,7 @@ public class ImageProcessor {
         Log.d("TESTCAL", bgrMat.rows() + " " + bgrMat.cols());
 
         Calibration.CalibrationResult a;
-        a = Calibration.main(bgrMat);
+        a = Calibration.main(bgrMat,targetHeightStart,targetHeightEnd);
 
         return a;
     }

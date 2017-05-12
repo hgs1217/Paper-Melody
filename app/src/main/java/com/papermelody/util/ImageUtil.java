@@ -48,6 +48,7 @@ public class ImageUtil {
         byte[] data = new byte[image.getWidth() * image.getHeight() * ImageFormat.getBitsPerPixel(ImageFormat.YUV_420_888) / 8];
         byte[] rowData = new byte[planes[0].getRowStride()];
 
+
         for (int i = 0; i < planes.length; i++) {
             buffer = planes[i].getBuffer();
             rowStride = planes[i].getRowStride();

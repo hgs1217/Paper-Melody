@@ -38,7 +38,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.papermelody.R;
-import com.papermelody.util.FingerDetectorAPI;
+import com.papermelody.util.TapDetectorAPI;
 import com.papermelody.util.ToastUtil;
 import com.papermelody.util.ViewUtil;
 
@@ -354,7 +354,9 @@ public class PlayActivity extends BaseActivity {
                             return;
                         }
 
-                        int key = FingerDetectorAPI.getKey(image);
+//                        int key = TapDetectorAPI.getKey(image);
+//                        FIXME: key should be returned by Tang tong hui's some class
+                        int key = 0;
                         playSound(key);
                     } finally {
                         if (image != null) {

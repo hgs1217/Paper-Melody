@@ -32,8 +32,12 @@ public class TapDetectorAPI {
     public static List<List<Point>> getTap(Image image) {
         // TODO:
         Mat yuv = ImageUtil.imageToMat(image);
+
         Mat im = new Mat(image.getHeight(), image.getWidth(), CvType.CV_8UC4);
         Imgproc.cvtColor(yuv, im, Imgproc.COLOR_YUV2BGR_I420);
+
+        double shrink_ratio = Util.resize(im);
+
         Imgproc.cvtColor(im, im, Imgproc.COLOR_BGR2YCrCb);
 
         Log.w("size", "" + im.size());
@@ -50,10 +54,15 @@ public class TapDetectorAPI {
         List<Point> taps = td.getTapping(im, fingers);
         Log.w("taps", "" + taps);
 
+        for (Point pt: hand_contour_pt) { pt.x /= shrink_ratio; pt.y /= shrink_ratio; }
+        for (Point pt: fingers) { pt.x /= shrink_ratio; pt.y /= shrink_ratio; }
+        for (Point pt: taps) { pt.x /= shrink_ratio; pt.y /= shrink_ratio; }
+
         List<List<Point>> ret = new ArrayList<>();
         ret.add(hand_contour_pt);
         ret.add(fingers);
         ret.add(taps);
+
         return ret;
     }
 }

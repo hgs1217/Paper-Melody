@@ -10,7 +10,7 @@ URL：https://github.com/gigaflw/Paper-Melody.server
 
 由于opencv库非常大，因此我没有上传github，然后我在/docs目录下放置了一个opencv库导入方法，你们按照那个流程导入一下
 
-## MileStone
+## Milestone
 
 - [ ] PlayInstrument 用例
 - [ ] Register & Login 用例

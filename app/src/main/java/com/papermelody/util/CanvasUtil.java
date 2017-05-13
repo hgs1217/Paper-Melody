@@ -31,6 +31,8 @@ public class CanvasUtil {
         p.setColor(color);
         p.setStrokeWidth(10);
 
+        // FIXME: inefficient to update upon every image
+        // these constants should be calced at the very beginning of `initCamera`
         float heightScalar = (float) canvas.getHeight() / photoHeight;
         float widthScalar =  (float) canvas.getWidth() / photoWidth;
         int screenHeight = ViewUtil.getScreenHeight(context);

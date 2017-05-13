@@ -95,14 +95,25 @@ public class CameraDebugActivity extends BaseActivity {
     private int[] voiceId = new int[36];
     private SoundPool soundPool;
 
-    public void processImage(Image image, Mat bgrMat) {
+    public void processImage(Image image) {
         /**
          * Process image here
          */
 //        Log.w("test", "hello?" + image.getWidth());
-        List<List<Point>> ret = TapDetectorAPI.getAllForDebug(bgrMat);
+        // FIXME: calibrationResult is null and will cause a crash when click `DEBUG` button
+        // @tang tong hui
+        Calibration.TranformResult tranformResult = ImageProcessor.getKeyTranform(calibrationResult);
+        Mat mat = ImageUtil.imageToBgr(image);
+        List<Integer> keys = ImageProcessor.getPlaySoundKey(mat.clone(), tranformResult);
+
+        List<List<Point>> ret = TapDetectorAPI.getAllForDebug(mat);
         canvasCameraDebug.updatePoints(ret.get(0), ret.get(1), ret.get(2), image.getHeight(),
                 image.getWidth(), this, viewCameraDebug.getHeight());
+        for (Integer key : keys) {
+            playSound(key);
+            Log.d("TESTK", key+"");
+        }
+
     }
 
 
@@ -166,6 +177,10 @@ public class CameraDebugActivity extends BaseActivity {
 
 
     private void initCamera() {
+        /**
+         * 不要改这里的代码！
+         * 任何图像处理的代码加到 processImage 里去！  by gigaflw
+         */
         HandlerThread handlerThread = new HandlerThread("Camera2");
         handlerThread.start();
         childHandler = new Handler(handlerThread.getLooper());
@@ -181,23 +196,17 @@ public class CameraDebugActivity extends BaseActivity {
             Size largest = Collections.max(Arrays.asList(map.getOutputSizes(ImageFormat.YUV_420_888)),
                     new CompareSizesByArea());
             initSurfaceSize((double) largest.getWidth()/largest.getHeight());
+
             Log.d("TESTVL", largest.getWidth()+" "+largest.getHeight());
             imageReader = ImageReader.newInstance(largest.getWidth(), largest.getHeight(), ImageFormat.YUV_420_888, 5);
-            Calibration.TranformResult tranformResult = ImageProcessor.getKeyTranform(calibrationResult);
+
             imageReader.setOnImageAvailableListener(reader -> {
                 Image image = null;
                 try {
                     image = imageReader.acquireLatestImage();
                     if (image == null) { return; }
 
-                    Mat mat = ImageUtil.imageToBgr(image);
-                    Mat mat2 = mat.clone();
-                    List<Integer> keys = ImageProcessor.getPlaySoundKey(mat, tranformResult);
-                    processImage(image, mat2);
-                    for (Integer key : keys) {
-                        playSound(key);
-                        Log.d("TESTK", key+"");
-                    }
+                    processImage(image);
 
                 } finally {
                     if (image != null) { image.close(); }

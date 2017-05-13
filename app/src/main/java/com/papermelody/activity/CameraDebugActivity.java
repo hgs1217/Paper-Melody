@@ -43,6 +43,7 @@ import com.papermelody.widget.CameraDebugView;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
@@ -95,6 +96,12 @@ public class CameraDebugActivity extends BaseActivity {
     private int[] voiceId = new int[36];
     private SoundPool soundPool;
 
+    private ArrayList<Integer> lastKeys = new ArrayList<>();
+    // this variable is used to prevent a same key to be played in a row
+    // FIXME: it is only a temporary measure because real piano will play a long sound instead of one shot
+    // FIXME: this vairable should be put into the class in responsible for playing sound, not here
+    //    by gigaflw
+
     public void processImage(Image image) {
         /**
          * Process image here
@@ -109,11 +116,14 @@ public class CameraDebugActivity extends BaseActivity {
         List<List<Point>> ret = TapDetectorAPI.getAllForDebug(mat);
         canvasCameraDebug.updatePoints(ret.get(0), ret.get(1), ret.get(2), image.getHeight(),
                 image.getWidth(), this, viewCameraDebug.getHeight());
+//        Log.w("TESTK", "" + keys);
+//        Log.w("LAST_TESTK", "" + lastKeys);
         for (Integer key : keys) {
-            playSound(key);
-            Log.d("TESTK", key+"");
+            if (!lastKeys.contains(key)){
+                playSound(key);
+            }
         }
-
+        lastKeys = new ArrayList<>(keys);
     }
 
 

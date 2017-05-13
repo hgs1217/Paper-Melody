@@ -9,3 +9,14 @@ URL：https://github.com/gigaflw/Paper-Melody.server
 请大家先把项目获取至本地，导入Android Studio进行配置，Gradle版本2.14.1，配置时如有问题请在群里交流
 
 由于opencv库非常大，因此我没有上传github，然后我在/docs目录下放置了一个opencv库导入方法，你们按照那个流程导入一下
+
+## MileStone
+
+- [ ] PlayInstrument 用例
+- [ ] Register & Login 用例
+- [ ] BrowseInMusicHall 用例
+- [ ] CommentByUser 用例
+- [ ] ListenByUser 用例
+
+- [ ] 界面
+- [ ] 算法优化

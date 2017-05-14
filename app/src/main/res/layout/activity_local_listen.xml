@@ -15,7 +15,7 @@
         android:text="这是LocalListenActivity"/>
 
     <LinearLayout
-        android:id="@+id/fragment_play"
+        android:id="@+id/fragment_local_listen"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical">

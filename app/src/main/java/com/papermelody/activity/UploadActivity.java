@@ -53,6 +53,7 @@ public class UploadActivity extends BaseActivity {
     private String link = null;
     private SocialSystemAPI api;
     private boolean isSuccess = false;
+    private String cacheName = null;  // 缓存的文件的名称
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,22 +73,22 @@ public class UploadActivity extends BaseActivity {
                 Thread thread = new Thread(new Runnable() {
                     @Override
                     public void run() {
-//                这里上传的是data/data/目录下已经存在的文件
-                        isSuccess = uploadMusic("http://59.78.0.200:8080/uploadFile",
-                                "Kissbye.mid", new File(getApplicationContext().getFilesDir()
-                                        .getAbsolutePath() + "/Kissbye.mid"));
-                        Log.i("nib", "isSuccess1==" + isSuccess);
+//                这里上传的是data/data/~/cache/目录下已经存在的文件
+                        File file = new File(getApplicationContext().getCacheDir()
+                                .getAbsolutePath() + cacheName);
+                        isSuccess = uploadMusic(R.string.server_ip + "uploadFile",
+                                cacheName, file);
+                        Log.i("nib", "isSuccess1=" + isSuccess);
                     }
                 });
                 thread.start();
                 try {
                     thread.join();
                 } catch (InterruptedException e) {
-//                    ToastUtil.showShort("InterruptedException");
                     Log.i("nib", "InterruptedException");
 //                e.printStackTrace();
                 }
-                Log.i("nib", "isSuccess2==" + isSuccess);
+                Log.i("nib", "isSuccess2=" + isSuccess);
                 if (isSuccess) {
                     String name = editMusicTitle.getText().toString();
                     Date date = new Date(System.currentTimeMillis());

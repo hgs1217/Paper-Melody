@@ -46,7 +46,7 @@ public class PlayListenActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         fragmentManager = getSupportFragmentManager();
         transaction = fragmentManager.beginTransaction();
-        transaction.add(R.id.fragment_play, ListenFragment.newInstance());
+        transaction.add(R.id.fragment_play_listen, ListenFragment.newInstance("Kissbye.mid"));
         transaction.commit();
         btnSaveToLocal.setOnClickListener((View v) -> {
             String filename = "Kissbye.mid";

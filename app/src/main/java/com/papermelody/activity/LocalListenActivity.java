@@ -28,7 +28,7 @@ public class LocalListenActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         fragmentManager = getSupportFragmentManager();
         transaction = fragmentManager.beginTransaction();
-        transaction.add(R.id.fragment_play, ListenFragment.newInstance());
+        transaction.add(R.id.fragment_local_listen, ListenFragment.newInstance(""));
         transaction.commit();
     }
 

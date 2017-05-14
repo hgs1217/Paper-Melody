@@ -32,14 +32,18 @@ public class ListenFragment extends BaseFragment {
     @BindView(R.id.btn_pause)
     Button btnPause;
 
+    private static final String FILENAME = "";
     private MediaPlayer mediaPlayer;
     //    private AssetFileDescriptor afd;
     private TimerTask timerTask;
     private Timer timer;
     private boolean playState;
 
-    public static ListenFragment newInstance() {
+    public static ListenFragment newInstance(String fn) {
         ListenFragment fragment = new ListenFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString(FILENAME, fn);
+        fragment.setArguments(bundle);
         return fragment;
     }
 
@@ -47,12 +51,11 @@ public class ListenFragment extends BaseFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mediaPlayer = new MediaPlayer();
+        String filename = getArguments().getString(FILENAME);
         playState = false;
         try {
-//            afd = getResources().getAssets().openFd("Kissbye.mid");
-//            mediaPlayer.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
             mediaPlayer.setDataSource(getContext().getFilesDir()
-                    .getAbsolutePath() + "/Kissbye.mid");
+                    .getAbsolutePath() + "/" + filename);
             mediaPlayer.prepare();
 //            mediaPlayer.start();
         } catch (IOException e) {

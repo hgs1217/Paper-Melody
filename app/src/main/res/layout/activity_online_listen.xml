@@ -6,6 +6,21 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:orientation="vertical"
+    android:gravity="center"
     tools:context="com.papermelody.activity.OnlineListenActivity">
+
+    <Button
+        android:id="@+id/btn_download"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/save_to_local"/>
+    <LinearLayout
+        android:id="@+id/fragment_online_listen"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical">
+
+    </LinearLayout>
 
 </LinearLayout>

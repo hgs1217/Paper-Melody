@@ -109,9 +109,9 @@ public class CameraDebugActivity extends BaseActivity {
 //        Log.w("test", "hello?" + image.getWidth());
         // FIXME: calibrationResult is null and will cause a crash when click `DEBUG` button
         // @tang tong hui
-        Calibration.TranformResult tranformResult = ImageProcessor.getKeyTranform(calibrationResult);
+        Calibration.TransformResult transformResult = ImageProcessor.getKeyTransform(calibrationResult);
         Mat mat = ImageUtil.imageToBgr(image);
-        List<Integer> keys = ImageProcessor.getPlaySoundKey(mat.clone(), tranformResult);
+        List<Integer> keys = ImageProcessor.getPlaySoundKey(mat.clone(), transformResult);
 
         List<List<Point>> ret = TapDetectorAPI.getAllForDebug(mat);
         canvasCameraDebug.updatePoints(ret.get(0), ret.get(1), ret.get(2), image.getHeight(),

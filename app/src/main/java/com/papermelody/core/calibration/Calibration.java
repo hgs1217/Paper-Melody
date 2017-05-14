@@ -35,6 +35,8 @@ public class Calibration {
     static{ System.loadLibrary("opencv_java3"); }
 
 
+
+
     public static CalibrationResult main(Mat srcImage,int upbound,int lowbound){
 
         Mat dstImage = new Mat();
@@ -186,6 +188,7 @@ public class Calibration {
         out.leftUpRightY=leftupright_y;
         out.rightUpLeftX=rightupleft_x;
         out.rightUpLeftY=rightupleft_y;
+
 
 
         if(Math.abs(leftlow_y-rightlow_y)<10&&Math.abs(leftup_y-rightup_y)<10&&temp1>10&&leftup_y>upbound&&rightup_y>upbound&&leftlow_y<lowbound&&rightlow_y<lowbound)
@@ -425,6 +428,47 @@ public class Calibration {
             blackWidth=0;
 
         }
+    }
+    public static boolean whether_stable(CalicrationResultsOfLatest5 calicrationResultsOfLatest5){
+        boolean flag=true;
+        for (int i=0;i<calicrationResultsOfLatest5.n-1;i++){
+            if (Math.abs(calicrationResultsOfLatest5.r[i].leftLowX-calicrationResultsOfLatest5.r[i+1].leftLowX)>5){
+                flag=false;
+                break;
+
+            }
+        }
+        return flag;
+    }
+    public static CalicrationResultsOfLatest5 getNewCalicrationResultsOfLatest5(CalicrationResultsOfLatest5 calicrationResultsOfLatest5,CalibrationResult calibrationResult) {
+        switch (calicrationResultsOfLatest5.n) {
+            case 0:{calicrationResultsOfLatest5.r[0]=calibrationResult;calicrationResultsOfLatest5.n+=1;break;}
+            case 1:{calicrationResultsOfLatest5.r[1]=calibrationResult;calicrationResultsOfLatest5.n+=1;break;}
+            case 2:{calicrationResultsOfLatest5.r[2]=calibrationResult;calicrationResultsOfLatest5.n+=1;break;}
+            case 3:{calicrationResultsOfLatest5.r[3]=calibrationResult;calicrationResultsOfLatest5.n+=1;break;}
+            case 4:{calicrationResultsOfLatest5.r[4]=calibrationResult;calicrationResultsOfLatest5.n+=1;break;}
+            case 5:{calicrationResultsOfLatest5.r[0]=calicrationResultsOfLatest5.r[1];
+                calicrationResultsOfLatest5.r[1]=calicrationResultsOfLatest5.r[2];
+                calicrationResultsOfLatest5.r[2]=calicrationResultsOfLatest5.r[3];
+                calicrationResultsOfLatest5.r[3]=calicrationResultsOfLatest5.r[4];
+                calicrationResultsOfLatest5.r[4]=calibrationResult;
+                break;
+
+
+            }
+
+
+
+
+        }
+        return calicrationResultsOfLatest5;
+    }
+    public static class CalicrationResultsOfLatest5{
+        CalibrationResult r[]=new CalibrationResult[5];
+
+        int n;
+        public CalicrationResultsOfLatest5(){n=0;}
+
     }
 
 }

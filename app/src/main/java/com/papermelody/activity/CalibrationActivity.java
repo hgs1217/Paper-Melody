@@ -93,6 +93,7 @@ public class CalibrationActivity extends BaseActivity {
     }
 
     private CameraManager cameraManager;
+    private int countOfcall=0;
     private CameraDevice cameraDevice;
     private SurfaceHolder surfaceHolder;
     private Handler childHandler, mainHandler;
@@ -100,6 +101,7 @@ public class CalibrationActivity extends BaseActivity {
     private CameraCaptureSession cameraCaptureSession;
     private ImageReader imageReader;
     private Calibration.CalibrationResult calibrationResult;
+    private Calibration.CalibrationResultsOfLatest5 calibrationResultsOfLatest5=new Calibration.CalibrationResultsOfLatest5();
     private int targetHeightStart = 0;
     private int targetHeightEnd = 1000;
 
@@ -208,9 +210,11 @@ public class CalibrationActivity extends BaseActivity {
 
                         Mat mat = ImageUtil.imageToBgr(image);
                         calibrationResult = ImageProcessor.getCalibrationCoordinate(mat, targetHeightStart, targetHeightEnd);
+                        countOfcall+=1;
+                        calibrationResultsOfLatest5=Calibration.getNewCalibrationResultsOfLatest5(calibrationResultsOfLatest5,calibrationResult);
                         canvasCalibration.updateCalibrationCoordinates(calibrationResult,
                                 largest.getHeight(), largest.getWidth(), CalibrationActivity.this);
-                        if (calibrationResult.isFlag()) {
+                        if ((calibrationResult.isFlag()&&Calibration.whether_stable(calibrationResultsOfLatest5))||(countOfcall>80&&calibrationResult.isFlag())) {
                             Bitmap bitmap = ImageUtil.imageToBitmap(mat);
 
                             viewCalibration.setVisibility(View.GONE);

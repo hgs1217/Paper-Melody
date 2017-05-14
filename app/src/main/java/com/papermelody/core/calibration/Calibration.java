@@ -18,16 +18,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import static android.R.attr.x;
-import static android.R.attr.y;
-import static com.papermelody.R.raw.b1;
-import static com.papermelody.R.raw.b2;
-import static com.papermelody.R.raw.b3;
-import static com.papermelody.R.raw.b4;
-import static com.papermelody.R.raw.b5;
-import static com.papermelody.R.raw.b6;
-import static com.papermelody.R.raw.b7;
-
 
 public class Calibration {
 
@@ -190,8 +180,7 @@ public class Calibration {
         out.rightUpLeftY=rightupleft_y;
 
 
-
-        if(Math.abs(leftlow_y-rightlow_y)<10&&Math.abs(leftup_y-rightup_y)<10&&temp1>10&&leftup_y>upbound&&rightup_y>upbound&&leftlow_y<lowbound&&rightlow_y<lowbound)
+        if (  Math.abs(leftlow_y - leftup_y) > 10 && Math.abs(rightlow_y - rightup_y) > 10  && temp1 > 10 && leftup_y > upbound && rightup_y > upbound && leftlow_y < lowbound && rightlow_y < lowbound)
             out.flag=true;
 
 
@@ -431,27 +420,18 @@ public class Calibration {
     }
     public static boolean whether_stable(CalibrationResultsOfLatest5 calicrationResultsOfLatest5){
         boolean flag=true;
-        for (int i=0;i<calicrationResultsOfLatest5.n-1;i++){
-            if (Math.abs(calicrationResultsOfLatest5.r[i].leftLowX-calicrationResultsOfLatest5.r[i+1].leftLowX)>5){
-                flag=false;
-                break;
-
-            }
-        }
+        if (calicrationResultsOfLatest5.n!=2)flag=false;
+        if (Math.abs(calicrationResultsOfLatest5.r[0].leftLowX-calicrationResultsOfLatest5.r[1].leftLowX)>10||Math.abs(calicrationResultsOfLatest5.r[0].rightLowX-calicrationResultsOfLatest5.r[1].rightLowX)>10)flag=false;
         return flag;
     }
     public static CalibrationResultsOfLatest5 getNewCalibrationResultsOfLatest5(CalibrationResultsOfLatest5 calibrationResultsOfLatest5,CalibrationResult calibrationResult) {
         switch (calibrationResultsOfLatest5.n) {
             case 0:{calibrationResultsOfLatest5.r[0]=calibrationResult;calibrationResultsOfLatest5.n+=1;break;}
             case 1:{calibrationResultsOfLatest5.r[1]=calibrationResult;calibrationResultsOfLatest5.n+=1;break;}
-            case 2:{calibrationResultsOfLatest5.r[2]=calibrationResult;calibrationResultsOfLatest5.n+=1;break;}
-            case 3:{calibrationResultsOfLatest5.r[3]=calibrationResult;calibrationResultsOfLatest5.n+=1;break;}
-            case 4:{calibrationResultsOfLatest5.r[4]=calibrationResult;calibrationResultsOfLatest5.n+=1;break;}
-            case 5:{calibrationResultsOfLatest5.r[0]=calibrationResultsOfLatest5.r[1];
-                calibrationResultsOfLatest5.r[1]=calibrationResultsOfLatest5.r[2];
-                calibrationResultsOfLatest5.r[2]=calibrationResultsOfLatest5.r[3];
-                calibrationResultsOfLatest5.r[3]=calibrationResultsOfLatest5.r[4];
-                calibrationResultsOfLatest5.r[4]=calibrationResult;
+
+            case 2:{calibrationResultsOfLatest5.r[0]=calibrationResultsOfLatest5.r[1];
+
+                calibrationResultsOfLatest5.r[1]=calibrationResult;
                 break;
 
 
@@ -464,7 +444,7 @@ public class Calibration {
         return calibrationResultsOfLatest5;
     }
     public static class CalibrationResultsOfLatest5{
-        CalibrationResult r[]=new CalibrationResult[5];
+        CalibrationResult r[]=new CalibrationResult[2];
 
         int n;
         public CalibrationResultsOfLatest5(){n=0;}

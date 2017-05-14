@@ -207,7 +207,7 @@ public class Calibration {
             Log.d("TESTC5", String.valueOf(srcImage));*/
         return out;
     }
-    public static TranformResult transform(CalibrationResult calibrationResult){
+    public static TransformResult transform(CalibrationResult calibrationResult){
         MatOfPoint2f src = new MatOfPoint2f(
                 new org.opencv.core.Point(calibrationResult.getLeftLowX(),calibrationResult.getLeftLowY()), // tl
                 new org.opencv.core.Point(calibrationResult.getLeftUpX(),calibrationResult.getLeftUpY()), // tr
@@ -222,7 +222,7 @@ public class Calibration {
         );
 
 
-        TranformResult tranformResult=new  TranformResult();
+        TransformResult transformResult=new  TransformResult();
         MatOfPoint2f Src = new MatOfPoint2f(
                 new org.opencv.core.Point(calibrationResult.getLeftLowX(),calibrationResult.getLeftLowY()), // tl
                 new org.opencv.core.Point(calibrationResult.getLeftUpRightX(),calibrationResult.getLeftUpRightY()), // tr
@@ -239,18 +239,18 @@ public class Calibration {
 
 
 
-        tranformResult.m = Imgproc.getPerspectiveTransform(src, dst);
-        Core.perspectiveTransform(Src,Dst,tranformResult.m);
+        transformResult.m = Imgproc.getPerspectiveTransform(src, dst);
+        Core.perspectiveTransform(Src,Dst,transformResult.m);
         org.opencv.core.Point[] points = Dst.toArray();
         double widthleft=Math.abs(points[0].x-points[1].x);
         double widthright=Math.abs(points[2].x-points[3].x);
-        tranformResult.blackWidth=(widthleft+widthright)/2;
+        transformResult.blackWidth=(widthleft+widthright)/2;
 
 
-        return tranformResult;
+        return transformResult;
 
     }
-    public static int Key(TranformResult tranformResult,double x,double y){
+    public static int Key(TransformResult transformResult,double x,double y){
 
 
 
@@ -264,9 +264,9 @@ public class Calibration {
         );
 
 
-        Core.perspectiveTransform(Src,Dst,tranformResult.m);
+        Core.perspectiveTransform(Src,Dst,transformResult.m);
 
-        return key(Dst.get(0,0)[0],Dst.get(0,0)[1],tranformResult.blackWidth);
+        return key(Dst.get(0,0)[0],Dst.get(0,0)[1],transformResult.blackWidth);
 
 
     }
@@ -421,15 +421,15 @@ public class Calibration {
 
         public int getRightUpLeftY() {return rightUpLeftY;}
     }
-    public static class TranformResult implements Serializable {
+    public static class TransformResult implements Serializable {
         Mat m;
         double blackWidth;
-        TranformResult(){
+        TransformResult(){
             blackWidth=0;
 
         }
     }
-    public static boolean whether_stable(CalicrationResultsOfLatest5 calicrationResultsOfLatest5){
+    public static boolean whether_stable(CalibrationResultsOfLatest5 calicrationResultsOfLatest5){
         boolean flag=true;
         for (int i=0;i<calicrationResultsOfLatest5.n-1;i++){
             if (Math.abs(calicrationResultsOfLatest5.r[i].leftLowX-calicrationResultsOfLatest5.r[i+1].leftLowX)>5){
@@ -440,18 +440,18 @@ public class Calibration {
         }
         return flag;
     }
-    public static CalicrationResultsOfLatest5 getNewCalicrationResultsOfLatest5(CalicrationResultsOfLatest5 calicrationResultsOfLatest5,CalibrationResult calibrationResult) {
-        switch (calicrationResultsOfLatest5.n) {
-            case 0:{calicrationResultsOfLatest5.r[0]=calibrationResult;calicrationResultsOfLatest5.n+=1;break;}
-            case 1:{calicrationResultsOfLatest5.r[1]=calibrationResult;calicrationResultsOfLatest5.n+=1;break;}
-            case 2:{calicrationResultsOfLatest5.r[2]=calibrationResult;calicrationResultsOfLatest5.n+=1;break;}
-            case 3:{calicrationResultsOfLatest5.r[3]=calibrationResult;calicrationResultsOfLatest5.n+=1;break;}
-            case 4:{calicrationResultsOfLatest5.r[4]=calibrationResult;calicrationResultsOfLatest5.n+=1;break;}
-            case 5:{calicrationResultsOfLatest5.r[0]=calicrationResultsOfLatest5.r[1];
-                calicrationResultsOfLatest5.r[1]=calicrationResultsOfLatest5.r[2];
-                calicrationResultsOfLatest5.r[2]=calicrationResultsOfLatest5.r[3];
-                calicrationResultsOfLatest5.r[3]=calicrationResultsOfLatest5.r[4];
-                calicrationResultsOfLatest5.r[4]=calibrationResult;
+    public static CalibrationResultsOfLatest5 getNewCalibrationResultsOfLatest5(CalibrationResultsOfLatest5 calibrationResultsOfLatest5,CalibrationResult calibrationResult) {
+        switch (calibrationResultsOfLatest5.n) {
+            case 0:{calibrationResultsOfLatest5.r[0]=calibrationResult;calibrationResultsOfLatest5.n+=1;break;}
+            case 1:{calibrationResultsOfLatest5.r[1]=calibrationResult;calibrationResultsOfLatest5.n+=1;break;}
+            case 2:{calibrationResultsOfLatest5.r[2]=calibrationResult;calibrationResultsOfLatest5.n+=1;break;}
+            case 3:{calibrationResultsOfLatest5.r[3]=calibrationResult;calibrationResultsOfLatest5.n+=1;break;}
+            case 4:{calibrationResultsOfLatest5.r[4]=calibrationResult;calibrationResultsOfLatest5.n+=1;break;}
+            case 5:{calibrationResultsOfLatest5.r[0]=calibrationResultsOfLatest5.r[1];
+                calibrationResultsOfLatest5.r[1]=calibrationResultsOfLatest5.r[2];
+                calibrationResultsOfLatest5.r[2]=calibrationResultsOfLatest5.r[3];
+                calibrationResultsOfLatest5.r[3]=calibrationResultsOfLatest5.r[4];
+                calibrationResultsOfLatest5.r[4]=calibrationResult;
                 break;
 
 
@@ -461,13 +461,13 @@ public class Calibration {
 
 
         }
-        return calicrationResultsOfLatest5;
+        return calibrationResultsOfLatest5;
     }
-    public static class CalicrationResultsOfLatest5{
+    public static class CalibrationResultsOfLatest5{
         CalibrationResult r[]=new CalibrationResult[5];
 
         int n;
-        public CalicrationResultsOfLatest5(){n=0;}
+        public CalibrationResultsOfLatest5(){n=0;}
 
     }
 

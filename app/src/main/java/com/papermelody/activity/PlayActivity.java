@@ -363,7 +363,7 @@ public class PlayActivity extends BaseActivity {
                     new CompareSizesByArea());
             Log.d("TESTSIZE", largest.getWidth() + " " + largest.getHeight());
             imageReader = ImageReader.newInstance(largest.getWidth(), largest.getHeight(), ImageFormat.YUV_420_888, 5);
-            Calibration.TranformResult tranformResult = ImageProcessor.getKeyTranform(calibrationResult);
+            Calibration.TransformResult tranformResult = ImageProcessor.getKeyTransform(calibrationResult);
             imageReader.setOnImageAvailableListener(new ImageReader.OnImageAvailableListener() {
                     /* 可以在这里处理拍照得到的临时照片 */
 

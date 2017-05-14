@@ -31,13 +31,13 @@ public class ImageProcessor {
         return a;
     }
 
-    public static Calibration.TranformResult getKeyTranform(Calibration.CalibrationResult result){
+    public static Calibration.TransformResult getKeyTransform(Calibration.CalibrationResult result){
         return Calibration.transform(result);
 
     }
 
 
-    public static List<Integer> getPlaySoundKey(Mat bgrMat, Calibration.TranformResult result) {
+    public static List<Integer> getPlaySoundKey(Mat bgrMat, Calibration.TransformResult result) {
         List<Integer> keys = new ArrayList<>();
         int count[]=new int [37];
         for (int i=0;i<count.length;i++){count[i]=0;}

@@ -54,10 +54,10 @@ public class CalibrationView extends View {
             double offset = (height - screenHeight) / 2.0;
             Log.d("CANVAS", height+" "+canvas.getWidth());
 
-            int point1X =  photoWidth - (int) (leftUpX * widthScalar), point1Y = (int) (leftUpY * heightScalar - offset),
-                    point2X = photoWidth - (int) (leftLowX * widthScalar), point2Y = (int) (leftLowY * heightScalar - offset),
-                    point3X = photoWidth - (int) (rightUpX * widthScalar), point3Y = (int) (rightUpY * heightScalar - offset),
-                    point4X = photoWidth - (int) (rightLowX * widthScalar), point4Y = (int) (rightLowY * heightScalar - offset);
+            int point1X =  (int) (leftUpX * widthScalar), point1Y = (int) (leftUpY * heightScalar - offset),
+                    point2X = (int) (leftLowX * widthScalar), point2Y = (int) (leftLowY * heightScalar - offset),
+                    point3X = (int) (rightUpX * widthScalar), point3Y = (int) (rightUpY * heightScalar - offset),
+                    point4X = (int) (rightLowX * widthScalar), point4Y = (int) (rightLowY * heightScalar - offset);
 
             Paint p = new Paint();
             p.setColor(Color.RED);

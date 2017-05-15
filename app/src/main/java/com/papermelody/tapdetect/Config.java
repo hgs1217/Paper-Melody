@@ -13,8 +13,8 @@ public class Config {
     public static Scalar[] FINGER_COLOR_RANGE_SM = {new Scalar(0, 150, 100), new Scalar(255, 160, 130)};
     public static Scalar[] FINGER_COLOR_RANGE_LG = {new Scalar(0, 145, 100), new Scalar(255, 165, 140)};
 
-    public static int IM_HEIGHT = 500;
-    public static int TAP_THRESHOLD_ROW = 320;
-    public static int FINGER_TIP_STEP = 20;
-    public static int FINGER_TIP_WIDTH = 30;
+    public static int IM_HEIGHT = 250;
+    public static int TAP_THRESHOLD_ROW = 160;
+    public static int FINGER_TIP_STEP = 10;
+    public static int FINGER_TIP_WIDTH = 15;
 }

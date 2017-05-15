@@ -72,7 +72,7 @@ public class FingerDetector {
             finger_tips_ind.add(i);
         }
 
-        List<Integer> finger_tips_ind_separate = this.mergeNeighbors(finger_tips_ind, 10);
+        List<Integer> finger_tips_ind_separate = this.mergeNeighbors(finger_tips_ind, Config.FINGER_TIP_WIDTH);
 
         //  FIXME: can't use stream until sdk 24
         // return finger_tips_ind_separate.stream().map(contour_pt::get).collect(Collectors.toList());

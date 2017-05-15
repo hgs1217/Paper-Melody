@@ -12,9 +12,11 @@
         android:id="@+id/textView5"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="0.20"
-        android:text="评论"
+        android:layout_weight="0.72"
+        android:background="@color/colorPrimaryDark"
 
+        android:text=" 评论"
+        android:textColor="@color/white"
         android:textSize="24sp"
         android:textStyle="bold" />
 
@@ -50,7 +52,7 @@
     <ListView
         android:id="@+id/current_comment_list"
         android:layout_width="match_parent"
-        android:layout_height="125dp" />
+        android:layout_height="38dp" />
 
     <EditText
         android:id="@+id/add_new_comment"
@@ -63,8 +65,15 @@
     <Button
         android:id="@+id/upload_comment_btn"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:layout_weight="0.36"
         android:text="@string/upload_comment" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="7.25"
+        android:text=" " />
 
 </LinearLayout>

@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="300dp"
         android:background="@drawable/beautiful"
-        android:src="@color/colorPrimary" />
+        android:src="@drawable/beautiful" />
 
     <LinearLayout
         android:layout_width="match_parent"

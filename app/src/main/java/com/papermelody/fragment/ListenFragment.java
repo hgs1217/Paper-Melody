@@ -3,6 +3,8 @@ package com.papermelody.fragment;
 import android.content.res.AssetFileDescriptor;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.Environment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +21,8 @@ import java.util.TimerTask;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static android.os.Environment.getExternalStorageDirectory;
+
 /**
  * Created by HgS_1217_ on 2017/4/10.
  */
@@ -33,11 +37,11 @@ public class ListenFragment extends BaseFragment {
     Button btnPause;
 
     private static final String FILENAME = "";
-    private MediaPlayer mediaPlayer;
-    //    private AssetFileDescriptor afd;
+    private static MediaPlayer mediaPlayer;
     private TimerTask timerTask;
     private Timer timer;
     private boolean playState;
+    private static String filename;
 
     public static ListenFragment newInstance(String fn) {
         ListenFragment fragment = new ListenFragment();
@@ -51,16 +55,18 @@ public class ListenFragment extends BaseFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mediaPlayer = new MediaPlayer();
-        String filename = getArguments().getString(FILENAME);
+        filename = getArguments().getString(FILENAME);
         playState = false;
-        try {
-            mediaPlayer.setDataSource(getContext().getFilesDir()
-                    .getAbsolutePath() + "/" + filename);
-            mediaPlayer.prepare();
-//            mediaPlayer.start();
-        } catch (IOException e) {
-            ToastUtil.showShort(R.string.unable_to_play);
-        }
+        refreshSource();
+//        try {
+//            mediaPlayer.setDataSource(getExternalStorageDirectory() + "/" +
+//                    Environment.DIRECTORY_DOWNLOADS + "/" + filename);
+//            mediaPlayer.prepare();
+//        } catch (IOException e) {
+//            Log.i("nib", getExternalStorageDirectory() + "/" +
+//                    Environment.DIRECTORY_DOWNLOADS + "/" + filename);
+//            ToastUtil.showShort(R.string.unable_to_play);
+//        }
     }
 
     @Override
@@ -115,4 +121,15 @@ public class ListenFragment extends BaseFragment {
         mediaPlayer.release();
     }
 
+    public static void refreshSource() {
+        try {
+            mediaPlayer.setDataSource(getExternalStorageDirectory() + "/" +
+                    Environment.DIRECTORY_DOWNLOADS + "/" + filename);
+            mediaPlayer.prepare();
+        } catch (IOException e) {
+            Log.i("nib", getExternalStorageDirectory() + "/" +
+                    Environment.DIRECTORY_DOWNLOADS + "/" + filename);
+            ToastUtil.showShort(R.string.unable_to_play);
+        }
+    }
 }

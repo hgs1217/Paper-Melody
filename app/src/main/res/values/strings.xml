@@ -16,8 +16,13 @@
     <string name="play_over">弹奏结束</string>
     <string name="save_to_local">保存到本地</string>
     <string name="unable_to_play">暂时无法播放T.T</string>
+<<<<<<< HEAD
     <!--<string name="server_ip">http://10.182.140.40:8080/</string>-->
     <string name="server_ip">http://192.168.0.104:8080/</string>
+=======
+    <string name="server_ip">http://123.207.249.92/</string>
+    <!--<string name="server_ip">http://59.78.0.200:8080/</string>-->
+>>>>>>> origin/master
     <string name="tab_mode">开始演奏</string>
     <string name="tab_settings">设置</string>
     <string name="tab_music_hall">音乐圈</string>

@@ -1,7 +1,12 @@
 package com.papermelody.activity;
 
+import android.app.DownloadManager;
+import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 
 import com.papermelody.R;
@@ -27,6 +32,9 @@ import java.net.URL;
 
 import butterknife.BindView;
 
+import static android.os.Environment.DIRECTORY_DOWNLOADS;
+import static android.os.Environment.getExternalStorageDirectory;
+
 /**
  * Created by HgS_1217_ on 2017/4/10.
  */
@@ -45,6 +53,7 @@ public class OnlineListenActivity extends BaseActivity {
 
     private OnlineMusic onlineMusic;
     private Thread downloadThread;
+    private Fragment fragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +68,8 @@ public class OnlineListenActivity extends BaseActivity {
         Log.i("nib", onlineMusic.getMusicName());
         fragmentManager = getSupportFragmentManager();
         transaction = fragmentManager.beginTransaction();
-        transaction.add(R.id.fragment_online_listen, ListenFragment.newInstance(fileName));
+        fragment = ListenFragment.newInstance(fileName);
+        transaction.add(R.id.fragment_online_listen, fragment);
         transaction.commit();
 
         downloadThread = new Thread(() -> {
@@ -67,17 +77,24 @@ public class OnlineListenActivity extends BaseActivity {
             String dataPath = getApplicationContext().getFilesDir().getAbsolutePath() + "/";
             String sourceURL = getString(R.string.server_ip) + "uploaded/" + fileName;
             Log.i("nib", sourceURL);
-            boolean downloadResult = download(sourceURL, dataPath, fileName);
-            if (downloadResult) {
-                ToastUtil.showShort(R.string.download_success);
-            } else {
-                ToastUtil.showShort(R.string.download_failed);
-            }
+            download_2(sourceURL, dataPath, fileName);
+//            boolean downloadResult = download(sourceURL, dataPath, fileName);
+//            if (downloadResult) {
+//                ToastUtil.showShort(R.string.download_success);
+//            } else {
+//                ToastUtil.showShort(R.string.download_failed);
+//            }
         });
 
-        // TODO 不知道为什么点击按钮后就跳到一个空白界面然后退出，尽管文件确实下载下来了
+        // FIXME 点击按钮下载不会闪退，但需返回重进一次才能播放
         btnDownload.setOnClickListener((View v) -> {
             downloadThread.start();
+//            try {
+//                downloadThread.join();
+//            } catch (InterruptedException e) {
+//                Log.i("nib", e.toString());
+//            }
+//            ListenFragment.refreshSource();
         });
     }
 
@@ -120,19 +137,26 @@ public class OnlineListenActivity extends BaseActivity {
                 os.write(buffer, 0, len);
             }
             os.flush();
+            os.close();
+            is.close();
             Log.i("nib", "download success");
             return true;
-        } catch (IOException e) {
+        } catch (Exception e) {
             Log.i("nib", e.toString());
             return false;
-        } finally {
-            try {
-                os.close();
-                is.close();
-            } catch (Exception e) {
-                Log.i("nib", e.toString());
-            }
         }
+    }
 
+    // 调用系统的下载器下载
+    private void download_2(String strurl, String path, String fileName) {
+        File file = new File(getExternalStorageDirectory() + "/Download/" + fileName);
+        if (file.exists()) {
+            file.delete();
+        }
+        DownloadManager downloadManager = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
+        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(strurl));
+        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileName);
+        downloadManager.enqueue(request);
+        Log.i("nib", Environment.DIRECTORY_DOWNLOADS + "/" + fileName);
     }
 }

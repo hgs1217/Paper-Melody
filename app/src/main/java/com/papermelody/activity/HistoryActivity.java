@@ -57,12 +57,11 @@ public class HistoryActivity extends BaseActivity {
     private SocialSystemAPI api;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         api = RetrofitClient.getSocialSystemAPI();
-       // commentList.setAdapter(new ArrayAdapter<String>(HistoryActivity.this,
+        // commentList.setAdapter(new ArrayAdapter<String>(HistoryActivity.this,
         //        android.R.layout.simple_list_item_1, getData()));
         initView();
     }
@@ -101,7 +100,6 @@ public class HistoryActivity extends BaseActivity {
         */
 
 
-
         button.setOnClickListener((View v) -> {
             String comment = editText.getText().toString();
             SimpleDateFormat sDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
@@ -131,19 +129,16 @@ public class HistoryActivity extends BaseActivity {
             }
 
 
-            try
-            {
+            try {
                 Thread.sleep(1000);
-            }
-            catch (InterruptedException e)
-            {
+            } catch (InterruptedException e) {
                 e.printStackTrace();
             }
 
             com2.setText(com1.getText());
             com22.setText(com11.getText());
             com1.setText(comment);
-            com11.setText(createtime+" by "+author);
+            com11.setText(createtime + " by " + author);
         });
     }
 

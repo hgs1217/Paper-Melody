@@ -6,6 +6,7 @@
     <string name="stop">停止</string>
     <string name="quit_save">放弃上传</string>
     <string name="play_start">播放</string>
+    <string name="comment">评论</string>
     <string name="edit_music_title">音乐名称</string>
     <string name="edit_music_des">说点什么</string>
     <string name="submit">提交</string>

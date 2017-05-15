@@ -46,6 +46,8 @@ public class OnlineListenActivity extends BaseActivity {
      */
     @BindView(R.id.btn_download)
     Button btnDownload;
+    @BindView(R.id.btn_comment)
+    Button btnComment;
 
     private FragmentManager fragmentManager;
     private FragmentTransaction transaction;
@@ -95,6 +97,10 @@ public class OnlineListenActivity extends BaseActivity {
 //                Log.i("nib", e.toString());
 //            }
 //            ListenFragment.refreshSource();
+        });
+        btnComment.setOnClickListener((View v) -> {
+            Intent intent1 = new Intent(getApplicationContext(), HistoryActivity.class);
+            startActivity(intent1);
         });
     }
 

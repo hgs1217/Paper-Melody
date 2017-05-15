@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.papermelody.R;
@@ -101,10 +102,21 @@ public class MainActivity extends BaseActivity {
         TextView textViewHall = (TextView) indicatorHall.findViewById(R.id.text_item_tab);
         TextView textViewUser = (TextView) indicatorUser.findViewById(R.id.text_item_tab);
 
+        ImageView imageViewMode = (ImageView) indicatorMode.findViewById(R.id.image_item_tab);
+        ImageView imageViewSettings = (ImageView) indicatorSettings.findViewById(R.id.image_item_tab);
+        ImageView imageViewHall = (ImageView) indicatorHall.findViewById(R.id.image_item_tab);
+        ImageView imageViewUser = (ImageView) indicatorUser.findViewById(R.id.image_item_tab);
+
+        imageViewMode.setImageDrawable(getDrawable(R.drawable.ic_audiotrack_black_24dp));
+        imageViewSettings.setImageDrawable(getDrawable(R.drawable.ic_settings_black_24dp));
+        imageViewHall.setImageDrawable(getDrawable(R.drawable.ic_cloud_circle_black_24dp));
+        imageViewUser.setImageDrawable(getDrawable(R.drawable.ic_account_circle_black_24dp));
+
         textViewMode.setText(R.string.tab_mode);
         textViewSettings.setText(R.string.tab_settings);
         textViewHall.setText(R.string.tab_music_hall);
         textViewUser.setText(R.string.tab_user);
+
 
         tabLayout.addTab(tabLayout.newTab().setCustomView(indicatorMode));
         tabLayout.addTab(tabLayout.newTab().setCustomView(indicatorHall));

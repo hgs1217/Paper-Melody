@@ -182,6 +182,8 @@ public class Calibration {
 
         if (Math.abs(leftlow_y - leftup_y) > 20 &&
                 Math.abs(rightlow_y - rightup_y) > 20 &&
+                Math.abs(rightlow_x - leftlow_x) > dstImage.width()/2&&
+                Math.abs(rightup_x - leftup_x) > dstImage.width()/2&&
                 temp1 > 13 && leftup_y > upbound && rightup_y > upbound &&
                 leftlow_y < lowbound &&
                 rightlow_y < lowbound)
@@ -424,7 +426,7 @@ public class Calibration {
     }
     public static boolean whether_stable(CalibrationResultsOfLatest5 calicrationResultsOfLatest5){
         boolean flag=true;
-        if (calicrationResultsOfLatest5.n != 4) flag = false;
+        if (calicrationResultsOfLatest5.n != 4) {flag = false; return flag ;}
         if (Math.abs(calicrationResultsOfLatest5.r[0].leftLowX - calicrationResultsOfLatest5.r[1].leftLowX) > 10 ||
                 Math.abs(calicrationResultsOfLatest5.r[0].rightLowX - calicrationResultsOfLatest5.r[1].rightLowX) > 10 ||
                 Math.abs(calicrationResultsOfLatest5.r[1].leftLowX - calicrationResultsOfLatest5.r[2].leftLowX) > 10 ||
@@ -448,7 +450,6 @@ public class Calibration {
                 calibrationResultsOfLatest5.n += 1;
                 break;
             }
-
             case 4: {
                 calibrationResultsOfLatest5.r[0] = calibrationResultsOfLatest5.r[1];
                 calibrationResultsOfLatest5.r[1] = calibrationResultsOfLatest5.r[2];

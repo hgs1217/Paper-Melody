@@ -129,6 +129,17 @@ public class HistoryActivity extends BaseActivity {
                                 NetworkFailureHandler.loginErrorHandler
                         ));
             }
+
+
+            try
+            {
+                Thread.sleep(1000);
+            }
+            catch (InterruptedException e)
+            {
+                e.printStackTrace();
+            }
+
             com2.setText(com1.getText());
             com22.setText(com11.getText());
             com1.setText(comment);

@@ -8,7 +8,8 @@
         android:id="@+id/img_mode_poster"
         android:layout_width="match_parent"
         android:layout_height="300dp"
-        android:src="@color/colorPrimary"/>
+        android:background="@drawable/beautiful"
+        android:src="@color/colorPrimary" />
 
     <LinearLayout
         android:layout_width="match_parent"

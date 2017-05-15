@@ -60,7 +60,7 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="textMultiLine"
-        android:text="@string/add_new_comment" />
+        android:text="在这里添加评论" />
 
     <Button
         android:id="@+id/upload_comment_btn"

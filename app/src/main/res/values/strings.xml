@@ -17,7 +17,7 @@
     <string name="save_to_local">保存到本地</string>
     <string name="unable_to_play">暂时无法播放T.T</string>
     <!--<string name="server_ip">http://10.182.140.40:8080/</string>-->
-    <string name="server_ip">http://192.168.0.103:8080/</string>
+    <string name="server_ip">http://192.168.0.104:8080/</string>
     <string name="tab_mode">开始演奏</string>
     <string name="tab_settings">设置</string>
     <string name="tab_music_hall">音乐圈</string>
@@ -68,4 +68,5 @@
     <string name="upload_comment">上传评论</string>
     <string name="calibration_cancel">重新标定</string>
     <string name="calibration_complete">完成标定</string>
+    <string name="upload_comment_success">评论上传完成！</string>
 </resources>

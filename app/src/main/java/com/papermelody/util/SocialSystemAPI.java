@@ -4,9 +4,9 @@ import com.papermelody.model.response.HttpResponse;
 import com.papermelody.model.response.OnlineMusicListResponse;
 import com.papermelody.model.response.UploadResponse;
 import com.papermelody.model.response.UserResponse;
+import com.papermelody.model.response.CommentResponse;
 
 import java.util.Date;
-import java.util.StringJoiner;
 
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
@@ -54,5 +54,8 @@ public interface SocialSystemAPI {
                                            @Field("user") String user,
                                            @Field("comment") String comment,
                                            @Field("time") String time);
+    @FormUrlEncoded
+    @POST("getcomment")
+    Observable<CommentResponse> getComment(@Field("musicID") String musicID);
 
 }

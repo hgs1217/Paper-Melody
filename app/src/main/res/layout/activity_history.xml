@@ -8,9 +8,63 @@
     android:orientation="vertical"
     tools:context="com.papermelody.activity.HistoryActivity">
 
-    <Button
-        android:id="@+id/upload_comment_btn2"
+    <TextView
+        android:id="@+id/textView5"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Button" />
+        android:layout_weight="0.20"
+        android:text="评论"
+
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="This is great!"
+        android:textColor="@color/black"
+        android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/textView11"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="2017-5-14 12:23 by USER1" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=" "
+        android:textColor="@color/black"
+        android:textSize="24sp"
+     />
+
+    <TextView
+        android:id="@+id/textView22"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=" " />
+
+    <ListView
+        android:id="@+id/current_comment_list"
+        android:layout_width="match_parent"
+        android:layout_height="125dp" />
+
+    <EditText
+        android:id="@+id/add_new_comment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textMultiLine"
+        android:text="@string/add_new_comment" />
+
+    <Button
+        android:id="@+id/upload_comment_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.36"
+        android:text="@string/upload_comment" />
+
 </LinearLayout>

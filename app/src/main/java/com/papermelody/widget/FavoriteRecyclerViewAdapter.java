@@ -19,13 +19,13 @@ public class FavoriteRecyclerViewAdapter extends RecyclerView.Adapter<FavoriteRe
      * 收藏作品中用于显示作品的RecyclerView的Adapter
      */
 
-    private LayoutInflater mLayoutInflater;
-    private Context mContext;
-    private OnItemClickListener mOnItemClickListener;
+    private LayoutInflater layoutInflater;
+    private Context context;
+    private OnItemClickListener onItemClickListener;
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new ViewHolder(mLayoutInflater.inflate(R.layout.item_online_music, parent, false));
+        return new ViewHolder(layoutInflater.inflate(R.layout.item_online_music, parent, false));
     }
 
     @Override

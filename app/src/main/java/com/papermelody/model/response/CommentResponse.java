@@ -2,7 +2,7 @@ package com.papermelody.model.response;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -10,14 +10,32 @@ import java.util.ArrayList;
  */
 
 public class CommentResponse extends HttpResponse {
-    @SerializedName("result")
-    private ArrayList<String> result;
 
-    public CommentResponse(ArrayList<String> x) {
-        result = x;
+    @SerializedName("result")
+    private CommentListInfo result;
+
+    public CommentListInfo getResult() {
+        return result;
     }
 
-    public ArrayList<String> getResult() {
-        return result;
+    public class CommentListInfo {
+
+        @SerializedName("count")
+        private Integer count;
+        @SerializedName("musics")
+        private List<CommentInfo> comments;
+
+        public CommentListInfo (Integer count, List<CommentInfo> comments) {
+            this.count = count;
+            this.comments = comments;
+        }
+
+        public Integer getCount() {
+            return count;
+        }
+
+        public List<CommentInfo> getComments() {
+            return comments;
+        }
     }
 }

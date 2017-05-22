@@ -1,5 +1,7 @@
 package com.papermelody.model;
 
+import com.papermelody.model.response.CommentInfo;
+
 import java.util.Date;
 
 /**
@@ -11,8 +13,31 @@ public class Comment {
      * 评论类
      */
 
-    private User commenter;
-    private OnlineMusic commentObject;
+    private String author;
+    private String musicID;
     private String content;
-    private Date date;
+    private Date createTime;
+
+    public Comment(CommentInfo info) {
+        author = info.getAuthor();
+        content = info.getComment();
+        createTime = info.getCreateTime();
+        musicID = info.getMusicID();
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public String getMusicID() {
+        return musicID;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
 }

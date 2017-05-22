@@ -1,10 +1,12 @@
 package com.papermelody.util;
 
+import android.support.annotation.Nullable;
+
+import com.papermelody.model.response.CommentResponse;
 import com.papermelody.model.response.HttpResponse;
 import com.papermelody.model.response.OnlineMusicListResponse;
 import com.papermelody.model.response.UploadResponse;
 import com.papermelody.model.response.UserResponse;
-import com.papermelody.model.response.CommentResponse;
 
 import java.util.Date;
 
@@ -12,6 +14,7 @@ import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Query;
 import rx.Observable;
 
 /**
@@ -54,8 +57,8 @@ public interface SocialSystemAPI {
                                            @Field("user") String user,
                                            @Field("comment") String comment,
                                            @Field("time") String time);
-    @FormUrlEncoded
-    @POST("getcomment")
-    Observable<CommentResponse> getComment(@Field("musicID") String musicID);
 
+    // 获取评论
+    @GET("getcomment")
+    Observable<CommentResponse> getComment(@Query("musicID") @Nullable String musicID);
 }

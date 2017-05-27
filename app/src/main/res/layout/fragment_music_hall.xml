@@ -4,12 +4,12 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <ImageView
-        android:id="@+id/img_hall_poster"
+    <com.papermelody.widget.MusicHallCycleViewPager
+        android:id="@+id/hall_cycle_view_pager"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:background="@drawable/beautiful"
-        android:src="@drawable/beautiful" />
+        android:layout_height="200dp">
+
+    </com.papermelody.widget.MusicHallCycleViewPager>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view_hall"

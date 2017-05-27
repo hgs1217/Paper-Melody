@@ -22,15 +22,14 @@ public class OnlineMusic extends Music implements Serializable {
     private String musicInfo;
     private Date musicCreateDate;
     private String musicLink;
+    private String musicPhotoUrl;
     private String uploadName;
     private String uploadUser;
     private String uploadInfo;
     private ArrayList<Comment> comments;
     private int upvoteNum;
 
-    public OnlineMusic() {
-
-    }
+    public OnlineMusic() { }
 
     public OnlineMusic(OnlineMusicInfo info) {
         musicName = info.getName();
@@ -143,5 +142,13 @@ public class OnlineMusic extends Music implements Serializable {
 
     public void setUpvoteNum(int upvoteNum) {
         this.upvoteNum = upvoteNum;
+    }
+
+    public String getMusicPhotoUrl() {
+        return musicPhotoUrl;
+    }
+
+    public void setMusicPhotoUrl(String musicPhotoUrl) {
+        this.musicPhotoUrl = musicPhotoUrl;
     }
 }

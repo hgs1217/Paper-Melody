@@ -6,12 +6,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 
 import com.papermelody.R;
 import com.papermelody.activity.CalibrationActivity;
 import com.papermelody.activity.CameraDebugActivity;
 import com.papermelody.activity.MainActivity;
+import com.papermelody.model.ImgBanner;
+import com.papermelody.widget.MainCycleViewPager;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -26,8 +30,8 @@ public class ModeFragment extends BaseFragment {
      * 主菜单开始演奏入口
      */
 
-    @BindView(R.id.img_mode_poster)
-    ImageView imgPoster;
+    @BindView(R.id.mode_cycle_view_pager)
+    MainCycleViewPager cyclePoster;
     @BindView(R.id.btn_mode_free)
     Button btnModeFree;
     @BindView(R.id.btn_mode_opern)
@@ -52,6 +56,7 @@ public class ModeFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_mode, container, false);
         ButterKnife.bind(this, view);
         initView();
+        initBannerView();
         return view;
     }
 
@@ -70,5 +75,17 @@ public class ModeFragment extends BaseFragment {
             Intent intent = new Intent(getActivity(), CameraDebugActivity.class);
             startActivity(intent);
         });
+    }
+
+    private void initBannerView() {
+        List<ImgBanner> banners = new ArrayList<>();
+        banners.add(new ImgBanner(R.drawable.testimg1));
+        banners.add(new ImgBanner(R.drawable.testimg2));
+        banners.add(new ImgBanner(R.drawable.testimg3));
+
+        cyclePoster.setIndicatorsSelected(R.drawable.shape_cycle_indicator_selected,
+                R.drawable.shape_cycle_indicator_unselected);
+        cyclePoster.setDelay(2000);
+        cyclePoster.setData(banners, null);
     }
 }

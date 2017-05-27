@@ -9,16 +9,17 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import com.papermelody.R;
 import com.papermelody.activity.OnlineListenActivity;
+import com.papermelody.model.MusicBanner;
 import com.papermelody.model.OnlineMusic;
 import com.papermelody.model.response.OnlineMusicInfo;
 import com.papermelody.model.response.OnlineMusicListResponse;
 import com.papermelody.util.NetworkFailureHandler;
 import com.papermelody.util.RetrofitClient;
 import com.papermelody.util.SocialSystemAPI;
+import com.papermelody.widget.MusicHallCycleViewPager;
 import com.papermelody.widget.MusicHallRecyclerViewAdapter;
 
 import java.util.ArrayList;
@@ -39,8 +40,8 @@ public class MusicHallFragment extends BaseFragment {
      * 音乐圈页面，上传作品使用recyclerView排序
      */
 
-    @BindView(R.id.img_hall_poster)
-    ImageView imgPoster;
+    @BindView(R.id.hall_cycle_view_pager)
+    MusicHallCycleViewPager cyclePoster;
     @BindView(R.id.recycler_view_hall)
     RecyclerView recyclerViewHall;
 
@@ -96,6 +97,7 @@ public class MusicHallFragment extends BaseFragment {
                                 musics.add(new OnlineMusic(info));
                             }
                             initRecyclerView(musics);
+                            initBannerView(musics);
                         },
                         NetworkFailureHandler.loginErrorHandler
                 ));
@@ -107,6 +109,19 @@ public class MusicHallFragment extends BaseFragment {
         recyclerViewHall.setAdapter(adapter);
         recyclerViewHall.setLayoutManager(new GridLayoutManager(context, 1));
         recyclerViewHall.setItemAnimator(new DefaultItemAnimator());
+    }
+
+    private void initBannerView(List<OnlineMusic> musics) {
+        // TODO: 此处后期需修改为MusicBanner与某些音乐绑定数据
+        List<MusicBanner> banners = new ArrayList<>();
+        banners.add(new MusicBanner(musics.get(0).getMusicName(), musics.get(0).getMusicPhotoUrl()));
+        banners.add(new MusicBanner(musics.get(1).getMusicName(), musics.get(1).getMusicPhotoUrl()));
+        banners.add(new MusicBanner(musics.get(2).getMusicName(), musics.get(2).getMusicPhotoUrl()));
+
+        cyclePoster.setIndicatorsSelected(R.drawable.shape_cycle_indicator_selected,
+                R.drawable.shape_cycle_indicator_unselected);
+        cyclePoster.setDelay(2000);
+        cyclePoster.setData(banners, null);
     }
 
     private List<OnlineMusic> testCreateMusics() {

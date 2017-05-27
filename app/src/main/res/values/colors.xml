@@ -7,4 +7,5 @@
     <color name="black">#000000</color>
     <color name="transparent">#00000000</color>
     <color name="green">#00FF00</color>
+    <color name="colorCycleViewBannerBackground">#44222222</color>
 </resources>

@@ -18,7 +18,7 @@
     <string name="save_to_local">保存到本地</string>
     <string name="unable_to_play">暂时无法播放T.T</string>
     <!--<string name="server_ip">http://123.207.249.92</string>-->
-    <string name="server_ip">http://192.168.0.107</string>
+    <string name="server_ip">http://192.168.0.100</string>
     <string name="tab_mode">开始演奏</string>
     <string name="tab_settings">设置</string>
     <string name="tab_music_hall">音乐圈</string>

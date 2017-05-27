@@ -82,7 +82,8 @@ public class UserFragment extends BaseFragment {
         });
 
         btnUserInfo.setOnClickListener((View v) -> {
-            // TODO:
+            MainActivity mainActivity = (MainActivity) getActivity();
+            mainActivity.updateFragment(MainActivity.USER_INFO);
         });
         btnUserHistory.setOnClickListener((View v) -> {
             Intent intent = new Intent(context, HistoryActivity.class);

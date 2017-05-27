@@ -20,6 +20,7 @@ import com.papermelody.fragment.ModeOpernSettingsFragment;
 import com.papermelody.fragment.MusicHallFragment;
 import com.papermelody.fragment.SettingsFragment;
 import com.papermelody.fragment.UserFragment;
+import com.papermelody.fragment.UserInfoFragment;
 import com.papermelody.widget.NoScrollViewPager;
 
 import butterknife.BindView;
@@ -41,6 +42,7 @@ public class MainActivity extends BaseActivity {
     public static final int MODE_FREE = 4;
     public static final int MODE_OPERN = 5;
     public static final int LOG_IN = 6;
+    public static final int USER_INFO = 7;
 
     private FragmentManager fragmentManager;
 
@@ -84,6 +86,9 @@ public class MainActivity extends BaseActivity {
                 break;
             case LOG_IN:
                 toolbarTitle.setText(R.string.log_in);
+                break;
+            case USER_INFO:
+                toolbarTitle.setText(R.string.user_info);
                 break;
             default:
                 break;
@@ -155,7 +160,7 @@ public class MainActivity extends BaseActivity {
 
     public class TabPagerAdapter extends FragmentStatePagerAdapter {
 
-        private final int pageCount = 7;
+        private final int pageCount = 8;
 
         public TabPagerAdapter(FragmentManager fragmentManager) {
             super(fragmentManager);
@@ -179,6 +184,8 @@ public class MainActivity extends BaseActivity {
                     return ModeOpernSettingsFragment.newInstance();
                 case LOG_IN:
                     return LogInFragment.newInstance();
+                case USER_INFO:
+                    return UserInfoFragment.newInstance();
                 default:
                     return null;
             }

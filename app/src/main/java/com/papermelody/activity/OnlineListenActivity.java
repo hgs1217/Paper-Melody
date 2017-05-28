@@ -1,30 +1,25 @@
 package com.papermelody.activity;
 
 import android.app.DownloadManager;
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.Fragment;
-import android.util.Log;
-
-import com.papermelody.R;
-import com.papermelody.fragment.MusicHallFragment;
-import com.papermelody.model.OnlineMusic;
-
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
 import com.papermelody.R;
+import com.papermelody.fragment.CommentFragment;
 import com.papermelody.fragment.ListenFragment;
-import com.papermelody.util.ToastUtil;
+import com.papermelody.fragment.MusicHallFragment;
+import com.papermelody.model.OnlineMusic;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
@@ -32,7 +27,6 @@ import java.net.URL;
 
 import butterknife.BindView;
 
-import static android.os.Environment.DIRECTORY_DOWNLOADS;
 import static android.os.Environment.getExternalStorageDirectory;
 
 /**
@@ -46,8 +40,6 @@ public class OnlineListenActivity extends BaseActivity {
      */
     @BindView(R.id.btn_download)
     Button btnDownload;
-    @BindView(R.id.btn_comment)
-    Button btnComment;
 
     private FragmentManager fragmentManager;
     private FragmentTransaction transaction;
@@ -68,11 +60,10 @@ public class OnlineListenActivity extends BaseActivity {
 //        fileName = onlineMusic.getFilename();
         fileName = "Kissbye.mid";
         Log.i("nib", onlineMusic.getMusicName());
+
         fragmentManager = getSupportFragmentManager();
-        transaction = fragmentManager.beginTransaction();
-        fragment = ListenFragment.newInstance(fileName);
-        transaction.add(R.id.fragment_online_listen, fragment);
-        transaction.commit();
+        fragmentManager.beginTransaction().add(R.id.container_online_listen, ListenFragment.newInstance(fileName)).commit();
+        fragmentManager.beginTransaction().add(R.id.container_comment, CommentFragment.newInstance(onlineMusic)).commit();
 
         downloadThread = new Thread(() -> {
             Log.i("nib", "downloading");
@@ -97,10 +88,6 @@ public class OnlineListenActivity extends BaseActivity {
 //                Log.i("nib", e.toString());
 //            }
 //            ListenFragment.refreshSource();
-        });
-        btnComment.setOnClickListener((View v) -> {
-            Intent intent1 = new Intent(getApplicationContext(), HistoryActivity.class);
-            startActivity(intent1);
         });
     }
 

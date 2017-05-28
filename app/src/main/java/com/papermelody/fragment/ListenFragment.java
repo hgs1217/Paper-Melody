@@ -96,7 +96,7 @@ public class ListenFragment extends BaseFragment {
             @Override
             public void run() {
                 // FIXME: duration为0时，会崩溃闪退
-                seekBar.setProgress(100 * mediaPlayer.getCurrentPosition() / mediaPlayer.getDuration());
+//                seekBar.setProgress(100 * mediaPlayer.getCurrentPosition() / mediaPlayer.getDuration());
             }
         };
         timer = new Timer();

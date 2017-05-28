@@ -51,9 +51,6 @@
             android:name=".activity.TutorialActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.CommentActivity"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".activity.LocalListenActivity"
             android:screenOrientation="portrait" />
         <activity

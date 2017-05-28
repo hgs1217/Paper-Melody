@@ -58,6 +58,7 @@ public class LogInFragment extends BaseFragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_log_in, container, false);
         ButterKnife.bind(this, view);
+
         api = RetrofitClient.getSocialSystemAPI();
         initView();
         return view;

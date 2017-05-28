@@ -34,7 +34,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.papermelody.R;
-import com.papermelody.core.calibration.Calibration;
+import com.papermelody.core.calibration.CalibrationResult;
 import com.papermelody.util.ImageProcessor;
 import com.papermelody.util.ImageUtil;
 import com.papermelody.util.ToastUtil;
@@ -93,15 +93,14 @@ public class CalibrationActivity extends BaseActivity {
     }
 
     private CameraManager cameraManager;
-    private int countOfcall=0;
     private CameraDevice cameraDevice;
     private SurfaceHolder surfaceHolder;
     private Handler childHandler, mainHandler;
     private String cameraID;
     private CameraCaptureSession cameraCaptureSession;
     private ImageReader imageReader;
-    private Calibration.CalibrationResult calibrationResult;
-    private Calibration.CalibrationResultsOfLatest5 calibrationResultsOfLatest5=new Calibration.CalibrationResultsOfLatest5();
+    private CalibrationResult calibrationResult;
+
     private int targetHeightStart = 0;
     private int targetHeightEnd = 1000;
 
@@ -127,6 +126,10 @@ public class CalibrationActivity extends BaseActivity {
     }
 
     private void initView() {
+        /**
+         * 初始化界面上的文字标签、按键响应等等
+         */
+
         surfaceHolder = viewCalibration.getHolder();
         surfaceHolder.setKeepScreenOn(true);
         surfaceHolder.addCallback(new SurfaceHolder.Callback() {
@@ -149,9 +152,9 @@ public class CalibrationActivity extends BaseActivity {
             }
         });
 
-        btnCalibrationComplete.setOnClickListener((View v)->{
+        btnCalibrationComplete.setOnClickListener((View v) -> {
             //Intent intent = new Intent(this, PlayActivity.class);
-            Intent intent = new Intent(this, CameraDebugActivity.class);
+            Intent intent = new Intent(this, PlayActivity.class);
             Bundle bundle = new Bundle();
             bundle.putSerializable(EXTRA_RESULT, calibrationResult);
             intent.putExtras(bundle);
@@ -159,7 +162,7 @@ public class CalibrationActivity extends BaseActivity {
             finish();
         });
 
-        btnCalibrationCancel.setOnClickListener((View v)->{
+        btnCalibrationCancel.setOnClickListener((View v) -> {
             viewCalibration.setVisibility(View.VISIBLE);
             layoutContainer.setVisibility(View.VISIBLE);
             imgCalibration.setVisibility(View.GONE);
@@ -169,23 +172,57 @@ public class CalibrationActivity extends BaseActivity {
         });
     }
 
+    public void processImage(Image image) {
+        /**
+         * 照片处理
+         */
+
+        Mat mat = ImageUtil.imageToBgr(image);
+        calibrationResult = ImageProcessor.getCalibrationCoordinate(mat, targetHeightStart, targetHeightEnd);
+
+        canvasCalibration.updateCalibrationCoordinates(calibrationResult, CalibrationActivity.this);
+
+        if (ImageProcessor.getCalibrationStatus(calibrationResult)) {
+            Bitmap bitmap = ImageUtil.imageToBitmap(mat);
+
+            viewCalibration.setVisibility(View.GONE);
+            layoutContainer.setVisibility(View.GONE);
+            imgCalibration.setVisibility(View.VISIBLE);
+            btnCalibrationCancel.setVisibility(View.VISIBLE);
+            btnCalibrationComplete.setVisibility(View.VISIBLE);
+
+            imgCalibration.setImageBitmap(bitmap);
+            canCalibration = false;
+        }
+    }
+
     private void initCamera() {
+        /**
+         * 初始化相机，在这里设置相机的预览获取，尺寸等等
+         */
+
         HandlerThread handlerThread = new HandlerThread("Camera2");
         handlerThread.start();
         childHandler = new Handler(handlerThread.getLooper());
         mainHandler = new Handler(getMainLooper());
         cameraManager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
         cameraID = String.valueOf(CameraCharacteristics.LENS_FACING_BACK);  //前摄像头
+        ImageProcessor.initProcessor();
+
         // 设置imageReader的尺寸与采样频率
         try {
             CameraCharacteristics characteristics = cameraManager.getCameraCharacteristics(cameraID);
             StreamConfigurationMap map = characteristics.get(
                     CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
+
+            // 获取照相机可用的最大像素图片
             Size largest = Collections.max(Arrays.asList(map.getOutputSizes(ImageFormat.YUV_420_888)),
                     new CompareSizesByArea());
             Log.d("TESTSIZE", largest.getWidth()+" "+largest.getHeight());
             imageReader = ImageReader.newInstance(largest.getWidth(), largest.getHeight(), ImageFormat.YUV_420_888, 5);
             initSurfaceSize((double) largest.getWidth()/largest.getHeight());
+            canvasCalibration.setPhotoSize(largest.getWidth(), largest.getHeight());
+
             // 计算合法区域范围
             int targetHeightStart = getHeightRelativeCoordinate(ViewUtil.getScreenHeight
                     (CalibrationActivity.this) - layoutLegal.getHeight(), largest.getHeight());
@@ -193,11 +230,7 @@ public class CalibrationActivity extends BaseActivity {
                     (CalibrationActivity.this), largest.getHeight());
 
             Log.d("TESTTAR", targetHeightStart+" "+targetHeightEnd);
-            imageReader.setOnImageAvailableListener(new ImageReader.OnImageAvailableListener() {
-                    /* 可以在这里处理拍照得到的临时照片 */
-
-                @Override
-                public void onImageAvailable(ImageReader reader) {
+            imageReader.setOnImageAvailableListener((reader) -> {
                     if (!canCalibration) {
                         return;
                     }
@@ -208,24 +241,7 @@ public class CalibrationActivity extends BaseActivity {
                             return;
                         }
 
-                        Mat mat = ImageUtil.imageToBgr(image);
-                        calibrationResult = ImageProcessor.getCalibrationCoordinate(mat, targetHeightStart, targetHeightEnd);
-                        countOfcall+=1;
-                        calibrationResultsOfLatest5=Calibration.getNewCalibrationResultsOfLatest5(calibrationResultsOfLatest5,calibrationResult);
-                        canvasCalibration.updateCalibrationCoordinates(calibrationResult,
-                                largest.getHeight(), largest.getWidth(), CalibrationActivity.this);
-                        if ((calibrationResult.isFlag()&&Calibration.whether_stable(calibrationResultsOfLatest5))||(countOfcall>80&&calibrationResult.isFlag())) {
-                            Bitmap bitmap = ImageUtil.imageToBitmap(mat);
-
-                            viewCalibration.setVisibility(View.GONE);
-                            layoutContainer.setVisibility(View.GONE);
-                            imgCalibration.setVisibility(View.VISIBLE);
-                            btnCalibrationCancel.setVisibility(View.VISIBLE);
-                            btnCalibrationComplete.setVisibility(View.VISIBLE);
-
-                            imgCalibration.setImageBitmap(bitmap);
-                            canCalibration = false;
-                        }
+                        processImage(image);
 
                         cnt++;
                         Log.d("CALIBRATION", "imgReader" + cnt);
@@ -234,7 +250,6 @@ public class CalibrationActivity extends BaseActivity {
                             image.close();
                         }
                     }
-                }
             }, mainHandler);
 
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {

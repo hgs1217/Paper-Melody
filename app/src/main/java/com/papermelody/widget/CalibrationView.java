@@ -8,7 +8,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 
-import com.papermelody.core.calibration.Calibration;
+import com.papermelody.core.calibration.CalibrationResult;
 import com.papermelody.util.ViewUtil;
 
 /**
@@ -74,8 +74,12 @@ public class CalibrationView extends View {
         this.width = width;
     }
 
-    public void updateCalibrationCoordinates(Calibration.CalibrationResult calibrationResult,
-                                             int height, int width, Context context) {
+    public void setPhotoSize(int width, int height) {
+        photoWidth = width;
+        photoHeight = height;
+    }
+
+    public void updateCalibrationCoordinates(CalibrationResult calibrationResult, Context context) {
         leftLowX = calibrationResult.getLeftLowX();
         leftLowY = calibrationResult.getLeftLowY();
         leftUpX = calibrationResult.getLeftUpX();
@@ -85,8 +89,6 @@ public class CalibrationView extends View {
         rightUpX = calibrationResult.getRightUpX();
         rightUpY = calibrationResult.getRightUpY();
 
-        photoHeight = height;
-        photoWidth = width;
         this.context = context;
         invalidate();
     }

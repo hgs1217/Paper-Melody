@@ -1,6 +1,5 @@
 package com.papermelody.fragment;
 
-import android.content.res.AssetFileDescriptor;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Environment;
@@ -96,6 +95,7 @@ public class ListenFragment extends BaseFragment {
         timerTask = new TimerTask() {
             @Override
             public void run() {
+                // FIXME: duration为0时，会崩溃闪退
                 seekBar.setProgress(100 * mediaPlayer.getCurrentPosition() / mediaPlayer.getDuration());
             }
         };

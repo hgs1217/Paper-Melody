@@ -34,22 +34,28 @@ import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.papermelody.R;
-import com.papermelody.core.calibration.Calibration;
+import com.papermelody.core.calibration.CalibrationResult;
+import com.papermelody.core.calibration.TransformResult;
 import com.papermelody.util.ImageProcessor;
 import com.papermelody.util.ImageUtil;
+import com.papermelody.util.TapDetectorAPI;
 import com.papermelody.util.ToastUtil;
 import com.papermelody.util.ViewUtil;
+import com.papermelody.widget.CameraDebugView;
 
 import org.opencv.core.Mat;
+import org.opencv.core.Point;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
@@ -67,6 +73,8 @@ public class PlayActivity extends BaseActivity {
      * 弹奏乐器时的界面，可能存在虚拟乐器或曲谱等内容
      */
 
+    @BindView(R.id.canvas_play)
+    CameraDebugView canvasPlay;
     @BindView(R.id.view_play)
     SurfaceView viewPlay;
     @BindView(R.id.text_mode)
@@ -205,7 +213,7 @@ public class PlayActivity extends BaseActivity {
     }
 
     private int mode, instrument, category, opern;
-    private Calibration.CalibrationResult calibrationResult;
+    private CalibrationResult calibrationResult;
     private LinearLayout[] keys = new LinearLayout[36];
     private int[] voiceResId = new int[]{R.raw.c3, R.raw.d3, R.raw.e3, R.raw.f3, R.raw.g3, R.raw.a3, R.raw.b3,
             R.raw.c4, R.raw.d4, R.raw.e4, R.raw.f4, R.raw.g4, R.raw.a4, R.raw.b4, R.raw.c5, R.raw.d5, R.raw.e5,
@@ -222,6 +230,11 @@ public class PlayActivity extends BaseActivity {
     private CameraCaptureSession cameraCaptureSession;
     private ImageReader imageReader;
 
+    private ArrayList<Integer> lastKeys = new ArrayList<>();
+    // this variable is used to prevent a same key to be played in a row
+    // FIXME: it is only a temporary measure because real piano will play a long sound instead of one shot
+    // FIXME: this vairable should be put into the class in responsible for playing sound, not here
+    //    by gigaflw
 
     private final Handler viewStartHandler = new Handler() {
         public void handleMessage(Message msg) {
@@ -266,10 +279,31 @@ public class PlayActivity extends BaseActivity {
         instrument = intent.getIntExtra(EXTRA_INSTRUMENT, 0);
         category = intent.getIntExtra(EXTRA_CATIGORY, 0);
         //opern = intent.getIntExtra(EXTRA_OPERN, 0);
-        calibrationResult = (Calibration.CalibrationResult) intent.getSerializableExtra(CalibrationActivity.EXTRA_RESULT);
+        calibrationResult = (CalibrationResult) intent.getSerializableExtra(CalibrationActivity.EXTRA_RESULT);
 
         initSoundPool();
         initView();
+    }
+
+    public void processImage(Image image) {
+        /**
+         * Process image here
+         */
+        TransformResult transformResult = ImageProcessor.getKeyTransform(calibrationResult);
+        Mat mat = ImageUtil.imageToBgr(image);
+        List<Integer> keys = ImageProcessor.getPlaySoundKey(mat.clone(), transformResult);
+
+        List<List<Point>> ret = TapDetectorAPI.getAllForDebug(mat);
+        canvasPlay.updatePoints(ret.get(0), ret.get(1), ret.get(2), image.getHeight(),
+                image.getWidth(), this, canvasPlay.getHeight());
+//        Log.w("TESTK", "" + keys);
+//        Log.w("LAST_TESTK", "" + lastKeys);
+        for (Integer key : keys) {
+            if (!lastKeys.contains(key)){
+                playSound(key);
+            }
+        }
+        lastKeys = new ArrayList<>(keys);
     }
 
     private void initSoundPool() {
@@ -281,7 +315,19 @@ public class PlayActivity extends BaseActivity {
         soundPool = spb.build();
     }
 
+    private void initSurfaceSize(double scalar) {
+        /* 横屏导致长宽交换 */
+        int width = ViewUtil.getScreenWidth(this);
+        int height = (int) (width / scalar);
+        viewPlay.setLayoutParams(new FrameLayout.LayoutParams(width, height));
+        Log.d("TESTV", width+" "+height);
+    }
+
     private void initView() {
+        /**
+         * 初始化界面上的文字标签、按键响应等等
+         */
+
         switch (mode) {
             case 0:
                 textViewModeName.setText(R.string.mode_free);
@@ -300,31 +346,37 @@ public class PlayActivity extends BaseActivity {
         }
 
         btnPlayOver.setOnClickListener((View v) -> {
-//          先假装生成一个midi文件（实际上是从assets里复制的），
-//          存放在应用的数据目录（data/data/com.papermelody/）下
+            /*先假装生成一个midi文件（实际上是从assets里复制的），
+              存放在应用的数据目录（data/data/com.papermelody/）下*/
             copyMusicToData();
             Intent intent = new Intent(this, PlayListenActivity.class);
             startActivity(intent);
             finish();
         });
 
-        keys = new LinearLayout[]{keyC3, keyD3, keyE3, keyF3, keyG3, keyA3, keyB3, keyC4, keyD4,
+        keys = new LinearLayout[] {keyC3, keyD3, keyE3, keyF3, keyG3, keyA3, keyB3, keyC4, keyD4,
                 keyE4, keyF4, keyG4, keyA4, keyB4, keyC5, keyD5, keyE5, keyF5, keyG5, keyA5, keyB5,
                 keyC3M, keyD3M, keyF3M, keyG3M, keyA3M, keyC4M, keyD4M, keyF4M, keyG4M, keyA4M,
                 keyC5M, keyD5M, keyF5M, keyG5M, keyA5M};
 
         for (int i = 0; i < keys.length; ++i) {
             voiceId[i] = soundPool.load(this, voiceResId[i], 1);
-            final int fi = i;
+
+            // FIXME: 等键盘配置好了再打开吧
+            /*final int fi = i;
             keys[i].setOnClickListener((View v) -> {
                 playSound(fi);
-            });
+            });*/
         }
 
         initSurfaceView();
     }
 
     private void initSurfaceView() {
+        /**
+         * 初始化用于显示相机预览的surfaceView
+         */
+
         surfaceHolder = viewPlay.getHolder();
         surfaceHolder.setKeepScreenOn(true);
         surfaceHolder.addCallback(new SurfaceHolder.Callback() {
@@ -348,45 +400,42 @@ public class PlayActivity extends BaseActivity {
     }
 
     private void initCamera() {
+        /**
+         * 初始化相机，在这里设置相机的预览获取，尺寸等等
+         */
+
         HandlerThread handlerThread = new HandlerThread("Camera2");
         handlerThread.start();
         childHandler = new Handler(handlerThread.getLooper());
         mainHandler = new Handler(getMainLooper());
         cameraManager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
         cameraID = String.valueOf(CameraCharacteristics.LENS_FACING_BACK);  //前摄像头
+
         // 设置imageReader的尺寸与采样频率
         try {
             CameraCharacteristics characteristics = cameraManager.getCameraCharacteristics(cameraID);
             StreamConfigurationMap map = characteristics.get(
                     CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
+
+            // 获取照相机可用的最大像素图片
             Size largest = Collections.max(Arrays.asList(map.getOutputSizes(ImageFormat.YUV_420_888)),
                     new CompareSizesByArea());
-            Log.d("TESTSIZE", largest.getWidth() + " " + largest.getHeight());
-            imageReader = ImageReader.newInstance(largest.getWidth(), largest.getHeight(), ImageFormat.YUV_420_888, 5);
-            Calibration.TransformResult tranformResult = ImageProcessor.getKeyTransform(calibrationResult);
-            imageReader.setOnImageAvailableListener(new ImageReader.OnImageAvailableListener() {
-                    /* 可以在这里处理拍照得到的临时照片 */
+            initSurfaceSize((double) largest.getWidth()/largest.getHeight());
 
-                @Override
-                public void onImageAvailable(ImageReader reader) {
+            imageReader = ImageReader.newInstance(largest.getWidth(), largest.getHeight(), ImageFormat.YUV_420_888, 5);
+            imageReader.setOnImageAvailableListener((reader) -> {
                     Image image = null;
                     try {
                         image = imageReader.acquireLatestImage();
                         if (image == null) {
                             return;
                         }
-
-                        Mat mat = ImageUtil.imageToBgr(image);
-                        List<Integer> keys = ImageProcessor.getPlaySoundKey(mat, tranformResult);
-                        for (Integer key : keys) {
-                            playSound(key);
-                        }
+                        processImage(image);
                     } finally {
                         if (image != null) {
                             image.close();
                         }
                     }
-                }
             }, mainHandler);
 
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
@@ -474,7 +523,9 @@ public class PlayActivity extends BaseActivity {
 
     public void playSound(int keyID) {
         soundPool.play(voiceId[keyID], 1, 1, 0, 0, 1);
-        new Thread(new Runnable() {
+
+        // FIXME: 动画效果，当键盘配置好之后可以开启
+        /*new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
@@ -493,7 +544,7 @@ public class PlayActivity extends BaseActivity {
                     e.printStackTrace();
                 }
             }
-        }).start();
+        }).start();*/
     }
 
     @Override
@@ -509,7 +560,6 @@ public class PlayActivity extends BaseActivity {
             return Long.signum((long) lhs.getWidth() * lhs.getHeight() -
                     (long) rhs.getWidth() * rhs.getHeight());
         }
-
     }
 
     private void copyMusicToData() {

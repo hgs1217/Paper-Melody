@@ -32,8 +32,7 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 
 import com.papermelody.R;
-import com.papermelody.core.calibration.Calibration;
-import com.papermelody.util.ImageProcessor;
+import com.papermelody.core.calibration.CalibrationResult;
 import com.papermelody.util.ImageUtil;
 import com.papermelody.util.TapDetectorAPI;
 import com.papermelody.util.ToastUtil;
@@ -87,7 +86,7 @@ public class CameraDebugActivity extends BaseActivity {
     private CameraCaptureSession cameraCaptureSession;
     private ImageReader imageReader;
 
-    private Calibration.CalibrationResult calibrationResult;
+    private CalibrationResult calibrationResult;
     private int[] voiceResId = new int[]{R.raw.c3, R.raw.d3, R.raw.e3, R.raw.f3, R.raw.g3, R.raw.a3, R.raw.b3,
             R.raw.c4, R.raw.d4, R.raw.e4, R.raw.f4, R.raw.g4, R.raw.a4, R.raw.b4, R.raw.c5, R.raw.d5, R.raw.e5,
             R.raw.f5, R.raw.g5, R.raw.a5, R.raw.b5, R.raw.c3m, R.raw.d3m, R.raw.f3m, R.raw.g3m, R.raw.a3m,
@@ -107,23 +106,22 @@ public class CameraDebugActivity extends BaseActivity {
          * Process image here
          */
 //        Log.w("test", "hello?" + image.getWidth());
-        // FIXME: calibrationResult is null and will cause a crash when click `DEBUG` button
-        // @tang tong hui
-        Calibration.TransformResult transformResult = ImageProcessor.getKeyTransform(calibrationResult);
+
+//        TransformResult transformResult = ImageProcessor.getKeyTransform(calibrationResult);
         Mat mat = ImageUtil.imageToBgr(image);
-        List<Integer> keys = ImageProcessor.getPlaySoundKey(mat.clone(), transformResult);
+//        List<Integer> keys = ImageProcessor.getPlaySoundKey(mat.clone(), transformResult);
 
         List<List<Point>> ret = TapDetectorAPI.getAllForDebug(mat);
         canvasCameraDebug.updatePoints(ret.get(0), ret.get(1), ret.get(2), image.getHeight(),
                 image.getWidth(), this, viewCameraDebug.getHeight());
 //        Log.w("TESTK", "" + keys);
 //        Log.w("LAST_TESTK", "" + lastKeys);
-        for (Integer key : keys) {
-            if (!lastKeys.contains(key)){
-                playSound(key);
-            }
-        }
-        lastKeys = new ArrayList<>(keys);
+//        for (Integer key : keys) {
+//            if (!lastKeys.contains(key)){
+//                playSound(key);
+//            }
+//        }
+//        lastKeys = new ArrayList<>(keys);
     }
 
 
@@ -134,7 +132,7 @@ public class CameraDebugActivity extends BaseActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         Intent intent = getIntent();
-        calibrationResult = (Calibration.CalibrationResult) intent.getSerializableExtra(CalibrationActivity.EXTRA_RESULT);
+        calibrationResult = (CalibrationResult) intent.getSerializableExtra(CalibrationActivity.EXTRA_RESULT);
 
         initSoundPool();
         initSurfaceView();
@@ -214,10 +212,11 @@ public class CameraDebugActivity extends BaseActivity {
                 Image image = null;
                 try {
                     image = imageReader.acquireLatestImage();
-                    if (image == null) { return; }
+                    if (image == null) {
+                        return;
+                    }
 
                     processImage(image);
-
                 } finally {
                     if (image != null) { image.close(); }
                 }

@@ -7,16 +7,28 @@
     android:fitsSystemWindows="true"
     tools:context="com.papermelody.activity.PlayActivity">
 
+    <!--<SurfaceView-->
+        <!--android:id="@+id/view_play"-->
+        <!--android:layout_width="1dp"-->
+        <!--android:layout_height="1dp" />-->
+
     <SurfaceView
         android:id="@+id/view_play"
-        android:layout_width="1dp"
-        android:layout_height="1dp" />
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
+    <com.papermelody.widget.CameraDebugView
+        android:id="@+id/canvas_play"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <!--FIXME: 先设置背景为空，用镜头内容代替-->
     <ImageView
         android:id="@+id/img_instrument_background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="fitXY"
+        android:visibility="gone"
         android:src="@drawable/piano_key21"/>
 
     <LinearLayout

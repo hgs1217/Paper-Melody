@@ -57,8 +57,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import butterknife.BindView;
@@ -417,12 +415,11 @@ public class PlayActivity extends BaseActivity {
             StreamConfigurationMap map = characteristics.get(
                     CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
 
-            // 获取照相机可用的最大像素图片
-            Size largest = Collections.max(Arrays.asList(map.getOutputSizes(ImageFormat.YUV_420_888)),
-                    new CompareSizesByArea());
-            initSurfaceSize((double) largest.getWidth()/largest.getHeight());
+            // 获取照相机可用的符合条件的最小像素图片
+            Size relativeMin = ImageUtil.getRelativeMinSize(Arrays.asList(map.getOutputSizes(ImageFormat.YUV_420_888)));
+            initSurfaceSize((double) relativeMin.getWidth()/relativeMin.getHeight());
 
-            imageReader = ImageReader.newInstance(largest.getWidth(), largest.getHeight(), ImageFormat.YUV_420_888, 5);
+            imageReader = ImageReader.newInstance(relativeMin.getWidth(), relativeMin.getHeight(), ImageFormat.YUV_420_888, 5);
             imageReader.setOnImageAvailableListener((reader) -> {
                     Image image = null;
                     try {
@@ -550,16 +547,6 @@ public class PlayActivity extends BaseActivity {
     @Override
     protected int getContentViewId() {
         return R.layout.activity_play;
-    }
-
-    private class CompareSizesByArea implements Comparator<Size> {
-
-        @Override
-        public int compare(Size lhs, Size rhs) {
-            // We cast here to ensure the multiplications won't overflow
-            return Long.signum((long) lhs.getWidth() * lhs.getHeight() -
-                    (long) rhs.getWidth() * rhs.getHeight());
-        }
     }
 
     private void copyMusicToData() {

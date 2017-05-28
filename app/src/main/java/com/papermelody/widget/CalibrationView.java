@@ -17,8 +17,8 @@ import com.papermelody.util.ViewUtil;
 
 public class CalibrationView extends View {
 
-    private int photoHeight = 960;
-    private int photoWidth = 1280;
+    private int photoHeight = 480;
+    private int photoWidth = 640;
     private int leftLowX = 0;
     private int leftLowY = 0;
     private int leftUpX = 0;

@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.ImageFormat;
 import android.media.Image;
 import android.util.Log;
+import android.util.Size;
 
 import org.opencv.android.Utils;
 import org.opencv.core.CvType;
@@ -12,6 +13,10 @@ import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 /**
  * Created by HgS_1217_ on 2017/5/8.
@@ -21,6 +26,10 @@ public class ImageUtil {
     /**
      * 用于处理图像的工具类
      */
+
+    // 预览照片所需求的最低像素要求
+    public static final int MIN_HEIGHT = 480;
+    public static final int MIN_WIDTH = 640;
 
     public static Bitmap imageToBitmap(Mat bgr) {
         Log.d("TESTB", bgr.rows() + " " + bgr.cols());
@@ -92,9 +101,35 @@ public class ImageUtil {
 
     public static Mat yuvToBgr(Image image, Mat yuvMat) {
         Mat bgrMat = new Mat(image.getHeight(), image.getWidth(), CvType.CV_8UC4);
-        Log.d("TESTCALL", bgrMat.rows() + " " + bgrMat.cols());
+        //Log.d("TESTCALL", bgrMat.rows() + " " + bgrMat.cols());
         Imgproc.cvtColor(yuvMat, bgrMat, Imgproc.COLOR_YUV2BGR_I420);
-        Log.d("TESTCALL", yuvMat.rows() + " " + yuvMat.cols());
+        //Log.d("TESTCALL", yuvMat.rows() + " " + yuvMat.cols());
         return bgrMat;
+    }
+
+    public static Size getRelativeMinSize(List<Size> sizes) {
+        List<Size> comparedSizes = new ArrayList<>();
+        for (Size size : sizes) {
+            if (size.getHeight() >= MIN_HEIGHT && size.getWidth() >= MIN_WIDTH) {
+                comparedSizes.add(size);
+            }
+        }
+        for (Size size : comparedSizes) {
+            Log.d("ComparedSizes", size.getHeight()+""+size.getWidth());
+        }
+        if (comparedSizes.size() > 0) {
+            return Collections.min(comparedSizes, new CompareSizesByArea());
+        }
+        return Collections.max(sizes, new CompareSizesByArea());
+    }
+
+    private static class CompareSizesByArea implements Comparator<Size> {
+
+        @Override
+        public int compare(Size lhs, Size rhs) {
+            // We cast here to ensure the multiplications won't overflow
+            return Long.signum((long) lhs.getWidth() * lhs.getHeight() -
+                    (long) rhs.getWidth() * rhs.getHeight());
+        }
     }
 }

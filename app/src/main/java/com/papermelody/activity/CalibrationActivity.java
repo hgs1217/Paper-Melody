@@ -44,8 +44,6 @@ import com.papermelody.widget.CalibrationView;
 import org.opencv.core.Mat;
 
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
 
 import butterknife.BindView;
 
@@ -215,19 +213,17 @@ public class CalibrationActivity extends BaseActivity {
             StreamConfigurationMap map = characteristics.get(
                     CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
 
-            // 获取照相机可用的最大像素图片
-            Size largest = Collections.max(Arrays.asList(map.getOutputSizes(ImageFormat.YUV_420_888)),
-                    new CompareSizesByArea());
-            Log.d("TESTSIZE", largest.getWidth()+" "+largest.getHeight());
-            imageReader = ImageReader.newInstance(largest.getWidth(), largest.getHeight(), ImageFormat.YUV_420_888, 5);
-            initSurfaceSize((double) largest.getWidth()/largest.getHeight());
-            canvasCalibration.setPhotoSize(largest.getWidth(), largest.getHeight());
+            // 获取照相机可用的符合条件的最小像素图片
+            Size relativeMin = ImageUtil.getRelativeMinSize(Arrays.asList(map.getOutputSizes(ImageFormat.YUV_420_888)));
+            initSurfaceSize((double) relativeMin.getWidth()/relativeMin.getHeight());
+            imageReader = ImageReader.newInstance(relativeMin.getWidth(), relativeMin.getHeight(), ImageFormat.YUV_420_888, 5);
+            canvasCalibration.setPhotoSize(relativeMin.getWidth(), relativeMin.getHeight());
 
             // 计算合法区域范围
             int targetHeightStart = getHeightRelativeCoordinate(ViewUtil.getScreenHeight
-                    (CalibrationActivity.this) - layoutLegal.getHeight(), largest.getHeight());
+                    (CalibrationActivity.this) - layoutLegal.getHeight(), relativeMin.getHeight());
             int targetHeightEnd = getHeightRelativeCoordinate(ViewUtil.getScreenHeight
-                    (CalibrationActivity.this), largest.getHeight());
+                    (CalibrationActivity.this), relativeMin.getHeight());
 
             Log.d("TESTTAR", targetHeightStart+" "+targetHeightEnd);
             imageReader.setOnImageAvailableListener((reader) -> {
@@ -243,8 +239,8 @@ public class CalibrationActivity extends BaseActivity {
 
                         processImage(image);
 
-                        cnt++;
-                        Log.d("CALIBRATION", "imgReader" + cnt);
+//                        cnt++;
+//                        Log.d("CALIBRATION", "imgReader" + cnt);
                     } finally {
                         if (image != null) {
                             image.close();
@@ -344,15 +340,5 @@ public class CalibrationActivity extends BaseActivity {
     @Override
     protected int getContentViewId() {
         return R.layout.activity_calibration;
-    }
-
-    private class CompareSizesByArea implements Comparator<Size> {
-
-        @Override
-        public int compare(Size lhs, Size rhs) {
-            // We cast here to ensure the multiplications won't overflow
-            return Long.signum((long) lhs.getWidth() * lhs.getHeight() -
-                    (long) rhs.getWidth() * rhs.getHeight());
-        }
     }
 }

@@ -44,8 +44,6 @@ import org.opencv.core.Point;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import butterknife.BindView;
@@ -201,12 +199,13 @@ public class CameraDebugActivity extends BaseActivity {
             CameraCharacteristics characteristics = cameraManager.getCameraCharacteristics(cameraID);
             StreamConfigurationMap map = characteristics.get(
                     CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
-            Size largest = Collections.max(Arrays.asList(map.getOutputSizes(ImageFormat.YUV_420_888)),
-                    new CompareSizesByArea());
-            initSurfaceSize((double) largest.getWidth()/largest.getHeight());
 
-            Log.d("TESTVL", largest.getWidth()+" "+largest.getHeight());
-            imageReader = ImageReader.newInstance(largest.getWidth(), largest.getHeight(), ImageFormat.YUV_420_888, 5);
+            // 获取照相机可用的符合条件的最小像素图片
+            Size relativeMin = ImageUtil.getRelativeMinSize(Arrays.asList(map.getOutputSizes(ImageFormat.YUV_420_888)));
+            initSurfaceSize((double) relativeMin.getWidth()/relativeMin.getHeight());
+
+            Log.d("TESTVL", relativeMin.getWidth()+" "+relativeMin.getHeight());
+            imageReader = ImageReader.newInstance(relativeMin.getWidth(), relativeMin.getHeight(), ImageFormat.YUV_420_888, 5);
 
             imageReader.setOnImageAvailableListener(reader -> {
                 Image image = null;
@@ -312,15 +311,5 @@ public class CameraDebugActivity extends BaseActivity {
     @Override
     protected int getContentViewId() {
         return R.layout.activity_camera_debug;
-    }
-
-    private class CompareSizesByArea implements Comparator<Size> {
-
-        @Override
-        public int compare(Size lhs, Size rhs) {
-            // We cast here to ensure the multiplications won't overflow
-            return Long.signum((long) lhs.getWidth() * lhs.getHeight() -
-                    (long) rhs.getWidth() * rhs.getHeight());
-        }
     }
 }

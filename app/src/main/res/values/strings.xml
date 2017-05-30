@@ -10,6 +10,7 @@
     <string name="edit_music_title">音乐名称</string>
     <string name="edit_music_des">说点什么</string>
     <string name="submit">提交</string>
+    <string name="browse">浏览</string>
     <string name="upload_success">上传成功</string>
     <string name="download_success">下载完成</string>
     <string name="download_failed">下载失败</string>

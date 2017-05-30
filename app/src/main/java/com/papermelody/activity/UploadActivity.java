@@ -1,14 +1,18 @@
 package com.papermelody.activity;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import com.papermelody.R;
 import com.papermelody.model.response.HttpResponse;
@@ -19,6 +23,7 @@ import com.papermelody.util.RetrofitClient;
 import com.papermelody.util.SocialSystemAPI;
 import com.papermelody.util.StorageUtil;
 import com.papermelody.util.ToastUtil;
+import com.squareup.picasso.Picasso;
 
 import java.io.DataOutputStream;
 import java.io.File;
@@ -49,8 +54,14 @@ public class UploadActivity extends BaseActivity {
     EditText editMusicTitle;
     @BindView(R.id.edit_music_des)
     EditText editMusicDes;
-    @BindView(R.id.btn_confirm)
+    @BindView(R.id.btn_upload_img)
+    Button btnUploadImg;
+    @BindView(R.id.img_upload)
+    ImageView imgUpload;
+    @BindView(R.id.btn_upload_confirm)
     Button btnConfirm;
+
+    public static final int LOAD_PIC = 0;
 
     private String link = null;
     private SocialSystemAPI api;
@@ -59,64 +70,116 @@ public class UploadActivity extends BaseActivity {
     private String name = null;
     private String author = null;
     private Date date = null;
+    private Bitmap bmp = null;
+    private String filePath = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         api = RetrofitClient.getSocialSystemAPI();
+
+        // 默认图片
+        bmp = BitmapFactory.decodeResource(getResources(), R.drawable.pyj);
+
+        initView();
+    }
+
+    private void initView() {
+        Picasso.with(this).load(R.drawable.pyj).into(imgUpload);
+        btnUploadImg.setOnClickListener((View v) -> {
+            chooseImg();
+        });
         btnConfirm.setOnClickListener((View v) -> {
-            boolean hasUser = true;
-            try {
-                author = ((App) getApplication()).getUser().getUsername();
-            } catch (NullPointerException e) {
-                ToastUtil.showShort("登录了才能上传哦！");
-                hasUser = false;
-            }
-            if (hasUser) {
-                Thread thread = new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-//                      这里上传的是data/data/~/cache/目录下已经存在的文件
-                        File file = new File(getApplicationContext().getCacheDir()
-                                .getAbsolutePath() + cacheName);
-                        isSuccess = uploadMusic(R.string.server_ip + "uploadFile",
-                                cacheName, file);
-                        Log.i("nib", "isSuccess1=" + isSuccess);
-                    }
-                });
-                thread.start();
-                try {
-                    thread.join();
-                } catch (InterruptedException e) {
-                    Log.i("nib", "InterruptedException");
-//                e.printStackTrace();
-                }
-                Log.i("nib", "isSuccess2=" + isSuccess);
-
-                isSuccess = true;
-                if (isSuccess) {
-                    name = editMusicTitle.getText().toString();
-                    date = new Date(System.currentTimeMillis());
-                    Log.i("nib", date.toString());
-
-                    uploadImg();
-
-                } else {
-                    Log.i("nib", "isSuccess==false");
-                    ToastUtil.showShort(R.string.upload_failed);
-                }
-            }
+            uploadConfirm();
         });
     }
 
+    private void chooseImg() {
+        try {
+            Intent intent= new Intent(Intent.ACTION_GET_CONTENT);
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            intent.setType("image/*");
+            intent.putExtra("crop", true);
+            intent.putExtra("return-data", true);
+            startActivityForResult(intent, LOAD_PIC);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case LOAD_PIC:
+                Uri selectedImage = data.getData();
+                String[] filePathColumn = {MediaStore.Images.Media.DATA};
+                Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
+                cursor.moveToFirst();
+                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                //picturePath就是图片在储存卡所在的位置
+                filePath = cursor.getString(columnIndex);
+                cursor.close();
+                Log.d("TESTPATH", filePath);
+                Picasso.with(this).load(selectedImage).into(imgUpload);
+                break;
+        }
+    }
+
+    private void uploadConfirm() {
+        boolean hasUser = true;
+        try {
+            author = ((App) getApplication()).getUser().getUsername();
+        } catch (NullPointerException e) {
+            ToastUtil.showShort("登录了才能上传哦！");
+            hasUser = false;
+        }
+        if (hasUser) {
+            Thread thread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+//                      这里上传的是data/data/~/cache/目录下已经存在的文件
+                    File file = new File(getApplicationContext().getCacheDir()
+                            .getAbsolutePath() + cacheName);
+                    isSuccess = uploadMusic(R.string.server_ip + "uploadFile",
+                            cacheName, file);
+                    Log.i("nib", "isSuccess1=" + isSuccess);
+                }
+            });
+            thread.start();
+            try {
+                thread.join();
+            } catch (InterruptedException e) {
+                Log.i("nib", "InterruptedException");
+//                e.printStackTrace();
+            }
+            Log.i("nib", "isSuccess2=" + isSuccess);
+
+            isSuccess = true;
+            if (isSuccess) {
+                name = editMusicTitle.getText().toString();
+                date = new Date(System.currentTimeMillis());
+                Log.i("nib", date.toString());
+
+                uploadImg();
+
+            } else {
+                Log.i("nib", "isSuccess==false");
+                ToastUtil.showShort(R.string.upload_failed);
+            }
+        }
+    }
+
     private void uploadImg() {
-        // TODO: 需测试
-        Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.pyj);
-        String filename = "test.png";
-        String filepath = Environment.getExternalStorageDirectory() + "/" + filename;
-        Log.d("TESTU", filepath);
-        File file = StorageUtil.saveBitmap(filepath, bmp);
+        File file;
+        if (filePath != null) {
+            file = new File(filePath);
+        } else {
+            String filename = "test.png";
+            filePath = Environment.getExternalStorageDirectory() + "/" + filename;
+            file = StorageUtil.saveBitmap(filePath, bmp);
+        }
+        Log.d("TESTPATH", filePath);
         RequestBody requestBody = RequestBody.create(MediaType.parse("image/*"), file);
         MultipartBody.Part body = MultipartBody.Part.createFormData("image", file.getName(), requestBody);
 

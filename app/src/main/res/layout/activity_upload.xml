@@ -27,8 +27,19 @@
         android:layout_height="200dp"
         android:hint="@string/edit_music_des" />
 
+    <ImageView
+        android:id="@+id/img_upload"
+        android:layout_width="100dp"
+        android:layout_height="100dp" />
+
     <Button
-        android:id="@+id/btn_confirm"
+        android:id="@+id/btn_upload_img"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/browse" />
+
+    <Button
+        android:id="@+id/btn_upload_confirm"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/submit" />

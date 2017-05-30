@@ -1,0 +1,18 @@
+# IDE
+.idea/
+
+# java
+*.class
+build/
+record/
+javadoc/    # ignore this temporarily
+Main.java
+
+# Gradle
+.gradle/
+
+# MacOS
+.DS_Store
+
+# Android setting files
+*.iml

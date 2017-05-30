@@ -5,15 +5,19 @@ import android.support.annotation.Nullable;
 import com.papermelody.model.response.CommentResponse;
 import com.papermelody.model.response.HttpResponse;
 import com.papermelody.model.response.OnlineMusicListResponse;
+import com.papermelody.model.response.UploadImgResponse;
 import com.papermelody.model.response.UploadResponse;
 import com.papermelody.model.response.UserResponse;
 
 import java.util.Date;
 
+import okhttp3.MultipartBody;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
 import retrofit2.http.Query;
 import rx.Observable;
 
@@ -44,7 +48,13 @@ public interface SocialSystemAPI {
     Observable<UploadResponse> uploadMusic(@Field("name") String name,
                                            @Field("author") String author,
                                            @Field("date") Date date,
-                                           @Field("link") String link);
+                                           @Field("link") String link,
+                                           @Field("imglink") String imgLink);
+
+    // 上传作品图片
+    @Multipart
+    @POST("uploadimg")
+    Observable<UploadImgResponse> uploadImg(@Part MultipartBody.Part image);
 
     // 音乐圈作品获取
     @GET("onlinemusics")

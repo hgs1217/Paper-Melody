@@ -94,7 +94,7 @@ public class MusicHallFragment extends BaseFragment {
                         musicList -> {
                             List<OnlineMusic> musics = new ArrayList<>();
                             for (OnlineMusicInfo info : musicList) {
-                                musics.add(new OnlineMusic(info));
+                                musics.add(new OnlineMusic(info, context));
                             }
                             initRecyclerView(musics);
                             initBannerView(musics);
@@ -114,9 +114,10 @@ public class MusicHallFragment extends BaseFragment {
     private void initBannerView(List<OnlineMusic> musics) {
         // TODO: 此处后期需修改为MusicBanner与某些音乐绑定数据
         List<MusicBanner> banners = new ArrayList<>();
-        banners.add(new MusicBanner(musics.get(0).getMusicName(), musics.get(0).getMusicPhotoUrl()));
-        banners.add(new MusicBanner(musics.get(1).getMusicName(), musics.get(1).getMusicPhotoUrl()));
-        banners.add(new MusicBanner(musics.get(2).getMusicName(), musics.get(2).getMusicPhotoUrl()));
+        int sz = musics.size();
+        banners.add(new MusicBanner(musics.get(sz-1).getMusicName(), musics.get(sz-1).getMusicPhotoUrl()));
+        banners.add(new MusicBanner(musics.get(sz-2).getMusicName(), musics.get(sz-2).getMusicPhotoUrl()));
+        banners.add(new MusicBanner(musics.get(sz-3).getMusicName(), musics.get(sz-3).getMusicPhotoUrl()));
 
         cyclePoster.setIndicatorsSelected(R.drawable.shape_cycle_indicator_selected,
                 R.drawable.shape_cycle_indicator_unselected);

@@ -1,24 +1,23 @@
 package com.papermelody.activity;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.papermelody.R;
-import com.papermelody.fragment.UserFragment;
-import com.papermelody.model.User;
 import com.papermelody.model.response.HttpResponse;
-import com.papermelody.model.response.UploadResponse;
-import com.papermelody.model.response.UserResponse;
+import com.papermelody.model.response.UploadImgResponse;
 import com.papermelody.util.App;
 import com.papermelody.util.NetworkFailureHandler;
 import com.papermelody.util.RetrofitClient;
 import com.papermelody.util.SocialSystemAPI;
+import com.papermelody.util.StorageUtil;
 import com.papermelody.util.ToastUtil;
 
 import java.io.DataOutputStream;
@@ -31,6 +30,9 @@ import java.net.URLEncoder;
 import java.util.Date;
 
 import butterknife.BindView;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -54,6 +56,9 @@ public class UploadActivity extends BaseActivity {
     private SocialSystemAPI api;
     private boolean isSuccess = false;
     private String cacheName = null;  // 缓存的文件的名称
+    private String name = null;
+    private String author = null;
+    private Date date = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +67,6 @@ public class UploadActivity extends BaseActivity {
         api = RetrofitClient.getSocialSystemAPI();
         btnConfirm.setOnClickListener((View v) -> {
             boolean hasUser = true;
-            String author = null;
             try {
                 author = ((App) getApplication()).getUser().getUsername();
             } catch (NullPointerException e) {
@@ -73,7 +77,7 @@ public class UploadActivity extends BaseActivity {
                 Thread thread = new Thread(new Runnable() {
                     @Override
                     public void run() {
-//                这里上传的是data/data/~/cache/目录下已经存在的文件
+//                      这里上传的是data/data/~/cache/目录下已经存在的文件
                         File file = new File(getApplicationContext().getCacheDir()
                                 .getAbsolutePath() + cacheName);
                         isSuccess = uploadMusic(R.string.server_ip + "uploadFile",
@@ -89,38 +93,78 @@ public class UploadActivity extends BaseActivity {
 //                e.printStackTrace();
                 }
                 Log.i("nib", "isSuccess2=" + isSuccess);
+
+                isSuccess = true;
                 if (isSuccess) {
-                    String name = editMusicTitle.getText().toString();
-                    Date date = new Date(System.currentTimeMillis());
+                    name = editMusicTitle.getText().toString();
+                    date = new Date(System.currentTimeMillis());
                     Log.i("nib", date.toString());
-                    addSubscription(api.uploadMusic(name, author, date, link)
-                            .flatMap(NetworkFailureHandler.httpFailureFilter)
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .map(response -> ((UploadResponse) response).getError())
-                            .subscribe(
-                                    errorCode -> {
-                                        if (errorCode == 0) {
-                                            Log.i("nib", "errCode==0");
-                                            ToastUtil.showShort(R.string.upload_success);
-                                            Intent intent = new Intent();
-                                            intent.setClass(this, MainActivity.class);
-                                            startActivity(intent);
-                                            finish();
-                                        } else {
-                                            Log.i("nib", "errCode!=0");
-                                            ToastUtil.showShort(R.string.upload_failed);
-                                        }
-                                    }
-                                    ,
-                                    NetworkFailureHandler.uploadErrorHandler
-                            ));
+
+                    uploadImg();
+
                 } else {
                     Log.i("nib", "isSuccess==false");
                     ToastUtil.showShort(R.string.upload_failed);
                 }
             }
         });
+    }
+
+    private void uploadImg() {
+        // TODO: 需测试
+        Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.pyj);
+        String filename = "test.png";
+        String filepath = Environment.getExternalStorageDirectory() + "/" + filename;
+        Log.d("TESTU", filepath);
+        File file = StorageUtil.saveBitmap(filepath, bmp);
+        RequestBody requestBody = RequestBody.create(MediaType.parse("image/*"), file);
+        MultipartBody.Part body = MultipartBody.Part.createFormData("image", file.getName(), requestBody);
+
+        addSubscription(api.uploadImg(body)
+                .flatMap(NetworkFailureHandler.httpFailureFilter)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .map(response -> ((UploadImgResponse) response).getImgLink())
+                .subscribe(
+                        imgLink -> {
+                            uploadMusicInfo(imgLink);
+
+                            /*if (errorCode == 0) {
+                                Log.i("nib", "errCode==0");
+                                ToastUtil.showShort(R.string.upload_success);
+                                Intent intent = new Intent();
+                                intent.setClass(this, MainActivity.class);
+                                startActivity(intent);
+                                finish();
+                            } else {
+                                Log.i("nib", "errCode!=0");
+                                ToastUtil.showShort(R.string.upload_failed);
+                            }*/
+                        }, NetworkFailureHandler.uploadErrorHandler
+                ));
+    }
+
+    private void uploadMusicInfo(String imgLink) {
+        addSubscription(api.uploadMusic(name, author, date, "", imgLink)  // FIXME: link 需要修改
+                .flatMap(NetworkFailureHandler.httpFailureFilter)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .map(response -> ((HttpResponse) response).getError())
+                .subscribe(
+                        errorCode -> {
+                            if (errorCode == 0) {
+                                Log.i("nib", "errCode==0");
+                                ToastUtil.showShort(R.string.upload_success);
+                                Intent intent = new Intent();
+                                intent.setClass(this, MainActivity.class);
+                                startActivity(intent);
+                                finish();
+                            } else {
+                                Log.i("nib", "errCode!=0");
+                                ToastUtil.showShort(R.string.upload_failed);
+                            }
+                        }, NetworkFailureHandler.uploadErrorHandler
+                ));
     }
 
     @Override

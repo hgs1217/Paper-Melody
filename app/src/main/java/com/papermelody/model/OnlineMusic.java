@@ -1,5 +1,8 @@
 package com.papermelody.model;
 
+import android.content.Context;
+
+import com.papermelody.R;
 import com.papermelody.model.response.OnlineMusicInfo;
 
 import java.io.Serializable;
@@ -31,11 +34,16 @@ public class OnlineMusic extends Music implements Serializable {
 
     public OnlineMusic() { }
 
-    public OnlineMusic(OnlineMusicInfo info) {
+    public OnlineMusic(OnlineMusicInfo info, Context context) {
         musicName = info.getName();
         musicAuthor = info.getAuthor();
         musicCreateDate = info.getDate();
         musicLink = info.getLink();
+        if (info.getImgLink().length() > 0) {
+            musicPhotoUrl = context.getString(R.string.server_ip) + info.getImgLink();
+        } else {
+            musicPhotoUrl = null;
+        }
     }
 
     @Override

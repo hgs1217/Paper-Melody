@@ -21,6 +21,8 @@ public class OnlineMusicInfo {
     private Date date;
     @SerializedName("link")
     private String link;
+    @SerializedName("imglink")
+    private String imgLink;
 
     public String getName() {
         return name;
@@ -36,5 +38,9 @@ public class OnlineMusicInfo {
 
     public String getLink() {
         return link;
+    }
+
+    public String getImgLink() {
+        return imgLink;
     }
 }

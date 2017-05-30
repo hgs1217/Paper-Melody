@@ -2,6 +2,7 @@ package com.papermelody.widget;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 
 import com.papermelody.R;
 import com.papermelody.model.OnlineMusic;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -83,6 +85,13 @@ public class MusicHallRecyclerViewAdapter extends RecyclerView.Adapter<MusicHall
         private void setView(OnlineMusic music) {
             textTitle.setText(music.getMusicName());
             textAuthor.setText(music.getMusicAuthor());
+            String url = music.getMusicPhotoUrl();
+            Log.d("TESTURL", String.valueOf(url));
+            try {
+                Picasso.with(context).load(url).into(imgOnlineMusic);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 

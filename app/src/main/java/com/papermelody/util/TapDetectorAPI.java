@@ -2,11 +2,12 @@ package com.papermelody.util;
 
 import android.util.Log;
 
-import com.papermelody.tapdetect.FingerDetector;
-import com.papermelody.tapdetect.HandDetector;
-import com.papermelody.tapdetect.TapDetector;
-import com.papermelody.tapdetect.Util;
-import com.papermelody.tapdetect.facade.Tap;
+import tapdetect.FingerDetector;
+import tapdetect.HandDetector;
+import tapdetect.TapDetector;
+import tapdetect.ImgLogger;
+import tapdetect.Util;
+import tapdetect.facade.Tap;
 
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
@@ -22,8 +23,12 @@ import java.util.List;
 
 public class TapDetectorAPI {
     /**
-     * Bridge the com.papermelody.tapdetect and the app
+     * Bridge the tapdetect and the app
      */
+    static {
+        ImgLogger.silent();
+    }
+
     private static final HandDetector hd = new HandDetector();
     private static final FingerDetector fd = new FingerDetector();
     private static final TapDetector td = new TapDetector();

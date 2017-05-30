@@ -1,0 +1,3 @@
+[submodule "tapdetect"]
+	path = tapdetect
+	url = git@github.com:gigaflw/tap-detect-java.git

@@ -49,6 +49,9 @@
             android:name=".activity.SettingsPrivacyActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".activity.SettingsDevActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".activity.TutorialActivity"
             android:screenOrientation="portrait" />
         <activity

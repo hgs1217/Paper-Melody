@@ -6,6 +6,16 @@
     android:gravity="center">
 
     <Button
+        android:id="@+id/btn_settings_dev"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:text="开发者"
+        android:textColor="@color/black"
+        android:textSize="12sp" />
+
+    <Button
         android:id="@+id/btn_settings_play"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

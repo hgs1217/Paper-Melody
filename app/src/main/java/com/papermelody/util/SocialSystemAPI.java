@@ -49,7 +49,7 @@ public interface SocialSystemAPI {
                                            @Field("author") String author,
                                            @Field("date") Date date,
                                            @Field("link") String link,
-                                           @Field("imglink") String imgLink);
+                                           @Field("imgLink") String imgLink);
 
     // 上传作品图片
     @Multipart
@@ -59,6 +59,16 @@ public interface SocialSystemAPI {
     // 音乐圈作品获取
     @GET("onlinemusics")
     Observable<OnlineMusicListResponse> getOnlineMusicList();
+
+    // 音乐查看人数加一
+    @FormUrlEncoded
+    @POST("addview")
+    Observable<HttpResponse> addView(@Field("musicID") Integer musicID);
+
+    // 音乐点赞人数加一
+    @FormUrlEncoded
+    @POST("addupvote")
+    Observable<HttpResponse> addUpvote(@Field("musicID") Integer musicID);
 
     //upload comment
     @FormUrlEncoded

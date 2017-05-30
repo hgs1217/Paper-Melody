@@ -21,8 +21,15 @@ public class OnlineMusicInfo {
     private Date date;
     @SerializedName("link")
     private String link;
-    @SerializedName("imglink")
+    @SerializedName("imgLink")
     private String imgLink;
+    @SerializedName("musicID")
+    private Integer musicID;
+    @SerializedName("viewNum")
+    private Integer viewNum;
+    @SerializedName("upvoteNum")
+    private Integer upvoteNum;
+
 
     public String getName() {
         return name;
@@ -42,5 +49,17 @@ public class OnlineMusicInfo {
 
     public String getImgLink() {
         return imgLink;
+    }
+
+    public Integer getMusicID() {
+        return musicID;
+    }
+
+    public Integer getViewNum() {
+        return viewNum;
+    }
+
+    public Integer getUpvoteNum() {
+        return upvoteNum;
     }
 }

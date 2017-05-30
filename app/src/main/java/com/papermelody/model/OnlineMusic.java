@@ -20,6 +20,7 @@ public class OnlineMusic extends Music implements Serializable {
 
     private String filename;
     private String path;
+    private Integer musicID;
     private String musicName;
     private String musicAuthor;
     private String musicInfo;
@@ -30,7 +31,8 @@ public class OnlineMusic extends Music implements Serializable {
     private String uploadUser;
     private String uploadInfo;
     private ArrayList<Comment> comments;
-    private int upvoteNum;
+    private Integer viewNum;
+    private Integer upvoteNum;
 
     public OnlineMusic() { }
 
@@ -39,6 +41,9 @@ public class OnlineMusic extends Music implements Serializable {
         musicAuthor = info.getAuthor();
         musicCreateDate = info.getDate();
         musicLink = info.getLink();
+        musicID = info.getMusicID();
+        viewNum = info.getViewNum();
+        upvoteNum = info.getUpvoteNum();
         if (info.getImgLink().length() > 0) {
             musicPhotoUrl = context.getString(R.string.server_ip) + info.getImgLink();
         } else {
@@ -144,19 +149,35 @@ public class OnlineMusic extends Music implements Serializable {
         this.comments = comments;
     }
 
-    public int getUpvoteNum() {
-        return upvoteNum;
-    }
-
-    public void setUpvoteNum(int upvoteNum) {
-        this.upvoteNum = upvoteNum;
-    }
-
     public String getMusicPhotoUrl() {
         return musicPhotoUrl;
     }
 
     public void setMusicPhotoUrl(String musicPhotoUrl) {
         this.musicPhotoUrl = musicPhotoUrl;
+    }
+
+    public Integer getMusicID() {
+        return musicID;
+    }
+
+    public void setMusicID(Integer musicID) {
+        this.musicID = musicID;
+    }
+
+    public Integer getViewNum() {
+        return viewNum;
+    }
+
+    public void setViewNum(Integer viewNum) {
+        this.viewNum = viewNum;
+    }
+
+    public Integer getUpvoteNum() {
+        return upvoteNum;
+    }
+
+    public void setUpvoteNum(Integer upvoteNum) {
+        this.upvoteNum = upvoteNum;
     }
 }

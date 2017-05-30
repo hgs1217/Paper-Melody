@@ -1,5 +1,6 @@
 package com.papermelody.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,6 +43,7 @@ public class LogInFragment extends BaseFragment {
     Button btnLogIn;
 
     private SocialSystemAPI api;
+    private Context context;
 
     public static LogInFragment newInstance() {
         LogInFragment fragment = new LogInFragment();
@@ -59,6 +61,7 @@ public class LogInFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_log_in, container, false);
         ButterKnife.bind(this, view);
 
+        context = getActivity();
         api = RetrofitClient.getSocialSystemAPI();
         initView();
         return view;

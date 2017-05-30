@@ -11,12 +11,17 @@ import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.papermelody.R;
 import com.papermelody.fragment.CommentFragment;
 import com.papermelody.fragment.ListenFragment;
 import com.papermelody.fragment.MusicHallFragment;
 import com.papermelody.model.OnlineMusic;
+import com.papermelody.model.response.HttpResponse;
+import com.papermelody.util.NetworkFailureHandler;
+import com.papermelody.util.RetrofitClient;
+import com.papermelody.util.SocialSystemAPI;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -26,6 +31,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import butterknife.BindView;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 import static android.os.Environment.getExternalStorageDirectory;
 
@@ -40,11 +47,17 @@ public class OnlineListenActivity extends BaseActivity {
      */
     @BindView(R.id.btn_download)
     Button btnDownload;
+    @BindView(R.id.music_view_num)
+    TextView viewNum;
+    @BindView(R.id.music_upvote_num)
+    TextView upvoteNum;
+    @BindView(R.id.btn_music_upvote)
+    Button btnUpvote;
 
     private FragmentManager fragmentManager;
     private FragmentTransaction transaction;
     private String fileName;    // 从intent中得到文件名称，下载到本地然后播放
-
+    private SocialSystemAPI api;
     private OnlineMusic onlineMusic;
     private Thread downloadThread;
     private Fragment fragment;
@@ -56,6 +69,9 @@ public class OnlineListenActivity extends BaseActivity {
         Intent intent = getIntent();
 //         获取从音乐圈传入的onlineMusic实例
         onlineMusic = (OnlineMusic) intent.getSerializableExtra(MusicHallFragment.SERIAL_ONLINEMUSIC);
+        api = RetrofitClient.getSocialSystemAPI();
+        initView();
+
 //         测试用，先同步server代码
 //        fileName = onlineMusic.getFilename();
         fileName = "Kissbye.mid";
@@ -79,7 +95,7 @@ public class OnlineListenActivity extends BaseActivity {
 //            }
         });
 
-        // FIXME 点击按钮下载不会闪退，但需返回重进一次才能播放
+        // FIXME: 点击按钮下载不会闪退，但需返回重进一次才能播放
         btnDownload.setOnClickListener((View v) -> {
             downloadThread.start();
 //            try {
@@ -91,9 +107,40 @@ public class OnlineListenActivity extends BaseActivity {
         });
     }
 
-    @Override
-    protected int getContentViewId() {
-        return R.layout.activity_online_listen;
+    private void initView () {
+        // FIXME: 点赞数和浏览数只有每次重进后才会刷新
+        viewNum.setText(String.valueOf(onlineMusic.getViewNum()));
+        upvoteNum.setText(String.valueOf(onlineMusic.getUpvoteNum()));
+        addViewNum();
+        btnUpvote.setOnClickListener((view) -> {
+            addUpvoteNum();  // FIXME: 存在可以多次点赞的bug
+        });
+    }
+
+    private void addViewNum () {
+        addSubscription(api.addView(onlineMusic.getMusicID())
+                .flatMap(NetworkFailureHandler.httpFailureFilter)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .map(response -> ((HttpResponse) response))
+                .subscribe(
+                        response -> {},
+                        NetworkFailureHandler.basicErrorHandler
+                ));
+    }
+
+    private void addUpvoteNum () {
+        addSubscription(api.addUpvote(onlineMusic.getMusicID())
+                .flatMap(NetworkFailureHandler.httpFailureFilter)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .map(response -> ((HttpResponse) response))
+                .subscribe(
+                        response -> {
+                            upvoteNum.setText(String.valueOf(onlineMusic.getUpvoteNum() + 1));
+                        },
+                        NetworkFailureHandler.basicErrorHandler
+                ));
     }
 
     // strurl要下载的文件的url，path保存的路径，filename文件名
@@ -151,5 +198,10 @@ public class OnlineListenActivity extends BaseActivity {
         request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileName);
         downloadManager.enqueue(request);
         Log.i("nib", Environment.DIRECTORY_DOWNLOADS + "/" + fileName);
+    }
+
+    @Override
+    protected int getContentViewId() {
+        return R.layout.activity_online_listen;
     }
 }

@@ -19,7 +19,7 @@ public class NetworkFailureHandler {
      * 处理网络故障的控制类
      */
 
-    static public void onError(Throwable e) {
+    public static void onError(Throwable e) {
         if (e instanceof HttpException) {
             ToastUtil.showShort("Error code " + ((HttpException) e).code());
         } else {
@@ -32,7 +32,7 @@ public class NetworkFailureHandler {
         e.printStackTrace();
     }
 
-    static public void onLogInError(Throwable e) {
+    public static void onLogInError(Throwable e) {
         if (e instanceof HttpException) {
             int code = ((HttpException) e).code();
             switch (code) {
@@ -51,7 +51,7 @@ public class NetworkFailureHandler {
         e.printStackTrace();
     }
 
-    static public void onUploadError(Throwable e) {
+    public static void onUploadError(Throwable e) {
         if (e instanceof HttpException) {
             int code = ((HttpException) e).code();
             switch (code) {
@@ -68,11 +68,11 @@ public class NetworkFailureHandler {
         e.printStackTrace();
     }
 
-    static public final Action1<Throwable> basicErrorHandler = throwable -> onError(throwable);
-    static public final Action1<Throwable> loginErrorHandler = throwable -> onLogInError(throwable);
-    static public final Action1<Throwable> uploadErrorHandler = throwable -> onUploadError(throwable);
+    public static final Action1<Throwable> basicErrorHandler = throwable -> onError(throwable);
+    public static final Action1<Throwable> loginErrorHandler = throwable -> onLogInError(throwable);
+    public static final Action1<Throwable> uploadErrorHandler = throwable -> onUploadError(throwable);
 
-    static public final Func1<HttpResponse, Observable<HttpResponse>> httpFailureFilter =
+    public static final Func1<HttpResponse, Observable<HttpResponse>> httpFailureFilter =
             httpResponse -> {
                 if (httpResponse.getError() == 0) {
                     return Observable.just(httpResponse);

@@ -14,12 +14,10 @@ public class App extends Application {
      * 用于记录各类数据的应用类，例如用户，设置等应用全局变量
      */
 
-    private User user;
+    private static User user;
     private static Context context;
 
-    public static Context getInstance(){
-        return context;
-    }
+    public static Context getInstance() { return context; }
 
     @Override
     public void onCreate() {
@@ -28,11 +26,12 @@ public class App extends Application {
         user = null;
     }
 
-    public User getUser() {
+    public static User getUser() {
         return user;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public static void setUser(User user) {
+        App.user = user;
     }
+
 }

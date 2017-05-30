@@ -96,6 +96,7 @@ public class UploadActivity extends BaseActivity {
 
     private void chooseImg() {
         try {
+            // FIXME: 存在点击最近图片会崩溃的bug
             Intent intent= new Intent(Intent.ACTION_GET_CONTENT);
             intent.addCategory(Intent.CATEGORY_OPENABLE);
             intent.setType("image/*");

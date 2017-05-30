@@ -78,8 +78,8 @@ public class MusicHallFragment extends BaseFragment {
         ButterKnife.bind(this, view);
         context = view.getContext();
 
-        // 开了服务器再调用此函数，否则就关了
         initGetMusicList();
+
         return view;
     }
 

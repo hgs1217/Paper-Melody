@@ -71,4 +71,6 @@
     <string name="calibration_cancel">重新标定</string>
     <string name="calibration_complete">完成标定</string>
     <string name="upload_comment_success">评论上传完成！</string>
+    <string name="network_unconnected">网络崩溃啦</string>
+    <string name="network_reconnect">重新连接</string>
 </resources>

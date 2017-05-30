@@ -74,7 +74,7 @@ public class UserFragment extends BaseFragment {
                 MainActivity mainActivity = (MainActivity) getActivity();
                 mainActivity.updateFragment(MainActivity.LOG_IN);
             } else {
-                ((App) getActivity().getApplication()).setUser(null);
+                App.setUser(null);
                 user = null;
                 ToastUtil.showShort(R.string.user_log_out);
                 updateUser();

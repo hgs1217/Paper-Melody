@@ -9,6 +9,7 @@ import android.widget.Button;
 
 import com.papermelody.R;
 import com.papermelody.activity.AboutActivity;
+import com.papermelody.activity.SettingsDevActivity;
 import com.papermelody.activity.SettingsPlayActivity;
 import com.papermelody.activity.SettingsPrivacyActivity;
 import com.papermelody.activity.TutorialActivity;
@@ -34,6 +35,9 @@ public class SettingsFragment extends BaseFragment {
     Button btnAbout;
     @BindView(R.id.btn_tutorial)
     Button btnTutorial;
+
+    @BindView(R.id.btn_settings_dev)
+    Button btnSettingsDev;
 
     public static SettingsFragment newInstance() {
         SettingsFragment fragment = new SettingsFragment();
@@ -69,6 +73,11 @@ public class SettingsFragment extends BaseFragment {
         });
         btnTutorial.setOnClickListener((View v) -> {
             Intent intent = new Intent(getActivity(), TutorialActivity.class);
+            startActivity(intent);
+        });
+
+        btnSettingsDev.setOnClickListener((View v) -> {
+            Intent intent = new Intent(getActivity(), SettingsDevActivity.class);
             startActivity(intent);
         });
     }

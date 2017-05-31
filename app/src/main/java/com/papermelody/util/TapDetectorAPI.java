@@ -2,6 +2,7 @@ package com.papermelody.util;
 
 import android.util.Log;
 
+import tapdetect.Config;
 import tapdetect.FingerDetector;
 import tapdetect.HandDetector;
 import tapdetect.TapDetector;
@@ -61,7 +62,7 @@ public class TapDetectorAPI {
 
         Mat hand = hd.getHand(im);
 
-        List<MatOfPoint> hand_contour = Util.largeContours(hand, 1200);
+        List<MatOfPoint> hand_contour = Util.largeContours(hand, Config.HAND_AREA_MIN);
         List<Point> hand_contour_pt = Util.contoursToPoints(hand_contour);
 
         List<Point> fingers = fd.getFingers(im, hand);

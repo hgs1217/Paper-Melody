@@ -102,6 +102,7 @@ public class CameraDebugActivity extends BaseActivity {
     public void processImage(Image image) {
         /**
          * Process image here
+         * Called on every frame of video
          */
 //        Log.w("test", "hello?" + image.getWidth());
 

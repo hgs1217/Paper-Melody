@@ -111,10 +111,13 @@ public class UploadActivity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
             case LOAD_PIC:
-                Uri selectedImage = data.getData();
-                String imgPath = StorageUtil.imageGetPath(this, selectedImage);
-                Log.d("TESTPATH", String.valueOf(imgPath));
-                Picasso.with(this).load(selectedImage).into(imgUpload);
+                if (data != null) {
+                    Uri selectedImage = data.getData();
+                    String imgPath = StorageUtil.imageGetPath(this, selectedImage);
+                    Log.d("TESTPATH", String.valueOf(imgPath));
+                    Picasso.with(this).load(selectedImage).into(imgUpload);
+                    filePath = imgPath;
+                }
                 break;
         }
     }
@@ -148,7 +151,7 @@ public class UploadActivity extends BaseActivity {
             }
             Log.i("nib", "isSuccess2=" + isSuccess);
 
-            isSuccess = true;
+            isSuccess = true; // FIXME: 仅供暂时的跟谱模式入口测试，到时候要删掉
             if (isSuccess) {
                 name = editMusicTitle.getText().toString();
                 date = new Date(System.currentTimeMillis());

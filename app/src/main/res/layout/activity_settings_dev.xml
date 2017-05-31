@@ -1,41 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <TextView
-        android:id="@+id/seekbar_caption1"
-        style="@style/SeekBarCaption" />
-    <SeekBar
-        android:id="@+id/seekbar1"
-        style="@style/SeekBar" />
-
-    <TextView
-        android:id="@+id/seekbar_caption2"
-        style="@style/SeekBarCaption" />
-    <SeekBar
-        android:id="@+id/seekbar2"
-        style="@style/SeekBar" />
-
-    <TextView
-        android:id="@+id/seekbar_caption3"
-        style="@style/SeekBarCaption" />
-    <SeekBar
-        android:id="@+id/seekbar3"
-        style="@style/SeekBar" />
-
-    <TextView
-        android:id="@+id/seekbar_caption4"
-        style="@style/SeekBarCaption" />
-    <SeekBar
-        android:id="@+id/seekbar4"
-        style="@style/SeekBar" />
-
-    <TextView
-        android:id="@+id/seekbar_caption5"
-        style="@style/SeekBarCaption" />
-    <SeekBar
-        android:id="@+id/seekbar5"
-        style="@style/SeekBar" />
-
-</LinearLayout>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="wrap_content"
+    android:layout_width="fill_parent">
+        
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    
+        <TextView
+            android:id="@+id/seekbar_caption1"
+            style="@style/SeekBarCaption" />
+        <SeekBar
+            android:id="@+id/seekbar1"
+            style="@style/SeekBar" />
+    
+        <TextView
+            android:id="@+id/seekbar_caption2"
+            style="@style/SeekBarCaption" />
+        <SeekBar
+            android:id="@+id/seekbar2"
+            style="@style/SeekBar" />
+    
+        <TextView
+            android:id="@+id/seekbar_caption3"
+            style="@style/SeekBarCaption" />
+        <SeekBar
+            android:id="@+id/seekbar3"
+            style="@style/SeekBar" />
+    
+        <TextView
+            android:id="@+id/seekbar_caption4"
+            style="@style/SeekBarCaption" />
+        <SeekBar
+            android:id="@+id/seekbar4"
+            style="@style/SeekBar" />
+    
+        <TextView
+            android:id="@+id/seekbar_caption5"
+            style="@style/SeekBarCaption" />
+        <SeekBar
+            android:id="@+id/seekbar5"
+            style="@style/SeekBar" />
+        
+    </LinearLayout>
+</ScrollView>

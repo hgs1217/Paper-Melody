@@ -50,6 +50,7 @@ public class UploadActivity extends BaseActivity {
      * 用例：上传作品
      * 上传作品页面
      */
+
     @BindView(R.id.edit_music_title)
     EditText editMusicTitle;
     @BindView(R.id.edit_music_des)
@@ -121,7 +122,12 @@ public class UploadActivity extends BaseActivity {
                 //picturePath就是图片在储存卡所在的位置
                 filePath = cursor.getString(columnIndex);
                 cursor.close();
-                Log.d("TESTPATH", filePath);
+                try {
+                    Log.d("TESTPATHCOL", String.valueOf(columnIndex));
+                    Log.d("TESTPATH", String.valueOf(filePath));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 Picasso.with(this).load(selectedImage).into(imgUpload);
                 break;
         }

@@ -1,13 +1,18 @@
 package com.papermelody.activity;
 
 import android.app.DownloadManager;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.media.session.PlaybackStateCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -29,6 +34,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import butterknife.BindView;
 import rx.android.schedulers.AndroidSchedulers;
@@ -60,11 +67,17 @@ public class OnlineListenActivity extends BaseActivity {
     private SocialSystemAPI api;
     private OnlineMusic onlineMusic;
     private Thread downloadThread;
-    private Fragment fragment;
+    private ListenFragment fragment = null;
+    private boolean downloadSuccess;
+    private TimerTask timerTask;
+    private Timer timer;
+    private BroadcastReceiver dmReceiver;
+    private IntentFilter intentFilter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
 
         Intent intent = getIntent();
 //         获取从音乐圈传入的onlineMusic实例
@@ -78,36 +91,49 @@ public class OnlineListenActivity extends BaseActivity {
         Log.i("nib", onlineMusic.getMusicName());
 
         fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().add(R.id.container_online_listen, ListenFragment.newInstance(fileName)).commit();
         fragmentManager.beginTransaction().add(R.id.container_comment, CommentFragment.newInstance(onlineMusic)).commit();
-
+        downloadSuccess = false;
+        timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                if (downloadSuccess && fragment == null) {
+                    fragment = ListenFragment.newInstance(fileName);
+                    fragmentManager.beginTransaction().add(R.id.container_online_listen, fragment).commit();
+//                    FIXME: 此处调用会无效，fragment.mediaPlayer是个null,不过不影响使用
+                    fragment.starPlay();
+                } else if (downloadSuccess && fragment != null) {
+                    timer.cancel();
+                }
+//                Log.i("nib", downloadSuccess + "");
+            }
+        };
+        timer = new Timer();
+        dmReceiver = new DMReceiver();
+        intentFilter = new IntentFilter();
+        intentFilter.addAction(DownloadManager.ACTION_DOWNLOAD_COMPLETE);
+        registerReceiver(dmReceiver, intentFilter);
         downloadThread = new Thread(() -> {
             Log.i("nib", "downloading");
             String dataPath = getApplicationContext().getFilesDir().getAbsolutePath() + "/";
-            String sourceURL = getString(R.string.server_ip) + "uploaded/" + fileName;
+            String sourceURL;
+//            防止server_ip忘记加/导致无法下载的情况
+            if (getString(R.string.server_ip).endsWith("/")) {
+                sourceURL = getString(R.string.server_ip) + "uploaded/" + fileName;
+            } else {
+                sourceURL = getString(R.string.server_ip) + "/uploaded/" + fileName;
+            }
             Log.i("nib", sourceURL);
             download_2(sourceURL, dataPath, fileName);
-//            boolean downloadResult = download(sourceURL, dataPath, fileName);
-//            if (downloadResult) {
-//                ToastUtil.showShort(R.string.download_success);
-//            } else {
-//                ToastUtil.showShort(R.string.download_failed);
-//            }
         });
 
-        // FIXME: 点击按钮下载不会闪退，但需返回重进一次才能播放
+//        High up! 下载完成才会实例化ListenFragment
         btnDownload.setOnClickListener((View v) -> {
             downloadThread.start();
-//            try {
-//                downloadThread.join();
-//            } catch (InterruptedException e) {
-//                Log.i("nib", e.toString());
-//            }
-//            ListenFragment.refreshSource();
+            timer.schedule(timerTask, 500, 500);
         });
     }
 
-    private void initView () {
+    private void initView() {
         // FIXME: 点赞数和浏览数只有每次重进后才会刷新
         viewNum.setText(String.valueOf(onlineMusic.getViewNum()));
         upvoteNum.setText(String.valueOf(onlineMusic.getUpvoteNum()));
@@ -117,19 +143,20 @@ public class OnlineListenActivity extends BaseActivity {
         });
     }
 
-    private void addViewNum () {
+    private void addViewNum() {
         addSubscription(api.addView(onlineMusic.getMusicID())
                 .flatMap(NetworkFailureHandler.httpFailureFilter)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .map(response -> ((HttpResponse) response))
                 .subscribe(
-                        response -> {},
+                        response -> {
+                        },
                         NetworkFailureHandler.basicErrorHandler
                 ));
     }
 
-    private void addUpvoteNum () {
+    private void addUpvoteNum() {
         addSubscription(api.addUpvote(onlineMusic.getMusicID())
                 .flatMap(NetworkFailureHandler.httpFailureFilter)
                 .subscribeOn(Schedulers.io())
@@ -143,47 +170,14 @@ public class OnlineListenActivity extends BaseActivity {
                 ));
     }
 
-    // strurl要下载的文件的url，path保存的路径，filename文件名
-    private boolean download(String strurl, String path, String fileName) {
-        InputStream is = null;
-        OutputStream os = null;
-        URL url = null;
-        try {
-            //创建文件夹
-            File f = new File(path);
-            if (!f.exists()) {
-                f.mkdir();
+    // 这是监听是否下载完成的类
+    public class DMReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (DownloadManager.ACTION_DOWNLOAD_COMPLETE.equals(action)) {
+                downloadSuccess = true;
             }
-            //创建文件
-            File file = new File(path + fileName);
-            //判断是否存在文件
-            if (file.exists()) {
-                //创建新文件
-                file.createNewFile();
-            } else {
-                file.delete();
-                file.createNewFile();
-            }
-            //创建并打开连接
-            url = new URL(strurl);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            //文件输入流
-            is = conn.getInputStream();
-            //输出流
-            os = new FileOutputStream(file);
-            byte buffer[] = new byte[1024];
-            int len = 0;
-            while ((len = is.read(buffer)) != -1) {
-                os.write(buffer, 0, len);
-            }
-            os.flush();
-            os.close();
-            is.close();
-            Log.i("nib", "download success");
-            return true;
-        } catch (Exception e) {
-            Log.i("nib", e.toString());
-            return false;
         }
     }
 
@@ -203,5 +197,11 @@ public class OnlineListenActivity extends BaseActivity {
     @Override
     protected int getContentViewId() {
         return R.layout.activity_online_listen;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(dmReceiver);
     }
 }

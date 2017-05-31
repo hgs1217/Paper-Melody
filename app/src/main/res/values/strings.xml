@@ -16,10 +16,14 @@
     <string name="download_failed">下载失败</string>
     <string name="upload_failed">上传失败T.T</string>
     <string name="play_over">弹奏结束</string>
-    <string name="save_to_local">保存到本地</string>
+    <string name="save_to_local">下载</string>
+    <string name="save_and_play">下载并播放</string>
+    <string name="re_save">重新下载</string>
     <string name="unable_to_play">暂时无法播放T.T</string>
-    <!--<string name="server_ip">http://123.207.249.92</string>-->
-    <string name="server_ip">http://192.168.0.100</string>
+    <!--写ip地址要在结尾加一个“/”-->
+    <!--<string name="server_ip">http://123.207.249.92/</string>-->
+    <!--<string name="server_ip">http://192.168.0.100/</string>-->
+    <string name="server_ip">http://59.78.0.200/</string>
     <string name="tab_mode">开始演奏</string>
     <string name="tab_settings">设置</string>
     <string name="tab_music_hall">音乐圈</string>

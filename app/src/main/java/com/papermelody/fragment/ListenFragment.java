@@ -56,16 +56,15 @@ public class ListenFragment extends BaseFragment {
         mediaPlayer = new MediaPlayer();
         filename = getArguments().getString(FILENAME);
         playState = false;
-        refreshSource();
-//        try {
-//            mediaPlayer.setDataSource(getExternalStorageDirectory() + "/" +
-//                    Environment.DIRECTORY_DOWNLOADS + "/" + filename);
-//            mediaPlayer.prepare();
-//        } catch (IOException e) {
-//            Log.i("nib", getExternalStorageDirectory() + "/" +
-//                    Environment.DIRECTORY_DOWNLOADS + "/" + filename);
-//            ToastUtil.showShort(R.string.unable_to_play);
-//        }
+        try {
+            mediaPlayer.setDataSource(getExternalStorageDirectory() + "/" +
+                    Environment.DIRECTORY_DOWNLOADS + "/" + filename);
+            mediaPlayer.prepare();
+        } catch (IOException e) {
+            Log.i("nib", getExternalStorageDirectory() + "/" +
+                    Environment.DIRECTORY_DOWNLOADS + "/" + filename);
+            ToastUtil.showShort(R.string.unable_to_play);
+        }
     }
 
     @Override
@@ -96,7 +95,7 @@ public class ListenFragment extends BaseFragment {
             @Override
             public void run() {
                 // FIXME: duration为0时，会崩溃闪退
-//                seekBar.setProgress(100 * mediaPlayer.getCurrentPosition() / mediaPlayer.getDuration());
+                seekBar.setProgress(100 * mediaPlayer.getCurrentPosition() / mediaPlayer.getDuration());
             }
         };
         timer = new Timer();
@@ -104,12 +103,11 @@ public class ListenFragment extends BaseFragment {
         btnPause.setOnClickListener((View v) -> {
             if (playState) {
                 mediaPlayer.pause();
-                btnPause.setText(R.string.conti);
+//                btnPause.setText(R.string.conti);
+                btnPause.setBackground(getResources().getDrawable(R.drawable.ic_play_circle_outline_black_36dp));
                 playState = false;
             } else {
-                mediaPlayer.start();
-                btnPause.setText(R.string.pause);
-                playState = true;
+                starPlay();
             }
         });
     }
@@ -121,15 +119,12 @@ public class ListenFragment extends BaseFragment {
         mediaPlayer.release();
     }
 
-    public static void refreshSource() {
-        try {
-            mediaPlayer.setDataSource(getExternalStorageDirectory() + "/" +
-                    Environment.DIRECTORY_DOWNLOADS + "/" + filename);
-            mediaPlayer.prepare();
-        } catch (IOException e) {
-            Log.i("nib", getExternalStorageDirectory() + "/" +
-                    Environment.DIRECTORY_DOWNLOADS + "/" + filename);
-            ToastUtil.showShort(R.string.unable_to_play);
+    public void starPlay() {
+        if (mediaPlayer != null) {
+            mediaPlayer.start();
+//            btnPause.setText(R.string.pause);
+            btnPause.setBackground(getResources().getDrawable(R.drawable.ic_pause_circle_outline_black_36dp));
+            playState = true;
         }
     }
 }

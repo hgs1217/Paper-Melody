@@ -56,8 +56,8 @@ public class FingerDetector {
 
         for (int i = 0; i < len; ++i) {
             Point pt = contour_pt.get(i);
-            Point ahead = contour_pt.get(i + step >= len ? i + step - len : i + step);
-            Point behind = contour_pt.get(i < step ? i - step + len : i - step);
+            Point ahead = contour_pt.get((i + step) % len);
+            Point behind = contour_pt.get((i - step) % len < 0 ? (i - step) % len + len : (i - step) % len);
 
             int center_x = (int) (ahead.x + behind.x + pt.x) / 3;
             int center_y = (int) (ahead.y + behind.y + pt.y) / 3;

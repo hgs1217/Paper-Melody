@@ -105,13 +105,17 @@ public class CameraDebugActivity extends BaseActivity {
          */
 //        Log.w("test", "hello?" + image.getWidth());
 
-//        TransformResult transformResult = ImageProcessor.getKeyTransform(calibrationResult);
         Mat mat = ImageUtil.imageToBgr(image);
 //        List<Integer> keys = ImageProcessor.getPlaySoundKey(mat.clone(), transformResult);
 
+        long t1 = System.currentTimeMillis();
         List<List<Point>> ret = TapDetectorAPI.getAllForDebug(mat);
-        canvasCameraDebug.updatePoints(ret.get(0), ret.get(1), ret.get(2), image.getHeight(),
-                image.getWidth(), this, viewCameraDebug.getHeight());
+        long t2 = System.currentTimeMillis();
+        canvasCameraDebug.updateInfo(
+                ret.get(0), ret.get(1), ret.get(2),
+                image.getHeight(), image.getWidth(), t2-t1,
+                this, viewCameraDebug.getHeight()
+        );
 //        Log.w("TESTK", "" + keys);
 //        Log.w("LAST_TESTK", "" + lastKeys);
 //        for (Integer key : keys) {

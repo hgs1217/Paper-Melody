@@ -23,6 +23,7 @@ public class CameraDebugView extends View {
     private List<Point> handContours = new ArrayList<>();
     private List<Point> fingerTips = new ArrayList<>();
     private List<Point> tapping = new ArrayList<>();
+    private long time_ms;
 
     public CameraDebugView(Context c) {
         super(c);
@@ -51,13 +52,24 @@ public class CameraDebugView extends View {
         if (!tapping.isEmpty()) {
             CanvasUtil.drawPoints(canvas, tapping, Color.GREEN);
         }
+
+        String[] to_be_write = {
+                "Time consumed: " + time_ms + " ms",
+                "Hand contour: " + handContours.size() + " points",
+                "Finger tip: " + fingerTips.size() + " points",
+                "Tapping points: " + tapping.size() + " points"
+        };
+        CanvasUtil.writeText(canvas, to_be_write);
     }
 
-    public void updatePoints(List<Point> handContours, List<Point> fingerTips,List<Point> tapping,
-                             int height, int width, Context context, int surViewHeight) {
+    public void updateInfo(
+            List<Point> handContours, List<Point> fingerTips,List<Point> tapping,
+            int height, int width, long time_ms, Context context, int surViewHeight
+    ) {
         this.handContours = new ArrayList<>(handContours);
         this.fingerTips = new ArrayList<>(fingerTips);
         this.tapping = new ArrayList<>(tapping);
+        this.time_ms = time_ms;
         CanvasUtil.updateSize(height, width, context, surViewHeight);
         invalidate();
     }

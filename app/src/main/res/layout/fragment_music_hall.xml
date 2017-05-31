@@ -11,11 +11,18 @@
 
     </com.papermelody.widget.MusicHallCycleViewPager>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_view_hall"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/layout_hall_refresh"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
-    </android.support.v7.widget.RecyclerView>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_view_hall"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </android.support.v7.widget.RecyclerView>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
 
 </LinearLayout>

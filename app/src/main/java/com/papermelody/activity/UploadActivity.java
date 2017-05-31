@@ -183,10 +183,10 @@ public class UploadActivity extends BaseActivity {
                 .flatMap(NetworkFailureHandler.httpFailureFilter)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .map(response -> ((UploadImgResponse) response).getImgLink())
+                .map(response -> ((UploadImgResponse) response).getImgName())
                 .subscribe(
-                        imgLink -> {
-                            uploadMusicInfo(imgLink);
+                        imgName -> {
+                            uploadMusicInfo(imgName);
 
                             /*if (errorCode == 0) {
                                 Log.i("nib", "errCode==0");
@@ -203,8 +203,8 @@ public class UploadActivity extends BaseActivity {
                 ));
     }
 
-    private void uploadMusicInfo(String imgLink) {
-        addSubscription(api.uploadMusic(name, author, date, "", imgLink)  // FIXME: link 需要修改
+    private void uploadMusicInfo(String imgName) {
+        addSubscription(api.uploadMusic(name, author, date, "", imgName)  // FIXME: link 需要修改
                 .flatMap(NetworkFailureHandler.httpFailureFilter)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

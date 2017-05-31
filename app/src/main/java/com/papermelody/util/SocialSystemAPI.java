@@ -49,7 +49,7 @@ public interface SocialSystemAPI {
                                            @Field("author") String author,
                                            @Field("date") Date date,
                                            @Field("link") String link,
-                                           @Field("imgLink") String imgLink);
+                                           @Field("imgName") String imgName);
 
     // 上传作品图片
     @Multipart

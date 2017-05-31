@@ -3,6 +3,7 @@ package com.papermelody.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -44,6 +45,8 @@ public class MusicHallFragment extends BaseFragment {
     MusicHallCycleViewPager cyclePoster;
     @BindView(R.id.recycler_view_hall)
     RecyclerView recyclerViewHall;
+    @BindView(R.id.layout_hall_refresh)
+    SwipeRefreshLayout layoutRefresh;
 
     public static final String SERIAL_ONLINEMUSIC = "SERIAL_ONLINEMUSIC";
 
@@ -79,6 +82,7 @@ public class MusicHallFragment extends BaseFragment {
         context = view.getContext();
 
         initGetMusicList();
+        initSwipeRefreshView();
 
         return view;
     }
@@ -123,6 +127,16 @@ public class MusicHallFragment extends BaseFragment {
                 R.drawable.shape_cycle_indicator_unselected);
         cyclePoster.setDelay(2000);
         cyclePoster.setData(banners, null);
+    }
+
+    private void initSwipeRefreshView() {
+        layoutRefresh.setColorSchemeResources(R.color.black);
+        layoutRefresh.setSize(SwipeRefreshLayout.DEFAULT);
+        layoutRefresh.setProgressViewEndTarget(true, 100);
+        layoutRefresh.setOnRefreshListener(() -> {
+            initGetMusicList();
+            layoutRefresh.setRefreshing(false);
+        });
     }
 
     private List<OnlineMusic> testCreateMusics() {

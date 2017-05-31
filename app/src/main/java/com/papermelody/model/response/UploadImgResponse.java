@@ -11,10 +11,10 @@ public class UploadImgResponse extends HttpResponse {
      * 上传图片的响应
      */
 
-    @SerializedName("imglink")
-    private String imgLink;
+    @SerializedName("imgName")
+    private String imgName;
 
-    public String getImgLink() {
-        return imgLink;
+    public String getImgName() {
+        return imgName;
     }
 }

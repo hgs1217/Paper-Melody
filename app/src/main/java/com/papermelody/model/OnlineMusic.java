@@ -2,8 +2,8 @@ package com.papermelody.model;
 
 import android.content.Context;
 
-import com.papermelody.R;
 import com.papermelody.model.response.OnlineMusicInfo;
+import com.papermelody.util.UrlUtil;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -44,8 +44,8 @@ public class OnlineMusic extends Music implements Serializable {
         musicID = info.getMusicID();
         viewNum = info.getViewNum();
         upvoteNum = info.getUpvoteNum();
-        if (info.getImgLink().length() > 0) {
-            musicPhotoUrl = context.getString(R.string.server_ip) + info.getImgLink();
+        if (info.getImgName().length() > 0) {
+            musicPhotoUrl = UrlUtil.getImageUrl(context, info.getImgName());
         } else {
             musicPhotoUrl = null;
         }

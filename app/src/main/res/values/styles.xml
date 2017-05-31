@@ -10,4 +10,18 @@
         <item name="android:windowNoTitle">true</item>
     </style>
 
+    <!-- Style for seekbar in dev setting activity. -->
+    <style name="SeekBar">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_margin">20dip</item>
+    </style>
+    <style name="SeekBarCaption">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_margin">20dip</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:text">0</item>
+    </style>
 </resources>

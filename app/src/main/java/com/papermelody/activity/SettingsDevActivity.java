@@ -1,13 +1,16 @@
 package com.papermelody.activity;
 
 import android.os.Bundle;
-import android.widget.Button;
+import android.util.Log;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.papermelody.R;
 
+import java.lang.reflect.Field;
+
 import butterknife.BindView;
+import tapdetect.Config;
 
 /**
  * Created by gigaflower on 2017/5/30.
@@ -19,35 +22,67 @@ public class SettingsDevActivity extends BaseActivity {
      */
 
 
-    @BindView(R.id.seekbar_im_height)           SeekBar sb_im_height;
-//    @BindView(R.id.seekbar_hand_area)           SeekBar sb_hand_area;
-//    @BindView(R.id.seekbar_finger_tip_step)     SeekBar sb_finger_tip_step;
-//    @BindView(R.id.seekbar_finger_tip_width)    SeekBar sb_finger_tip_width;
-//    @BindView(R.id.seekbar_tap_threshold_row)   SeekBar sb_finger_tap_threshold_row;
+    @BindView(R.id.seekbar1)        SeekBar sb1;
+    @BindView(R.id.seekbar2)        SeekBar sb2;
+    @BindView(R.id.seekbar3)        SeekBar sb3;
+    @BindView(R.id.seekbar4)        SeekBar sb4;
+    @BindView(R.id.seekbar5)        SeekBar sb5;
 
-    @BindView(R.id.text_im_height)           TextView text_im_height;
-//    @BindView(R.id.textview_hand_area)           TextView text_hand_area;
-//    @BindView(R.id.textview_finger_tip_step)     TextView text_finger_tip_step;
-//    @BindView(R.id.textview_finger_tip_width)    TextView text_finger_tip_width;
-//    @BindView(R.id.textview_tap_threshold_row)   TextView text_finger_tap_threshold_row;
+    @BindView(R.id.seekbar_caption1) TextView text1;
+    @BindView(R.id.seekbar_caption2) TextView text2;
+    @BindView(R.id.seekbar_caption3) TextView text3;
+    @BindView(R.id.seekbar_caption4) TextView text4;
+    @BindView(R.id.seekbar_caption5) TextView text5;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        sb_im_height.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                text_im_height.setText(progress);
+        SeekBar[] seekbars = { sb1, sb2, sb3, sb4, sb5 };
+        TextView[] texts = { text1, text2, text3, text4, text5 };
+
+
+        // Use reflect to dynamically set the value of seek bars
+        // according to values in `tapdetect.Config`
+        Field[] parameters = Config.class.getDeclaredFields();
+
+        int ind = 0;
+        for (Field field: parameters) {
+            if (field.getType() != int.class) { continue; }
+            final int index = ind;
+
+            final String paraName = field.getName().replace("_", " ").toLowerCase();
+
+            try {
+                final int paraValue = field.getInt(Config.class);
+                texts[ind].setText(paraName + ": " + paraValue);
+                seekbars[ind].setMax(paraValue * 2);
+                seekbars[ind].setProgress(paraValue);
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+                // if this error happens, blame it on me     by gigaflw
             }
 
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {}
+            seekbars[index].setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                @Override
+                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                    try {
+                        field.set(Config.class, progress);
+                        texts[index].setText(paraName + ": " + field.getInt(Config.class));
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                        // if this error happens, blame it on me     by gigaflw
+                    }
+                }
 
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {}
-        });
+                @Override
+                public void onStartTrackingTouch(SeekBar seekBar) {}
+
+                @Override
+                public void onStopTrackingTouch(SeekBar seekBar) {}
+            });
+            ind += 1;
+        }
     }
-
 
     @Override
     protected int getContentViewId() {

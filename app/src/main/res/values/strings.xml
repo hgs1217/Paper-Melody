@@ -22,7 +22,7 @@
     <string name="tip_download_before">先下载才能播放哦</string>
     <string name="save_to_local">下载</string>
     <string name="picture">图片</string>
-    <string name="downloading">下载中，不要乱点啊啊啊啊啊</string>
+    <string name="downloading">下载中……</string>
     <string name="file_exist">文件已经存在啦</string>
     <string name="save_and_play">下载并播放</string>
     <string name="re_save">重新下载</string>

@@ -48,8 +48,8 @@ public class OnlineListenActivity extends BaseActivity {
      */
     @BindView(R.id.btn_download)
     Button btnDownload;
-    @BindView(R.id.tip_online_listen)
-    TextView tipOnlineListen;
+    @BindView(R.id.title_online_listen)
+    TextView titleOnLineListen;
     @BindView(R.id.music_view_num)
     TextView viewNum;
     @BindView(R.id.music_upvote_num)
@@ -107,22 +107,25 @@ public class OnlineListenActivity extends BaseActivity {
         intentFilter.addAction(DownloadManager.ACTION_DOWNLOAD_COMPLETE);
         registerReceiver(dmReceiver, intentFilter);
 
-        tipOnlineListen.setText(onlineMusic.getMusicName());
+        titleOnLineListen.setText(onlineMusic.getMusicName());
         File file = new File(getExternalStorageDirectory() + "/Download/" + fileName);
         fileExist = file.exists();
-        if (fileExist){
-            initListenFragment();
-        }
+//        if (fileExist){
+//            initListenFragment();
+//        }
         btnDownload.setOnClickListener((View v) -> {
             fileExist = file.exists();
             if (fileExist) {
-                ToastUtil.showShort(R.string.file_exist);
+//                ToastUtil.showShort(R.string.file_exist);
+                initListenFragment();
+                btnDownload.setOnClickListener(cantDownload);
             } else {
                 downloadFile();
                 timer.schedule(timerTask, 0, 100);
                 btnDownload.setOnClickListener(downloading);
             }
         });
+        btnDownload.callOnClick();
     }
 
     private void initView() {
@@ -196,6 +199,7 @@ public class OnlineListenActivity extends BaseActivity {
         } else {
             sourceURL = getString(R.string.server_ip) + "/uploaded/" + fileName;
         }
+        ToastUtil.showShort(R.string.downloading);
         download_2(sourceURL, dataPath, fileName);
     }
 

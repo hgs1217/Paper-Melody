@@ -3,26 +3,32 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/img_music"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:contentDescription="@string/picture"
-        android:src="@drawable/testimg1"
-        android:layout_alignParentTop="true"/>
+    <RelativeLayout
+        android:id="@+id/rl_music"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
 
-    <Button
-        android:id="@+id/btn_pause"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:background="@drawable/ic_play_circle_outline_black_36dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignBottom="@id/img_music"/>
+        <ImageView
+            android:id="@+id/img_music"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:contentDescription="@string/picture"
+            android:src="@drawable/testimg1"
+            android:layout_alignParentTop="true" />
+
+        <Button
+            android:id="@+id/btn_pause"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@drawable/ic_play_circle_outline_white_48dp"
+            android:layout_centerInParent="true" />
+    </RelativeLayout>
+
 
     <SeekBar
         android:id="@+id/seekBar"
         android:layout_width="match_parent"
         android:layout_height="24dp"
-        android:layout_below="@id/img_music" />
+        android:layout_below="@id/rl_music" />
 
 </RelativeLayout>

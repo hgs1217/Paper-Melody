@@ -10,6 +10,7 @@
 
     <SurfaceView
         android:id="@+id/view_calibration"
+        android:layout_gravity="center"
         android:layout_width="480dp"
         android:layout_height="360dp" />
 
@@ -20,7 +21,7 @@
         android:orientation="vertical">
 
         <LinearLayout
-            android:background="#CC000000"
+            android:background="#00000000"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
@@ -38,6 +39,7 @@
 
     <ImageView
         android:id="@+id/img_calibration"
+        android:layout_gravity="center"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
@@ -70,6 +72,7 @@
 
     <com.papermelody.widget.CalibrationView
         android:id="@+id/canvas_calibration"
+        android:layout_gravity="center"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
     

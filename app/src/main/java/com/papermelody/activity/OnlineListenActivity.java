@@ -132,6 +132,7 @@ public class OnlineListenActivity extends BaseActivity {
         addViewNum();
         btnUpvote.setOnClickListener((view) -> {
             addUpvoteNum();  // FIXME: 存在可以多次点赞的bug
+            btnUpvote.setBackground(getDrawable(R.drawable.ic_thumb_up_white_18dp));
         });
     }
 

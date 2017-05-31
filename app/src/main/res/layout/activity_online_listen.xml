@@ -5,36 +5,53 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    android:orientation="vertical"
     android:gravity="center"
+    android:orientation="vertical"
     tools:context="com.papermelody.activity.OnlineListenActivity">
-
-    <Button
-        android:id="@+id/btn_download"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/save_to_local"/>
 
     <LinearLayout
         android:id="@+id/container_online_listen"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="10dp"
         android:gravity="center"
-        android:orientation="vertical"
-        android:layout_margin="10dp">
+        android:orientation="horizontal">
 
     </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp">
+        <TextView
+            android:id="@+id/tip_online_listen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/tip_download_before"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"/>
+        <Button
+            android:id="@+id/btn_download"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:background="@drawable/ic_file_download_black_36dp"
+            android:layout_alignParentEnd="true"/>
+    </RelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center">
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:gravity="end"
+        android:orientation="horizontal">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="查看人数"/>
+            android:text="@string/view_count" />
 
         <TextView
             android:id="@+id/music_view_num"
@@ -42,12 +59,12 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:text="0"/>
+            android:text="@string/zero" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="点赞人数"/>
+            android:text="@string/vote_count" />
 
         <TextView
             android:id="@+id/music_upvote_num"
@@ -55,21 +72,21 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:text="0"/>
+            android:text="@string/zero" />
 
         <Button
             android:id="@+id/btn_music_upvote"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="点赞"/>
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:background="@drawable/ic_thumb_up_black_18dp"/>
 
     </LinearLayout>
 
     <!--<Button-->
-        <!--android:id="@+id/btn_comment"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:text="@string/comment"/>-->
+    <!--android:id="@+id/btn_comment"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:text="@string/comment"/>-->
 
     <LinearLayout
         android:id="@+id/container_comment"

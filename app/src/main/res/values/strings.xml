@@ -7,6 +7,9 @@
     <string name="quit_save">放弃上传</string>
     <string name="play_start">播放</string>
     <string name="comment">评论</string>
+    <string name="zero">0</string>
+    <string name="view_count">浏览次数</string>
+    <string name="vote_count">赞</string>
     <string name="edit_music_title">音乐名称</string>
     <string name="edit_music_des">说点什么</string>
     <string name="submit">提交</string>
@@ -16,6 +19,7 @@
     <string name="download_failed">下载失败</string>
     <string name="upload_failed">上传失败T.T</string>
     <string name="play_over">弹奏结束</string>
+    <string name="tip_download_before">先下载才能播放哦</string>
     <string name="save_to_local">下载</string>
     <string name="save_and_play">下载并播放</string>
     <string name="re_save">重新下载</string>

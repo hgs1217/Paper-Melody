@@ -13,6 +13,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.papermelody.R;
@@ -24,6 +25,7 @@ import com.papermelody.model.response.HttpResponse;
 import com.papermelody.util.NetworkFailureHandler;
 import com.papermelody.util.RetrofitClient;
 import com.papermelody.util.SocialSystemAPI;
+import com.papermelody.util.ToastUtil;
 
 import java.io.File;
 import java.util.Timer;
@@ -46,6 +48,8 @@ public class OnlineListenActivity extends BaseActivity {
      */
     @BindView(R.id.btn_download)
     Button btnDownload;
+    @BindView(R.id.tip_online_listen)
+    TextView tipOnlineListen;
     @BindView(R.id.music_view_num)
     TextView viewNum;
     @BindView(R.id.music_upvote_num)
@@ -54,17 +58,17 @@ public class OnlineListenActivity extends BaseActivity {
     Button btnUpvote;
 
     private FragmentManager fragmentManager;
-    private FragmentTransaction transaction;
     private String fileName;    // 从intent中得到文件名称，下载到本地然后播放
     private SocialSystemAPI api;
     private OnlineMusic onlineMusic;
-    private Thread downloadThread;
     private ListenFragment fragment = null;
-    private boolean downloadSuccess;
+    private boolean downloadSuccess = false;
+    private boolean fileExist = false;
     private TimerTask timerTask;
     private Timer timer;
     private BroadcastReceiver dmReceiver;
     private IntentFilter intentFilter;
+    private View.OnClickListener cantDownload, downloading;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,21 +86,19 @@ public class OnlineListenActivity extends BaseActivity {
         fileName = "Kissbye.mid";
         Log.i("nib", onlineMusic.getMusicName());
 
+        cantDownload = (View v) -> ToastUtil.showShort(R.string.file_exist);
+        downloading = (View v) -> ToastUtil.showShort(R.string.downloading);
         fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().add(R.id.container_comment, CommentFragment.newInstance(onlineMusic)).commit();
-        downloadSuccess = false;
         timerTask = new TimerTask() {
             @Override
             public void run() {
                 if (downloadSuccess && fragment == null) {
-                    fragment = ListenFragment.newInstance(fileName);
-                    fragmentManager.beginTransaction().add(R.id.container_online_listen, fragment).commit();
-//                    FIXME: 此处调用会无效，fragment.mediaPlayer是个null,不过不影响使用
-                    fragment.starPlay();
-                } else if (downloadSuccess && fragment != null) {
+                    initListenFragment();
+                    btnDownload.setOnClickListener(cantDownload);
+                } else if (downloadSuccess) {
                     timer.cancel();
                 }
-//                Log.i("nib", downloadSuccess + "");
             }
         };
         timer = new Timer();
@@ -104,24 +106,22 @@ public class OnlineListenActivity extends BaseActivity {
         intentFilter = new IntentFilter();
         intentFilter.addAction(DownloadManager.ACTION_DOWNLOAD_COMPLETE);
         registerReceiver(dmReceiver, intentFilter);
-        downloadThread = new Thread(() -> {
-            Log.i("nib", "downloading");
-            String dataPath = getApplicationContext().getFilesDir().getAbsolutePath() + "/";
-            String sourceURL;
-//            防止server_ip忘记加/导致无法下载的情况
-            if (getString(R.string.server_ip).endsWith("/")) {
-                sourceURL = getString(R.string.server_ip) + "uploaded/" + fileName;
-            } else {
-                sourceURL = getString(R.string.server_ip) + "/uploaded/" + fileName;
-            }
-            Log.i("nib", sourceURL);
-            download_2(sourceURL, dataPath, fileName);
-        });
 
-//        High up! 下载完成才会实例化ListenFragment
+        tipOnlineListen.setText(onlineMusic.getMusicName());
+        File file = new File(getExternalStorageDirectory() + "/Download/" + fileName);
+        fileExist = file.exists();
+        if (fileExist){
+            initListenFragment();
+        }
         btnDownload.setOnClickListener((View v) -> {
-            downloadThread.start();
-            timer.schedule(timerTask, 500, 500);
+            fileExist = file.exists();
+            if (fileExist) {
+                ToastUtil.showShort(R.string.file_exist);
+            } else {
+                downloadFile();
+                timer.schedule(timerTask, 0, 100);
+                btnDownload.setOnClickListener(downloading);
+            }
         });
     }
 
@@ -178,13 +178,31 @@ public class OnlineListenActivity extends BaseActivity {
     private void download_2(String strurl, String path, String fileName) {
         File file = new File(getExternalStorageDirectory() + "/Download/" + fileName);
         if (file.exists()) {
-            file.delete();
+            return;
         }
         DownloadManager downloadManager = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
         DownloadManager.Request request = new DownloadManager.Request(Uri.parse(strurl));
         request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileName);
         downloadManager.enqueue(request);
-        Log.i("nib", Environment.DIRECTORY_DOWNLOADS + "/" + fileName);
+//        Log.i("nib", Environment.DIRECTORY_DOWNLOADS + "/" + fileName);
+    }
+
+    private void downloadFile() {
+        String dataPath = getApplicationContext().getFilesDir().getAbsolutePath() + "/";
+        String sourceURL;
+//            防止server_ip忘记加/导致无法下载的情况
+        if (getString(R.string.server_ip).endsWith("/")) {
+            sourceURL = getString(R.string.server_ip) + "uploaded/" + fileName;
+        } else {
+            sourceURL = getString(R.string.server_ip) + "/uploaded/" + fileName;
+        }
+        download_2(sourceURL, dataPath, fileName);
+    }
+
+    private void initListenFragment() {
+        fragment = ListenFragment.newInstance(fileName);
+        fragmentManager.beginTransaction().add(R.id.container_online_listen, fragment).commit();
+//        fragment.starPlay();
     }
 
     @Override
@@ -197,4 +215,5 @@ public class OnlineListenActivity extends BaseActivity {
         super.onDestroy();
         unregisterReceiver(dmReceiver);
     }
+
 }

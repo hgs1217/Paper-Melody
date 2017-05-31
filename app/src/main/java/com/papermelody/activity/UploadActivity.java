@@ -1,13 +1,11 @@
 package com.papermelody.activity;
 
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -97,7 +95,6 @@ public class UploadActivity extends BaseActivity {
 
     private void chooseImg() {
         try {
-            // FIXME: 存在点击最近图片会崩溃的bug
             Intent intent= new Intent(Intent.ACTION_GET_CONTENT);
             intent.addCategory(Intent.CATEGORY_OPENABLE);
             intent.setType("image/*");
@@ -115,19 +112,8 @@ public class UploadActivity extends BaseActivity {
         switch (requestCode) {
             case LOAD_PIC:
                 Uri selectedImage = data.getData();
-                String[] filePathColumn = {MediaStore.Images.Media.DATA};
-                Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
-                cursor.moveToFirst();
-                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-                //picturePath就是图片在储存卡所在的位置
-                filePath = cursor.getString(columnIndex);
-                cursor.close();
-                try {
-                    Log.d("TESTPATHCOL", String.valueOf(columnIndex));
-                    Log.d("TESTPATH", String.valueOf(filePath));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                String imgPath = StorageUtil.imageGetPath(this, selectedImage);
+                Log.d("TESTPATH", String.valueOf(imgPath));
                 Picasso.with(this).load(selectedImage).into(imgUpload);
                 break;
         }
@@ -136,7 +122,7 @@ public class UploadActivity extends BaseActivity {
     private void uploadConfirm() {
         boolean hasUser = true;
         try {
-            author = ((App) getApplication()).getUser().getUsername();
+            author = App.getUser().getUsername();
         } catch (NullPointerException e) {
             ToastUtil.showShort("登录了才能上传哦！");
             hasUser = false;

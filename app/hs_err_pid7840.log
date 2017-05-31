@@ -1,0 +1,235 @@
+#
+# A fatal error has been detected by the Java Runtime Environment:
+#
+#  EXCEPTION_ACCESS_VIOLATION (0xc0000005) at pc=0x0000000060350a7f, pid=7840, tid=0x0000000000000ca0
+#
+# JRE version:  (8.0_112-b06) (build )
+# Java VM: OpenJDK 64-Bit Server VM (25.112-b06 mixed mode windows-amd64 compressed oops)
+# Problematic frame:
+# V  [jvm.dll+0x30a7f]
+#
+# Failed to write core dump. Minidumps are not enabled by default on client versions of Windows
+#
+# If you would like to submit a bug report, please visit:
+#   http://bugreport.java.com/bugreport/crash.jsp
+#
+
+---------------  T H R E A D  ---------------
+
+Current thread (0x000000000258b800):  JavaThread "main" [_thread_in_vm, id=3232, stack(0x0000000002780000,0x0000000002880000)]
+
+siginfo: ExceptionCode=0xc0000005, writing address 0x000000000000000a
+
+Registers:
+RAX=0x000000000000000a, RBX=0x000000000247d380, RCX=0x000000000572bdb0, RDX=0x0000000000000015
+RSP=0x000000000287b590, RBP=0x000000000287b690, RSI=0x000000000287b7f8, RDI=0x000000000572bdb0
+R8 =0x0000000000000009, R9 =0x0000000060320000, R10=0x0000000000000009, R11=0x000000000287b3b0
+R12=0x000000000258b800, R13=0x000000000287bc30, R14=0x00000000000000a1, R15=0x0000000000000001
+RIP=0x0000000060350a7f, EFLAGS=0x0000000000010206
+
+Top of Stack: (sp=0x000000000287b590)
+0x000000000287b590:   00000000000000a1 000000000247d380
+0x000000000287b5a0:   000000000287b7f8 000000f900000003
+0x000000000287b5b0:   0247000100000000 0000000000000080
+0x000000000287b5c0:   00000009000000a1 0000000000000000
+0x000000000287b5d0:   0000000000000000 0000000000000009
+0x000000000287b5e0:   000000000000a100 000000000572bdb0
+0x000000000287b5f0:   000000000258b800 0000000002590160
+0x000000000287b600:   0000000000000000 0000000000000001
+0x000000000287b610:   000000000258c320 0000000000000000
+0x000000000287b620:   000000000247e0a8 0000000005fe9840
+0x000000000287b630:   0000000000000010 0000000002470230
+0x000000000287b640:   00000000025876a0 000000005e2b4e7e
+0x000000000287b650:   000000000247e0a8 0000000002470268
+0x000000000287b660:   0000000002470230 0000000002470230
+0x000000000287b670:   0000000002470328 00000000024754e4
+0x000000000287b680:   0000000000000023 000000005e2b38a8 
+
+Instructions: (pc=0x0000000060350a7f)
+0x0000000060350a5f:   7c 24 08 00 0f 85 a9 06 00 00 44 8b 74 24 30 e9
+0x0000000060350a6f:   ff 05 00 00 ba 91 01 00 00 e9 e4 05 00 00 4a 63
+0x0000000060350a7f:   5c c7 50 85 db 78 1c 49 8b 45 50 3b 58 3c 7d 13
+0x0000000060350a8f:   48 8b 40 08 0f b6 44 18 04 41 3a c7 75 05 41 8b 
+
+
+Register to memory mapping:
+
+RAX=0x000000000000000a is an unknown value
+RBX=0x000000000247d380 is an unknown value
+RCX=0x000000000572bdb0 is pointing into metadata
+RDX=0x0000000000000015 is an unknown value
+RSP=0x000000000287b590 is pointing into the stack for thread: 0x000000000258b800
+RBP=0x000000000287b690 is pointing into the stack for thread: 0x000000000258b800
+RSI=0x000000000287b7f8 is pointing into the stack for thread: 0x000000000258b800
+RDI=0x000000000572bdb0 is pointing into metadata
+R8 =0x0000000000000009 is an unknown value
+R9 =0x0000000060320000 is an unknown value
+R10=0x0000000000000009 is an unknown value
+R11=0x000000000287b3b0 is pointing into the stack for thread: 0x000000000258b800
+R12=0x000000000258b800 is a thread
+R13=0x000000000287bc30 is pointing into the stack for thread: 0x000000000258b800
+R14=0x00000000000000a1 is an unknown value
+R15=0x0000000000000001 is an unknown value
+
+
+Stack: [0x0000000002780000,0x0000000002880000],  sp=0x000000000287b590,  free space=1005k
+Native frames: (J=compiled Java code, j=interpreted, Vv=VM code, C=native code)
+V  [jvm.dll+0x30a7f]
+V  [jvm.dll+0x388f7]
+V  [jvm.dll+0x3cf50]
+V  [jvm.dll+0x57e9d]
+V  [jvm.dll+0x58774]
+V  [jvm.dll+0x59e46]
+V  [jvm.dll+0x559c7]
+V  [jvm.dll+0x396bf]
+V  [jvm.dll+0x3cf50]
+V  [jvm.dll+0x57e9d]
+V  [jvm.dll+0x58774]
+V  [jvm.dll+0x59e46]
+V  [jvm.dll+0x59e9d]
+V  [jvm.dll+0xd1743]
+V  [jvm.dll+0x95f93]
+V  [jvm.dll+0x9614f]
+C  0x000000000f035011
+
+Java frames: (J=compiled Java code, j=interpreted, Vv=VM code)
+j  java.util.Collections.<clinit>()V+22
+v  ~StubRoutines::call_stub
+j  java.lang.Throwable.<clinit>()V+31
+v  ~StubRoutines::call_stub
+j  java.lang.Class.forName0(Ljava/lang/String;ZLjava/lang/ClassLoader;Ljava/lang/Class;)Ljava/lang/Class;+0
+j  java.lang.Class.forName(Ljava/lang/String;ZLjava/lang/ClassLoader;)Ljava/lang/Class;+49
+j  java.lang.ref.Reference$ReferenceHandler.ensureClassInitialized(Ljava/lang/Class;)V+9
+j  java.lang.ref.Reference$ReferenceHandler.<clinit>()V+2
+v  ~StubRoutines::call_stub
+j  java.lang.ref.Reference.<clinit>()V+38
+v  ~StubRoutines::call_stub
+
+---------------  P R O C E S S  ---------------
+
+Java Threads: ( => current thread )
+=>0x000000000258b800 JavaThread "main" [_thread_in_vm, id=3232, stack(0x0000000002780000,0x0000000002880000)]
+
+Other Threads:
+  0x0000000005fde800 VMThread [stack: 0x0000000007020000,0x0000000007120000] [id=1708]
+
+VM state:not at safepoint (normal execution)
+
+VM Mutex/Monitor currently owned by a thread: None
+
+Heap:
+ PSYoungGen      total 18944K, used 327K [0x00000000eb180000, 0x00000000ec680000, 0x0000000100000000)
+  eden space 16384K, 2% used [0x00000000eb180000,0x00000000eb1d1ec8,0x00000000ec180000)
+  from space 2560K, 0% used [0x00000000ec400000,0x00000000ec400000,0x00000000ec680000)
+  to   space 2560K, 0% used [0x00000000ec180000,0x00000000ec180000,0x00000000ec400000)
+ ParOldGen       total 44032K, used 0K [0x00000000c1400000, 0x00000000c3f00000, 0x00000000eb180000)
+  object space 44032K, 0% used [0x00000000c1400000,0x00000000c1400000,0x00000000c3f00000)
+ Metaspace       used 977K, capacity 4480K, committed 4480K, reserved 1056768K
+  class space    used 97K, capacity 384K, committed 384K, reserved 1048576K
+
+Card table byte_map: [0x0000000002c40000,0x0000000002e40000] byte_map_base: 0x0000000002636000
+
+Marking Bits: (ParMarkBitMap*) 0x0000000060ae18f0
+ Begin Bits: [0x00000000034f0000, 0x00000000044a0000)
+ End Bits:   [0x00000000044a0000, 0x0000000005450000)
+
+Polling page: 0x0000000000130000
+
+CodeCache: size=245760Kb used=397Kb max_used=397Kb free=245362Kb
+ bounds [0x000000000f010000, 0x000000000f280000, 0x000000001e010000]
+ total_blobs=89 nmethods=0 adapters=64
+ compilation: enabled
+
+Compilation events (0 events):
+No events
+
+GC Heap History (0 events):
+No events
+
+Deoptimization events (0 events):
+No events
+
+Internal exceptions (0 events):
+No events
+
+Events (10 events):
+Event: 0.025 loading class java/util/Collections$EmptySet
+Event: 0.025 loading class java/util/AbstractSet
+Event: 0.025 loading class java/util/Set
+Event: 0.025 loading class java/util/Set done
+Event: 0.025 loading class java/util/AbstractSet done
+Event: 0.025 loading class java/util/Collections$EmptySet done
+Event: 0.025 loading class java/util/Collections$EmptyList
+Event: 0.025 loading class java/util/Collections$EmptyList done
+Event: 0.025 loading class java/util/Collections$EmptyMap
+Event: 0.025 loading class java/util/AbstractMap
+
+
+Dynamic libraries:
+0x000000013f790000 - 0x000000013f7c1000 	D:\Program Files\Android\Android Studio\jre\bin\java.exe
+0x0000000077920000 - 0x0000000077aca000 	C:\Windows\SYSTEM32\ntdll.dll
+0x0000000077800000 - 0x000000007791f000 	C:\Windows\system32\kernel32.dll
+0x000007fefd640000 - 0x000007fefd6aa000 	C:\Windows\system32\KERNELBASE.dll
+0x000007feffb50000 - 0x000007feffc2b000 	C:\Windows\system32\ADVAPI32.dll
+0x000007fefede0000 - 0x000007fefee7f000 	C:\Windows\system32\msvcrt.dll
+0x000007fefec30000 - 0x000007fefec4f000 	C:\Windows\SYSTEM32\sechost.dll
+0x000007fefdbe0000 - 0x000007fefdd0d000 	C:\Windows\system32\RPCRT4.dll
+0x0000000077700000 - 0x00000000777fa000 	C:\Windows\system32\USER32.dll
+0x000007fefeb70000 - 0x000007fefebd7000 	C:\Windows\system32\GDI32.dll
+0x000007fefd850000 - 0x000007fefd85e000 	C:\Windows\system32\LPK.dll
+0x000007fefeaa0000 - 0x000007fefeb6a000 	C:\Windows\system32\USP10.dll
+0x000007fefbc50000 - 0x000007fefbe44000 	C:\Windows\WinSxS\amd64_microsoft.windows.common-controls_6595b64144ccf1df_6.0.7601.18837_none_fa3b1e3d17594757\COMCTL32.dll
+0x000007fefdb60000 - 0x000007fefdbd1000 	C:\Windows\system32\SHLWAPI.dll
+0x000007feff060000 - 0x000007feff08e000 	C:\Windows\system32\IMM32.DLL
+0x000007fefecd0000 - 0x000007fefedd9000 	C:\Windows\system32\MSCTF.dll
+0x000007fefd310000 - 0x000007fefd342000 	C:\Windows\system32\nvinitx.dll
+0x000007fefd300000 - 0x000007fefd30c000 	C:\Windows\system32\VERSION.dll
+0x000000000f000000 - 0x000000000f006000 	C:\Program Files\NVIDIA Corporation\CoProcManager\detoured.dll
+0x000007fefac30000 - 0x000007fefac62000 	C:\Program Files\NVIDIA Corporation\CoProcManager\nvd3d9wrapx.dll
+0x000007fefee80000 - 0x000007feff057000 	C:\Windows\system32\SETUPAPI.dll
+0x000007fefd6b0000 - 0x000007fefd6e6000 	C:\Windows\system32\CFGMGR32.dll
+0x000007feff340000 - 0x000007feff41a000 	C:\Windows\system32\OLEAUT32.dll
+0x000007fefd860000 - 0x000007fefda5c000 	C:\Windows\system32\ole32.dll
+0x000007fefd740000 - 0x000007fefd75a000 	C:\Windows\system32\DEVOBJ.dll
+0x000007fefaa30000 - 0x000007fefaa52000 	C:\Program Files\NVIDIA Corporation\CoProcManager\nvdxgiwrapx.dll
+0x000000005e260000 - 0x000000005e332000 	D:\Program Files\Android\Android Studio\jre\jre\bin\msvcr100.dll
+0x0000000060320000 - 0x0000000060b5c000 	D:\Program Files\Android\Android Studio\jre\jre\bin\server\jvm.dll
+0x000007fefbed0000 - 0x000007fefbed9000 	C:\Windows\system32\WSOCK32.dll
+0x000007fefebe0000 - 0x000007fefec2d000 	C:\Windows\system32\WS2_32.dll
+0x000007fefd840000 - 0x000007fefd848000 	C:\Windows\system32\NSI.dll
+0x000007fefd5a0000 - 0x000007fefd5db000 	C:\Windows\system32\WINMM.dll
+0x0000000077ae0000 - 0x0000000077ae7000 	C:\Windows\system32\PSAPI.DLL
+0x000007fefbee0000 - 0x000007fefbeef000 	D:\Program Files\Android\Android Studio\jre\jre\bin\verify.dll
+0x000007fef2680000 - 0x000007fef26a9000 	D:\Program Files\Android\Android Studio\jre\jre\bin\java.dll
+0x000007fef26c0000 - 0x000007fef26d6000 	D:\Program Files\Android\Android Studio\jre\jre\bin\zip.dll
+0x000007fef4010000 - 0x000007fef4135000 	C:\Windows\system32\dbghelp.dll
+
+VM Arguments:
+jvm_args: -Dretrolambda.bytecodeVersion=50 -Dretrolambda.classpath=C:\Users\Administrator\.gradle\caches\modules-2\files-2.1\com.squareup.picasso\picasso\2.5.2\7446d06ec8d4f7ffcc53f1da37c95f200dcb9387\picasso-2.5.2.jar;C:\Users\Administrator\.android\build-cache\69aa8d2380f72c17e9b92c01f80ca8be8709ac52\output\jars\classes.jar;C:\Users\Administrator\.gradle\caches\modules-2\files-2.1\com.jakewharton\butterknife-annotations\8.5.1\bb67dad90bab7cd77a8f7f1b8442b47e3a2326bc\butterknife-annotations-8.5.1.jar;C:\Users\Administrator\.android\build-cache\59eabeba239e9ad0017df31d84d853eb20a62451\output\jars\classes.jar;C:\Users\Administrator\.android\build-cache\f335beab88b1739af579d799e64b6b60d26d7eb3\output\jars\classes.jar;C:\Users\Administrator\.android\build-cache\cc8c3334854bf2f29a33fc3ac06fa1c5e46f9051\output\jars\classes.jar;C:\Users\Administrator\.gradle\caches\modules-2\files-2.1\com.squareup.retrofit2\converter-gson\2.1.0\aa557d71ead91cbf26e0c316a0f593d168303309\converter-gson-2.1.0.jar;C:\Users\Administrator\.gradle\caches\modules-2\files-2.1\com.google.code.gson\gson\2.8.0\c4ba5371a29ac9b2ad6129b1d39ea38750043eff\gson-2.8.0.jar;C:\Users\Administrator\.gradle\caches\modules-2\files-2.1\com.squareup.retrofit2\adapter-rxjava\2.1.0\693eddc23e87ab13f9cf5001707ce8e7e1d1ff01\adapter-rxjava-2.1.0.jar;C:\Users\Administrator\.gradle\caches\modules-2\files-2.1\com.squareup.retrofit2\retrofit\2.1.0\2de7cd8b95b7021b1d597f049bcb422055119f2c\retrofit-2.1.0.jar;C:\Users\Administrator\.gradle\caches\modules-2\files-2.1\io.reactivex\rxjava\1.2.5\b423532b5a3c949cbb799468f83bf566032fe98d\rxjava-1.2.5.jar;C:\Users\Administrator\.gradle\caches\modules-2\files-2.1\com.squareup.okhttp3\logging-interceptor\3.5.0\94c11f915bfe1aeaa5ef6351ddfbe58bae1ea397\logging-interceptor-3.5.0.jar;C:\Users\Administrator\.gradle\caches\modules-2\files-2.1\com.squareup.okhttp3\okhttp\3.5.0\4b0bb6bfbecbdd42b97ff400af342bfe7f32bc83\okhttp-3.5.0.jar;C:\Users\Administrator\.gradle\caches\modules-2\files-2.1\com.squareup.okio\okio\1.11.0\840897fcd7223a-Dretrolambda.classpathFile=C:\Users\ADMINI~1\AppData\Local\Temp\inc-7442221613259396449.path -Dretrolambda.includedFiles=D:\Computer Science\Github\Paper-Melody\app\build\intermediates\classes\debug\com\papermelody\util\StorageUtil.class;D:\Computer Science\Github\Paper-Melody\app\build\intermediates\classes\debug\com\papermelody\activity\UploadActivity.class -Dretrolambda.inputDir=D:\Computer Science\Github\Paper-Melody\app\build\intermediates\classes\debug -Dretrolambda.outputDir=D:\Computer Science\Github\Paper-Melody\app\build\intermediates\transforms\retrolambda\debug\folders\1\1\retrolambda -Dfile.encoding=GBK -Duser.country=CN -Duser.language=zh -Duser.variant 
+java_command: net.orfjackal.retrolambda.Main
+java_class_path (initial): C:\Users\Administrator\.gradle\caches\modules-2\files-2.1\net.orfjackal.retrolambda\retrolambda\2.5.1\3db6629d3ba0168c580af3be44fe54014dfb105\retrolambda-2.5.1.jar
+Launcher Type: SUN_STANDARD
+
+Environment Variables:
+JAVA_HOME=D:\Program Files (x86)\Java\jdk1.8.0_91
+CLASSPATH=.;D:\Program Files (x86)\Java\jdk1.8.0_91\lib;D:\Program Files (x86)\Java\jdk1.8.0_91\lib\tools.jar;D:\Program Files (x86)\Java\jdk1.8.0_91\lib\lucene-core-6.2.1.jar;D:\Program Files (x86)\Java\jdk1.8.0_91\lib\lucene-demo-6.2.1.jar;D:\Program Files\Java\lucene-6.2.1\core\lucene-core-6.2.1.jar;D:\Program Files\Java\lucene-6.2.1\queryparser\lucene-queryparser-6.2.1.jar;D:\Program Files\Java\lucene-6.2.1\analysis\common\lucene-analyzers-common-6.2.1.jar;D:\Program Files\Java\lucene-6.2.1\demo\lucene-demo-6.2.1.jar
+PATH=D:\Qt\4.8.6\bin;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common\;C:\Windows\system32\;C:\Windows\;C:\Windows\System32\Wbem\;C:\Windows\System32\WindowsPowerShell\v1.0\;d:\program files (x86)\python34\;D:\Program Files (x86)\mysql\mysql-5.6.24-win32\bin\;D:\Program Files (x86)\CTEX\UserData\miktex\bin\;D:\Program Files (x86)\CTEX\MiKTeX\miktex\bin\;D:\Program Files (x86)\CTEX\CTeX\ctex\bin\;D:\Program Files (x86)\CTEX\CTeX\cct\bin;D:\Program Files (x86)\CTEX\CTeX\ty\bin;D:\Program Files (x86)\CTEX\Ghostscript\gs9.05\bin;D:\Program Files (x86)\CTEX\GSview\gsview;D:\Program Files (x86)\CTEX\WinEdt;D:\Program Files (x86)\Java\jdk1.8.0_91\bin;D:\Program Files (x86)\Java\jdk1.8.0_91\jre\bin;D:\Program Files (x86)\Android\android-sdk\tools\;D:\Program Files (x86)\Android\android-sdk\build-tools\;D:\Program Files (x86)\Android\android-sdk\platform-tools\;D:\Program Files (x86)\python27\;D:\Program Files (x86)\python27\Scripts\;d:\Program Files\Git\cmd; D:\Program Files\gradle-2.14.1\BIN;D:\Program Files (x86)\QuickTime\QTSystem\;f:\altera\90sp2\quartus\bin;D:\Program Files\python36;D:\Program Files\python36\Scripts;f:\Program Files\MATLAB\R2016a\runtime\win64;f:\Program Files\MATLAB\R2016a\bin;f:\Program Files\MATLAB\R2016a\polyspace\bin;D:\Program Files\python36\Scripts\;D:\Program Files\python36\;f:\modeltech64_10.4\win64
+USERNAME=Administrator
+OS=Windows_NT
+PROCESSOR_IDENTIFIER=Intel64 Family 6 Model 61 Stepping 4, GenuineIntel
+
+
+
+---------------  S Y S T E M  ---------------
+
+OS: Windows 7 , 64 bit Build 7601 (6.1.7601.23796)
+
+CPU:total 4 (2 cores per cpu, 2 threads per core) family 6 model 61 stepping 4, cmov, cx8, fxsr, mmx, sse, sse2, sse3, ssse3, sse4.1, sse4.2, popcnt, avx, avx2, aes, clmul, erms, 3dnowpref, lzcnt, ht, tsc, tscinvbit, bmi1, bmi2, adx
+
+Memory: 4k page, physical 4112180k(438652k free), swap 8746788k(2887456k free)
+
+vm_info: OpenJDK 64-Bit Server VM (25.112-b06) for windows-amd64 JRE (1.8.0_112-release-b06), built on Dec  8 2016 00:54:26 by "builder" with MS VC++ 10.0 (VS2010)
+
+time: Wed May 31 10:31:16 2017
+elapsed time: 0 seconds (0d 0h 0m 0s)
+

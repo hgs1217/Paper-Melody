@@ -31,18 +31,34 @@ public class Calibration {
         Mat dstImage = new Mat();
         Mat grayImage = new Mat();
         Mat dilateImage = new Mat();
+        Mat histImage;
+        Mat medianBlurImage=new Mat();
+        Mat bilateralFilterImage=new Mat();
+        Mat blurImage=new Mat();
+        Mat thresholdImage=new Mat();
         List<MatOfPoint> contours = new ArrayList<MatOfPoint>();
 
         //System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 
         Imgproc.cvtColor(srcImage, grayImage, Imgproc.COLOR_BGR2GRAY);
-        Mat element = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, (new Size(15, 5)));
+
+
+
+        histImage=ImgTransform.Hist(grayImage);
+        Mat element = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, (new Size(5,5)));
+
+
 
         //3、进行腐蚀
 
-        Imgproc.dilate(grayImage, dilateImage, element);//膨胀
-        Imgproc.Canny(dilateImage, dstImage, 50, 150, 3, false);
-        Imgproc.findContours(dstImage, contours, new Mat(), Imgproc.RETR_TREE,
+        Imgproc.dilate(histImage, dilateImage, element);//膨胀
+        Imgproc.medianBlur(dilateImage,medianBlurImage,5);
+        Imgproc.bilateralFilter(medianBlurImage,bilateralFilterImage,9,75,75);
+        Imgproc.blur(bilateralFilterImage,blurImage,new Size(5,5));
+        Imgproc.adaptiveThreshold(blurImage,thresholdImage,255,Imgproc.ADAPTIVE_THRESH_GAUSSIAN_C,Imgproc.THRESH_BINARY,11,2);
+
+
+        Imgproc.findContours(thresholdImage, contours, new Mat(), Imgproc.RETR_TREE,
                 Imgproc.CHAIN_APPROX_SIMPLE);
         int lencontour = contours.size();
         System.out.println(lencontour);

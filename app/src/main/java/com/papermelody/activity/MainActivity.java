@@ -43,6 +43,7 @@ public class MainActivity extends BaseActivity {
     public static final int MODE_OPERN = 5;
     public static final int LOG_IN = 6;
     public static final int USER_INFO = 7;
+    public static final int REGISTER = 8;
 
     private FragmentManager fragmentManager;
 
@@ -89,6 +90,9 @@ public class MainActivity extends BaseActivity {
                 break;
             case USER_INFO:
                 toolbarTitle.setText(R.string.user_info);
+                break;
+            case REGISTER:
+                toolbarTitle.setText(R.string.register);
                 break;
             default:
                 break;
@@ -160,7 +164,7 @@ public class MainActivity extends BaseActivity {
 
     public class TabPagerAdapter extends FragmentStatePagerAdapter {
 
-        private final int pageCount = 8;
+        private final int pageCount = 9;
 
         public TabPagerAdapter(FragmentManager fragmentManager) {
             super(fragmentManager);
@@ -186,6 +190,8 @@ public class MainActivity extends BaseActivity {
                     return LogInFragment.newInstance();
                 case USER_INFO:
                     return UserInfoFragment.newInstance();
+                case REGISTER:
+                    return com.papermelody.fragment.RegisterFragment.newInstance();
                 default:
                     return null;
             }

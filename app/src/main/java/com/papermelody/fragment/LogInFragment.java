@@ -2,6 +2,8 @@ package com.papermelody.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.design.widget.TextInputLayout;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,14 +34,17 @@ public class LogInFragment extends BaseFragment {
      * 用例：注册、登录
      * 注册与登录页面，（暂弃用：此页面包含2个Fragment）
      */
-
-    @BindView(R.id.edit_username)
+    @BindView(R.id.ttl_username)
+    TextInputLayout userTextInputLayoutUser;
+    @BindView(R.id.ttl_password)
+    TextInputLayout pwTextInputLayoutUser;
+    @BindView(R.id.et_username)
     EditText editUsername;
-    @BindView(R.id.edit_password)
+    @BindView(R.id.et_password)
     EditText editPassword;
     @BindView(R.id.btn_register)
-    Button btnRegister;
-    @BindView(R.id.btn_log_in)
+   Button btnRegister;
+    @BindView(R.id.bt_go)
     Button btnLogIn;
 
     private SocialSystemAPI api;
@@ -59,17 +64,59 @@ public class LogInFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_log_in, container, false);
+
+        //设置可以计数
+
         ButterKnife.bind(this, view);
 
         context = getActivity();
         api = RetrofitClient.getSocialSystemAPI();
+        userTextInputLayoutUser.setCounterEnabled(true);
+        //计数的最大值
+        userTextInputLayoutUser.setCounterMaxLength(20);
+        pwTextInputLayoutUser.setCounterEnabled(true);
+
+        //计数的最大值
+        pwTextInputLayoutUser.setCounterMaxLength(20);
+
+
         initView();
         return view;
     }
 
     private void initView() {
-        btnRegister.setOnClickListener((View v) -> {
+
+        btnLogIn.setOnClickListener((View v) -> {
             String name = editUsername.getText().toString();
+            userTextInputLayoutUser.setErrorEnabled(false);
+            if(TextUtils.isEmpty(name)||name.length()<6){
+
+                userTextInputLayoutUser.setError("用户名过短");
+
+            }
+            else{
+            String pw = editPassword.getText().toString();
+            pwTextInputLayoutUser.setErrorEnabled(false);
+            if(TextUtils.isEmpty(pw)||pw.length()<6){
+
+                pwTextInputLayoutUser.setError("密码错误不能少于6个字符");
+
+            }
+            else {
+                addSubscription(api.login(name, pw)
+                        .flatMap(NetworkFailureHandler.httpFailureFilter)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .map(response -> ((UserResponse) response).getResult())
+                        .subscribe(
+                                userInfo -> {
+                                    ToastUtil.showShort(R.string.login_success);
+                                    updateUser(userInfo);
+                                },
+                                NetworkFailureHandler.loginErrorHandler
+                        ));
+            }
+            /*String name = editUsername.getText().toString();
             String pw = editPassword.getText().toString();
             addSubscription(api.register(name, pw)
                     .flatMap(NetworkFailureHandler.httpFailureFilter)
@@ -82,25 +129,19 @@ public class LogInFragment extends BaseFragment {
                                 updateUser(userInfo);
                             },
                             NetworkFailureHandler.loginErrorHandler
-                    ));
-        });
-        btnLogIn.setOnClickListener((View v) -> {
-            String name = editUsername.getText().toString();
-            String pw = editPassword.getText().toString();
-            addSubscription(api.login(name, pw)
-                    .flatMap(NetworkFailureHandler.httpFailureFilter)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .map(response -> ((UserResponse) response).getResult())
-                    .subscribe(
-                            userInfo -> {
-                                ToastUtil.showShort(R.string.login_success);
-                                updateUser(userInfo);
-                            },
-                            NetworkFailureHandler.loginErrorHandler
-                    ));
-        });
+                    ));*/
+        }
+    });
+        btnRegister.setOnClickListener((View v) -> {
+                    MainActivity mainActivity = (MainActivity) getActivity();
+                    mainActivity.updateFragment(MainActivity.REGISTER);
+           /*
+            */
+        }
+        );
+
     }
+
 
     private void updateUser(UserResponse.UserInfo userInfo) {
         User user = new User();

@@ -17,6 +17,7 @@ import android.media.AudioManager;
 import android.media.Image;
 import android.media.ImageReader;
 import android.media.SoundPool;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -25,6 +26,7 @@ import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.util.Size;
 import android.util.SparseIntArray;
+import android.view.Gravity;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -154,8 +156,14 @@ public class CameraDebugActivity extends BaseActivity {
         /* 横屏导致长宽交换 */
         int width = ViewUtil.getScreenWidth(this);
         int height = (int) (width / scalar);
-        viewCameraDebug.setLayoutParams(new FrameLayout.LayoutParams(width, height));
-        Log.d("TESTV", width+" "+height);
+        FrameLayout.LayoutParams lp;
+        if (Build.VERSION.SDK_INT >= 24) {
+            // TODO: Android 7.0 上貌似有自动图片适配功能，暂时不太确定，需要更多的测试情况
+            height = ViewUtil.getScreenHeight(this);
+        }
+        lp = new FrameLayout.LayoutParams(width, height);
+        lp.gravity = Gravity.CENTER;
+        viewCameraDebug.setLayoutParams(lp);
     }
 
     private void initSurfaceView() {

@@ -392,8 +392,6 @@ public class Calibration {
             else return 36;
 
         }
-
-
     }
 
 

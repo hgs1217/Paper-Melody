@@ -105,7 +105,6 @@ public class CalibrationActivity extends BaseActivity {
     private int targetHeightEnd = 1000;
 
     private boolean canCalibration = true;
-    private int cnt = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -136,6 +135,8 @@ public class CalibrationActivity extends BaseActivity {
         /**
          * 初始化界面上的文字标签、按键响应等等
          */
+
+        initViewStatus();
 
         surfaceHolder = viewCalibration.getHolder();
         surfaceHolder.setKeepScreenOn(true);
@@ -170,16 +171,24 @@ public class CalibrationActivity extends BaseActivity {
         });
 
         btnCalibrationCancel.setOnClickListener((View v) -> {
-            viewCalibration.setVisibility(View.VISIBLE);
-            layoutContainer.setVisibility(View.VISIBLE);
-            imgCalibration.setVisibility(View.GONE);
-            btnCalibrationCancel.setVisibility(View.GONE);
-            btnCalibrationComplete.setVisibility(View.GONE);
-            canCalibration = true;
+            initViewStatus();
         });
     }
 
-    public void processImage(Image image) {
+    private void initViewStatus() {
+        /**
+         * 标定状态的界面布局，隐藏一些按钮
+         */
+
+        viewCalibration.setVisibility(View.VISIBLE);
+        layoutContainer.setVisibility(View.VISIBLE);
+        imgCalibration.setVisibility(View.GONE);
+        btnCalibrationCancel.setVisibility(View.GONE);
+        btnCalibrationComplete.setVisibility(View.GONE);
+        canCalibration = true;
+    }
+
+    private void processImage(Image image) {
         /**
          * 照片处理
          */

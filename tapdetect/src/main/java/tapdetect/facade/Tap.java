@@ -20,15 +20,18 @@ import tapdetect.TapDetector;
 import tapdetect.Util;
 
 public class Tap {
+    //    static {
+//        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);  // this line only need to be carried out once
+//    }
     static {
-        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);  // this line only need to be carried out once
+        System.loadLibrary("opencv_java3");
     }
 
     /**
      * Facade for outside to use the tap detector
      *
      * @param im: a Image in the type of org.opencv.core.Mat
-     *            required to be in <strong>YCrCb</strong> color mode!
+     * required to be in <strong>YCrCb</strong> color mode!
      * @return : a <code>List</code> of <code>Points</code>
      * which takes the left top point as (0, 0) point
      * <p>
@@ -53,7 +56,7 @@ public class Tap {
         List<Point> fingers = fd.getFingers(im, hand);
         List<Point> taps = td.getTapping(im, fingers);
 
-        for (Point pt: taps) {
+        for (Point pt : taps) {
             pt.x *= recover_ratio;
             pt.y *= recover_ratio;
         }
@@ -85,8 +88,14 @@ public class Tap {
 
         List<Point> taps = td.getTapping(im, fingers);
 
-        for (Point pt: hand_contour_pt) { pt.x *= recover_ratio; pt.y *= recover_ratio; }
-        for (Point pt: fingers) { pt.x *= recover_ratio; pt.y *= recover_ratio; }
+        for (Point pt : hand_contour_pt) {
+            pt.x *= recover_ratio;
+            pt.y *= recover_ratio;
+        }
+        for (Point pt : fingers) {
+            pt.x *= recover_ratio;
+            pt.y *= recover_ratio;
+        }
         // no need to shrink points in taps because Point in taps and Point in finger have same reference
 
         List<List<Point>> ret = new ArrayList<>();

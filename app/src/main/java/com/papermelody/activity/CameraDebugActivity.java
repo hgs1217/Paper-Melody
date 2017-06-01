@@ -77,7 +77,6 @@ public class CameraDebugActivity extends BaseActivity {
         }
     };
 
-
     ///为了使照片竖直显示
 
     private CameraDevice cameraDevice;
@@ -86,30 +85,13 @@ public class CameraDebugActivity extends BaseActivity {
     private CameraCaptureSession cameraCaptureSession;
     private ImageReader imageReader;
 
-    private CalibrationResult calibrationResult;
-    private int[] voiceResId = new int[]{R.raw.c3, R.raw.d3, R.raw.e3, R.raw.f3, R.raw.g3, R.raw.a3, R.raw.b3,
-            R.raw.c4, R.raw.d4, R.raw.e4, R.raw.f4, R.raw.g4, R.raw.a4, R.raw.b4, R.raw.c5, R.raw.d5, R.raw.e5,
-            R.raw.f5, R.raw.g5, R.raw.a5, R.raw.b5, R.raw.c3m, R.raw.d3m, R.raw.f3m, R.raw.g3m, R.raw.a3m,
-            R.raw.c4m, R.raw.d4m, R.raw.f4m, R.raw.g4m, R.raw.a4m, R.raw.c5m, R.raw.d5m, R.raw.f5m, R.raw.g5m,
-            R.raw.a5m};
-    private int[] voiceId = new int[36];
-    private SoundPool soundPool;
-
-    private ArrayList<Integer> lastKeys = new ArrayList<>();
-    // this variable is used to prevent a same key to be played in a row
-    // FIXME: it is only a temporary measure because real piano will play a long sound instead of one shot
-    // FIXME: this vairable should be put into the class in responsible for playing sound, not here
-    //    by gigaflw
-
     public void processImage(Image image) {
         /**
          * Process image here
          * Called on every frame of video
          */
-//        Log.w("test", "hello?" + image.getWidth());
 
         Mat mat = ImageUtil.imageToBgr(image);
-//        List<Integer> keys = ImageProcessor.getPlaySoundKey(mat.clone(), transformResult);
 
         long t1 = System.currentTimeMillis();
         List<List<Point>> ret = TapDetectorAPI.getAllForDebug(mat);
@@ -120,14 +102,6 @@ public class CameraDebugActivity extends BaseActivity {
                 image.getHeight(), image.getWidth(), t2-t1,
                 this, viewCameraDebug.getHeight()
         );
-//        Log.w("TESTK", "" + keys);
-//        Log.w("LAST_TESTK", "" + lastKeys);
-//        for (Integer key : keys) {
-//            if (!lastKeys.contains(key)){
-//                playSound(key);
-//            }
-//        }
-//        lastKeys = new ArrayList<>(keys);
     }
 
 
@@ -137,21 +111,9 @@ public class CameraDebugActivity extends BaseActivity {
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        Intent intent = getIntent();
-        calibrationResult = (CalibrationResult) intent.getSerializableExtra(CalibrationActivity.EXTRA_RESULT);
-
-        initSoundPool();
         initSurfaceView();
     }
 
-    private void initSoundPool() {
-        SoundPool.Builder spb = new SoundPool.Builder();
-        spb.setMaxStreams(10);
-        AudioAttributes.Builder attrBuilder = new AudioAttributes.Builder();
-        attrBuilder.setLegacyStreamType(AudioManager.STREAM_MUSIC);
-        spb.setAudioAttributes(attrBuilder.build());
-        soundPool = spb.build();
-    }
 
     private void initSurfaceSize(double scalar) {
         /* 横屏导致长宽交换 */
@@ -189,10 +151,6 @@ public class CameraDebugActivity extends BaseActivity {
                 }
             }
         });
-
-        for (int i = 0; i < voiceId.length; ++i) {
-            voiceId[i] = soundPool.load(this, voiceResId[i], 1);
-        }
     }
 
 
@@ -316,10 +274,6 @@ public class CameraDebugActivity extends BaseActivity {
         } catch (CameraAccessException e) {
             e.printStackTrace();
         }
-    }
-
-    public void playSound(int keyID) {
-        soundPool.play(voiceId[keyID], 1, 1, 0, 0, 1);
     }
 
     @Override

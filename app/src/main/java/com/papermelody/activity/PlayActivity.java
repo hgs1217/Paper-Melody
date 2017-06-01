@@ -293,7 +293,7 @@ public class PlayActivity extends BaseActivity {
 
         List<List<Point>> ret = TapDetectorAPI.getAllForDebug(mat);
         canvasPlay.updateInfo(
-                ret.get(0), ret.get(1), ret.get(2),
+                ret.get(0), ret.get(1), ret.get(2), ret.get(3),
                 image.getHeight(),image.getWidth(),0,
                 this, canvasPlay.getHeight());
 //        Log.w("TESTK", "" + keys);

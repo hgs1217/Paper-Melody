@@ -43,6 +43,20 @@
         <SeekBar
             android:id="@+id/seekbar5"
             style="@style/SeekBar" />
-        
+
+        <TextView
+            android:id="@+id/seekbar_caption6"
+            style="@style/SeekBarCaption" />
+        <SeekBar
+            android:id="@+id/seekbar6"
+            style="@style/SeekBar" />
+
+        <TextView
+            android:id="@+id/seekbar_caption7"
+            style="@style/SeekBarCaption" />
+        <SeekBar
+            android:id="@+id/seekbar7"
+            style="@style/SeekBar" />
+
     </LinearLayout>
 </ScrollView>

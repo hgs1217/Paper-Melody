@@ -70,7 +70,7 @@ public class ImageProcessor {
         for (int i = 0; i < count.length; i++) {
             count[i] = 0;
         }
-        List<Point> tap = TapDetectorAPI.getTap(bgrMat);
+        List<Point> tap = TapDetectorAPI.getTaps(bgrMat);
         if (tap.isEmpty()) {
             return keys;
         }

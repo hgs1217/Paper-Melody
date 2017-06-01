@@ -220,7 +220,9 @@ public class Calibration {
                 Math.abs(rightup_x - leftup_x) > histImage.width() / 2 &&
                 temp1 > 13 && leftup_y > upbound && rightup_y > upbound &&
                 leftlow_y < lowbound &&
-                rightlow_y < lowbound)
+                rightlow_y < lowbound
+                &&leftlow_x<histImage.width() / 4
+                &&rightlow_x>histImage.width()*3/4)
             out.setFlag(true);
 
 

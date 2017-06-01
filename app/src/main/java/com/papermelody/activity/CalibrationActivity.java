@@ -201,6 +201,8 @@ public class CalibrationActivity extends BaseActivity {
         canvasCalibration.updateCalibrationCoordinates(calibrationResult, CalibrationActivity.this);
 
         if (ImageProcessor.getCalibrationStatus(calibrationResult)) {
+            Log.d("TESThistres",calibrationResult.getLeftUpRightX()+"");
+            Log.d("TESThistres",calibrationResult.isFlag()+"");
             Bitmap bitmap = ImageUtil.imageToBitmap(mat);
 
             viewCalibration.setVisibility(View.GONE);

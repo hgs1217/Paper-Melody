@@ -37,6 +37,7 @@ public class ImageProcessor {
 
         CalibrationResult a;
         a = Calibration.main(bgrMat, targetHeightStart, targetHeightEnd);
+        Log.d("TESThist111", a.getLeftLowX() + " " + a.getLeftUpX());
 
         cntOfCall++;
 

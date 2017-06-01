@@ -4,6 +4,8 @@ package com.papermelody.core.calibration;
  * Created by tangtonghui on 17/5/9.
  */
 
+import android.util.Log;
+
 import com.papermelody.activity.PlayActivity;
 
 import org.opencv.core.Core;
@@ -31,7 +33,7 @@ public class Calibration {
         Mat dstImage = new Mat();
         Mat grayImage = new Mat();
         Mat dilateImage = new Mat();
-        Mat histImage;
+        Mat histImage=new Mat();
         Mat medianBlurImage=new Mat();
         Mat bilateralFilterImage=new Mat();
         Mat blurImage=new Mat();
@@ -42,9 +44,10 @@ public class Calibration {
 
 
 
+        Imgproc.cvtColor(srcImage, histImage, Imgproc.COLOR_BGR2GRAY);
 
-
-        histImage=ImgTransform.Hist(srcImage);
+       // histImage=ImgTransform.Hist(srcImage);
+       // Log.d("TESThist", histImage.rows() + " " + histImage.cols());
         Mat element = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, (new Size(5,5)));
 
 
@@ -61,6 +64,7 @@ public class Calibration {
         Imgproc.findContours(thresholdImage, contours, new Mat(), Imgproc.RETR_TREE,
                 Imgproc.CHAIN_APPROX_SIMPLE);
         int lencontour = contours.size();
+
         System.out.println(lencontour);
         int[] a1 = new int[lencontour];
         int[] a2 = new int[lencontour];
@@ -71,17 +75,19 @@ public class Calibration {
             a2[j] = 0;
             a3[j] = 0;
         }
+        Log.d("TESThisthei",grayImage.height()+" ");
         int nnn = 0;
         int count = 0;
         boolean flag = false;
         for (int i = 0; i < lencontour; i++) {
             MatOfPoint item = contours.get(i);
             Moments m = Imgproc.moments(item);
-            if ((m.get_m00() != 0) && (Imgproc.contourArea(item) > 25)) {
+            if ((m.get_m00() != 0) && (Imgproc.contourArea(item) > 0)) {
                 double d1 = (m.get_m01() / m.get_m00());
                 Double D1 = new Double(d1);
                 int cy = D1.intValue();
-                if (cy > dstImage.height() / 2) {
+                if (cy > histImage.height() / 2) {
+                    Log.d("TESThist2",cy+" ");
                     nnn += 1;
                     flag = false;
                     for (int j = 0; j < count; j++) {
@@ -119,8 +125,10 @@ public class Calibration {
             }
         }
         int temp1 = temp;
+
+
         temp = a2[temp_order];
-        int leftlow_x = dstImage.width(), leftlow_y = 0, leftup_x = 0, leftup_y = 0, rightlow_x = 0, rightlow_y = 0, rightup_x = 0, rightup_y = 0, leftupright_x = 0, leftupright_y = 0, rightupleft_x = 0, rightupleft_y = 0;
+        int leftlow_x = histImage.width(), leftlow_y = 0, leftup_x = 0, leftup_y = 0, rightlow_x = 0, rightlow_y = 0, rightup_x = 0, rightup_y = 0, leftupright_x = 0, leftupright_y = 0, rightupleft_x = 0, rightupleft_y = 0;
         System.out.println(leftlow_x);
         for (int i = 0; i < lencontour; i++) {
             if (a1[i] == temp_order) {
@@ -207,15 +215,16 @@ public class Calibration {
 
         if (Math.abs(leftlow_y - leftup_y) > 20 &&
                 Math.abs(rightlow_y - rightup_y) > 20 &&
-                Math.abs(rightlow_x - leftlow_x) > dstImage.width() / 2 &&
-                Math.abs(rightup_x - leftup_x) > dstImage.width() / 2 &&
+                Math.abs(rightlow_x - leftlow_x) > histImage.width() / 2 &&
+                Math.abs(rightup_x - leftup_x) > histImage.width() / 2 &&
                 temp1 > 13 && leftup_y > upbound && rightup_y > upbound &&
                 leftlow_y < lowbound &&
                 rightlow_y < lowbound)
             out.setFlag(true);
 
 
-            /*Mat dst = new Mat(4,1, CvType.CV_32FC2);
+            /*Mat dst = new Mat(4,1, CvT
+            ype.CV_32FC2);
             dst.put(-250,0, -250,100,250,0,250,100);
             Mat perspectiveTransform = Imgproc.getPerspectiveTransform(src, dst);
 

@@ -24,7 +24,7 @@ public class ImgTransform {
         Mat lut= new Mat(256, 1, CvType.CV_8UC1);
 
         Imgproc.cvtColor(srcImage, grayImage, Imgproc.COLOR_BGR2GRAY);
-        System.out.println(grayImage.get(860,100)[0]);
+
 
         ArrayList<Mat> histsSource  = new ArrayList<Mat>();
         histsSource.add(grayImage);

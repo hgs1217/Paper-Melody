@@ -31,7 +31,7 @@
     <!--写ip地址要在结尾加一个“/”-->
     <!--<string name="server_ip">http://123.207.249.92/</string>-->
     <!--<string name="server_ip">http://192.168.0.108/</string>-->
-   
+
 
     <string name="server_ip">http://10.185.245.166:8080/</string>
 

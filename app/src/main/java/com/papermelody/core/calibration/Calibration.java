@@ -40,11 +40,11 @@ public class Calibration {
 
         //System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 
-        Imgproc.cvtColor(srcImage, grayImage, Imgproc.COLOR_BGR2GRAY);
 
 
 
-        histImage=ImgTransform.Hist(grayImage);
+
+        histImage=ImgTransform.Hist(srcImage);
         Mat element = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, (new Size(5,5)));
 
 

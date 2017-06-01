@@ -67,7 +67,7 @@ public class ImageProcessor {
          */
 
         List<Integer> keys = new ArrayList<>();
-        int count[] = new int [37];   // FIXME: 不是36个键嘛？  --by HgS_1217_
+        int count[] = new int [37];   // 
         for (int i = 0; i < count.length; i++) {
             count[i] = 0;
         }

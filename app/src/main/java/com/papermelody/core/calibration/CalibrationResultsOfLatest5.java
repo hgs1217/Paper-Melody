@@ -6,7 +6,7 @@ package com.papermelody.core.calibration;
 
 public class CalibrationResultsOfLatest5 {
 
-    CalibrationResult r[] = new CalibrationResult[4];
+    CalibrationResult r[] = new CalibrationResult[5];
 
     int n;
 

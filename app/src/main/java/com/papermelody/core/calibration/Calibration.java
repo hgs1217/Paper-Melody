@@ -422,7 +422,7 @@ public class Calibration {
 
     public static boolean whether_stable(CalibrationResultsOfLatest5 calicrationResultsOfLatest5) {
         boolean flag = true;
-        if (calicrationResultsOfLatest5.n != 4) {
+        if (calicrationResultsOfLatest5.n != 5) {
             flag = false;
             return flag;
         }
@@ -459,11 +459,18 @@ public class Calibration {
                 break;
             }
             case 4: {
+                calibrationResultsOfLatest5.r[4] = calibrationResult;
+                calibrationResultsOfLatest5.n += 1;
+                break;
+            }
+
+            case 5: {
                 calibrationResultsOfLatest5.r[0] = calibrationResultsOfLatest5.r[1];
                 calibrationResultsOfLatest5.r[1] = calibrationResultsOfLatest5.r[2];
                 calibrationResultsOfLatest5.r[2] = calibrationResultsOfLatest5.r[3];
 
-                calibrationResultsOfLatest5.r[3] = calibrationResult;
+                calibrationResultsOfLatest5.r[3] = calibrationResultsOfLatest5.r[4];
+                calibrationResultsOfLatest5.r[4] =calibrationResult;
                 break;
 
 

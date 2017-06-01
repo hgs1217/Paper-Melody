@@ -110,6 +110,7 @@ public class Calibration {
             }
         }
         CalibrationResult out = new CalibrationResult();
+        out.setFlag(false);
         if (nnn == 0) {
             return out;
         }

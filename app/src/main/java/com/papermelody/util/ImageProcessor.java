@@ -53,7 +53,7 @@ public class ImageProcessor {
                 calibrationResultsOfLatest5, result);
 
         return (result.isFlag() && Calibration.whether_stable(calibrationResultsOfLatest5)) ||
-                (ImageProcessor.getCntOfCall() > 80 && result.isFlag());
+                (ImageProcessor.getCntOfCall() > 200 && result.isFlag());
     }
 
     public static TransformResult getKeyTransform (CalibrationResult result) {
@@ -67,7 +67,7 @@ public class ImageProcessor {
          */
 
         List<Integer> keys = new ArrayList<>();
-        int count[] = new int [37];   // 
+        int count[] = new int [37];   //
         for (int i = 0; i < count.length; i++) {
             count[i] = 0;
         }

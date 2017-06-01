@@ -13,19 +13,24 @@ import java.util.ArrayList;
 
 import org.opencv.core.*;
 import org.opencv.imgproc.Imgproc;
+import org.opencv.videoio.VideoCapture;
 
+import tapdetect.Config;
 import tapdetect.FingerDetector;
 import tapdetect.HandDetector;
+import tapdetect.ImgLogger;
 import tapdetect.TapDetector;
 import tapdetect.Util;
 
 public class Tap {
-    //    static {
-//        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);  // this line only need to be carried out once
-//    }
     static {
-        System.loadLibrary("opencv_java3");
+        System.loadLibrary("opencv_java3");  // this line only need to be carried out once
+        ImgLogger.silent();
     }
+
+    private static final HandDetector hd = new HandDetector();
+    private static final FingerDetector fd = new FingerDetector();
+    private static final TapDetector td = new TapDetector();
 
     /**
      * Facade for outside to use the tap detector
@@ -44,13 +49,10 @@ public class Tap {
      * </code>
      */
 
-    private static final HandDetector hd = new HandDetector();
-    private static final FingerDetector fd = new FingerDetector();
-    private static final TapDetector td = new TapDetector();
-
     public static List<Point> getTaps(Mat im) {
         // resize to the standard size
         double recover_ratio = 1.0 / Util.resize(im);
+        Imgproc.cvtColor(im, im, Imgproc.COLOR_BGR2YCrCb);
 
         Mat hand = hd.getHand(im);
         List<Point> fingers = fd.getFingers(im, hand);
@@ -72,7 +74,8 @@ public class Tap {
                 List<List<Point>> ret = getAllForDebug(im);
                 ret[0]   // contour points of detected hand
                 ret[1]   // detected fingers
-                ret[2]   // detected points where tap happens
+                ret[2]   // detected points which is 'falling down'
+                ret[3]   // detected points where tap happens
         */
 
         double recover_ratio = 1.0 / Util.resize(im);
@@ -81,12 +84,12 @@ public class Tap {
 
         Mat hand = hd.getHand(im);
 
-        List<MatOfPoint> hand_contour = Util.largeContours(hand, 1200);
+        List<MatOfPoint> hand_contour = Util.largeContours(hand, Config.HAND_AREA_MIN);
         List<Point> hand_contour_pt = Util.contoursToPoints(hand_contour);
 
         List<Point> fingers = fd.getFingers(im, hand);
 
-        List<Point> taps = td.getTapping(im, fingers);
+        List<TapDetector.TapDetectPoint> taps = td.getTappingAll(im, fingers);
 
         for (Point pt : hand_contour_pt) {
             pt.x *= recover_ratio;
@@ -101,7 +104,15 @@ public class Tap {
         List<List<Point>> ret = new ArrayList<>();
         ret.add(hand_contour_pt);
         ret.add(fingers);
-        ret.add(taps);
+        ret.add(new ArrayList<Point>());
+        ret.add(new ArrayList<Point>());
+        for (TapDetector.TapDetectPoint p: taps) {
+            if (p.is_falling()) {
+                ret.get(2).add(p.getPoint());
+            } else if (p.is_tapping()) {
+                ret.get(3).add(p.getPoint());
+            }
+        }
 
         return ret;
     }

@@ -27,18 +27,22 @@ public class SettingsDevActivity extends BaseActivity {
     @BindView(R.id.seekbar3)        SeekBar sb3;
     @BindView(R.id.seekbar4)        SeekBar sb4;
     @BindView(R.id.seekbar5)        SeekBar sb5;
+    @BindView(R.id.seekbar6)        SeekBar sb6;
+    @BindView(R.id.seekbar7)        SeekBar sb7;
 
     @BindView(R.id.seekbar_caption1) TextView text1;
     @BindView(R.id.seekbar_caption2) TextView text2;
     @BindView(R.id.seekbar_caption3) TextView text3;
     @BindView(R.id.seekbar_caption4) TextView text4;
     @BindView(R.id.seekbar_caption5) TextView text5;
+    @BindView(R.id.seekbar_caption6) TextView text6;
+    @BindView(R.id.seekbar_caption7) TextView text7;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        SeekBar[] seekbars = { sb1, sb2, sb3, sb4, sb5 };
-        TextView[] texts = { text1, text2, text3, text4, text5 };
+        SeekBar[] seekbars = { sb1, sb2, sb3, sb4, sb5, sb6, sb7 };
+        TextView[] texts = { text1, text2, text3, text4, text5, text6, text7 };
 
 
         // Use reflect to dynamically set the value of seek bars

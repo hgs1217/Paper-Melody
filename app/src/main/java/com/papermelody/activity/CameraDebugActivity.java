@@ -114,8 +114,9 @@ public class CameraDebugActivity extends BaseActivity {
         long t1 = System.currentTimeMillis();
         List<List<Point>> ret = TapDetectorAPI.getAllForDebug(mat);
         long t2 = System.currentTimeMillis();
+
         canvasCameraDebug.updateInfo(
-                ret.get(0), ret.get(1), ret.get(2),
+                ret.get(0), ret.get(1), ret.get(2), ret.get(3),
                 image.getHeight(), image.getWidth(), t2-t1,
                 this, viewCameraDebug.getHeight()
         );

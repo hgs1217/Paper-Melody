@@ -62,9 +62,7 @@ public class HandDetector {
 
         // 3. remove noise
         // Morphology Open
-        for (int i = 0; i < 3; ++i) {
-            Imgproc.morphologyEx(mask, mask, Imgproc.MORPH_OPEN, Mat.ones(3, 3, CvType.CV_8U));
-        }
+        Imgproc.morphologyEx(mask, mask, Imgproc.MORPH_OPEN, Mat.ones(3, 3, CvType.CV_8U));
         Imgproc.dilate(mask, mask, Mat.ones(3, 3, CvType.CV_8U));
         ImgLogger.debug("02_morpho_open.jpg", mask);
 

@@ -102,9 +102,7 @@ public class ListenFragment extends BaseFragment {
         timer.schedule(timerTask, 0, 1000);
         btnPause.setOnClickListener((View v) -> {
             if (playState) {
-                mediaPlayer.pause();
-                btnPause.setBackground(getResources().getDrawable(R.drawable.ic_play_circle_outline_white_48dp));
-                playState = false;
+                pausePlay();
             } else {
                 starPlay();
             }
@@ -121,9 +119,20 @@ public class ListenFragment extends BaseFragment {
     public void starPlay() {
         if (mediaPlayer != null) {
             mediaPlayer.start();
-//            btnPause.setText(R.string.pause);
             btnPause.setBackground(getResources().getDrawable(R.drawable.ic_pause_circle_outline_white_48dp));
             playState = true;
         }
+    }
+
+    public void pausePlay() {
+        if (mediaPlayer != null) {
+            mediaPlayer.pause();
+            btnPause.setBackground(getResources().getDrawable(R.drawable.ic_play_circle_outline_white_48dp));
+            playState = false;
+        }
+    }
+
+    public boolean getPlayState() {
+        return playState;
     }
 }

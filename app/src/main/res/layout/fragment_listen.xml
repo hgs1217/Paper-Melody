@@ -11,7 +11,7 @@
         <ImageView
             android:id="@+id/img_music"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="match_parent"
             android:contentDescription="@string/picture"
             android:src="@drawable/testimg1"
             android:layout_alignParentTop="true" />
@@ -29,6 +29,6 @@
         android:id="@+id/seekBar"
         android:layout_width="match_parent"
         android:layout_height="24dp"
-        android:layout_below="@id/rl_music" />
+        android:layout_alignBottom="@id/rl_music" />
 
 </RelativeLayout>

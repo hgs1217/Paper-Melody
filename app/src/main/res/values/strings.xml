@@ -84,4 +84,7 @@
     <string name="upload_comment_success">评论上传完成！</string>
     <string name="network_unconnected">网络崩溃啦</string>
     <string name="network_reconnect">重新连接</string>
+    <string name="title_activity_online_listen_scrollable">OnlineListenActivityScrollable</string>
+
+    <string name="action_settings">Settings</string>
 </resources>

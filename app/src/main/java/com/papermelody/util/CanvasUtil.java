@@ -17,10 +17,16 @@ import java.util.List;
 public class CanvasUtil {
     private static Paint pointPaint = new Paint();
     private static Paint textPaint = new Paint();
-    private static int photoHeight = 1920;
-    private static int photoWidth = 1080;
-    private static Context context;
-    private static int surHeight = 960;
+
+    private static int photoHeight = -1;
+    private static int photoWidth = -1;
+
+    private static int surfaceViewHeight = -1;
+    private static int surfaceViewWidth = -1;
+
+    private static int screenHeight = -1;
+
+//    private static Context context;
 
     static {
         pointPaint.setStrokeWidth(10);
@@ -28,22 +34,26 @@ public class CanvasUtil {
         textPaint.setTextSize(50);
     }
 
-    public static void updateSize(int height, int width, Context c, int surViewHeight) {
-        photoHeight = height;
+    public static void setSurfaceViewSize(int width, int height) {
+        surfaceViewWidth = width;
+        surfaceViewHeight = height;
+    }
+
+    public static void setPhotoSize(int width, int height) {
         photoWidth = width;
-        context = c;
-        surHeight = surViewHeight;
+        photoHeight = height;
+    }
+
+    public static void setScreenHeight(int height) {
+        screenHeight = height;
     }
 
     public static void drawPoints(Canvas canvas, List<Point> points, int color) {
         pointPaint.setColor(color);
 
-        // FIXME: inefficient to update upon every image
-        // these constants should be calced at the very beginning of `initCamera`
-        float heightScalar = (float) canvas.getHeight() / photoHeight;
-        float widthScalar =  (float) canvas.getWidth() / photoWidth;
-        int screenHeight = ViewUtil.getScreenHeight(context);
-        double offset = (surHeight - screenHeight) / 2.0;
+        float heightScalar = (float) surfaceViewHeight / photoHeight;
+        float widthScalar =  (float) surfaceViewWidth  / photoWidth;
+        double offset = (surfaceViewHeight - screenHeight) / 2.0;
 
         for (Point pt: points) {
             canvas.drawCircle((photoWidth - (float)pt.x) * widthScalar, (float)(pt.y * heightScalar + offset), 10, pointPaint);

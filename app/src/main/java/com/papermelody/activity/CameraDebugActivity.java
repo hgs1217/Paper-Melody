@@ -35,6 +35,7 @@ import android.widget.FrameLayout;
 
 import com.papermelody.R;
 import com.papermelody.core.calibration.CalibrationResult;
+import com.papermelody.util.CanvasUtil;
 import com.papermelody.util.ImageUtil;
 import com.papermelody.util.TapDetectorAPI;
 import com.papermelody.util.ToastUtil;
@@ -97,10 +98,9 @@ public class CameraDebugActivity extends BaseActivity {
         List<List<Point>> ret = TapDetectorAPI.getAllForDebug(mat);
         long t2 = System.currentTimeMillis();
 
+        CanvasUtil.setScreenHeight(ViewUtil.getScreenHeight(this));
         canvasCameraDebug.updateInfo(
-                ret.get(0), ret.get(1), ret.get(2), ret.get(3),
-                image.getHeight(), image.getWidth(), t2-t1,
-                this, viewCameraDebug.getHeight()
+            ret.get(0), ret.get(1), ret.get(2), ret.get(3), t2-t1
         );
     }
 
@@ -130,6 +130,7 @@ public class CameraDebugActivity extends BaseActivity {
             lp.gravity = Gravity.CENTER;
         }
         viewCameraDebug.setLayoutParams(lp);
+        CanvasUtil.setSurfaceViewSize(width, height);
     }
 
     private void initSurfaceView() {
@@ -181,6 +182,8 @@ public class CameraDebugActivity extends BaseActivity {
 
             Log.d("TESTVL", relativeMin.getWidth()+" "+relativeMin.getHeight());
             imageReader = ImageReader.newInstance(relativeMin.getWidth(), relativeMin.getHeight(), ImageFormat.YUV_420_888, 5);
+
+            CanvasUtil.setPhotoSize(relativeMin.getWidth(), relativeMin.getHeight());
 
             imageReader.setOnImageAvailableListener(reader -> {
                 Image image = null;

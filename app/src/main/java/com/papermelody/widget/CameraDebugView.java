@@ -70,14 +70,14 @@ public class CameraDebugView extends View {
 
     public void updateInfo(
             List<Point> handContours, List<Point> fingerTips,List<Point> falling, List<Point> tapping,
-            int height, int width, long time_ms, Context context, int surViewHeight
+            long time_ms
     ) {
         this.handContours = new ArrayList<>(handContours);
         this.fingerTips = new ArrayList<>(fingerTips);
         this.falling = new ArrayList<>(falling);
         this.tapping = new ArrayList<>(tapping);
         this.time_ms = time_ms;
-        CanvasUtil.updateSize(height, width, context, surViewHeight);
+
         invalidate();
     }
 

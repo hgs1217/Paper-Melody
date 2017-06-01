@@ -120,12 +120,15 @@ public class CameraDebugActivity extends BaseActivity {
         int width = ViewUtil.getScreenWidth(this);
         int height = (int) (width / scalar);
         FrameLayout.LayoutParams lp;
+        lp = new FrameLayout.LayoutParams(width, height);
+        lp.gravity = Gravity.CENTER;
+        canvasCameraDebug.setLayoutParams(lp);
         if (Build.VERSION.SDK_INT >= 24) {
             // TODO: Android 7.0 上貌似有自动图片适配功能，暂时不太确定，需要更多的测试情况
             height = ViewUtil.getScreenHeight(this);
+            lp = new FrameLayout.LayoutParams(width, height);
+            lp.gravity = Gravity.CENTER;
         }
-        lp = new FrameLayout.LayoutParams(width, height);
-        lp.gravity = Gravity.CENTER;
         viewCameraDebug.setLayoutParams(lp);
     }
 

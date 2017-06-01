@@ -5,7 +5,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 
 import com.papermelody.core.calibration.CalibrationResult;
@@ -52,11 +51,11 @@ public class CalibrationView extends View {
             double widthScalar = (double) width / photoWidth;
             int screenHeight = ViewUtil.getScreenHeight(context);
             double offset = (height - screenHeight) / 2.0;
-            Log.d("CANVAS", height+" "+canvas.getWidth());
+//            Log.d("CANVAS", height+" "+canvas.getWidth());
+//
+//            Log.d("CANVAS1", height+" "+photoHeight+" "+width+" "+photoWidth);
+//            Log.d("CANVAS2", height+" "+screenHeight+" "+offset);
 
-            Log.d("CANVAS1", height+" "+photoHeight+" "+width+" "+photoWidth);
-            Log.d("CANVAS2", height+" "+screenHeight+" "+offset);
-            
             int point1X =  (int) (leftUpX * widthScalar), point1Y = (int) (leftUpY * heightScalar - offset),
                     point2X = (int) (leftLowX * widthScalar), point2Y = (int) (leftLowY * heightScalar - offset),
                     point3X = (int) (rightUpX * widthScalar), point3Y = (int) (rightUpY * heightScalar - offset),

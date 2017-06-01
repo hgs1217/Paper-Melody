@@ -122,7 +122,7 @@ public class CalibrationActivity extends BaseActivity {
         FrameLayout.LayoutParams lp;
         lp = new FrameLayout.LayoutParams(width, height);
         lp.gravity = Gravity.CENTER;
-
+        imgCalibration.setLayoutParams(lp);
         canvasCalibration.setSize(width, height);
         if (Build.VERSION.SDK_INT >= 24) {
             // TODO: Android 7.0 上貌似有自动图片适配功能，暂时不太确定，需要更多的测试情况
@@ -130,7 +130,6 @@ public class CalibrationActivity extends BaseActivity {
             lp = new FrameLayout.LayoutParams(width, height);
             lp.gravity = Gravity.CENTER;
         }
-        imgCalibration.setLayoutParams(lp);
         viewCalibration.setLayoutParams(lp);
     }
 

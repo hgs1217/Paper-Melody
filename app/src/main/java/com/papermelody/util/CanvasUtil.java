@@ -1,10 +1,8 @@
 package com.papermelody.util;
 
-import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.util.Log;
 
 import org.opencv.core.Point;
 
@@ -56,7 +54,7 @@ public class CanvasUtil {
         double offset = (surfaceViewHeight - screenHeight) / 2.0;
 
         for (Point pt: points) {
-            canvas.drawCircle((photoWidth - (float)pt.x) * widthScalar, (float)(pt.y * heightScalar + offset), 10, pointPaint);
+            canvas.drawCircle((photoWidth - (float)pt.x) * widthScalar, (float)(pt.y * heightScalar - offset), 10, pointPaint);
             // subtracted by photoWidth because the point is reversed in X from front camera
         }
     }

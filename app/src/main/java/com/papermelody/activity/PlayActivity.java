@@ -42,6 +42,7 @@ import android.widget.TextView;
 import com.papermelody.R;
 import com.papermelody.core.calibration.CalibrationResult;
 import com.papermelody.core.calibration.TransformResult;
+import com.papermelody.util.CanvasUtil;
 import com.papermelody.util.ImageProcessor;
 import com.papermelody.util.ImageUtil;
 import com.papermelody.util.TapDetectorAPI;
@@ -319,13 +320,20 @@ public class PlayActivity extends BaseActivity {
         int width = ViewUtil.getScreenWidth(this);
         int height = (int) (width / scalar);
         FrameLayout.LayoutParams lp;
+        lp = new FrameLayout.LayoutParams(width, height);
+        lp.gravity = Gravity.CENTER;
         if (Build.VERSION.SDK_INT >= 24) {
             // TODO: Android 7.0 上貌似有自动图片适配功能，暂时不太确定，需要更多的测试情况
             height = ViewUtil.getScreenHeight(this);
+            lp = new FrameLayout.LayoutParams(width, height);
+            lp.gravity = Gravity.CENTER;
+            FrameLayout.LayoutParams lpCanvas;
+            lpCanvas = new FrameLayout.LayoutParams((int)(ViewUtil.getScreenHeight(this) * scalar), ViewUtil.getScreenHeight(this));
+            lpCanvas.gravity = Gravity.CENTER;
+            canvasPlay.setLayoutParams(lpCanvas);
         }
-        lp = new FrameLayout.LayoutParams(width, height);
-        lp.gravity = Gravity.CENTER;
         viewPlay.setLayoutParams(lp);
+        CanvasUtil.setSurfaceViewSize(width, height);
     }
 
     private void initView() {

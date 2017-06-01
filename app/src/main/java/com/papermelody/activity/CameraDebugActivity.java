@@ -2,7 +2,6 @@ package com.papermelody.activity;
 
 import android.Manifest;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.ImageFormat;
 import android.hardware.camera2.CameraAccessException;
@@ -12,11 +11,8 @@ import android.hardware.camera2.CameraDevice;
 import android.hardware.camera2.CameraManager;
 import android.hardware.camera2.CaptureRequest;
 import android.hardware.camera2.params.StreamConfigurationMap;
-import android.media.AudioAttributes;
-import android.media.AudioManager;
 import android.media.Image;
 import android.media.ImageReader;
-import android.media.SoundPool;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -34,7 +30,6 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 
 import com.papermelody.R;
-import com.papermelody.core.calibration.CalibrationResult;
 import com.papermelody.util.CanvasUtil;
 import com.papermelody.util.ImageUtil;
 import com.papermelody.util.TapDetectorAPI;
@@ -45,7 +40,6 @@ import com.papermelody.widget.CameraDebugView;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -122,12 +116,15 @@ public class CameraDebugActivity extends BaseActivity {
         FrameLayout.LayoutParams lp;
         lp = new FrameLayout.LayoutParams(width, height);
         lp.gravity = Gravity.CENTER;
-        canvasCameraDebug.setLayoutParams(lp);
         if (Build.VERSION.SDK_INT >= 24) {
             // TODO: Android 7.0 上貌似有自动图片适配功能，暂时不太确定，需要更多的测试情况
             height = ViewUtil.getScreenHeight(this);
             lp = new FrameLayout.LayoutParams(width, height);
             lp.gravity = Gravity.CENTER;
+            FrameLayout.LayoutParams lpCanvas;
+            lpCanvas = new FrameLayout.LayoutParams((int)(ViewUtil.getScreenHeight(this) * scalar), ViewUtil.getScreenHeight(this));
+            lpCanvas.gravity = Gravity.CENTER;
+            canvasCameraDebug.setLayoutParams(lpCanvas);
         }
         viewCameraDebug.setLayoutParams(lp);
         CanvasUtil.setSurfaceViewSize(width, height);

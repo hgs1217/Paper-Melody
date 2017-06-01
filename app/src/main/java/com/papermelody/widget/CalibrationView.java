@@ -28,6 +28,7 @@ public class CalibrationView extends View {
     private int rightUpY = 0;
     private int height = 960;
     private int width = 1280;
+    private boolean flag = false;
     private Context context;
 
     public CalibrationView(Context c) {
@@ -55,6 +56,14 @@ public class CalibrationView extends View {
 //
 //            Log.d("CANVAS1", height+" "+photoHeight+" "+width+" "+photoWidth);
 //            Log.d("CANVAS2", height+" "+screenHeight+" "+offset);
+
+            if (!flag) {
+                // 标定过程中图片和显示的视频左右相反，应当对坐标进行左右对称取反的操作
+                leftUpX = photoWidth - leftUpX;
+                leftLowX = photoWidth - leftLowX;
+                rightUpX = photoWidth - rightUpX;
+                rightLowX = photoWidth - rightLowX;
+            }
 
             int point1X =  (int) (leftUpX * widthScalar), point1Y = (int) (leftUpY * heightScalar - offset),
                     point2X = (int) (leftLowX * widthScalar), point2Y = (int) (leftLowY * heightScalar - offset),
@@ -90,6 +99,7 @@ public class CalibrationView extends View {
         rightLowY = calibrationResult.getRightLowY();
         rightUpX = calibrationResult.getRightUpX();
         rightUpY = calibrationResult.getRightUpY();
+        flag = calibrationResult.isFlag();
 
         this.context = context;
         invalidate();

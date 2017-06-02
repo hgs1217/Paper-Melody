@@ -214,15 +214,20 @@ public class Calibration {
         out.setRightUpLeftX(rightupleft_x);
         out.setRightUpLeftY(rightupleft_y);
 
-        if (Math.abs(leftlow_y - leftup_y) > 20 &&
-                Math.abs(rightlow_y - rightup_y) > 20 &&
+        if (Math.abs(leftlow_y - leftup_y) > 10 &&
+                Math.abs(rightlow_y - rightup_y) > 10 &&
                 Math.abs(rightlow_x - leftlow_x) > histImage.width() / 2 &&
                 Math.abs(rightup_x - leftup_x) > histImage.width() / 2 &&
-                temp1 > 13 && leftup_y > upbound && rightup_y > upbound &&
+                temp1 > 8 && leftup_y > upbound && rightup_y > upbound &&
                 leftlow_y < lowbound &&
                 rightlow_y < lowbound
                 &&leftlow_x<histImage.width() / 4
-                &&rightlow_x>histImage.width()*3/4)
+                &&rightlow_x>histImage.width()*3/4
+                &&leftlow_x>0
+                &&rightlow_x<histImage.width()
+                &&leftlow_x<leftup_x
+                &&rightlow_x>rightup_x
+                )
             out.setFlag(true);
 
 
@@ -425,15 +430,14 @@ public class Calibration {
 
     public static boolean whether_stable(CalibrationResultsOfLatest5 calicrationResultsOfLatest5) {
         boolean flag = true;
-        if (calicrationResultsOfLatest5.n != 5) {
+        if (calicrationResultsOfLatest5.n != 3) {
             flag = false;
             return flag;
         }
         if (Math.abs(calicrationResultsOfLatest5.r[0].getLeftLowX() - calicrationResultsOfLatest5.r[1].getLeftLowX()) > 10 ||
                 Math.abs(calicrationResultsOfLatest5.r[0].getRightLowX() - calicrationResultsOfLatest5.r[1].getRightLowX()) > 10 ||
-                Math.abs(calicrationResultsOfLatest5.r[1].getLeftLowX() - calicrationResultsOfLatest5.r[2].getLeftLowX()) > 10 ||
-                Math.abs(calicrationResultsOfLatest5.r[2].getLeftLowX() - calicrationResultsOfLatest5.r[3].getLeftLowX()) > 10 ||
-                Math.abs(calicrationResultsOfLatest5.r[3].getLeftLowX() - calicrationResultsOfLatest5.r[4].getLeftLowX()) > 10
+                Math.abs(calicrationResultsOfLatest5.r[1].getLeftLowX() - calicrationResultsOfLatest5.r[2].getLeftLowX()) > 10
+
                 )
             flag = false;
         return flag;
@@ -456,24 +460,13 @@ public class Calibration {
                 calibrationResultsOfLatest5.n += 1;
                 break;
             }
-            case 3: {
-                calibrationResultsOfLatest5.r[3] = calibrationResult;
-                calibrationResultsOfLatest5.n += 1;
-                break;
-            }
-            case 4: {
-                calibrationResultsOfLatest5.r[4] = calibrationResult;
-                calibrationResultsOfLatest5.n += 1;
-                break;
-            }
 
-            case 5: {
+
+            case 3: {
                 calibrationResultsOfLatest5.r[0] = calibrationResultsOfLatest5.r[1];
                 calibrationResultsOfLatest5.r[1] = calibrationResultsOfLatest5.r[2];
-                calibrationResultsOfLatest5.r[2] = calibrationResultsOfLatest5.r[3];
 
-                calibrationResultsOfLatest5.r[3] = calibrationResultsOfLatest5.r[4];
-                calibrationResultsOfLatest5.r[4] =calibrationResult;
+                calibrationResultsOfLatest5.r[2] =calibrationResult;
                 break;
 
 

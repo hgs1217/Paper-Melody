@@ -258,9 +258,9 @@ public class CalibrationActivity extends BaseActivity {
             canvasCalibration.setPhotoSize(relativeMin.getWidth(), relativeMin.getHeight());
 
             // 计算合法区域范围
-            int targetHeightStart = getHeightRelativeCoordinate(ViewUtil.getScreenHeight
+            targetHeightStart = getHeightRelativeCoordinate(ViewUtil.getScreenHeight
                     (CalibrationActivity.this) - layoutLegal.getHeight(), relativeMin.getHeight());
-            int targetHeightEnd = getHeightRelativeCoordinate(ViewUtil.getScreenHeight
+            targetHeightEnd = getHeightRelativeCoordinate(ViewUtil.getScreenHeight
                     (CalibrationActivity.this), relativeMin.getHeight());
 
             Log.d("TESTTAR", targetHeightStart+" "+targetHeightEnd);

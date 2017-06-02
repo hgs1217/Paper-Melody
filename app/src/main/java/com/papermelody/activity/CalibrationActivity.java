@@ -198,14 +198,14 @@ public class CalibrationActivity extends BaseActivity {
 
         // FIXME: 暂时调慢了标定视频帧率
         cnt++;
-        if (cnt % 3 != 0) {
+        if (cnt % 2 != 0) {
             return;
         }
 
         Mat mat = ImageUtil.imageToBgr(image);
         calibrationResult = ImageProcessor.getCalibrationCoordinate(mat, targetHeightStart, targetHeightEnd);
 
-        canvasCalibration.updateCalibrationCoordinates(calibrationResult, CalibrationActivity.this);
+        canvasCalibration.updateCalibrationCoordinates(calibrationResult, CalibrationActivity.this, false);
 
         if (ImageProcessor.getCalibrationStatus(calibrationResult)) {
             Log.d("TESThistres",calibrationResult.getLeftLowX()+"");
@@ -217,7 +217,7 @@ public class CalibrationActivity extends BaseActivity {
             Log.d("TESThistres",calibrationResult.getRightUpX()+"");
             Log.d("TESThistres",calibrationResult.getRightUpY()+"");
             Log.d("TESThistres",calibrationResult.isFlag()+"");
-            canvasCalibration.updateCalibrationCoordinates(calibrationResult, CalibrationActivity.this);
+            canvasCalibration.updateCalibrationCoordinates(calibrationResult, CalibrationActivity.this, true);
 
             Bitmap bitmap = ImageUtil.imageToBitmap(mat);
 

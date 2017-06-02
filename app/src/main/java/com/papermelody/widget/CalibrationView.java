@@ -30,6 +30,7 @@ public class CalibrationView extends View {
     private int height = 960;
     private int width = 1280;
     private boolean flag = false;
+    private boolean success = false;
     private Context context = null;
 
     public CalibrationView(Context c) {
@@ -48,7 +49,7 @@ public class CalibrationView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        if (context != null) {
+        if (context != null && flag) {
             double heightScalar = (double) height / photoHeight;
             double widthScalar = (double) width / photoWidth;
             int screenHeight = ViewUtil.getScreenHeight(context);
@@ -58,7 +59,7 @@ public class CalibrationView extends View {
 //            Log.d("CANVAS1", height+" "+photoHeight+" "+width+" "+photoWidth);
 //            Log.d("CANVAS2", height+" "+screenHeight+" "+offset);
 
-            if (!flag) {
+            if (!success) {
                 // 标定过程中图片和显示的视频左右相反，应当对坐标进行左右对称取反的操作
                 leftUpX = photoWidth - leftUpX;
                 leftLowX = photoWidth - leftLowX;
@@ -71,7 +72,7 @@ public class CalibrationView extends View {
                     point3X = (int) (rightUpX * widthScalar), point3Y = (int) (rightUpY * heightScalar - offset),
                     point4X = (int) (rightLowX * widthScalar), point4Y = (int) (rightLowY * heightScalar - offset);
 
-            if (flag) {
+            if (success) {
                 Log.d("TESThistres2",point1X+"");
                 Log.d("TESThistres2",point1Y+"");
                 Log.d("TESThistres2",point2X+"");
@@ -102,7 +103,7 @@ public class CalibrationView extends View {
         photoHeight = height;
     }
 
-    public void updateCalibrationCoordinates(CalibrationResult calibrationResult, Context context) {
+    public void updateCalibrationCoordinates(CalibrationResult calibrationResult, Context context, boolean success) {
         leftLowX = calibrationResult.getLeftLowX();
         leftLowY = calibrationResult.getLeftLowY();
         leftUpX = calibrationResult.getLeftUpX();
@@ -113,6 +114,7 @@ public class CalibrationView extends View {
         rightUpY = calibrationResult.getRightUpY();
         flag = calibrationResult.isFlag();
 
+        this.success = success;
         this.context = context;
         invalidate();
     }

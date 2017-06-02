@@ -122,7 +122,8 @@ public class CameraDebugActivity extends BaseActivity {
             lp = new FrameLayout.LayoutParams(width, height);
             lp.gravity = Gravity.CENTER;
             FrameLayout.LayoutParams lpCanvas;
-            lpCanvas = new FrameLayout.LayoutParams((int)(ViewUtil.getScreenHeight(this) * scalar), ViewUtil.getScreenHeight(this));
+            width = (int)(height * scalar);
+            lpCanvas = new FrameLayout.LayoutParams(width, height);
             lpCanvas.gravity = Gravity.CENTER;
             canvasCameraDebug.setLayoutParams(lpCanvas);
         }

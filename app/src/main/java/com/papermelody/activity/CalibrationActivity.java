@@ -201,8 +201,17 @@ public class CalibrationActivity extends BaseActivity {
         canvasCalibration.updateCalibrationCoordinates(calibrationResult, CalibrationActivity.this);
 
         if (ImageProcessor.getCalibrationStatus(calibrationResult)) {
-            Log.d("TESThistres",calibrationResult.getLeftUpRightX()+"");
+            Log.d("TESThistres",calibrationResult.getLeftLowX()+"");
+            Log.d("TESThistres",calibrationResult.getLeftLowY()+"");
+            Log.d("TESThistres",calibrationResult.getLeftUpX()+"");
+            Log.d("TESThistres",calibrationResult.getLeftUpY()+"");
+            Log.d("TESThistres",calibrationResult.getRightLowX()+"");
+            Log.d("TESThistres",calibrationResult.getRightLowY()+"");
+            Log.d("TESThistres",calibrationResult.getRightUpX()+"");
+            Log.d("TESThistres",calibrationResult.getRightUpY()+"");
             Log.d("TESThistres",calibrationResult.isFlag()+"");
+            canvasCalibration.updateCalibrationCoordinates(calibrationResult, CalibrationActivity.this);
+
             Bitmap bitmap = ImageUtil.imageToBitmap(mat);
 
             viewCalibration.setVisibility(View.GONE);

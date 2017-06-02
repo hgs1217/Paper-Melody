@@ -30,7 +30,7 @@ public class CalibrationView extends View {
     private int height = 960;
     private int width = 1280;
     private boolean flag = false;
-    private Context context;
+    private Context context = null;
 
     public CalibrationView(Context c) {
         super(c);
@@ -48,7 +48,7 @@ public class CalibrationView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        if (leftLowX != 0) {
+        if (context != null) {
             double heightScalar = (double) height / photoHeight;
             double widthScalar = (double) width / photoWidth;
             int screenHeight = ViewUtil.getScreenHeight(context);
@@ -81,7 +81,6 @@ public class CalibrationView extends View {
                 Log.d("TESThistres2",point4X+"");
                 Log.d("TESThistres2",point4Y+"");
             }
-
 
             Paint p = new Paint();
             p.setColor(Color.RED);

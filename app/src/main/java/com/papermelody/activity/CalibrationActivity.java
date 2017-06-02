@@ -105,6 +105,7 @@ public class CalibrationActivity extends BaseActivity {
     private int targetHeightEnd = 1000;
 
     private boolean canCalibration = true;
+    private int cnt = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -194,6 +195,12 @@ public class CalibrationActivity extends BaseActivity {
         /**
          * 照片处理
          */
+
+        // FIXME: 暂时调慢了标定视频帧率
+        cnt++;
+        if (cnt % 3 != 0) {
+            return;
+        }
 
         Mat mat = ImageUtil.imageToBgr(image);
         calibrationResult = ImageProcessor.getCalibrationCoordinate(mat, targetHeightStart, targetHeightEnd);

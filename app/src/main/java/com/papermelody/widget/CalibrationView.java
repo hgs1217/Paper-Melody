@@ -49,7 +49,7 @@ public class CalibrationView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        if (context != null && flag) {
+        if (context != null) {
             double heightScalar = (double) height / photoHeight;
             double widthScalar = (double) width / photoWidth;
             int screenHeight = ViewUtil.getScreenHeight(context);

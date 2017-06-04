@@ -44,6 +44,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindView;
+import tapdetect.facade.Tap;
 
 /**
  * Created by gigaflw on 2017/4/10.
@@ -80,22 +81,30 @@ public class CameraDebugActivity extends BaseActivity {
     private CameraCaptureSession cameraCaptureSession;
     private ImageReader imageReader;
 
+    private long lastFrameTime = 0;
+
     public void processImage(Image image) {
         /**
          * Process image here
          * Called on every frame of video
          */
+        long frameTime = System.currentTimeMillis();
 
-        Mat mat = ImageUtil.imageToBgr(image);
+        if (Tap.readyForNextFrame()) {
+            Mat mat = ImageUtil.imageToBgr(image);
 
-        long t1 = System.currentTimeMillis();
-        List<List<Point>> ret = TapDetectorAPI.getAllForDebug(mat);
-        long t2 = System.currentTimeMillis();
+            long t1 = System.currentTimeMillis();
+            List<List<Point>> ret = Tap.getAllForDebug(mat);
+            long t2 = System.currentTimeMillis();
 
-        CanvasUtil.setScreenHeight(ViewUtil.getScreenHeight(this));
-        canvasCameraDebug.updateInfo(
-            ret.get(0), ret.get(1), ret.get(2), ret.get(3), t2-t1
-        );
+            CanvasUtil.setScreenHeight(ViewUtil.getScreenHeight(this));
+            canvasCameraDebug.updateInfo(
+                    ret.get(0), ret.get(1), ret.get(2), ret.get(3), ret.get(4),
+                    t2-t1, frameTime - lastFrameTime, Tap.getProcessInterval()
+            );
+        }
+
+        lastFrameTime = frameTime;
     }
 
 

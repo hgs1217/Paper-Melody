@@ -24,4 +24,6 @@ public class TapDetectorAPI {
     public static List<List<Point>> getAllForDebug(Mat im) {
         return Tap.getAllForDebug(im);
     }
+
+    public static long getProcessInterval() { return Tap.getProcessInterval(); }
 }

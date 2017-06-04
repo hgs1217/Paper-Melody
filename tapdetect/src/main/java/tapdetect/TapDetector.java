@@ -21,11 +21,12 @@ public class TapDetector {
     }
 
     public static class TapDetectPoint {
-        Point point;
+        Point point = new Point();
         FingerTipStatus status;
 
         TapDetectPoint(Point point, FingerTipStatus status) {
-            this.point = point;
+            this.point.x = point.x;
+            this.point.y = point.y;
             this.status = status;
         }
 
@@ -35,8 +36,13 @@ public class TapDetector {
 
         public Point getPoint() { return point; }
 
-        public boolean is_falling() { return status == FingerTipStatus.FALLING;  }
-        public boolean is_tapping() { return status == FingerTipStatus.TAPPING;  }
+        public boolean isFalling() { return status == FingerTipStatus.FALLING;  }
+        public boolean isLinger()  { return status == FingerTipStatus.LINGER;  }
+        public boolean isTapping() { return status == FingerTipStatus.TAPPING;  }
+
+        public String toString() {
+            return "" + point;
+        }
     }
 
     public List<Point> getTapping(Mat im) {
@@ -107,14 +113,15 @@ public class TapDetector {
         }
 
         // update lastFingerTips
+        List<TapDetectPoint> result = new ArrayList<>();
         lastFingerTips.clear();
         for (int i=0; i<fingers.size(); ++i) {
             lastFingerTips.add(new TapDetectPoint(fingers.get(i), fingerTipsStatus.get(i)));
+            result.add(new TapDetectPoint(fingers.get(i), fingerTipsStatus.get(i)));
         }
 
         // Mat tapping_im = Util.drawPoints(im, tapping, new Scalar(0, 255, 0));
-        // ImgLogger.info("20_tapping.jpg", tapping_im);
-        return (List<TapDetectPoint>) lastFingerTips.clone();
+        return result;
     }
 
     private ArrayList<TapDetectPoint> lastFingerTips = new ArrayList<>();  // finger tips of last frame

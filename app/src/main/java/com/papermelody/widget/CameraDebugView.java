@@ -23,8 +23,9 @@ public class CameraDebugView extends View {
     private List<Point> handContours = new ArrayList<>();
     private List<Point> fingerTips = new ArrayList<>();
     private List<Point> falling = new ArrayList<>();
+    private List<Point> lingering = new ArrayList<>();
     private List<Point> tapping = new ArrayList<>();
-    private long time_ms;
+    private long processDelay, cameraInterval, processInterval;
 
     public CameraDebugView(Context c) {
         super(c);
@@ -43,15 +44,19 @@ public class CameraDebugView extends View {
         super.onDraw(canvas);
 
         if (!handContours.isEmpty()) {
-            CanvasUtil.drawPoints(canvas, handContours, Color.BLUE);
+            CanvasUtil.drawPoints(canvas, handContours, Color.RED);
         }
 //        Log.w("fingers when draw", "" + fingerTips);
         if (!fingerTips.isEmpty()) {
-            CanvasUtil.drawPoints(canvas, fingerTips, Color.RED);
+            CanvasUtil.drawPoints(canvas, fingerTips, Color.GRAY);
         }
 //        Log.w("tapping when draw", "" + tapping);
         if (!falling.isEmpty()) {
             CanvasUtil.drawPoints(canvas, falling, Color.rgb(0, 160, 0));
+        }
+
+        if (!lingering.isEmpty()) {
+            CanvasUtil.drawPoints(canvas, lingering, Color.BLUE);
         }
 
         if (!tapping.isEmpty()) {
@@ -59,24 +64,34 @@ public class CameraDebugView extends View {
         }
 
         String[] to_be_write = {
-                "Time consumed: " + time_ms + " ms",
-                "Hand contour: " + handContours.size() + " points",
-                "Finger tip: " + fingerTips.size() + " points",
-                "Falling points: " + falling.size() + " points",
-                "Tapping points: " + tapping.size() + " points"
+                "Camera interval: " + cameraInterval + " ms",
+                "Process interval: " + processInterval + " ms",
+                "Time consumed: " + processDelay + " ms",
+                "Hand contour: " + handContours.size() + " pts",
+                "Finger tip: " + fingerTips.size() + " pts",
+                "Falling: " + falling.size() + " pts",
+                "Lingering: " + lingering.size() + " pts",
+                "Tapping: " + tapping.size() + " pts"
         };
         CanvasUtil.writeText(canvas, to_be_write);
     }
 
     public void updateInfo(
-            List<Point> handContours, List<Point> fingerTips,List<Point> falling, List<Point> tapping,
-            long time_ms
+            List<Point> handContours,
+            List<Point> fingerTips,
+            List<Point> falling,
+            List<Point> lingering,
+            List<Point> tapping,
+            long processDelay, long cameraInterval, long processInterval
     ) {
         this.handContours = new ArrayList<>(handContours);
         this.fingerTips = new ArrayList<>(fingerTips);
         this.falling = new ArrayList<>(falling);
+        this.lingering = new ArrayList<>(lingering);
         this.tapping = new ArrayList<>(tapping);
-        this.time_ms = time_ms;
+        this.processDelay = processDelay;
+        this.cameraInterval = cameraInterval;
+        this.processInterval = processInterval;
 
         invalidate();
     }

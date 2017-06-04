@@ -58,5 +58,12 @@
             android:id="@+id/seekbar7"
             style="@style/SeekBar" />
 
+        <TextView
+            android:id="@+id/seekbar_caption8"
+            style="@style/SeekBarCaption" />
+        <SeekBar
+            android:id="@+id/seekbar8"
+            style="@style/SeekBar" />
+
     </LinearLayout>
 </ScrollView>

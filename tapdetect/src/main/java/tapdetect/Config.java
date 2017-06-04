@@ -22,5 +22,8 @@ public class Config {
     // max distance the finger tip could move between 2 frames
     public static int FINGER_TIP_MOVE_DIST_MAX = 20;
     // max distance the finger tip could move if to judge the point as lingering
-    public static int FINGER_TIP_LINGER_DIST_MAX = 1;
+    public static int FINGER_TIP_LINGER_DIST_MAX = 4;
+
+    // min interval between 2 frame to avoid to slow the moving speed
+    public static int PROCESS_INTERVAL_MS = 100;
 }

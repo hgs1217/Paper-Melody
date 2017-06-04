@@ -113,6 +113,23 @@ public class CameraDebugActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        /*View decorView = getWindow().getDecorView();
+        int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_FULLSCREEN;
+        decorView.setSystemUiVisibility(uiOptions);*/
+
+        /*Window window = getWindow();
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
+                | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+        window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        // 状态栏（以上几行代码必须，参考setStatusBarColor|setNavigationBarColor方法源码）
+        window.setStatusBarColor(Color.TRANSPARENT);
+        // 虚拟导航键
+        window.setNavigationBarColor(Color.TRANSPARENT);*/
+
+        Log.d("TESTC", ViewUtil.getScreenWidth(this)+" "+ViewUtil.getScreenHeight(this));
 
         initSurfaceView();
     }

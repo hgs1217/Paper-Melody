@@ -11,6 +11,7 @@ import com.papermelody.R;
 import com.papermelody.activity.CalibrationActivity;
 import com.papermelody.activity.CameraDebugActivity;
 import com.papermelody.activity.UploadActivity;
+import com.papermelody.activity.UploadActivity2;
 import com.papermelody.model.ImgBanner;
 import com.papermelody.widget.MainCycleViewPager;
 
@@ -72,7 +73,7 @@ public class ModeFragment extends BaseFragment {
             // TODO: 当设置完成后需修改
             /*MainActivity mainActivity = (MainActivity) getActivity();
             mainActivity.updateFragment(MainActivity.MODE_OPERN);*/
-            Intent intent = new Intent(getActivity(), UploadActivity.class);
+            Intent intent = new Intent(getActivity(), UploadActivity2.class);
             startActivity(intent);
         });
         btnModeCameraDebug.setOnClickListener((View v) -> {

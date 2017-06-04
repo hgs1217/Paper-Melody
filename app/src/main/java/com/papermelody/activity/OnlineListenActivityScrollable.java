@@ -70,7 +70,12 @@ public class OnlineListenActivityScrollable extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.setNavigationOnClickListener((View v) -> {
+            finish();
+        });
 
         Intent intent = getIntent();
 //         获取从音乐圈传入的onlineMusic实例
@@ -108,7 +113,7 @@ public class OnlineListenActivityScrollable extends BaseActivity {
         ctl.setExpandedTitleMargin(10, 0, 0, 15);
         ctl.setExpandedTitleColor(getResources().getColor(R.color.black));
         initView();
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
     }
 
     private void initView() {

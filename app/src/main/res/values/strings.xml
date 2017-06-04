@@ -29,11 +29,11 @@
     <string name="unable_to_play">暂时无法播放T.T</string>
 
     <!--写ip地址要在结尾加一个“/”-->
-    <!--<string name="server_ip">http://123.207.249.92/</string>-->
+    <string name="server_ip">http://123.207.249.92/</string>
     <!--<string name="server_ip">http://192.168.0.108/</string>-->
+    <!--<string name="server_ip">http://192.168.137.183/</string>-->
 
-
-    <string name="server_ip">http://10.185.245.166:8080/</string>
+    <!--<string name="server_ip">http://10.185.245.166:8080/</string>-->
 
     <string name="tab_mode">开始演奏</string>
     <string name="tab_settings">设置</string>

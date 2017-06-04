@@ -1,5 +1,6 @@
 package com.papermelody.core.calibration;
 
+import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfFloat;
@@ -31,11 +32,7 @@ public class ImgTransform {
         Mat hist = new Mat();
         Imgproc.calcHist(histsSource, new MatOfInt(0), new Mat(), hist, new MatOfInt(256), new MatOfFloat(0f, 256f));
         int min=0,max=0;
-        for (int i=0;i<hist.size().height;i++){
-            //System.out.println( hist.get(i,0)[0]);
-            min+=hist.get(i,0)[0];
 
-        }
         for (int i=0;i<hist.size().height;i++){
             if (hist.get(i,0)[0]>0)
             { min=i;
@@ -57,19 +54,7 @@ public class ImgTransform {
 
         //for (int i=0;i<lut.size().height;i++){
         //System.out.println(lut.get(i,0)[0]);}
-        for (int i=0;i<grayImage.size().height;i++){
-            for (int j=0;j<grayImage.size().width;j++)
-            {
-                int temp=(int)grayImage.get(i,j)[0];
-                if (temp>255)temp=255;
-                int inttmp=(int)lut.get(temp,0)[0];
-                if (inttmp>255)inttmp=255;
-
-                grayImage.put(i,j,inttmp);
-
-            }
-
-        }
+        Core.LUT(grayImage,lut,grayImage);
         return grayImage;
 
 

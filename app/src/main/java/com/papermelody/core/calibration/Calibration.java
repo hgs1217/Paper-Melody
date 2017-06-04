@@ -19,6 +19,8 @@ import org.opencv.imgproc.Moments;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.opencv.imgproc.Imgproc.contourArea;
+
 
 public class Calibration {
 
@@ -41,18 +43,16 @@ public class Calibration {
         List<MatOfPoint> contours = new ArrayList<MatOfPoint>();
 
         //System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+        //Imgproc.cvtColor(srcImage, histImage, Imgproc.COLOR_BGR2GRAY);
 
-
-
-        Imgproc.cvtColor(srcImage, histImage, Imgproc.COLOR_BGR2GRAY);
-
-       // histImage=ImgTransform.Hist(srcImage);
+        histImage = ImgTransform.Hist(srcImage);
        // Log.d("TESThist", histImage.rows() + " " + histImage.cols());
         Mat element = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, (new Size(5,5)));
 
 
 
         //3、进行腐蚀
+
 
         Imgproc.dilate(histImage, dilateImage, element);//膨胀
         Imgproc.medianBlur(dilateImage,medianBlurImage,5);
@@ -64,43 +64,58 @@ public class Calibration {
         Imgproc.findContours(thresholdImage, contours, new Mat(), Imgproc.RETR_TREE,
                 Imgproc.CHAIN_APPROX_SIMPLE);
         int lencontour = contours.size();
+        Log.d("TESThisthei",lencontour+" ");
 
         System.out.println(lencontour);
         int[] a1 = new int[lencontour];
-        int[] a2 = new int[lencontour];
+        double [] allarea = new double [lencontour];
+        int[] allcy = new int[lencontour];
         int[] a3 = new int[lencontour];
+        double [] avarea = new double [lencontour];
+        int[] avcy = new int[lencontour];
         for (int j = 0; j < a1.length; j++) {
 
             a1[j] = -1;
-            a2[j] = 0;
+            avarea[j] = 0;
+            avcy[j]=0;
+            allarea[j]=0;
+            allcy[j]=0;
             a3[j] = 0;
         }
-        Log.d("TESThisthei",grayImage.height()+" ");
+
         int nnn = 0;
         int count = 0;
         boolean flag = false;
         for (int i = 0; i < lencontour; i++) {
             MatOfPoint item = contours.get(i);
             Moments m = Imgproc.moments(item);
-            if ((m.get_m00() != 0) && (Imgproc.contourArea(item) > 0)) {
+            if ((m.get_m00() != 0) && (contourArea(item) > 0)) {
                 double d1 = (m.get_m01() / m.get_m00());
                 Double D1 = new Double(d1);
                 int cy = D1.intValue();
-                if (cy > histImage.height() / 2) {
+                double area=Imgproc.contourArea(item);
+                if (cy > histImage.height() *11/20 && cy < histImage.height()*19/20) {
                     Log.d("TESThist2",cy+" ");
                     nnn += 1;
                     flag = false;
                     for (int j = 0; j < count; j++) {
-                        if (Math.abs(cy - a2[j]) < 20) {
+                        if (Math.abs(area - avarea[j]) < avarea[j]*4/7&& Math.abs(cy - avcy[j]) <histImage.height()/17 ) {
                             flag = true;
                             a3[j] = a3[j] + 1;
                             a1[i] = j;
+                            allarea[j]+=area;
+                            avarea[j]=allarea[j]/a3[j];
+                            allcy[j]+=cy;
+                            avcy[j]=allcy[j]/a3[j];
                             break;
 
                         }
                     }
                     if (!flag) {
-                        a2[count] = cy;
+                        avarea[count] = area;
+                        allarea[count]=area;
+                        allcy[count] = cy ;
+                        avcy[count]=cy;
                         a3[count] = 1;
                         a1[i] = count;
                         count++;
@@ -126,14 +141,20 @@ public class Calibration {
             }
         }
         int temp1 = temp;
-
-
-        temp = a2[temp_order];
+        Log.d("TESTtemp2",temp+" ");
+        Log.d("TESTtemp3",temp_order+" ");
+        Log.d("TESTtemp4",a1[0]+" ");
+        Log.d("TESTtemp5",count+" ");
+        int ddd=0;
+        int avercy=avcy[temp_order];
+        double averarea=avarea[temp_order];
         int leftlow_x = histImage.width(), leftlow_y = 0, leftup_x = 0, leftup_y = 0, rightlow_x = 0, rightlow_y = 0, rightup_x = 0, rightup_y = 0, leftupright_x = 0, leftupright_y = 0, rightupleft_x = 0, rightupleft_y = 0;
         System.out.println(leftlow_x);
         for (int i = 0; i < lencontour; i++) {
             if (a1[i] == temp_order) {
+                ddd++;
                 int cx, cy, uptemp;
+
                 MatOfPoint item = contours.get(i);
                 Moments m = Imgproc.moments(item);
 
@@ -143,6 +164,7 @@ public class Calibration {
                 double d2 = (m.get_m10() / m.get_m00());
                 Double D2 = new Double(d2);
                 cx = D2.intValue();
+                double area=Imgproc.contourArea(item);
 
                 org.opencv.core.Point[] points = item.toArray();
                 org.opencv.core.Point leftmost = points[0];
@@ -158,7 +180,7 @@ public class Calibration {
                 }
 
 
-                if (Math.abs(cy - temp) < 20) {
+                if (Math.abs(cy - avercy) < histImage.height()/20&&Math.abs(area - averarea) < averarea*1/2) {
                     if (leftmost.x < leftlow_x) {
                         leftlow_x = (int) leftmost.x;
                         leftlow_y = (int) leftmost.y;
@@ -201,6 +223,7 @@ public class Calibration {
 
             }
         }
+        Log.d("TESTtemp6",ddd+" ");
         out.setLeftLowX(leftlow_x);
         out.setLeftLowY(leftlow_y);
         out.setLeftUpX(leftup_x);
@@ -213,12 +236,23 @@ public class Calibration {
         out.setLeftUpRightY(leftupright_y);
         out.setRightUpLeftX(rightupleft_x);
         out.setRightUpLeftY(rightupleft_y);
+        Log.d("TESThistres",out.getLeftLowX()+"");
+        Log.d("TESThistres",out.getLeftLowY()+"");
+        Log.d("TESThistres",out.getLeftUpX()+"");
+        Log.d("TESThistres",out.getLeftUpY()+"");
+        Log.d("TESThistres",out.getRightLowX()+"");
+        Log.d("TESThistres",out.getRightLowY()+"");
+        Log.d("TESThistres",out.getRightUpX()+"");
+        Log.d("TESThistres",out.getRightUpY()+"");
+        Log.d("TESThistres",out.isFlag()+"");
 
-        if (Math.abs(leftlow_y - leftup_y) > 10 &&
-                Math.abs(rightlow_y - rightup_y) > 10 &&
+        if (Math.abs(leftlow_y - leftup_y) > 5
+                &&
+                Math.abs(rightlow_y - rightup_y) > 5 &&
                 Math.abs(rightlow_x - leftlow_x) > histImage.width() / 2 &&
                 Math.abs(rightup_x - leftup_x) > histImage.width() / 2 &&
-                temp1 > 8 && leftup_y > upbound && rightup_y > upbound &&
+                temp1>12&&temp1<=16&&
+                leftup_y > upbound && rightup_y > upbound &&
                 leftlow_y < lowbound &&
                 rightlow_y < lowbound
                 &&leftlow_x<histImage.width() / 4
@@ -226,7 +260,9 @@ public class Calibration {
                 &&leftlow_x>0
                 &&rightlow_x<histImage.width()
                 &&leftlow_x<leftup_x
+                && leftlow_y > leftup_y
                 &&rightlow_x>rightup_x
+                && rightlow_y > rightup_y
                 )
             out.setFlag(true);
 
@@ -430,13 +466,13 @@ public class Calibration {
 
     public static boolean whether_stable(CalibrationResultsOfLatest5 calicrationResultsOfLatest5) {
         boolean flag = true;
-        if (calicrationResultsOfLatest5.n != 3) {
+        if (calicrationResultsOfLatest5.n != 2) {
             flag = false;
             return flag;
         }
         if (Math.abs(calicrationResultsOfLatest5.r[0].getLeftLowX() - calicrationResultsOfLatest5.r[1].getLeftLowX()) > 10 ||
-                Math.abs(calicrationResultsOfLatest5.r[0].getRightLowX() - calicrationResultsOfLatest5.r[1].getRightLowX()) > 10 ||
-                Math.abs(calicrationResultsOfLatest5.r[1].getLeftLowX() - calicrationResultsOfLatest5.r[2].getLeftLowX()) > 10
+                Math.abs(calicrationResultsOfLatest5.r[0].getRightLowX() - calicrationResultsOfLatest5.r[1].getRightLowX()) > 10 //||
+                //Math.abs(calicrationResultsOfLatest5.r[1].getLeftLowX() - calicrationResultsOfLatest5.r[2].getLeftLowX()) > 10
 
                 )
             flag = false;
@@ -456,21 +492,23 @@ public class Calibration {
                 break;
             }
             case 2: {
-                calibrationResultsOfLatest5.r[2] = calibrationResult;
-                calibrationResultsOfLatest5.n += 1;
-                break;
-            }
-
-
-            case 3: {
                 calibrationResultsOfLatest5.r[0] = calibrationResultsOfLatest5.r[1];
-                calibrationResultsOfLatest5.r[1] = calibrationResultsOfLatest5.r[2];
 
-                calibrationResultsOfLatest5.r[2] =calibrationResult;
+                calibrationResultsOfLatest5.r[1] =calibrationResult;
+
                 break;
-
-
             }
+
+
+           // case 3: {
+                //calibrationResultsOfLatest5.r[0] = calibrationResultsOfLatest5.r[1];
+              //  calibrationResultsOfLatest5.r[1] = calibrationResultsOfLatest5.r[2];
+
+                //calibrationResultsOfLatest5.r[2] =calibrationResult;
+               // break;
+
+
+           // }
 
 
         }

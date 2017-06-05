@@ -431,7 +431,8 @@ public class PlayActivity extends BaseActivity {
                     CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
 
             // 获取照相机可用的符合条件的最小像素图片
-            Size relativeMin = ImageUtil.getRelativeMinSize(Arrays.asList(map.getOutputSizes(ImageFormat.YUV_420_888)));
+            Size relativeMin = ImageUtil.getRelativeMinSize(Arrays.asList(map.getOutputSizes(ImageFormat.YUV_420_888)),
+                                                            viewPlay.getWidth(), viewPlay.getHeight());
             initSurfaceSize((double) relativeMin.getWidth()/relativeMin.getHeight());
 
             imageReader = ImageReader.newInstance(relativeMin.getWidth(), relativeMin.getHeight(), ImageFormat.YUV_420_888, 5);

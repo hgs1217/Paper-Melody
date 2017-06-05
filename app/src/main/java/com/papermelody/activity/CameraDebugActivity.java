@@ -32,7 +32,6 @@ import android.widget.FrameLayout;
 import com.papermelody.R;
 import com.papermelody.util.CanvasUtil;
 import com.papermelody.util.ImageUtil;
-import com.papermelody.util.TapDetectorAPI;
 import com.papermelody.util.ToastUtil;
 import com.papermelody.util.ViewUtil;
 import com.papermelody.widget.CameraDebugView;
@@ -201,7 +200,8 @@ public class CameraDebugActivity extends BaseActivity {
                     CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
 
             // 获取照相机可用的符合条件的最小像素图片
-            Size relativeMin = ImageUtil.getRelativeMinSize(Arrays.asList(map.getOutputSizes(ImageFormat.YUV_420_888)));
+            Size relativeMin = ImageUtil.getRelativeMinSize(Arrays.asList(map.getOutputSizes(ImageFormat.YUV_420_888)),
+                                                        viewCameraDebug.getWidth(), viewCameraDebug.getHeight());
             initSurfaceSize((double) relativeMin.getWidth()/relativeMin.getHeight());
 
             Log.d("TESTVL", relativeMin.getWidth()+" "+relativeMin.getHeight());

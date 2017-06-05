@@ -5,7 +5,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 
 import com.papermelody.core.calibration.CalibrationResult;
@@ -72,7 +71,7 @@ public class CalibrationView extends View {
                     point3X = (int) (rightUpX * widthScalar), point3Y = (int) (rightUpY * heightScalar - offset),
                     point4X = (int) (rightLowX * widthScalar), point4Y = (int) (rightLowY * heightScalar - offset);
 
-            if (success) {
+            /*if (success) {
                 Log.d("TESThistres2",point1X+"");
                 Log.d("TESThistres2",point1Y+"");
                 Log.d("TESThistres2",point2X+"");
@@ -81,7 +80,7 @@ public class CalibrationView extends View {
                 Log.d("TESThistres2",point3Y+"");
                 Log.d("TESThistres2",point4X+"");
                 Log.d("TESThistres2",point4Y+"");
-            }
+            }*/
 
             Paint p = new Paint();
             p.setColor(Color.RED);

@@ -160,9 +160,7 @@ public class CommentFragment extends BaseFragment {
                         .map(response -> (HttpResponse) response)
                         .subscribe(
                                 upload_com_res -> {
-                                    ToastUtil.showS
-
-                    hort(R.string.upload_comment_success);
+                                    ToastUtil.showShort(R.string.upload_comment_success);
                 },
                 NetworkFailureHandler.loginErrorHandler
         ));

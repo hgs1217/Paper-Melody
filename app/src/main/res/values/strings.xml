@@ -31,7 +31,7 @@
 
     <!--写ip地址要在结尾加一个“/”-->
 
-    <string name="server_ip">http://123.207.249.92/</string>
+    <string name="server_ip">http://192.168.0.102/</string>
     <!--<string name="server_ip">http://192.168.0.108/</string>-->
     <!--<string name="server_ip">http://192.168.137.183/</string>-->
 
@@ -106,16 +106,14 @@
 
     <string name="repeat_password">Repeat Password</string>
     <string name="next">NEXT</string>
-<<<<<<< HEAD
     <string name="add_new_comment_here">点击此处写下你的评论！</string>
     <string name="user_comment_title">我的最新评论</string>
     <string name="all_comment_title">所有评论</string>
     <string name="user_comment_not_exist">你还没有评论过哦</string>
     <string name="test_long_text">test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1</string>
-=======
     <string name="title_activity_upload2">UploadActivity2</string>
 
     <string name="request_permission">请求申请</string>
->>>>>>> aca4780b9cd91445ce9d55868a6361b4804fd1c7
+
 
 </resources>

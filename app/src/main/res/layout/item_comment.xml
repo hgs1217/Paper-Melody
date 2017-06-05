@@ -3,17 +3,50 @@
 <!--TODO: 可参照onlineMusic item等实现评论列表item-->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
-    android:layout_width="380dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:gravity="center_vertical">
+    android:gravity="top"
+    android:layout_margin="2sp"
+    android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/item_text_comment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="title"
-        android:textSize="20sp"
-        android:textColor="@color/black" />
+
+    <ImageView
+        android:id="@+id/item_user_head_icon"
+        android:layout_width="40sp"
+        android:layout_height="40sp"
+        app:srcCompat="@drawable/ic_account_circle_black_24dp" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/item_this_user_name"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="title"
+            android:textColor="@color/black"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/item_this_comment_time"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorAccent"
+            android:text="Loading comment time......" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:id="@+id/item_this_comment_context"
+            android:layout_marginRight="30sp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textAlignment="viewStart"
+            android:text="@string/test_long_text"/>
+
+
+    </LinearLayout>
 
 </LinearLayout>

@@ -8,7 +8,12 @@
     android:orientation="vertical"
     tools:context="com.papermelody.activity.AboutActivity">
 
-
+    <fragment
+        android:id="@+id/fragment_comment"
+        android:name="com.papermelody.fragment.CommentFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+    />
 
 
 

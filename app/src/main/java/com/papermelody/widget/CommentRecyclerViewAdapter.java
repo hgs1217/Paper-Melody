@@ -67,8 +67,14 @@ public class CommentRecyclerViewAdapter extends RecyclerView.Adapter<CommentRecy
     class ViewHolder extends RecyclerView.ViewHolder {
         /* 持有每个item的所有界面元素 */
 
-        @BindView(R.id.item_text_comment)
+        @BindView(R.id.item_this_comment_context)
         TextView textComment;
+        @BindView(R.id.item_this_user_name)
+        TextView textUserName;
+        @BindView(R.id.item_this_comment_time)
+        TextView textCommentTime;
+        //@BindView User ICON
+
 
         public ViewHolder(View view) {
             super(view);
@@ -77,6 +83,8 @@ public class CommentRecyclerViewAdapter extends RecyclerView.Adapter<CommentRecy
 
         private void setView(Comment comment) {
             textComment.setText(comment.getContent());
+            textCommentTime.setText(comment.getCreateTime().toString());
+            textUserName.setText(comment.getAuthor());
         }
     }
 

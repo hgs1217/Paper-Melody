@@ -30,10 +30,11 @@
 
     <!--写ip地址要在结尾加一个“/”-->
     <!--<string name="server_ip">http://123.207.249.92/</string>-->
-    <!--<string name="server_ip">http://192.168.0.108/</string>-->
+    <string name="server_ip">http://192.168.0.102/</string>
 
 
-    <string name="server_ip">http://10.185.245.166:8080/</string>
+    <!--<string name="server_ip">http://10.185.245.166:8080/</string>-->
+    <!--<string name="server_ip">http://10.184.221.196/</string>-->
 
     <string name="tab_mode">开始演奏</string>
     <string name="tab_settings">设置</string>
@@ -103,5 +104,10 @@
 
     <string name="repeat_password">Repeat Password</string>
     <string name="next">NEXT</string>
+    <string name="add_new_comment_here">点击此处写下你的评论！</string>
+    <string name="user_comment_title">我的最新评论</string>
+    <string name="all_comment_title">所有评论</string>
+    <string name="user_comment_not_exist">你还没有评论过哦</string>
+    <string name="test_long_text">test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1</string>
 
 </resources>

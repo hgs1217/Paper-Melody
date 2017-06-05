@@ -3,14 +3,13 @@ package com.papermelody.fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import com.papermelody.R;
 import com.papermelody.model.Comment;
@@ -52,14 +51,7 @@ public class CommentFragment extends BaseFragment {
     EditText editText;
     @BindView(R.id.current_comment_list)
     RecyclerView commentList;
-    @BindView(R.id.textView1)
-    TextView com1;
-    @BindView(R.id.textView11)
-    TextView com11;
-    @BindView(R.id.textView2)
-    TextView com2;
-    @BindView(R.id.textView22)
-    TextView com22;
+
 
     private SocialSystemAPI api;
     private OnlineMusic onlineMusic;
@@ -101,8 +93,7 @@ public class CommentFragment extends BaseFragment {
         return view;
     }
 
-    private ArrayList<String> getData()
-    {
+    private ArrayList<String> getData() {
         String musicID = "music1";
         ArrayList<String> listx = new ArrayList<>();
 
@@ -117,7 +108,7 @@ public class CommentFragment extends BaseFragment {
                 .flatMap(NetworkFailureHandler.httpFailureFilter)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .map(response -> ((CommentResponse) response).getResult().getComments())
+                .map(response -> ((CommentResponse) response).getResult().getComments()) /*list的commentinfo*/
                 .subscribe(
                         commentList -> {
                             List<Comment> comments = new ArrayList<>();
@@ -134,7 +125,7 @@ public class CommentFragment extends BaseFragment {
         adapter = new CommentRecyclerViewAdapter(context, comments);
         adapter.setOnItemClickListener(commentOnItemClickListener);
         commentList.setAdapter(adapter);
-        commentList.setLayoutManager(new GridLayoutManager(context, 1));
+        commentList.setLayoutManager(new LinearLayoutManager(context));
         commentList.setItemAnimator(new DefaultItemAnimator());
     }
 
@@ -151,7 +142,7 @@ public class CommentFragment extends BaseFragment {
             String comment = editText.getText().toString();
             SimpleDateFormat sDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
             String createtime = sDateFormat.format(new java.util.Date());
-            String author = "AnonymousUser";
+            String author = "AnonymousUser"; //FIXME: 这里先方便上传，不然每次要登录
             String musicID = "music1";  // FIXME: 需修改为真实的ID
             boolean hasUser = true;
             try {
@@ -169,22 +160,20 @@ public class CommentFragment extends BaseFragment {
                         .map(response -> (HttpResponse) response)
                         .subscribe(
                                 upload_com_res -> {
-                                    ToastUtil.showShort(R.string.upload_comment_success);
-                                },
-                                NetworkFailureHandler.loginErrorHandler
-                        ));
-            }
+                                    ToastUtil.showS
 
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+                    hort(R.string.upload_comment_success);
+                },
+                NetworkFailureHandler.loginErrorHandler
+        ));
+    }
 
-//            com2.setText(com1.getText());
-//            com22.setText(com11.getText());
-//            com1.setText(comment);
-//            com11.setText(createtime + " by " + author);
+            try {//模拟延迟
+        Thread.sleep(800);
+    } catch (InterruptedException e) {
+        e.printStackTrace();
+    }
+
         });
     }
 }

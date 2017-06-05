@@ -2,75 +2,76 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_margin="1dp"
     android:orientation="vertical">
     <!--android:weightSum="1">-->
 
     <TextView
-        android:id="@+id/textView5"
+        android:id="@+id/user_comment_title"
+        android:paddingStart="2sp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="0.72"
+        android:layout_weight="0"
         android:background="@color/colorPrimaryDark"
-
-        android:text=" 评论"
+        android:text="@string/user_comment_title"
+        android:paddingLeft="2sp"
         android:textColor="@color/white"
-        android:textSize="24sp"
-        android:textStyle="bold" />
-
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="This is great!"
-        android:textColor="@color/black"
-        android:textSize="24sp" />
-
-    <TextView
-        android:id="@+id/textView11"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="2017-5-14 12:23 by USER1" />
-
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text=" "
-        android:textColor="@color/black"
-        android:textSize="24sp"
+        android:textSize="15sp"
         />
 
     <TextView
-        android:id="@+id/textView22"
+        android:id="@+id/user_newest_comment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text=" " />
+        android:textSize="18sp"
+        android:paddingStart="4sp"
+        android:layout_marginTop="8sp"
+        android:layout_marginBottom="10sp"
+        android:text="@string/user_comment_not_exist" />
+
+    <TextView
+        android:id="@+id/all_comment_title"
+        android:paddingStart="2sp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0"
+        android:background="@color/colorPrimaryDark"
+        android:text="@string/all_comment_title"
+        android:paddingLeft="2sp"
+        android:textColor="@color/white"
+        android:textSize="15sp"
+       />
+
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/current_comment_list"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="fill_parent"
+        android:layout_marginTop="6sp"
+        android:layout_weight="99999"
+        android:fillViewport="true"
+        android:paddingLeft="4sp"
+        android:paddingRight="4sp" />
 
     <EditText
         android:id="@+id/add_new_comment"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="60sp"
         android:ems="10"
-        android:inputType="textMultiLine"
-        android:text="" />
+        android:layout_weight="1"
+        android:textSize="18sp"
+        android:hint="@string/add_new_comment_here"
+        android:inputType="textMultiLine" />
 
     <Button
         android:id="@+id/upload_comment_btn"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_weight="0.36"
-        android:text="@string/upload_comment" />
+        android:background="@color/colorAccent"
+        android:layout_width="wrap_content"
+        android:layout_height="26sp"
+        android:textColor="@color/textPrimary"
+        android:layout_weight="1"
+        android:text="@string/upload_comment"
+        android:textSize="12sp" />
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="7.25"
-        android:text=" " />
 
 </LinearLayout>

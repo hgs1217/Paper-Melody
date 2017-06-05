@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
+    android:background="@color/black"
     tools:context="com.papermelody.activity.CameraDebugActivity">
 
     <com.papermelody.widget.AutoFitTextureView

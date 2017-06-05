@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
+    android:background="@color/black"
     tools:context="com.papermelody.activity.PlayActivity">
 
     <!--FIXME: 先设镜头内容代替，未来如果要改回来可以把SurfaceView的大小改成1dp-->

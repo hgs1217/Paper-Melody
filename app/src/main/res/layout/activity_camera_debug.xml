@@ -8,10 +8,11 @@
     android:gravity="center"
     tools:context="com.papermelody.activity.CameraDebugActivity">
 
-    <SurfaceView
+    <com.papermelody.widget.AutoFitTextureView
         android:id="@+id/view_camera_debug"
+        android:layout_gravity="center"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="match_parent" />
 
     <com.papermelody.widget.CameraDebugView
         android:id="@+id/canvas_camera_debug"

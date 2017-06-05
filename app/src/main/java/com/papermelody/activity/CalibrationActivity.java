@@ -260,6 +260,8 @@ public class CalibrationActivity extends BaseActivity {
      */
     private void processImage(Image image) {
 
+        // FIXME: 标定现在卡顿现象十分严重
+
         // FIXME: 暂时调慢了标定视频帧率
         cnt++;
         if (cnt % 2 != 0) {

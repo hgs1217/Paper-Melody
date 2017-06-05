@@ -7,13 +7,15 @@
     android:fitsSystemWindows="true"
     tools:context="com.papermelody.activity.PlayActivity">
 
+    <!--FIXME: 先设镜头内容代替，未来如果要改回来可以把SurfaceView的大小改成1dp-->
     <!--<SurfaceView-->
         <!--android:id="@+id/view_play"-->
-        <!--android:layout_width="1dp"-->
-        <!--android:layout_height="1dp" />-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content" />-->
 
-    <SurfaceView
+    <com.papermelody.widget.AutoFitTextureView
         android:id="@+id/view_play"
+        android:layout_gravity="center"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

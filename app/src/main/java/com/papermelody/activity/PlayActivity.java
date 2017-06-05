@@ -5,6 +5,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.ImageFormat;
+import android.graphics.Matrix;
+import android.graphics.RectF;
+import android.graphics.SurfaceTexture;
 import android.hardware.camera2.CameraAccessException;
 import android.hardware.camera2.CameraCaptureSession;
 import android.hardware.camera2.CameraCharacteristics;
@@ -17,19 +20,18 @@ import android.media.AudioManager;
 import android.media.Image;
 import android.media.ImageReader;
 import android.media.SoundPool;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Message;
 import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.util.Size;
 import android.util.SparseIntArray;
 import android.view.Gravity;
 import android.view.Surface;
-import android.view.SurfaceHolder;
-import android.view.SurfaceView;
+import android.view.TextureView;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
@@ -48,6 +50,7 @@ import com.papermelody.util.ImageUtil;
 import com.papermelody.util.TapDetectorAPI;
 import com.papermelody.util.ToastUtil;
 import com.papermelody.util.ViewUtil;
+import com.papermelody.widget.AutoFitTextureView;
 import com.papermelody.widget.CameraDebugView;
 
 import org.opencv.core.Mat;
@@ -76,7 +79,7 @@ public class PlayActivity extends BaseActivity {
     @BindView(R.id.canvas_play)
     CameraDebugView canvasPlay;
     @BindView(R.id.view_play)
-    SurfaceView viewPlay;
+    AutoFitTextureView viewPlay;
     @BindView(R.id.text_mode)
     TextView textViewMode;
     @BindView(R.id.text_instrument)
@@ -202,6 +205,11 @@ public class PlayActivity extends BaseActivity {
     public static final String EXTRA_CATIGORY = "EXTRA_CATIGORY";
     public static final String EXTRA_OPERN = "EXTRA_OPERN";
 
+    private static final String TAG = "PlayAct";
+
+    private static final int MAX_PREVIEW_WIDTH = 1920;
+    private static final int MAX_PREVIEW_HEIGHT = 1080;
+
     private static final SparseIntArray ORIENTATIONS = new SparseIntArray();
 
     ///为了使照片竖直显示
@@ -222,13 +230,54 @@ public class PlayActivity extends BaseActivity {
             R.raw.a5m};
     private int[] voiceId = new int[36];
     private SoundPool soundPool;
+
     private CameraManager cameraManager;
     private CameraDevice cameraDevice;
-    private SurfaceHolder surfaceHolder;
-    private Handler childHandler, mainHandler;
+
+    /**
+     * 获取照片图像数据用到的子线程
+     */
+    private HandlerThread backgroundThread;
+    private Handler backgroundHandler;
+
+    /**
+     * Activity主线程
+     */
+    private Handler mainHandler;
+
     private String cameraID;
     private CameraCaptureSession cameraCaptureSession;
+
+    /**
+     * imageReader：用于装载预览的图片流
+     */
     private ImageReader imageReader;
+
+    private Size previewSize;
+
+    private CaptureRequest.Builder previewRequestBuilder;
+
+    private final TextureView.SurfaceTextureListener surfaceTextureListener =
+            new TextureView.SurfaceTextureListener() {
+
+                @Override
+                public void onSurfaceTextureAvailable(SurfaceTexture texture, int width, int height) {
+                    openCamera(width, height);
+                }
+
+                @Override
+                public void onSurfaceTextureSizeChanged(SurfaceTexture texture, int width, int height) {
+                    configureTransform(width, height);
+                }
+
+                @Override
+                public boolean onSurfaceTextureDestroyed(SurfaceTexture texture) {
+                    return true;
+                }
+
+                @Override
+                public void onSurfaceTextureUpdated(SurfaceTexture texture) { }
+            };
 
     private ArrayList<Integer> lastKeys = new ArrayList<>();
     // this variable is used to prevent a same key to be played in a row
@@ -281,6 +330,12 @@ public class PlayActivity extends BaseActivity {
         //opern = intent.getIntExtra(EXTRA_OPERN, 0);
         calibrationResult = (CalibrationResult) intent.getSerializableExtra(CalibrationActivity.EXTRA_RESULT);
 
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,  WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+        // 开启子线程，绑定TextureView的响应事件
+        startBackgroundThread();
+        viewPlay.setSurfaceTextureListener(surfaceTextureListener);
+        
         initSoundPool();
         initView();
     }
@@ -313,27 +368,6 @@ public class PlayActivity extends BaseActivity {
         attrBuilder.setLegacyStreamType(AudioManager.STREAM_MUSIC);
         spb.setAudioAttributes(attrBuilder.build());
         soundPool = spb.build();
-    }
-
-    private void initSurfaceSize(double scalar) {
-        /* 横屏导致长宽交换 */
-        int width = ViewUtil.getScreenWidth(this);
-        int height = (int) (width / scalar);
-        FrameLayout.LayoutParams lp;
-        lp = new FrameLayout.LayoutParams(width, height);
-        lp.gravity = Gravity.CENTER;
-        if (Build.VERSION.SDK_INT >= 24) {
-            // TODO: Android 7.0 上貌似有自动图片适配功能，暂时不太确定，需要更多的测试情况
-            height = ViewUtil.getScreenHeight(this);
-            lp = new FrameLayout.LayoutParams(width, height);
-            lp.gravity = Gravity.CENTER;
-            FrameLayout.LayoutParams lpCanvas;
-            lpCanvas = new FrameLayout.LayoutParams((int)(ViewUtil.getScreenHeight(this) * scalar), ViewUtil.getScreenHeight(this));
-            lpCanvas.gravity = Gravity.CENTER;
-            canvasPlay.setLayoutParams(lpCanvas);
-        }
-        viewPlay.setLayoutParams(lp);
-        CanvasUtil.setSurfaceViewSize(width, height);
     }
 
     private void initView() {
@@ -381,157 +415,248 @@ public class PlayActivity extends BaseActivity {
                 playSound(fi);
             });*/
         }
-
-        initSurfaceView();
     }
 
-    private void initSurfaceView() {
-        /**
-         * 初始化用于显示相机预览的surfaceView
-         */
+    /**
+     * 相机开启
+     * @param width     TextureView的宽度
+     * @param height    TextureView的高度
+     */
+    private void openCamera(int width, int height) {
 
-        surfaceHolder = viewPlay.getHolder();
-        surfaceHolder.setKeepScreenOn(true);
-        surfaceHolder.addCallback(new SurfaceHolder.Callback() {
-            @Override
-            public void surfaceCreated(SurfaceHolder holder) {
-                initCamera();
-            }
-
-            @Override
-            public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-            }
-
-            @Override
-            public void surfaceDestroyed(SurfaceHolder holder) {
-                if (cameraDevice != null) {
-                    cameraDevice.close();
-                    cameraDevice = null;
-                }
-            }
-        });
-    }
-
-    private void initCamera() {
-        /**
-         * 初始化相机，在这里设置相机的预览获取，尺寸等等
-         */
-
-        HandlerThread handlerThread = new HandlerThread("Camera2");
-        handlerThread.start();
-        childHandler = new Handler(handlerThread.getLooper());
-        mainHandler = new Handler(getMainLooper());
-        cameraManager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
-        cameraID = String.valueOf(CameraCharacteristics.LENS_FACING_BACK);  //前摄像头
-
-        // 设置imageReader的尺寸与采样频率
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED) {
+//            requestCameraPermission();
+            return;
+        }
+        setUpCameraOutputs(width, height);
+        configureTransform(width, height);
         try {
-            CameraCharacteristics characteristics = cameraManager.getCameraCharacteristics(cameraID);
-            StreamConfigurationMap map = characteristics.get(
-                    CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
-
-            // 获取照相机可用的符合条件的最小像素图片
-            Size relativeMin = ImageUtil.getRelativeMinSize(Arrays.asList(map.getOutputSizes(ImageFormat.YUV_420_888)),
-                                                            viewPlay.getWidth(), viewPlay.getHeight());
-            initSurfaceSize((double) relativeMin.getWidth()/relativeMin.getHeight());
-
-            imageReader = ImageReader.newInstance(relativeMin.getWidth(), relativeMin.getHeight(), ImageFormat.YUV_420_888, 5);
-            imageReader.setOnImageAvailableListener((reader) -> {
-                    Image image = null;
-                    try {
-                        image = imageReader.acquireLatestImage();
-                        if (image == null) {
-                            return;
-                        }
-                        processImage(image);
-                    } finally {
-                        if (image != null) {
-                            image.close();
-                        }
-                    }
-            }, mainHandler);
-
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                return;
-            }
             cameraManager.openCamera(cameraID, deviceStateCallback, mainHandler);
         } catch (CameraAccessException e) {
             e.printStackTrace();
         }
     }
 
-    private CameraDevice.StateCallback deviceStateCallback = new CameraDevice.StateCallback() {
-        /* 摄像头创建监听 */
+    /**
+     * 用来设置相机的输出选项，包括图像尺寸，图像获取，图像的标定操作等等
+     * @param width     TextureView的宽度
+     * @param height    TextureView的高度
+     */
+    private void setUpCameraOutputs(int width, int height) {
 
-        @Override
-        public void onOpened(@NonNull CameraDevice camera) {
-            ToastUtil.showShort("开启成功");
-            cameraDevice = camera;
-            takePreview();
-        }
-
-        @Override
-        public void onDisconnected(@NonNull CameraDevice camera) {
-            if (null != cameraDevice) {
-                cameraDevice.close();
-                cameraDevice = null;
-            }
-        }
-
-        @Override
-        public void onError(@NonNull CameraDevice camera, int error) {
-            ToastUtil.showShort("摄像头开启失败");
-        }
-    };
-
-    private void takePreview() {
-        /* 开启预览 */
+        cameraManager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
+        cameraID = String.valueOf(CameraCharacteristics.LENS_FACING_BACK);  //前摄像头
+        ImageProcessor.initProcessor();
 
         try {
-            // 创建预览需要的CaptureRequest.Builder
-            final CaptureRequest.Builder previewRequestBuilder =
-                    cameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW);
-            // 将SurfaceView的surface作为CaptureRequest.Builder的目标
-            previewRequestBuilder.addTarget(surfaceHolder.getSurface());
-            // 将imageReader的surface作为CaptureRequest.Builder的目标
-            previewRequestBuilder.addTarget(imageReader.getSurface());
-            // 创建CameraCaptureSession，该对象负责管理处理预览请求和拍照请求
-            cameraDevice.createCaptureSession(Arrays.asList(surfaceHolder.getSurface(),
-                    imageReader.getSurface()), new CameraCaptureSession.StateCallback() {
-                @Override
-                public void onConfigured(@NonNull CameraCaptureSession session) {
-                    if (null == cameraDevice) {
+            CameraCharacteristics characteristics = cameraManager.getCameraCharacteristics(cameraID);
+            StreamConfigurationMap map = characteristics.get(
+                    CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
+
+            // 获取最贴近手机屏幕长宽比的照片，若存在多张，则选取一个大于640*480的最小尺寸, YUV_420_888格式是预览流格式
+            Size relativeMin = ImageUtil.getRelativeMinSize(Arrays.asList(map.getOutputSizes(ImageFormat.YUV_420_888)),
+                    viewPlay.getWidth(), viewPlay.getHeight());
+
+            Log.d(TAG, relativeMin.getWidth()+" "+relativeMin.getHeight());
+
+            imageReader = ImageReader.newInstance(relativeMin.getWidth(), relativeMin.getHeight(),
+                    ImageFormat.YUV_420_888, 5);
+
+            CanvasUtil.setPhotoSize(relativeMin.getWidth(), relativeMin.getHeight());
+
+            imageReader.setOnImageAvailableListener(reader -> {
+                Image image = null;
+                try {
+                    image = imageReader.acquireLatestImage();
+                    if (image == null) {
                         return;
                     }
-                    // 当摄像头已经准备好时，开始显示预览
-                    cameraCaptureSession = session;
-                    try {
-                        // 自动对焦
-                        previewRequestBuilder.set(CaptureRequest.CONTROL_AF_MODE,
-                                CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_PICTURE);
-                        // 打开闪光灯
-                        previewRequestBuilder.set(CaptureRequest.CONTROL_AE_MODE,
-                                CaptureRequest.CONTROL_AE_MODE_ON_AUTO_FLASH);
-                        // 显示预览
-                        CaptureRequest previewRequest = previewRequestBuilder.build();
-                        cameraCaptureSession.setRepeatingRequest(previewRequest, null, childHandler);
-                        // 获取手机方向
-                        int rotation = ViewUtil.getWindowRotation(PlayActivity.this);
-                        // 根据设备方向计算设置照片的方向
-                        previewRequestBuilder.set(CaptureRequest.JPEG_ORIENTATION, ORIENTATIONS.get(rotation));
-                    } catch (CameraAccessException e) {
-                        e.printStackTrace();
-                    }
+                    processImage(image);
+                } finally {
+                    if (image != null) { image.close(); }
                 }
+            }, mainHandler);
 
-                @Override
-                public void onConfigureFailed(@NonNull CameraCaptureSession session) {
-                    ToastUtil.showShort("配置失败");
-                }
-            }, childHandler);
+            // 查看当前手机朝向来决定是否要对调TextureView的长宽
+            int displayRotation = getWindowManager().getDefaultDisplay().getRotation();
+            int sensorOrientation = characteristics.get(CameraCharacteristics.SENSOR_ORIENTATION);
+            boolean swappedDimensions = false;
+            switch (displayRotation) {
+                case Surface.ROTATION_0:
+                case Surface.ROTATION_180:
+                    if (sensorOrientation == 90 || sensorOrientation == 270) {
+                        swappedDimensions = true;
+                    }
+                    break;
+                case Surface.ROTATION_90:
+                case Surface.ROTATION_270:
+                    if (sensorOrientation == 0 || sensorOrientation == 180) {
+                        swappedDimensions = true;
+                    }
+                    break;
+                default:
+                    Log.e(TAG, "Display rotation is invalid: " + displayRotation);
+            }
+
+            android.graphics.Point displaySize = new android.graphics.Point();
+            getWindowManager().getDefaultDisplay().getSize(displaySize);
+            int rotatedPreviewWidth = width;
+            int rotatedPreviewHeight = height;
+            int maxPreviewWidth = displaySize.x;
+            int maxPreviewHeight = displaySize.y;
+
+            if (swappedDimensions) {
+                rotatedPreviewWidth = height;
+                rotatedPreviewHeight = width;
+                maxPreviewWidth = displaySize.y;
+                maxPreviewHeight = displaySize.x;
+            }
+
+            if (maxPreviewWidth > MAX_PREVIEW_WIDTH) {
+                maxPreviewWidth = MAX_PREVIEW_WIDTH;
+            }
+            if (maxPreviewHeight > MAX_PREVIEW_HEIGHT) {
+                maxPreviewHeight = MAX_PREVIEW_HEIGHT;
+            }
+
+            // Danger, W.R.! Attempting to use too large a preview size could  exceed the camera
+            // bus' bandwidth limitation, resulting in gorgeous previews but the storage of
+            // garbage capture data.
+            previewSize = ImageUtil.chooseOptimalSize(map.getOutputSizes(SurfaceTexture.class),
+                    rotatedPreviewWidth, rotatedPreviewHeight, maxPreviewWidth, maxPreviewHeight, relativeMin);
+
+            Log.d(TAG, previewSize.getWidth()+" "+previewSize.getHeight());
+            viewPlay.setAspectRatio(previewSize.getWidth(), previewSize.getHeight());
+
+            FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(viewPlay.getWidth(), viewPlay.getHeight());
+            lp.gravity = Gravity.CENTER;
+            CanvasUtil.setSurfaceViewSize(viewPlay.getWidth(), viewPlay.getHeight());
+
         } catch (CameraAccessException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * 当手机屏幕的朝向改变时，要对获取到的视频流进行方向上的调整
+     * @param viewWidth     TextureView的宽度
+     * @param viewHeight    TextureView的高度
+     */
+    private void configureTransform(int viewWidth, int viewHeight) {
+
+        if (viewPlay == null || previewSize == null) {
+            return;
+        }
+        int rotation = getWindowManager().getDefaultDisplay().getRotation();
+
+        Matrix matrix = new Matrix();
+        RectF viewRect = new RectF(0, 0, viewWidth, viewHeight);
+        RectF bufferRect = new RectF(0, 0, previewSize.getHeight(), previewSize.getWidth());
+        float centerX = viewRect.centerX();
+        float centerY = viewRect.centerY();
+        if (Surface.ROTATION_90 == rotation || Surface.ROTATION_270 == rotation) {
+            bufferRect.offset(centerX - bufferRect.centerX(), centerY - bufferRect.centerY());
+            matrix.setRectToRect(viewRect, bufferRect, Matrix.ScaleToFit.FILL);
+            float scale = Math.max((float) viewHeight / previewSize.getHeight(),
+                    (float) viewWidth / previewSize.getWidth());
+            matrix.postScale(scale, scale, centerX, centerY);
+            matrix.postRotate(90 * (rotation - 2), centerX, centerY);
+        } else if (Surface.ROTATION_180 == rotation) {
+            matrix.postRotate(180, centerX, centerY);
+        }
+        viewPlay.setTransform(matrix);
+    }
+
+    private final CameraDevice.StateCallback deviceStateCallback = new CameraDevice.StateCallback() {
+
+        @Override
+        public void onOpened(@NonNull CameraDevice device) {
+            ToastUtil.showShort("开启成功");
+            cameraDevice = device;
+            createCameraPreviewSession();
+        }
+
+        @Override
+        public void onDisconnected(@NonNull CameraDevice device) {
+            device.close();
+            cameraDevice = null;
+        }
+
+        @Override
+        public void onError(@NonNull CameraDevice device, int error) {
+        }
+    };
+
+    /**
+     * 预览状态的创建
+     */
+    private void createCameraPreviewSession() {
+
+        try {
+            SurfaceTexture texture = viewPlay.getSurfaceTexture();
+            assert texture != null;
+
+            // We configure the size of default buffer to be the size of camera preview we want.
+            texture.setDefaultBufferSize(previewSize.getWidth(), previewSize.getHeight());
+
+            // This is the output Surface we need to start preview.
+            Surface surface = new Surface(texture);
+
+            // We set up a CaptureRequest.Builder with the output Surface.
+            previewRequestBuilder = cameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW);
+            // 将TextureView的surface作为CaptureRequest.Builder的目标
+            previewRequestBuilder.addTarget(surface);
+            // 将imageReader的surface作为CaptureRequest.Builder的目标
+            previewRequestBuilder.addTarget(imageReader.getSurface());
+
+            // Here, we create a CameraCaptureSession for camera preview.
+            cameraDevice.createCaptureSession(Arrays.asList(surface, imageReader.getSurface()),
+                    new CameraCaptureSession.StateCallback() {
+
+                        @Override
+                        public void onConfigured(@NonNull CameraCaptureSession session) {
+                            // The camera is already closed
+                            if (cameraDevice == null) {
+                                return;
+                            }
+
+                            // When the session is ready, we start displaying the preview.
+                            cameraCaptureSession = session;
+                            try {
+                                // 自动对焦
+                                previewRequestBuilder.set(CaptureRequest.CONTROL_AF_MODE,
+                                        CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_PICTURE);
+                                // 打开闪光灯
+                                previewRequestBuilder.set(CaptureRequest.CONTROL_AE_MODE,
+                                        CaptureRequest.CONTROL_AE_MODE_ON_AUTO_FLASH);
+                                // 显示预览
+                                CaptureRequest previewRequest = previewRequestBuilder.build();
+                                cameraCaptureSession.setRepeatingRequest(previewRequest, null, backgroundHandler);
+                                // 获取手机方向
+                                int rotation = ViewUtil.getWindowRotation(PlayActivity.this);
+                                // 根据设备方向计算设置照片的方向
+                                previewRequestBuilder.set(CaptureRequest.JPEG_ORIENTATION, ORIENTATIONS.get(rotation));
+                            } catch (CameraAccessException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        @Override
+                        public void onConfigureFailed(@NonNull CameraCaptureSession cameraCaptureSession) {
+                            ToastUtil.showShort("配置失败");
+                        }
+                    }, backgroundHandler);
+        } catch (CameraAccessException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void startBackgroundThread() {
+        backgroundThread = new HandlerThread("Camera2");
+        backgroundThread.start();
+        backgroundHandler = new Handler(backgroundThread.getLooper());
+        mainHandler = new Handler(getMainLooper());
     }
 
     public void playSound(int keyID) {

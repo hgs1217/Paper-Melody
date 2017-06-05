@@ -18,13 +18,17 @@
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
             app:popupTheme="@style/AppTheme.PopupOverlay"
-            app:title="@string/upload" />
+            app:title="@string/upload"
+            app:contentInsetStart="0dp"
+            app:contentInsetLeft="0dp"/>
 
     </android.support.design.widget.AppBarLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginEnd="10dp"
+        android:layout_marginStart="10dp"
         android:layout_marginTop="?attr/actionBarSize">
 
         <android.support.design.widget.TextInputLayout
@@ -54,17 +58,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/edit_music_des"
-                android:lines="6" />
+                android:lines="8" />
         </android.support.design.widget.TextInputLayout>
 
         <ImageView
             android:id="@+id/img_upload"
-            android:scaleType="center"
             android:layout_width="150dp"
             android:layout_height="150dp"
             android:layout_below="@id/input_layout_des"
-            android:src="@drawable/ic_add_to_photos_black_48dp"
-            android:contentDescription="@string/picture" />
+            android:layout_marginStart="5dp"
+            android:background="@drawable/image_border"
+            android:contentDescription="@string/picture"
+            android:scaleType="center"
+            android:src="@drawable/ic_add_to_photos_black_48dp" />
 
     </RelativeLayout>
 

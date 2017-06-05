@@ -131,7 +131,8 @@ public class MusicHallFragment extends BaseFragment {
     }
 
     private void initSwipeRefreshView() {
-        layoutRefresh.setColorSchemeResources(R.color.black);
+        layoutRefresh.setColorSchemeResources(R.color.colorAccent);
+        layoutRefresh.setProgressBackgroundColorSchemeResource(R.color.white);
         layoutRefresh.setSize(SwipeRefreshLayout.DEFAULT);
         layoutRefresh.setProgressViewEndTarget(true, 100);
         layoutRefresh.setOnRefreshListener(() -> {

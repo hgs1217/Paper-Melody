@@ -1,27 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <tabs>
     <tab
+        barColorWhenSelected="#2196F3"
+        icon="@drawable/ic_audiotrack_black_24dp"
         id="@+id/tab_1"
-        title="Tab1"
-        icon="@mipmap/ic_launcher"
-        barColorWhenSelected="#99e450"
-        />
+        title="开始演奏" />
     <tab
+        barColorWhenSelected="#55a9ec"
+        icon="@drawable/ic_cloud_circle_black_24dp"
         id="@+id/tab_2"
-        title="Tab2"
-        icon="@mipmap/ic_launcher"
-        barColorWhenSelected="#26c8d1"
-        />
+        title="音乐圈" />
     <tab
+        barColorWhenSelected="#9ecaec"
+        icon="@drawable/ic_account_circle_black_24dp"
         id="@+id/tab_3"
-        title="Tab3"
-        icon="@mipmap/ic_launcher"
-        barColorWhenSelected="#a252d7"
-        />
+        title="用户管理" />
     <tab
+        barColorWhenSelected="#e2e7ea"
+        icon="@drawable/ic_settings_black_24dp"
         id="@+id/tab_4"
-        title="Tab4"
-        icon="@mipmap/ic_launcher"
-        barColorWhenSelected="#f29696"
-        />
+        title="设置" />
 </tabs>

@@ -111,7 +111,8 @@ public class OnlineListenActivityScrollable extends BaseActivity {
         fragmentManager.beginTransaction().add(R.id.container_comment, CommentFragment.newInstance(onlineMusic)).commit();
         ctl.setTitle(onlineMusic.getMusicName());
         ctl.setExpandedTitleMargin(10, 0, 0, 15);
-        ctl.setExpandedTitleColor(getResources().getColor(R.color.black));
+        ctl.setExpandedTitleColor(getResources().getColor(R.color.colorAccent));
+        ctl.setCollapsedTitleTextColor(getResources().getColor(R.color.white));
         initView();
 
     }

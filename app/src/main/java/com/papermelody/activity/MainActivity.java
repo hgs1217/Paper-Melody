@@ -1,12 +1,19 @@
 package com.papermelody.activity;
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.IdRes;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
@@ -22,6 +29,7 @@ import com.papermelody.fragment.SettingsFragment;
 import com.papermelody.fragment.UserFragment;
 import com.papermelody.fragment.UserInfoFragment;
 import com.papermelody.widget.NoScrollViewPager;
+import com.roughike.bottombar.BottomBar;
 
 import butterknife.BindView;
 
@@ -32,8 +40,8 @@ public class MainActivity extends BaseActivity {
 
     @BindView(R.id.container)
     NoScrollViewPager container;
-    @BindView(R.id.tabs)
-    TabLayout tabLayout;
+    @BindView(R.id.bottomBar)
+    BottomBar bottomBar;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.toolbar_title)
@@ -69,30 +77,39 @@ public class MainActivity extends BaseActivity {
         switch (position) {
             case 0:
                 toolbarTitle.setText(R.string.tab_mode);
+                toolbar.setBackgroundColor(getResources().getColor(R.color.tab0));
                 break;
             case 1:
                 toolbarTitle.setText(R.string.tab_music_hall);
+                toolbar.setBackgroundColor(getResources().getColor(R.color.tab1));
                 break;
             case 2:
                 toolbarTitle.setText(R.string.tab_user);
+                toolbar.setBackgroundColor(getResources().getColor(R.color.tab2));
                 break;
             case 3:
                 toolbarTitle.setText(R.string.tab_settings);
+                toolbar.setBackgroundColor(getResources().getColor(R.color.tab3));
                 break;
             case MODE_FREE:
                 toolbarTitle.setText(R.string.mode_free);
+                toolbar.setBackgroundColor(getResources().getColor(R.color.tab0));
                 break;
             case MODE_OPERN:
                 toolbarTitle.setText(R.string.mode_opern);
+                toolbar.setBackgroundColor(getResources().getColor(R.color.tab0));
                 break;
             case LOG_IN:
                 toolbarTitle.setText(R.string.log_in);
+                toolbar.setBackgroundColor(getResources().getColor(R.color.tab0));
                 break;
             case USER_INFO:
                 toolbarTitle.setText(R.string.user_info);
+                toolbar.setBackgroundColor(getResources().getColor(R.color.tab0));
                 break;
             case REGISTER:
                 toolbarTitle.setText(R.string.register);
+                toolbar.setBackgroundColor(getResources().getColor(R.color.tab0));
                 break;
             default:
                 break;
@@ -101,52 +118,95 @@ public class MainActivity extends BaseActivity {
     }
 
     private void initTabView() {
-        View indicatorMode = getLayoutInflater().inflate(R.layout.item_tab, null);
-        View indicatorSettings = getLayoutInflater().inflate(R.layout.item_tab, null);
-        View indicatorHall = getLayoutInflater().inflate(R.layout.item_tab, null);
-        View indicatorUser = getLayoutInflater().inflate(R.layout.item_tab, null);
+//        View indicatorMode = getLayoutInflater().inflate(R.layout.item_tab, null);
+//        View indicatorSettings = getLayoutInflater().inflate(R.layout.item_tab, null);
+//        View indicatorHall = getLayoutInflater().inflate(R.layout.item_tab, null);
+//        View indicatorUser = getLayoutInflater().inflate(R.layout.item_tab, null);
+//
+//        TextView textViewMode = (TextView) indicatorMode.findViewById(R.id.text_item_tab);
+//        TextView textViewSettings = (TextView) indicatorSettings.findViewById(R.id.text_item_tab);
+//        TextView textViewHall = (TextView) indicatorHall.findViewById(R.id.text_item_tab);
+//        TextView textViewUser = (TextView) indicatorUser.findViewById(R.id.text_item_tab);
+//
+//        ImageView imageViewMode = (ImageView) indicatorMode.findViewById(R.id.image_item_tab);
+//        ImageView imageViewSettings = (ImageView) indicatorSettings.findViewById(R.id.image_item_tab);
+//        ImageView imageViewHall = (ImageView) indicatorHall.findViewById(R.id.image_item_tab);
+//        ImageView imageViewUser = (ImageView) indicatorUser.findViewById(R.id.image_item_tab);
+//
+//        imageViewMode.setImageDrawable(getDrawable(R.drawable.ic_audiotrack_black_24dp));
+//        imageViewSettings.setImageDrawable(getDrawable(R.drawable.ic_settings_black_24dp));
+//        imageViewHall.setImageDrawable(getDrawable(R.drawable.ic_cloud_circle_black_24dp));
+//        imageViewUser.setImageDrawable(getDrawable(R.drawable.ic_account_circle_black_24dp));
+//
+//        textViewMode.setText(R.string.tab_mode);
+//        textViewSettings.setText(R.string.tab_settings);
+//        textViewHall.setText(R.string.tab_music_hall);
+//        textViewUser.setText(R.string.tab_user);
+//
+//        tabLayout.addTab(tabLayout.newTab().setCustomView(indicatorMode));
+//        tabLayout.addTab(tabLayout.newTab().setCustomView(indicatorHall));
+//        tabLayout.addTab(tabLayout.newTab().setCustomView(indicatorUser));
+//        tabLayout.addTab(tabLayout.newTab().setCustomView(indicatorSettings));
 
-        TextView textViewMode = (TextView) indicatorMode.findViewById(R.id.text_item_tab);
-        TextView textViewSettings = (TextView) indicatorSettings.findViewById(R.id.text_item_tab);
-        TextView textViewHall = (TextView) indicatorHall.findViewById(R.id.text_item_tab);
-        TextView textViewUser = (TextView) indicatorUser.findViewById(R.id.text_item_tab);
+//        tabLayout.addTab(tabLayout.newTab().setText(R.string.tab_mode).setIcon(getDrawable(R.drawable.ic_audiotrack_black_24dp)));
+//        tabLayout.addTab(tabLayout.newTab().setText(R.string.tab_music_hall).setIcon(getDrawable(R.drawable.ic_cloud_circle_black_24dp)));
+//        tabLayout.addTab(tabLayout.newTab().setText(R.string.tab_user).setIcon(getDrawable(R.drawable.ic_account_circle_black_24dp)));
+//        tabLayout.addTab(tabLayout.newTab().setText(R.string.tab_settings).setIcon(getDrawable(R.drawable.ic_settings_black_24dp)));
 
-        ImageView imageViewMode = (ImageView) indicatorMode.findViewById(R.id.image_item_tab);
-        ImageView imageViewSettings = (ImageView) indicatorSettings.findViewById(R.id.image_item_tab);
-        ImageView imageViewHall = (ImageView) indicatorHall.findViewById(R.id.image_item_tab);
-        ImageView imageViewUser = (ImageView) indicatorUser.findViewById(R.id.image_item_tab);
+//        ColorStateList colors;
+//        if (Build.VERSION.SDK_INT >= 23) {
+//            colors = getResources().getColorStateList(R.color.tab_icon_tint, getTheme());
+//        }
+//        else {
+//            colors = getResources().getColorStateList(R.color.tab_icon_tint);
+//        }
+//        for (int i = 0; i < tabLayout.getTabCount(); i++) {
+//            TabLayout.Tab tab = tabLayout.getTabAt(i);
+//            Drawable icon = tab.getIcon();
+//            if (icon != null) {
+//                icon = DrawableCompat.wrap(icon);
+//                DrawableCompat.setTintList(icon, colors);
+//            }
+//        }
+//        tabLayout.setSelectedTabIndicatorColor(Color.TRANSPARENT);
 
-        imageViewMode.setImageDrawable(getDrawable(R.drawable.ic_audiotrack_black_24dp));
-        imageViewSettings.setImageDrawable(getDrawable(R.drawable.ic_settings_black_24dp));
-        imageViewHall.setImageDrawable(getDrawable(R.drawable.ic_cloud_circle_black_24dp));
-        imageViewUser.setImageDrawable(getDrawable(R.drawable.ic_account_circle_black_24dp));
-
-        textViewMode.setText(R.string.tab_mode);
-        textViewSettings.setText(R.string.tab_settings);
-        textViewHall.setText(R.string.tab_music_hall);
-        textViewUser.setText(R.string.tab_user);
-
-
-        tabLayout.addTab(tabLayout.newTab().setCustomView(indicatorMode));
-        tabLayout.addTab(tabLayout.newTab().setCustomView(indicatorHall));
-        tabLayout.addTab(tabLayout.newTab().setCustomView(indicatorUser));
-        tabLayout.addTab(tabLayout.newTab().setCustomView(indicatorSettings));
-
-        tabLayout.setSelectedTabIndicatorColor(Color.TRANSPARENT);
-
-        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                int currentPage = tab.getPosition();
-                updateToolbar(currentPage);
-                container.setCurrentItem(currentPage, false);
+//        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+//            @Override
+//            public void onTabSelected(TabLayout.Tab tab) {
+//                int currentPage = tab.getPosition();
+//                updateToolbar(currentPage);
+//                container.setCurrentItem(currentPage, false);
+//            }
+//
+//            @Override
+//            public void onTabUnselected(TabLayout.Tab tab) {
+//            }
+//
+//            @Override
+//            public void onTabReselected(TabLayout.Tab tab) {
+//            }
+//        });
+        bottomBar.setOnTabSelectListener((@IdRes int tabId) -> {
+            int currentPage;
+            switch (tabId) {
+                case R.id.tab_1:
+                    currentPage = 0;
+                    break;
+                case R.id.tab_2:
+                    currentPage = 1;
+                    break;
+                case R.id.tab_3:
+                    currentPage = 2;
+                    break;
+                case R.id.tab_4:
+                    currentPage = 3;
+                    break;
+                default:
+                    currentPage = 0;
+                    break;
             }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) { }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) { }
+            updateToolbar(currentPage);
+            container.setCurrentItem(currentPage, false);
         });
     }
 

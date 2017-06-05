@@ -52,6 +52,8 @@ public class UploadActivity2 extends BaseActivity {
     ImageView imgUpload;
     @BindView(R.id.fab_upload_confirm)
     FloatingActionButton fabConfirm;
+    @BindView(R.id.toolbar_upload)
+    Toolbar toolbarUpload;
 
     public static final int LOAD_PIC = 0;
 
@@ -69,16 +71,17 @@ public class UploadActivity2 extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         api = RetrofitClient.getSocialSystemAPI();
-        setContentView(R.layout.activity_upload2);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
         initView();
     }
 
     private void initView() {
+        setSupportActionBar(toolbarUpload);
+        if (getSupportActionBar() != null) getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbarUpload.setNavigationOnClickListener((View v) -> {
+            finish();
+        });
         Log.i("nib", "view initialized");
-        // FIXME: 点击没反应？？？？
         imgUpload.setOnClickListener((View v) -> {
             chooseImg();
             Log.i("nib", "img clicked");

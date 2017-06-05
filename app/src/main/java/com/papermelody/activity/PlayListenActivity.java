@@ -2,14 +2,18 @@ package com.papermelody.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
 import com.papermelody.R;
 import com.papermelody.fragment.ListenFragment;
+import com.papermelody.model.LocalMusic;
 import com.papermelody.util.ToastUtil;
 
 import java.io.FileInputStream;
@@ -31,8 +35,12 @@ public class PlayListenActivity extends BaseActivity {
      * 弹奏完之后的用户试听页面，其中试听部分是用Fragment实现，其它的按钮布局在Activity中
      */
 
-    @BindView(R.id.btn_save_to_local)
-    Button btnSaveToLocal;
+    @BindView(R.id.toolbar_play_listen)
+    Toolbar toolbar;
+    @BindView(R.id.toolbar_layout)
+    CollapsingToolbarLayout ctl;
+    @BindView(R.id.fab_play_listen)
+    FloatingActionButton fab;
     @BindView(R.id.btn_upload)
     Button btnUpload;
     @BindView(R.id.btn_quit_upload)
@@ -40,29 +48,51 @@ public class PlayListenActivity extends BaseActivity {
 
     private FragmentManager fragmentManager;
     private FragmentTransaction transaction;
+    private ListenFragment fragment = null;
+    private View.OnClickListener startPlay, pausePlay;
+    private String fileName;
+    private LocalMusic localMusic;
+
+//    没有经过调试，可能会有bug
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Intent intent = getIntent();
+//        localMusic = ???
+
+        fileName = "Kissbye.mid";
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.setNavigationOnClickListener((View v) -> {
+            finish();
+        });
         fragmentManager = getSupportFragmentManager();
         transaction = fragmentManager.beginTransaction();
-        transaction.add(R.id.fragment_play_listen, ListenFragment.newInstance("Kissbye.mid"));
+        fragment = ListenFragment.newInstance(fileName);
+        transaction.add(R.id.fragment_play_listen, fragment);
         transaction.commit();
-        btnSaveToLocal.setOnClickListener((View v) -> {
-            String filename = "Kissbye.mid";
-            String destPath = getApplicationContext().getExternalFilesDir("") + "/" + filename;
-            String sourcePath = getApplicationContext().getFilesDir() + "/" + filename;
-            copyToAndroidData(sourcePath, destPath);
-            Log.i("nib", "fuck 我的log呢???");
-            ToastUtil.showShort("保存成功");
-            btnSaveToLocal.setClickable(false);
-        });
+        startPlay = (View v) -> {
+            fragment.starPlay();
+            fab.setOnClickListener(pausePlay);
+            fab.setImageDrawable(getDrawable(android.R.drawable.ic_media_pause));
+        };
+        pausePlay = (View v) -> {
+            fragment.pausePlay();
+            fab.setOnClickListener(startPlay);
+            fab.setImageDrawable(getDrawable(android.R.drawable.ic_media_play));
+        };
+        ctl.setTitle(getString(R.string.play_listen));
+        ctl.setExpandedTitleMargin(10, 0, 0, 15);
+        ctl.setExpandedTitleColor(getResources().getColor(R.color.colorAccent));
+        ctl.setCollapsedTitleTextColor(getResources().getColor(R.color.white));
         btnUpload.setOnClickListener((View v) -> {
-            Intent intent = new Intent(getApplicationContext(), UploadActivity.class);
+            Intent intent1 = new Intent(getApplicationContext(), UploadActivity.class);
             startActivity(intent);
         });
         btnQuitUpload.setOnClickListener((View v) -> {
-            Intent intent = new Intent();
+            Intent intent2 = new Intent();
             intent.setClass(this, MainActivity.class);
             startActivity(intent);
             finish();

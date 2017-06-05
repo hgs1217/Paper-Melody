@@ -27,9 +27,15 @@ public class ImageUtil {
      * 用于处理图像的工具类
      */
 
-    // 预览照片所需求的最低像素要求
+    /**
+     * 预览照片所需求的最低像素要求，防止像素太低识别有误
+     */
     public static final int MIN_HEIGHT = 480;
     public static final int MIN_WIDTH = 640;
+
+    /**
+     * 预设的图片长宽比
+     */
     public static final double HEIGHT_WIDTH_RATIO = 1.7777777;
 
     public static Bitmap imageToBitmap(Mat bgr) {
@@ -108,6 +114,13 @@ public class ImageUtil {
         return bgrMat;
     }
 
+    /**
+     * 获取最贴近手机屏幕长宽比的照片，若存在多张，则选取一个大于预设最低尺寸的最小尺寸
+     * @param sizes         能获取的照片尺寸list
+     * @param screenWidth   屏幕宽度
+     * @param screenHeight  屏幕高度
+     * @return              返回的最佳尺寸
+     */
     public static Size getRelativeMinSize(List<Size> sizes, int screenWidth, int screenHeight) {
         List<Size> comparedSizes = new ArrayList<>();
         Log.d("TESTCP", screenWidth+" "+screenHeight);
@@ -186,7 +199,7 @@ public class ImageUtil {
 
     private static class CompareSizesByRatioArea implements Comparator<Size> {
 
-        private double widthHeightRatio = 1.777777;
+        private double widthHeightRatio = HEIGHT_WIDTH_RATIO;
 
         public CompareSizesByRatioArea(double ratio) {
             widthHeightRatio = ratio;

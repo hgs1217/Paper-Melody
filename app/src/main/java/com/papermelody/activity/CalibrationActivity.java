@@ -55,31 +55,56 @@ import butterknife.BindView;
  */
 
 public class CalibrationActivity extends BaseActivity {
-
     /**
      * 用例：演奏乐器（流程四）
      * 标定界面，用于标定演奏纸的演奏合法位置
-     * http://blog.sina.com.cn/s/blog_46e3af5b0101cehh.html
-     * http://blog.csdn.net/u013869488/article/details/49853217
-     * http://blog.csdn.net/sinat_29384657/article/details/52188723
      *
-     * http://blog.csdn.net/yanzi1225627/article/details/38098729
+     * 预览实现参考Google官方Camera2 API sample
+     * link: https://github.com/googlesamples/android-Camera2Basic
      */
 
+    /**
+     * viewCalibration：用于放置预览流
+     */
     @BindView(R.id.view_calibration)
     AutoFitTextureView viewCalibration;
+
+    /**
+     * canvasCalibration：作为画布用来画标定获得的坐标
+     */
     @BindView(R.id.canvas_calibration)
     CalibrationView canvasCalibration;
+
+    /**
+     * imgCalibration：用于装载最后标定成功的图片
+     */
     @BindView(R.id.img_calibration)
     ImageView imgCalibration;
+
+    /**
+     * btnCalibrationCancel：标定成功后点击可进行重新标定
+     */
     @BindView(R.id.btn_calibration_cancel)
     Button btnCalibrationCancel;
+
+    /**
+     * btnCalibrationComplete：标定成功后点击可进入到演奏页面
+     */
     @BindView(R.id.btn_calibration_complete)
     Button btnCalibrationComplete;
+
+    /**
+     * layoutContainer：标定不合法区域，会被涂上一些黑色显示
+     */
     @BindView(R.id.layout_container)
     LinearLayout layoutContainer;
+
+    /**
+     * layoutLegal：标定合法区域
+     */
     @BindView(R.id.layout_legal)
     LinearLayout layoutLegal;
+
 
     public static final String EXTRA_RESULT = "EXTRA_RESULT";
 
@@ -89,9 +114,11 @@ public class CalibrationActivity extends BaseActivity {
     private static final int MAX_PREVIEW_WIDTH = 1920;
     private static final int MAX_PREVIEW_HEIGHT = 1080;
 
+    /**
+     * 用于使图片竖直显示所建立的一些方向数据
+     */
     private static final SparseIntArray ORIENTATIONS = new SparseIntArray();
 
-    ///为了使照片竖直显示
     static {
         ORIENTATIONS.append(Surface.ROTATION_0, 90);
         ORIENTATIONS.append(Surface.ROTATION_90, 0);
@@ -101,19 +128,42 @@ public class CalibrationActivity extends BaseActivity {
 
     private CameraManager cameraManager;
     private CameraDevice cameraDevice;
+
+    /**
+     * 获取照片图像数据用到的子线程
+     */
     private HandlerThread backgroundThread;
     private Handler backgroundHandler;
+
     private String cameraID;
     private CameraCaptureSession cameraCaptureSession;
+
+    /**
+     * imageReader：用于装载预览的图片流
+     */
     private ImageReader imageReader;
+
+    /**
+     * calibrationResult：放置了对图片进行标定处理后的结果，包括了四个边界点和标定状态
+     */
     private CalibrationResult calibrationResult;
 
+    /**
+     * targetHeightStart和targetHeightEnd：分别是合法区域的纵坐标（单位px）
+     */
     private int targetHeightStart = 0;
     private int targetHeightEnd = 1000;
 
+    /**
+     * canCalibration: 为true时可以开始标定，为false时标定停止
+     */
     private boolean canCalibration = true;
+
     private int cnt = 0;
 
+    /**
+     * previewSize: 预览区域的尺寸
+     */
     private Size previewSize;
 
     private CaptureRequest.Builder previewRequestBuilder;
@@ -157,16 +207,17 @@ public class CalibrationActivity extends BaseActivity {
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,  WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
+        // 开启子线程，绑定TextureView的响应事件
         startBackgroundThread();
         viewCalibration.setSurfaceTextureListener(surfaceTextureListener);
 
         initView();
     }
 
+    /**
+     * 初始化界面上的文字标签、按键响应等等
+     */
     private void initView() {
-        /**
-         * 初始化界面上的文字标签、按键响应等等
-         */
 
         initViewStatus();
 
@@ -184,10 +235,10 @@ public class CalibrationActivity extends BaseActivity {
         });
     }
 
+    /**
+     * 标定状态的界面布局，隐藏一些按钮
+     */
     private void initViewStatus() {
-        /**
-         * 标定状态的界面布局，隐藏一些按钮
-         */
 
         viewCalibration.setVisibility(View.VISIBLE);
         layoutContainer.setVisibility(View.VISIBLE);
@@ -197,10 +248,10 @@ public class CalibrationActivity extends BaseActivity {
         canCalibration = true;
     }
 
+    /**
+     * 照片处理
+     */
     private void processImage(Image image) {
-        /**
-         * 照片处理
-         */
 
         // FIXME: 暂时调慢了标定视频帧率
         cnt++;
@@ -238,7 +289,13 @@ public class CalibrationActivity extends BaseActivity {
         }
     }
 
+    /**
+     * 相机开启
+     * @param width     TextureView的宽度
+     * @param height    TextureView的高度
+     */
     private void openCamera(int width, int height) {
+
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
                 != PackageManager.PERMISSION_GRANTED) {
 //            requestCameraPermission();
@@ -253,7 +310,13 @@ public class CalibrationActivity extends BaseActivity {
         }
     }
 
+    /**
+     * 用来设置相机的输出选项，包括图像尺寸，图像获取，图像的标定操作等等
+     * @param width     TextureView的宽度
+     * @param height    TextureView的高度
+     */
     private void setUpCameraOutputs(int width, int height) {
+
         cameraManager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
         cameraID = String.valueOf(CameraCharacteristics.LENS_FACING_BACK);  //前摄像头
         ImageProcessor.initProcessor();
@@ -263,6 +326,7 @@ public class CalibrationActivity extends BaseActivity {
             StreamConfigurationMap map = characteristics.get(
                     CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
 
+            // 获取最贴近手机屏幕长宽比的照片，若存在多张，则选取一个大于640*480的最小尺寸, YUV_420_888格式是预览流格式
             Size relativeMin = ImageUtil.getRelativeMinSize(Arrays.asList(map.getOutputSizes(ImageFormat.YUV_420_888)),
                                                             viewCalibration.getWidth(), viewCalibration.getHeight());
 
@@ -271,6 +335,8 @@ public class CalibrationActivity extends BaseActivity {
             imageReader = ImageReader.newInstance(relativeMin.getWidth(), relativeMin.getHeight(),
                                             ImageFormat.YUV_420_888, 5);
             imageReader.setOnImageAvailableListener((reader) -> {
+                /* 当获取到图片后，对图片进行操作 */
+
                 if (!canCalibration) {
                     return;
                 }
@@ -288,10 +354,8 @@ public class CalibrationActivity extends BaseActivity {
                 }
             }, backgroundHandler);
 
-            // Find out if we need to swap dimension to get the preview size relative to sensor
-            // coordinate.
+            // 查看当前手机朝向来决定是否要对调TextureView的长宽
             int displayRotation = getWindowManager().getDefaultDisplay().getRotation();
-            //noinspection ConstantConditions
             int sensorOrientation = characteristics.get(CameraCharacteristics.SENSOR_ORIENTATION);
             boolean swappedDimensions = false;
             switch (displayRotation) {
@@ -344,7 +408,13 @@ public class CalibrationActivity extends BaseActivity {
         }
     }
 
+    /**
+     * 当手机屏幕的朝向改变时，要对获取到的视频流进行方向上的调整
+     * @param viewWidth     TextureView的宽度
+     * @param viewHeight    TextureView的高度
+     */
     private void configureTransform(int viewWidth, int viewHeight) {
+
         if (viewCalibration == null || previewSize == null) {
             return;
         }
@@ -358,8 +428,7 @@ public class CalibrationActivity extends BaseActivity {
         if (Surface.ROTATION_90 == rotation || Surface.ROTATION_270 == rotation) {
             bufferRect.offset(centerX - bufferRect.centerX(), centerY - bufferRect.centerY());
             matrix.setRectToRect(viewRect, bufferRect, Matrix.ScaleToFit.FILL);
-            float scale = Math.max(
-                    (float) viewHeight / previewSize.getHeight(),
+            float scale = Math.max((float) viewHeight / previewSize.getHeight(),
                     (float) viewWidth / previewSize.getWidth());
             matrix.postScale(scale, scale, centerX, centerY);
             matrix.postRotate(90 * (rotation - 2), centerX, centerY);
@@ -389,7 +458,11 @@ public class CalibrationActivity extends BaseActivity {
         }
     };
 
+    /**
+     * 预览状态的创建
+     */
     private void createCameraPreviewSession() {
+
         try {
             SurfaceTexture texture = viewCalibration.getSurfaceTexture();
             assert texture != null;
@@ -401,8 +474,7 @@ public class CalibrationActivity extends BaseActivity {
             Surface surface = new Surface(texture);
 
             // We set up a CaptureRequest.Builder with the output Surface.
-            previewRequestBuilder
-                    = cameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW);
+            previewRequestBuilder = cameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW);
             previewRequestBuilder.addTarget(surface);
 
             // Here, we create a CameraCaptureSession for camera preview.
@@ -459,6 +531,7 @@ public class CalibrationActivity extends BaseActivity {
         return R.layout.activity_calibration;
     }
 
+    // TODO: 权限请求暂时未实现
 //    private void requestCameraPermission() {
 //        if (Build.VERSION.SDK_INT >= 23) {
 //            if (shouldShowRequestPermissionRationale(Manifest.permission.CAMERA)) {

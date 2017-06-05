@@ -10,7 +10,8 @@ import android.view.TextureView;
 
 public class AutoFitTextureView extends TextureView {
     /**
-     * 参考Google官方Camera2 API example
+     * 参考Google官方Camera2 API sample， 用于自适应屏幕尺寸的TextureView
+     * link: https://github.com/googlesamples/android-Camera2Basic
      */
 
     private int mRatioWidth = 0;

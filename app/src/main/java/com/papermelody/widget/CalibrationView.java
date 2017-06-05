@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 
 import com.papermelody.core.calibration.CalibrationResult;
@@ -48,6 +49,7 @@ public class CalibrationView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
+        Log.d("CANVAS3", height+" "+canvas.getWidth());
         if (context != null) {
             double heightScalar = (double) height / photoHeight;
             double widthScalar = (double) width / photoWidth;

@@ -27,11 +27,13 @@ import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.util.Size;
 import android.util.SparseIntArray;
+import android.view.Gravity;
 import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -134,6 +136,11 @@ public class CalibrationActivity extends BaseActivity {
      */
     private HandlerThread backgroundThread;
     private Handler backgroundHandler;
+
+    /**
+     * Activity主线程
+     */
+    private Handler mainHandler;
 
     private String cameraID;
     private CameraCaptureSession cameraCaptureSession;
@@ -304,7 +311,7 @@ public class CalibrationActivity extends BaseActivity {
         setUpCameraOutputs(width, height);
         configureTransform(width, height);
         try {
-            cameraManager.openCamera(cameraID, deviceStateCallback, backgroundHandler);
+            cameraManager.openCamera(cameraID, deviceStateCallback, mainHandler);
         } catch (CameraAccessException e) {
             e.printStackTrace();
         }
@@ -332,6 +339,8 @@ public class CalibrationActivity extends BaseActivity {
 
             Log.d(TAG, relativeMin.getWidth()+" "+relativeMin.getHeight());
 
+            canvasCalibration.setPhotoSize(relativeMin.getWidth(), relativeMin.getHeight());
+
             imageReader = ImageReader.newInstance(relativeMin.getWidth(), relativeMin.getHeight(),
                                             ImageFormat.YUV_420_888, 5);
             imageReader.setOnImageAvailableListener((reader) -> {
@@ -352,7 +361,7 @@ public class CalibrationActivity extends BaseActivity {
                         image.close();
                     }
                 }
-            }, backgroundHandler);
+            }, mainHandler);
 
             // 查看当前手机朝向来决定是否要对调TextureView的长宽
             int displayRotation = getWindowManager().getDefaultDisplay().getRotation();
@@ -402,7 +411,15 @@ public class CalibrationActivity extends BaseActivity {
             previewSize = ImageUtil.chooseOptimalSize(map.getOutputSizes(SurfaceTexture.class),
                     rotatedPreviewWidth, rotatedPreviewHeight, maxPreviewWidth, maxPreviewHeight, relativeMin);
 
+            Log.d(TAG, previewSize.getWidth()+" "+previewSize.getHeight());
             viewCalibration.setAspectRatio(previewSize.getWidth(), previewSize.getHeight());
+
+            FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(viewCalibration.getWidth(), viewCalibration.getHeight());
+            lp.gravity = Gravity.CENTER;
+            canvasCalibration.setLayoutParams(lp);
+            imgCalibration.setLayoutParams(lp);
+            canvasCalibration.setSize(viewCalibration.getWidth(), viewCalibration.getHeight());
+
         } catch (CameraAccessException e) {
             e.printStackTrace();
         }
@@ -475,7 +492,10 @@ public class CalibrationActivity extends BaseActivity {
 
             // We set up a CaptureRequest.Builder with the output Surface.
             previewRequestBuilder = cameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW);
+            // 将TextureView的surface作为CaptureRequest.Builder的目标
             previewRequestBuilder.addTarget(surface);
+            // 将imageReader的surface作为CaptureRequest.Builder的目标
+            previewRequestBuilder.addTarget(imageReader.getSurface());
 
             // Here, we create a CameraCaptureSession for camera preview.
             cameraDevice.createCaptureSession(Arrays.asList(surface, imageReader.getSurface()),
@@ -510,20 +530,20 @@ public class CalibrationActivity extends BaseActivity {
                         }
 
                         @Override
-                        public void onConfigureFailed(
-                                @NonNull CameraCaptureSession cameraCaptureSession) {
-                            ToastUtil.showShort("Configure Failed");
+                        public void onConfigureFailed(@NonNull CameraCaptureSession cameraCaptureSession) {
+                            ToastUtil.showShort("配置失败");
                         }
-                    }, null);
+                    }, backgroundHandler);
         } catch (CameraAccessException e) {
             e.printStackTrace();
         }
     }
 
     private void startBackgroundThread() {
-        backgroundThread = new HandlerThread("CameraBackground");
+        backgroundThread = new HandlerThread("Camera2");
         backgroundThread.start();
         backgroundHandler = new Handler(backgroundThread.getLooper());
+        mainHandler = new Handler(getMainLooper());
     }
 
     @Override

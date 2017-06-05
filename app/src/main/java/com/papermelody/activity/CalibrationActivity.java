@@ -6,6 +6,10 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.ImageFormat;
+import android.graphics.Matrix;
+import android.graphics.Point;
+import android.graphics.RectF;
+import android.graphics.SurfaceTexture;
 import android.hardware.camera2.CameraAccessException;
 import android.hardware.camera2.CameraCaptureSession;
 import android.hardware.camera2.CameraCharacteristics;
@@ -15,23 +19,19 @@ import android.hardware.camera2.CaptureRequest;
 import android.hardware.camera2.params.StreamConfigurationMap;
 import android.media.Image;
 import android.media.ImageReader;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.util.Size;
 import android.util.SparseIntArray;
-import android.view.Gravity;
 import android.view.Surface;
-import android.view.SurfaceHolder;
-import android.view.SurfaceView;
+import android.view.TextureView;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -41,6 +41,7 @@ import com.papermelody.util.ImageProcessor;
 import com.papermelody.util.ImageUtil;
 import com.papermelody.util.ToastUtil;
 import com.papermelody.util.ViewUtil;
+import com.papermelody.widget.AutoFitTextureView;
 import com.papermelody.widget.CalibrationView;
 
 import org.opencv.core.Mat;
@@ -54,37 +55,70 @@ import butterknife.BindView;
  */
 
 public class CalibrationActivity extends BaseActivity {
-
     /**
      * 用例：演奏乐器（流程四）
      * 标定界面，用于标定演奏纸的演奏合法位置
-     * http://blog.sina.com.cn/s/blog_46e3af5b0101cehh.html
-     * http://blog.csdn.net/u013869488/article/details/49853217
-     * http://blog.csdn.net/sinat_29384657/article/details/52188723
      *
-     * http://blog.csdn.net/yanzi1225627/article/details/38098729
+     * 预览实现参考Google官方Camera2 API sample
+     * link: https://github.com/googlesamples/android-Camera2Basic
      */
 
+    /**
+     * viewCalibration：用于放置预览流
+     */
     @BindView(R.id.view_calibration)
-    SurfaceView viewCalibration;
+    AutoFitTextureView viewCalibration;
+
+    /**
+     * canvasCalibration：作为画布用来画标定获得的坐标
+     */
     @BindView(R.id.canvas_calibration)
     CalibrationView canvasCalibration;
+
+    /**
+     * imgCalibration：用于装载最后标定成功的图片
+     */
     @BindView(R.id.img_calibration)
     ImageView imgCalibration;
+
+    /**
+     * btnCalibrationCancel：标定成功后点击可进行重新标定
+     */
     @BindView(R.id.btn_calibration_cancel)
     Button btnCalibrationCancel;
+
+    /**
+     * btnCalibrationComplete：标定成功后点击可进入到演奏页面
+     */
     @BindView(R.id.btn_calibration_complete)
     Button btnCalibrationComplete;
+
+    /**
+     * layoutContainer：标定不合法区域，会被涂上一些黑色显示
+     */
     @BindView(R.id.layout_container)
     LinearLayout layoutContainer;
+
+    /**
+     * layoutLegal：标定合法区域
+     */
     @BindView(R.id.layout_legal)
     LinearLayout layoutLegal;
 
+
     public static final String EXTRA_RESULT = "EXTRA_RESULT";
 
+    private static final String TAG = "CalibrationAct";
+    private static final int REQUEST_CAMERA_PERMISSION = 1;
+
+    private static final int MAX_PREVIEW_WIDTH = 1920;
+    private static final int MAX_PREVIEW_HEIGHT = 1080;
+
+    /**
+     * 用于使图片竖直显示所建立的一些方向数据
+     */
     private static final SparseIntArray ORIENTATIONS = new SparseIntArray();
 
-    ///为了使照片竖直显示
     static {
         ORIENTATIONS.append(Surface.ROTATION_0, 90);
         ORIENTATIONS.append(Surface.ROTATION_90, 0);
@@ -94,79 +128,100 @@ public class CalibrationActivity extends BaseActivity {
 
     private CameraManager cameraManager;
     private CameraDevice cameraDevice;
-    private SurfaceHolder surfaceHolder;
-    private Handler childHandler, mainHandler;
+
+    /**
+     * 获取照片图像数据用到的子线程
+     */
+    private HandlerThread backgroundThread;
+    private Handler backgroundHandler;
+
     private String cameraID;
     private CameraCaptureSession cameraCaptureSession;
-    private ImageReader imageReader;
-    private CalibrationResult calibrationResult;
-    private int imgHeight = 1080;
-    private int imgWidth = 1920;
 
+    /**
+     * imageReader：用于装载预览的图片流
+     */
+    private ImageReader imageReader;
+
+    /**
+     * calibrationResult：放置了对图片进行标定处理后的结果，包括了四个边界点和标定状态
+     */
+    private CalibrationResult calibrationResult;
+
+    /**
+     * targetHeightStart和targetHeightEnd：分别是合法区域的纵坐标（单位px）
+     */
     private int targetHeightStart = 0;
     private int targetHeightEnd = 1000;
 
+    /**
+     * canCalibration: 为true时可以开始标定，为false时标定停止
+     */
     private boolean canCalibration = true;
+
     private int cnt = 0;
+
+    /**
+     * previewSize: 预览区域的尺寸
+     */
+    private Size previewSize;
+
+    private CaptureRequest.Builder previewRequestBuilder;
+
+    private final TextureView.SurfaceTextureListener surfaceTextureListener =
+            new TextureView.SurfaceTextureListener() {
+
+                @Override
+                public void onSurfaceTextureAvailable(SurfaceTexture texture, int width, int height) {
+                    openCamera(width, height);
+                }
+
+                @Override
+                public void onSurfaceTextureSizeChanged(SurfaceTexture texture, int width, int height) {
+                    configureTransform(width, height);
+                }
+
+                @Override
+                public boolean onSurfaceTextureDestroyed(SurfaceTexture texture) {
+                    return true;
+                }
+
+                @Override
+                public void onSurfaceTextureUpdated(SurfaceTexture texture) { }
+            };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        /*Window window = getWindow();
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+        window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.setStatusBarColor(Color.TRANSPARENT);
+        window.setNavigationBarColor(Color.TRANSPARENT);*/
+
         super.onCreate(savedInstanceState);
 
+        Log.d(TAG, ViewUtil.getScreenHeight(this)+" "+ViewUtil.getScreenWidth(this));
+
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,  WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+        // 开启子线程，绑定TextureView的响应事件
+        startBackgroundThread();
+        viewCalibration.setSurfaceTextureListener(surfaceTextureListener);
 
         initView();
     }
 
-    private void initSurfaceSize(double scalar) {
-        /* 横屏导致长宽交换 */
-        imgWidth = ViewUtil.getScreenWidth(this);
-        imgHeight = (int) (imgWidth / scalar);
-        FrameLayout.LayoutParams lp;
-        lp = new FrameLayout.LayoutParams(imgWidth, imgHeight);
-        lp.gravity = Gravity.CENTER;
-        imgCalibration.setLayoutParams(lp);
-        canvasCalibration.setSize(imgWidth, imgHeight);
-        if (Build.VERSION.SDK_INT >= 24) {
-            // TODO: Android 7.0 上貌似有自动图片适配功能，暂时不太确定，需要更多的测试情况
-            imgHeight = ViewUtil.getScreenHeight(this);
-            lp = new FrameLayout.LayoutParams(imgWidth, imgHeight);
-            lp.gravity = Gravity.CENTER;
-        }
-        viewCalibration.setLayoutParams(lp);
-    }
-
+    /**
+     * 初始化界面上的文字标签、按键响应等等
+     */
     private void initView() {
-        /**
-         * 初始化界面上的文字标签、按键响应等等
-         */
 
         initViewStatus();
 
-        surfaceHolder = viewCalibration.getHolder();
-        surfaceHolder.setKeepScreenOn(true);
-        surfaceHolder.addCallback(new SurfaceHolder.Callback() {
-            @Override
-            public void surfaceCreated(SurfaceHolder holder) {
-                initCamera();
-            }
-
-            @Override
-            public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-
-            }
-
-            @Override
-            public void surfaceDestroyed(SurfaceHolder holder) {
-                if (cameraDevice != null) {
-                    cameraDevice.close();
-                    cameraDevice = null;
-                }
-            }
-        });
-
         btnCalibrationComplete.setOnClickListener((View v) -> {
-            //Intent intent = new Intent(this, PlayActivity.class);
             Intent intent = new Intent(this, PlayActivity.class);
             Bundle bundle = new Bundle();
             bundle.putSerializable(EXTRA_RESULT, calibrationResult);
@@ -180,10 +235,10 @@ public class CalibrationActivity extends BaseActivity {
         });
     }
 
+    /**
+     * 标定状态的界面布局，隐藏一些按钮
+     */
     private void initViewStatus() {
-        /**
-         * 标定状态的界面布局，隐藏一些按钮
-         */
 
         viewCalibration.setVisibility(View.VISIBLE);
         layoutContainer.setVisibility(View.VISIBLE);
@@ -193,10 +248,10 @@ public class CalibrationActivity extends BaseActivity {
         canCalibration = true;
     }
 
+    /**
+     * 照片处理
+     */
     private void processImage(Image image) {
-        /**
-         * 照片处理
-         */
 
         // FIXME: 暂时调慢了标定视频帧率
         cnt++;
@@ -210,7 +265,7 @@ public class CalibrationActivity extends BaseActivity {
         canvasCalibration.updateCalibrationCoordinates(calibrationResult, CalibrationActivity.this, false);
 
         if (ImageProcessor.getCalibrationStatus(calibrationResult)) {
-            Log.d("TESThistres",calibrationResult.getLeftLowX()+"");
+            /*Log.d("TESThistres",calibrationResult.getLeftLowX()+"");
             Log.d("TESThistres",calibrationResult.getLeftLowY()+"");
             Log.d("TESThistres",calibrationResult.getLeftUpX()+"");
             Log.d("TESThistres",calibrationResult.getLeftUpY()+"");
@@ -218,7 +273,7 @@ public class CalibrationActivity extends BaseActivity {
             Log.d("TESThistres",calibrationResult.getRightLowY()+"");
             Log.d("TESThistres",calibrationResult.getRightUpX()+"");
             Log.d("TESThistres",calibrationResult.getRightUpY()+"");
-            Log.d("TESThistres",calibrationResult.isFlag()+"");
+            Log.d("TESThistres",calibrationResult.isFlag()+"");*/
             canvasCalibration.updateCalibrationCoordinates(calibrationResult, CalibrationActivity.this, true);
 
             Bitmap bitmap = ImageUtil.imageToBitmap(mat);
@@ -234,151 +289,333 @@ public class CalibrationActivity extends BaseActivity {
         }
     }
 
-    private void initCamera() {
-        /**
-         * 初始化相机，在这里设置相机的预览获取，尺寸等等
-         */
+    /**
+     * 相机开启
+     * @param width     TextureView的宽度
+     * @param height    TextureView的高度
+     */
+    private void openCamera(int width, int height) {
 
-        HandlerThread handlerThread = new HandlerThread("Camera2");
-        handlerThread.start();
-        childHandler = new Handler(handlerThread.getLooper());
-        mainHandler = new Handler(getMainLooper());
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED) {
+//            requestCameraPermission();
+            return;
+        }
+        setUpCameraOutputs(width, height);
+        configureTransform(width, height);
+        try {
+            cameraManager.openCamera(cameraID, deviceStateCallback, backgroundHandler);
+        } catch (CameraAccessException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 用来设置相机的输出选项，包括图像尺寸，图像获取，图像的标定操作等等
+     * @param width     TextureView的宽度
+     * @param height    TextureView的高度
+     */
+    private void setUpCameraOutputs(int width, int height) {
+
         cameraManager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
         cameraID = String.valueOf(CameraCharacteristics.LENS_FACING_BACK);  //前摄像头
         ImageProcessor.initProcessor();
 
-        // 设置imageReader的尺寸与采样频率
         try {
             CameraCharacteristics characteristics = cameraManager.getCameraCharacteristics(cameraID);
             StreamConfigurationMap map = characteristics.get(
                     CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
 
-            // 获取照相机可用的符合条件的最小像素图片
-            Size relativeMin = ImageUtil.getRelativeMinSize(Arrays.asList(map.getOutputSizes(ImageFormat.YUV_420_888)));
-            initSurfaceSize((double) relativeMin.getWidth()/relativeMin.getHeight());
-            imageReader = ImageReader.newInstance(relativeMin.getWidth(), relativeMin.getHeight(), ImageFormat.YUV_420_888, 5);
-            canvasCalibration.setPhotoSize(relativeMin.getWidth(), relativeMin.getHeight());
+            // 获取最贴近手机屏幕长宽比的照片，若存在多张，则选取一个大于640*480的最小尺寸, YUV_420_888格式是预览流格式
+            Size relativeMin = ImageUtil.getRelativeMinSize(Arrays.asList(map.getOutputSizes(ImageFormat.YUV_420_888)),
+                                                            viewCalibration.getWidth(), viewCalibration.getHeight());
 
-            // 计算合法区域范围
-            targetHeightStart = getHeightRelativeCoordinate(ViewUtil.getScreenHeight
-                    (CalibrationActivity.this) - layoutLegal.getHeight(), relativeMin.getHeight());
-            targetHeightEnd = getHeightRelativeCoordinate(ViewUtil.getScreenHeight
-                    (CalibrationActivity.this), relativeMin.getHeight());
+            Log.d(TAG, relativeMin.getWidth()+" "+relativeMin.getHeight());
 
-            Log.d("TESTTAR", targetHeightStart+" "+targetHeightEnd);
+            imageReader = ImageReader.newInstance(relativeMin.getWidth(), relativeMin.getHeight(),
+                                            ImageFormat.YUV_420_888, 5);
             imageReader.setOnImageAvailableListener((reader) -> {
-                    if (!canCalibration) {
+                /* 当获取到图片后，对图片进行操作 */
+
+                if (!canCalibration) {
+                    return;
+                }
+                Image image = null;
+                try {
+                    image = imageReader.acquireLatestImage();
+                    if (image == null) {
                         return;
                     }
-                    Image image = null;
-                    try {
-                        image = imageReader.acquireLatestImage();
-                        if (image == null) {
-                            return;
-                        }
-
-                        processImage(image);
-
-//                        cnt++;
-//                        Log.d("CALIBRATION", "imgReader" + cnt);
-                    } finally {
-                        if (image != null) {
-                            image.close();
-                        }
+                    processImage(image);
+                } finally {
+                    if (image != null) {
+                        image.close();
                     }
-            }, mainHandler);
+                }
+            }, backgroundHandler);
 
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                return;
+            // 查看当前手机朝向来决定是否要对调TextureView的长宽
+            int displayRotation = getWindowManager().getDefaultDisplay().getRotation();
+            int sensorOrientation = characteristics.get(CameraCharacteristics.SENSOR_ORIENTATION);
+            boolean swappedDimensions = false;
+            switch (displayRotation) {
+                case Surface.ROTATION_0:
+                case Surface.ROTATION_180:
+                    if (sensorOrientation == 90 || sensorOrientation == 270) {
+                        swappedDimensions = true;
+                    }
+                    break;
+                case Surface.ROTATION_90:
+                case Surface.ROTATION_270:
+                    if (sensorOrientation == 0 || sensorOrientation == 180) {
+                        swappedDimensions = true;
+                    }
+                    break;
+                default:
+                    Log.e(TAG, "Display rotation is invalid: " + displayRotation);
             }
-            cameraManager.openCamera(cameraID, deviceStateCallback, mainHandler);
+
+            Point displaySize = new Point();
+            getWindowManager().getDefaultDisplay().getSize(displaySize);
+            int rotatedPreviewWidth = width;
+            int rotatedPreviewHeight = height;
+            int maxPreviewWidth = displaySize.x;
+            int maxPreviewHeight = displaySize.y;
+
+            if (swappedDimensions) {
+                rotatedPreviewWidth = height;
+                rotatedPreviewHeight = width;
+                maxPreviewWidth = displaySize.y;
+                maxPreviewHeight = displaySize.x;
+            }
+
+            if (maxPreviewWidth > MAX_PREVIEW_WIDTH) {
+                maxPreviewWidth = MAX_PREVIEW_WIDTH;
+            }
+            if (maxPreviewHeight > MAX_PREVIEW_HEIGHT) {
+                maxPreviewHeight = MAX_PREVIEW_HEIGHT;
+            }
+
+            // Danger, W.R.! Attempting to use too large a preview size could  exceed the camera
+            // bus' bandwidth limitation, resulting in gorgeous previews but the storage of
+            // garbage capture data.
+            previewSize = ImageUtil.chooseOptimalSize(map.getOutputSizes(SurfaceTexture.class),
+                    rotatedPreviewWidth, rotatedPreviewHeight, maxPreviewWidth, maxPreviewHeight, relativeMin);
+
+            viewCalibration.setAspectRatio(previewSize.getWidth(), previewSize.getHeight());
         } catch (CameraAccessException e) {
             e.printStackTrace();
         }
     }
 
-    private CameraDevice.StateCallback deviceStateCallback = new CameraDevice.StateCallback() {
-        /* 摄像头创建监听 */
+    /**
+     * 当手机屏幕的朝向改变时，要对获取到的视频流进行方向上的调整
+     * @param viewWidth     TextureView的宽度
+     * @param viewHeight    TextureView的高度
+     */
+    private void configureTransform(int viewWidth, int viewHeight) {
+
+        if (viewCalibration == null || previewSize == null) {
+            return;
+        }
+        int rotation = getWindowManager().getDefaultDisplay().getRotation();
+
+        Matrix matrix = new Matrix();
+        RectF viewRect = new RectF(0, 0, viewWidth, viewHeight);
+        RectF bufferRect = new RectF(0, 0, previewSize.getHeight(), previewSize.getWidth());
+        float centerX = viewRect.centerX();
+        float centerY = viewRect.centerY();
+        if (Surface.ROTATION_90 == rotation || Surface.ROTATION_270 == rotation) {
+            bufferRect.offset(centerX - bufferRect.centerX(), centerY - bufferRect.centerY());
+            matrix.setRectToRect(viewRect, bufferRect, Matrix.ScaleToFit.FILL);
+            float scale = Math.max((float) viewHeight / previewSize.getHeight(),
+                    (float) viewWidth / previewSize.getWidth());
+            matrix.postScale(scale, scale, centerX, centerY);
+            matrix.postRotate(90 * (rotation - 2), centerX, centerY);
+        } else if (Surface.ROTATION_180 == rotation) {
+            matrix.postRotate(180, centerX, centerY);
+        }
+        viewCalibration.setTransform(matrix);
+    }
+
+    private final CameraDevice.StateCallback deviceStateCallback = new CameraDevice.StateCallback() {
 
         @Override
-        public void onOpened(@NonNull CameraDevice camera) {
+        public void onOpened(@NonNull CameraDevice device) {
             ToastUtil.showShort("开启成功");
-            cameraDevice = camera;
-            takePreview();
+            cameraDevice = device;
+            createCameraPreviewSession();
         }
 
         @Override
-        public void onDisconnected(@NonNull CameraDevice camera) {
-            if (null != cameraDevice) {
-                cameraDevice.close();
-                cameraDevice = null;
-            }
+        public void onDisconnected(@NonNull CameraDevice device) {
+            device.close();
+            cameraDevice = null;
         }
 
         @Override
-        public void onError(@NonNull CameraDevice camera, int error) {
-            ToastUtil.showShort("摄像头开启失败");
+        public void onError(@NonNull CameraDevice device, int error) {
         }
     };
 
-    private void takePreview() {
-        /* 开启预览 */
+    /**
+     * 预览状态的创建
+     */
+    private void createCameraPreviewSession() {
 
         try {
-            // 创建预览需要的CaptureRequest.Builder
-            final CaptureRequest.Builder previewRequestBuilder =
-                    cameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW);
-            // 将SurfaceView的surface作为CaptureRequest.Builder的目标
-            previewRequestBuilder.addTarget(surfaceHolder.getSurface());
-            // 将imageReader的surface作为CaptureRequest.Builder的目标
-            previewRequestBuilder.addTarget(imageReader.getSurface());
-            // 创建CameraCaptureSession，该对象负责管理处理预览请求和拍照请求
-            cameraDevice.createCaptureSession(Arrays.asList(surfaceHolder.getSurface(),
-                    imageReader.getSurface()), new CameraCaptureSession.StateCallback() {
-                @Override
-                public void onConfigured(@NonNull CameraCaptureSession session) {
-                    if (null == cameraDevice) {
-                        return;
-                    }
-                    // 当摄像头已经准备好时，开始显示预览
-                    cameraCaptureSession = session;
-                    try {
-                        // 自动对焦
-                        previewRequestBuilder.set(CaptureRequest.CONTROL_AF_MODE,
-                                CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_PICTURE);
-                        // 打开闪光灯
-                        previewRequestBuilder.set(CaptureRequest.CONTROL_AE_MODE,
-                                CaptureRequest.CONTROL_AE_MODE_ON_AUTO_FLASH);
-                        // 显示预览
-                        CaptureRequest previewRequest = previewRequestBuilder.build();
-                        cameraCaptureSession.setRepeatingRequest(previewRequest, null, childHandler);
-                        // 获取手机方向
-                        int rotation = ViewUtil.getWindowRotation(CalibrationActivity.this);
-                        // 根据设备方向计算设置照片的方向
-                        previewRequestBuilder.set(CaptureRequest.JPEG_ORIENTATION, ORIENTATIONS.get(rotation));
-                    } catch (CameraAccessException e) {
-                        e.printStackTrace();
-                    }
-                }
+            SurfaceTexture texture = viewCalibration.getSurfaceTexture();
+            assert texture != null;
 
-                @Override
-                public void onConfigureFailed(@NonNull CameraCaptureSession session) {
-                    ToastUtil.showShort("配置失败");
-                }
-            }, childHandler);
+            // We configure the size of default buffer to be the size of camera preview we want.
+            texture.setDefaultBufferSize(previewSize.getWidth(), previewSize.getHeight());
+
+            // This is the output Surface we need to start preview.
+            Surface surface = new Surface(texture);
+
+            // We set up a CaptureRequest.Builder with the output Surface.
+            previewRequestBuilder = cameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW);
+            previewRequestBuilder.addTarget(surface);
+
+            // Here, we create a CameraCaptureSession for camera preview.
+            cameraDevice.createCaptureSession(Arrays.asList(surface, imageReader.getSurface()),
+                    new CameraCaptureSession.StateCallback() {
+
+                        @Override
+                        public void onConfigured(@NonNull CameraCaptureSession session) {
+                            // The camera is already closed
+                            if (cameraDevice == null) {
+                                return;
+                            }
+
+                            // When the session is ready, we start displaying the preview.
+                            cameraCaptureSession = session;
+                            try {
+                                // 自动对焦
+                                previewRequestBuilder.set(CaptureRequest.CONTROL_AF_MODE,
+                                        CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_PICTURE);
+                                // 打开闪光灯
+                                previewRequestBuilder.set(CaptureRequest.CONTROL_AE_MODE,
+                                        CaptureRequest.CONTROL_AE_MODE_ON_AUTO_FLASH);
+                                // 显示预览
+                                CaptureRequest previewRequest = previewRequestBuilder.build();
+                                cameraCaptureSession.setRepeatingRequest(previewRequest, null, backgroundHandler);
+                                // 获取手机方向
+                                int rotation = ViewUtil.getWindowRotation(CalibrationActivity.this);
+                                // 根据设备方向计算设置照片的方向
+                                previewRequestBuilder.set(CaptureRequest.JPEG_ORIENTATION, ORIENTATIONS.get(rotation));
+                            } catch (CameraAccessException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        @Override
+                        public void onConfigureFailed(
+                                @NonNull CameraCaptureSession cameraCaptureSession) {
+                            ToastUtil.showShort("Configure Failed");
+                        }
+                    }, null);
         } catch (CameraAccessException e) {
             e.printStackTrace();
         }
     }
 
-    private int getHeightRelativeCoordinate(int screenY, int photoHeight) {
-        double offset = (imgHeight - ViewUtil.getScreenHeight(CalibrationActivity.this)) / 2.0;
-        double targetHeightStart = (screenY + offset) / (double) imgHeight * photoHeight;
-        return (int) targetHeightStart;
+    private void startBackgroundThread() {
+        backgroundThread = new HandlerThread("CameraBackground");
+        backgroundThread.start();
+        backgroundHandler = new Handler(backgroundThread.getLooper());
     }
 
     @Override
     protected int getContentViewId() {
         return R.layout.activity_calibration;
     }
+
+    // TODO: 权限请求暂时未实现
+//    private void requestCameraPermission() {
+//        if (Build.VERSION.SDK_INT >= 23) {
+//            if (shouldShowRequestPermissionRationale(Manifest.permission.CAMERA)) {
+//                new ConfirmationDialog().show(getChildFragmentManager(), FRAGMENT_DIALOG);
+//            } else {
+//                FragmentCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA},
+//                        REQUEST_CAMERA_PERMISSION);
+//            }
+//        }
+//    }
+//
+//    @Override
+//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+//                                           @NonNull int[] grantResults) {
+//        if (requestCode == REQUEST_CAMERA_PERMISSION) {
+//            if (grantResults.length != 1 || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+//                ErrorDialog.newInstance(getString(R.string.request_permission))
+//                        .show(getChildFragmentManager(), FRAGMENT_DIALOG);
+//            }
+//        } else {
+//            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+//        }
+//    }
+//
+//    /**
+//     * Shows an error message dialog.
+//     */
+//    public static class ErrorDialog extends DialogFragment {
+//
+//        private static final String ARG_MESSAGE = "message";
+//
+//        public static ErrorDialog newInstance(String message) {
+//            ErrorDialog dialog = new ErrorDialog();
+//            Bundle args = new Bundle();
+//            args.putString(ARG_MESSAGE, message);
+//            dialog.setArguments(args);
+//            return dialog;
+//        }
+//
+//        @Override
+//        public Dialog onCreateDialog(Bundle savedInstanceState) {
+//            final Activity activity = getActivity();
+//            return new AlertDialog.Builder(activity)
+//                    .setMessage(getArguments().getString(ARG_MESSAGE))
+//                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+//                        @Override
+//                        public void onClick(DialogInterface dialogInterface, int i) {
+//                            activity.finish();
+//                        }
+//                    })
+//                    .create();
+//        }
+//
+//    }
+//
+//    /**
+//     * Shows OK/Cancel confirmation dialog about camera permission.
+//     */
+//    public static class ConfirmationDialog extends DialogFragment {
+//
+//        @Override
+//        public Dialog onCreateDialog(Bundle savedInstanceState) {
+//            final Fragment parent = getParentFragment();
+//            return new AlertDialog.Builder(getActivity())
+//                    .setMessage(R.string.request_permission)
+//                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+//                        @Override
+//                        public void onClick(DialogInterface dialog, int which) {
+//                            FragmentCompat.requestPermissions(parent,
+//                                    new String[]{Manifest.permission.CAMERA},
+//                                    REQUEST_CAMERA_PERMISSION);
+//                        }
+//                    })
+//                    .setNegativeButton(android.R.string.cancel,
+//                            new DialogInterface.OnClickListener() {
+//                                @Override
+//                                public void onClick(DialogInterface dialog, int which) {
+//                                    Activity activity = parent.getActivity();
+//                                    if (activity != null) {
+//                                        activity.finish();
+//                                    }
+//                                }
+//                            })
+//                    .create();
+//        }
+//    }
 }

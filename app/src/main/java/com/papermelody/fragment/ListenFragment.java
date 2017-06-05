@@ -32,8 +32,8 @@ public class ListenFragment extends BaseFragment {
      */
     @BindView(R.id.seekBar)
     SeekBar seekBar;
-    @BindView(R.id.btn_pause)
-    Button btnPause;
+//    @BindView(R.id.btn_pause)
+//    Button btnPause;
 
     private static final String FILENAME = "";
     private static MediaPlayer mediaPlayer;
@@ -100,13 +100,13 @@ public class ListenFragment extends BaseFragment {
         };
         timer = new Timer();
         timer.schedule(timerTask, 0, 1000);
-        btnPause.setOnClickListener((View v) -> {
-            if (playState) {
-                pausePlay();
-            } else {
-                starPlay();
-            }
-        });
+//        btnPause.setOnClickListener((View v) -> {
+//            if (playState) {
+//                pausePlay();
+//            } else {
+//                starPlay();
+//            }
+//        });
     }
 
     @Override
@@ -119,7 +119,7 @@ public class ListenFragment extends BaseFragment {
     public void starPlay() {
         if (mediaPlayer != null) {
             mediaPlayer.start();
-            btnPause.setBackground(getResources().getDrawable(R.drawable.ic_pause_circle_outline_white_48dp));
+//            btnPause.setBackground(getResources().getDrawable(R.drawable.ic_pause_circle_outline_white_48dp));
             playState = true;
         }
     }
@@ -127,7 +127,7 @@ public class ListenFragment extends BaseFragment {
     public void pausePlay() {
         if (mediaPlayer != null) {
             mediaPlayer.pause();
-            btnPause.setBackground(getResources().getDrawable(R.drawable.ic_play_circle_outline_white_48dp));
+//            btnPause.setBackground(getResources().getDrawable(R.drawable.ic_play_circle_outline_white_48dp));
             playState = false;
         }
     }

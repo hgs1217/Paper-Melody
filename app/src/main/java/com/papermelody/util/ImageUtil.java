@@ -27,9 +27,16 @@ public class ImageUtil {
      * 用于处理图像的工具类
      */
 
-    // 预览照片所需求的最低像素要求
+    /**
+     * 预览照片所需求的最低像素要求，防止像素太低识别有误
+     */
     public static final int MIN_HEIGHT = 480;
     public static final int MIN_WIDTH = 640;
+
+    /**
+     * 预设的图片长宽比
+     */
+    public static final double HEIGHT_WIDTH_RATIO = 1.7777777;
 
     public static Bitmap imageToBitmap(Mat bgr) {
         Log.d("TESTB", bgr.rows() + " " + bgr.cols());
@@ -107,8 +114,16 @@ public class ImageUtil {
         return bgrMat;
     }
 
-    public static Size getRelativeMinSize(List<Size> sizes) {
+    /**
+     * 获取最贴近手机屏幕长宽比的照片，若存在多张，则选取一个大于预设最低尺寸的最小尺寸
+     * @param sizes         能获取的照片尺寸list
+     * @param screenWidth   屏幕宽度
+     * @param screenHeight  屏幕高度
+     * @return              返回的最佳尺寸
+     */
+    public static Size getRelativeMinSize(List<Size> sizes, int screenWidth, int screenHeight) {
         List<Size> comparedSizes = new ArrayList<>();
+        Log.d("TESTCP", screenWidth+" "+screenHeight);
         for (Size size : sizes) {
             if (size.getHeight() >= MIN_HEIGHT && size.getWidth() >= MIN_WIDTH) {
                 comparedSizes.add(size);
@@ -117,10 +132,59 @@ public class ImageUtil {
         for (Size size : comparedSizes) {
             Log.d("ComparedSizes", size.getHeight()+""+size.getWidth());
         }
+        double ratio = (double) screenWidth / screenHeight;
         if (comparedSizes.size() > 0) {
-            return Collections.min(comparedSizes, new CompareSizesByArea());
+            return Collections.min(comparedSizes, new CompareSizesByRatioArea(ratio));
         }
         return Collections.max(sizes, new CompareSizesByArea());
+    }
+
+    /**
+     * Given {@code choices} of {@code Size}s supported by a camera, choose the smallest one that
+     * is at least as large as the respective texture view size, and that is at most as large as the
+     * respective max size, and whose aspect ratio matches with the specified value. If such size
+     * doesn't exist, choose the largest one that is at most as large as the respective max size,
+     * and whose aspect ratio matches with the specified value.
+     *
+     * @param choices           The list of sizes that the camera supports for the intended output
+     *                          class
+     * @param textureViewWidth  The width of the texture view relative to sensor coordinate
+     * @param textureViewHeight The height of the texture view relative to sensor coordinate
+     * @param maxWidth          The maximum width that can be chosen
+     * @param maxHeight         The maximum height that can be chosen
+     * @param aspectRatio       The aspect ratio
+     * @return The optimal {@code Size}, or an arbitrary one if none were big enough
+     */
+    public static Size chooseOptimalSize(Size[] choices, int textureViewWidth,
+                                          int textureViewHeight, int maxWidth, int maxHeight, Size aspectRatio) {
+
+        // Collect the supported resolutions that are at least as big as the preview Surface
+        List<Size> bigEnough = new ArrayList<>();
+        // Collect the supported resolutions that are smaller than the preview Surface
+        List<Size> notBigEnough = new ArrayList<>();
+        int w = aspectRatio.getWidth();
+        int h = aspectRatio.getHeight();
+        for (Size option : choices) {
+            if (option.getWidth() <= maxWidth && option.getHeight() <= maxHeight &&
+                    option.getHeight() == option.getWidth() * h / w) {
+                if (option.getWidth() >= textureViewWidth &&
+                        option.getHeight() >= textureViewHeight) {
+                    bigEnough.add(option);
+                } else {
+                    notBigEnough.add(option);
+                }
+            }
+        }
+
+        // Pick the smallest of those big enough. If there is no one big enough, pick the
+        // largest of those not big enough.
+        if (bigEnough.size() > 0) {
+            return Collections.min(bigEnough, new CompareSizesByArea());
+        } else if (notBigEnough.size() > 0) {
+            return Collections.max(notBigEnough, new CompareSizesByArea());
+        } else {
+            return choices[0];
+        }
     }
 
     private static class CompareSizesByArea implements Comparator<Size> {
@@ -130,6 +194,29 @@ public class ImageUtil {
             // We cast here to ensure the multiplications won't overflow
             return Long.signum((long) lhs.getWidth() * lhs.getHeight() -
                     (long) rhs.getWidth() * rhs.getHeight());
+        }
+    }
+
+    private static class CompareSizesByRatioArea implements Comparator<Size> {
+
+        private double widthHeightRatio = HEIGHT_WIDTH_RATIO;
+
+        public CompareSizesByRatioArea(double ratio) {
+            widthHeightRatio = ratio;
+        }
+
+        @Override
+        public int compare(Size lhs, Size rhs) {
+            // We cast here to ensure the multiplications won't overflow
+            double leftRatio = (double) lhs.getWidth() / lhs.getHeight();
+            double rightRatio = (double) rhs.getWidth() / rhs.getHeight();
+            double difRatio = Math.abs(leftRatio - widthHeightRatio) - Math.abs(rightRatio - widthHeightRatio);
+            if (Math.abs(difRatio) < 0.01) {
+                return Long.signum((long) lhs.getWidth() * lhs.getHeight() -
+                        (long) rhs.getWidth() * rhs.getHeight());
+            } else {
+                return (int) Math.signum(difRatio);
+            }
         }
     }
 }

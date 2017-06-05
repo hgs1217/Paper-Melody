@@ -2,17 +2,18 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_calibration"
+    android:background="@color/black"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
     tools:context="com.papermelody.activity.CalibrationActivity">
 
-    <SurfaceView
+    <com.papermelody.widget.AutoFitTextureView
         android:id="@+id/view_calibration"
         android:layout_gravity="center"
-        android:layout_width="480dp"
-        android:layout_height="360dp" />
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
     <LinearLayout
         android:id="@+id/layout_container"

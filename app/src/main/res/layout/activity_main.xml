@@ -5,7 +5,7 @@
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
+    android:fitsSystemWindows="false"
     android:orientation="vertical"
     tools:context="com.papermelody.activity.MainActivity">
 
@@ -20,12 +20,12 @@
 
     </com.papermelody.widget.NoScrollViewPager>
 
-    <android.support.design.widget.TabLayout
-        android:id="@+id/tabs"
+    <com.roughike.bottombar.BottomBar
+        android:id="@+id/bottomBar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end|bottom"
-        app:tabIndicatorHeight="50dp"
-        app:tabMode="fixed" />
+        android:layout_height="50dp"
+        app:bb_activeTabAlpha="0.8"
+        app:bb_activeTabColor="@color/colorAccent"
+        app:bb_tabXmlResource="@xml/bottombar_menu" />
 
 </LinearLayout>

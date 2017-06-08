@@ -31,8 +31,7 @@
 
     <!--写ip地址要在结尾加一个“/”-->
 
-    <string name="server_ip">http://192.168.0.102/</string>
-    <!--<string name="server_ip">http://192.168.0.108/</string>-->
+    <string name="server_ip">http://192.168.0.106/</string>
     <!--<string name="server_ip">http://192.168.137.183/</string>-->
 
     <!--<string name="server_ip">http://10.185.245.166:8080/</string>-->
@@ -115,5 +114,9 @@
 
     <string name="request_permission">请求申请</string>
 
-
+    <string-array name="spinner_order_mode">
+        <item>默认排序</item>
+        <item>按热度</item>
+        <item>按点赞数</item>
+    </string-array>
 </resources>

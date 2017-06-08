@@ -58,7 +58,7 @@ public interface SocialSystemAPI {
 
     // 音乐圈作品获取
     @GET("onlinemusics")
-    Observable<OnlineMusicListResponse> getOnlineMusicList();
+    Observable<OnlineMusicListResponse> getOnlineMusicList(@Query("order") @Nullable Integer order);
 
     // 音乐查看人数加一
     @FormUrlEncoded

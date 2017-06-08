@@ -10,9 +10,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
 import com.papermelody.R;
-import com.papermelody.activity.OnlineListenActivity;
 import com.papermelody.activity.OnlineListenActivityScrollable;
 import com.papermelody.model.MusicBanner;
 import com.papermelody.model.OnlineMusic;
@@ -48,11 +50,20 @@ public class MusicHallFragment extends BaseFragment {
     RecyclerView recyclerViewHall;
     @BindView(R.id.layout_hall_refresh)
     SwipeRefreshLayout layoutRefresh;
+    @BindView(R.id.spinner_hall)
+    Spinner spinnerHall;
 
     public static final String SERIAL_ONLINEMUSIC = "SERIAL_ONLINEMUSIC";
 
+    public static final int ORDER_DEFAULT = 0;
+    public static final int ORDER_HOT = 1;
+    public static final int ORDER_WELCOME = 2;
+
     private Context context;
     private MusicHallRecyclerViewAdapter adapter;
+    private int orderMode = 0;
+    private ArrayAdapter<CharSequence> arrayAdapterOrder;
+
     private MusicHallRecyclerViewAdapter.OnItemClickListener hallOnItemClickListener = new
             MusicHallRecyclerViewAdapter.OnItemClickListener() {
                 @Override
@@ -84,13 +95,14 @@ public class MusicHallFragment extends BaseFragment {
 
         initGetMusicList();
         initSwipeRefreshView();
+        initSpinner();
 
         return view;
     }
 
     private void initGetMusicList() {
         SocialSystemAPI api = RetrofitClient.getSocialSystemAPI();
-        addSubscription(api.getOnlineMusicList()
+        addSubscription(api.getOnlineMusicList(orderMode)
                 .flatMap(NetworkFailureHandler.httpFailureFilter)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -138,6 +150,24 @@ public class MusicHallFragment extends BaseFragment {
         layoutRefresh.setOnRefreshListener(() -> {
             initGetMusicList();
             layoutRefresh.setRefreshing(false);
+        });
+    }
+
+    private void initSpinner() {
+        arrayAdapterOrder = ArrayAdapter.createFromResource(getContext(), R.array.spinner_order_mode, android.R.layout.simple_spinner_item);
+        arrayAdapterOrder.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerHall.setAdapter(arrayAdapterOrder);
+        spinnerHall.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                orderMode = position;
+                initGetMusicList();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
         });
     }
 

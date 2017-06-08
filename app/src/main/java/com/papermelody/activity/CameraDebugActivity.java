@@ -160,10 +160,7 @@ public class CameraDebugActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
-        Log.d("TESTC", ViewUtil.getScreenWidth(this)+" "+ViewUtil.getScreenHeight(this));
-
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,  WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON, WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         // 开启子线程，绑定TextureView的响应事件
         startBackgroundThread();

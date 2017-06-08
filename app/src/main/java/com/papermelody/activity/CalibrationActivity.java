@@ -209,9 +209,8 @@ public class CalibrationActivity extends BaseActivity {
 
         super.onCreate(savedInstanceState);
 
-        Log.d(TAG, ViewUtil.getScreenHeight(this)+" "+ViewUtil.getScreenWidth(this));
-
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,  WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON, WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         // 开启子线程，绑定TextureView的响应事件
         startBackgroundThread();

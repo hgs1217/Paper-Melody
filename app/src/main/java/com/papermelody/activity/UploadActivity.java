@@ -6,12 +6,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
@@ -136,7 +133,7 @@ public class UploadActivity extends BaseActivity {
 //                      这里上传的是data/data/~/cache/目录下已经存在的文件
                     File file = new File(getApplicationContext().getCacheDir()
                             .getAbsolutePath() + cacheName);
-                    isSuccess = uploadMusic(R.string.server_ip + "uploadFile",
+                    isSuccess = uploadMusic(App.getServerIP() + "uploadFile",
                             cacheName, file);
                     Log.i("nib", "isSuccess1=" + isSuccess);
                 }

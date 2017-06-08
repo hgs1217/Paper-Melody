@@ -331,8 +331,6 @@ public class PlayActivity extends BaseActivity {
         //opern = intent.getIntExtra(EXTRA_OPERN, 0);
         calibrationResult = (CalibrationResult) intent.getSerializableExtra(CalibrationActivity.EXTRA_RESULT);
 
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,  WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
         // 开启子线程，绑定TextureView的响应事件
         startBackgroundThread();
         viewPlay.setSurfaceTextureListener(surfaceTextureListener);

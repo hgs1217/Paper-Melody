@@ -10,9 +10,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
@@ -24,6 +22,7 @@ import com.papermelody.fragment.ListenFragment;
 import com.papermelody.fragment.MusicHallFragment;
 import com.papermelody.model.OnlineMusic;
 import com.papermelody.model.response.HttpResponse;
+import com.papermelody.util.App;
 import com.papermelody.util.NetworkFailureHandler;
 import com.papermelody.util.RetrofitClient;
 import com.papermelody.util.SocialSystemAPI;
@@ -191,10 +190,10 @@ public class OnlineListenActivityScrollable extends BaseActivity {
         String dataPath = getApplicationContext().getFilesDir().getAbsolutePath() + "/";
         String sourceURL;
 //            防止server_ip忘记加/导致无法下载的情况
-        if (getString(R.string.server_ip).endsWith("/")) {
-            sourceURL = getString(R.string.server_ip) + "uploaded/" + fileName;
+        if (App.getServerIP().endsWith("/")) {
+            sourceURL = App.getServerIP() + "uploaded/" + fileName;
         } else {
-            sourceURL = getString(R.string.server_ip) + "/uploaded/" + fileName;
+            sourceURL = App.getServerIP() + "/uploaded/" + fileName;
         }
         ToastUtil.showShort(R.string.downloading);
         download_2(sourceURL, dataPath, fileName);

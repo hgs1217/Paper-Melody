@@ -2,8 +2,6 @@ package com.papermelody.util;
 
 import android.content.Context;
 
-import com.papermelody.R;
-
 /**
  * Created by HgS_1217_ on 2017/5/31.
  */
@@ -14,6 +12,6 @@ public class UrlUtil {
      */
 
     public static String getImageUrl (Context context, String imgname) {
-        return context.getString(R.string.server_ip) + "getimage/" + imgname;
+        return App.getServerIP() + "getimage/" + imgname;
     }
 }

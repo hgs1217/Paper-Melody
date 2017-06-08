@@ -111,7 +111,6 @@ public class CalibrationActivity extends BaseActivity {
     public static final String EXTRA_RESULT = "EXTRA_RESULT";
 
     private static final String TAG = "CalibrationAct";
-    private static final int REQUEST_CAMERA_PERMISSION = 1;
 
     private static final int MAX_PREVIEW_WIDTH = 1920;
     private static final int MAX_PREVIEW_HEIGHT = 1080;
@@ -554,90 +553,5 @@ public class CalibrationActivity extends BaseActivity {
     }
 
     // TODO: 权限请求暂时未实现
-//    private void requestCameraPermission() {
-//        if (Build.VERSION.SDK_INT >= 23) {
-//            if (shouldShowRequestPermissionRationale(Manifest.permission.CAMERA)) {
-//                new ConfirmationDialog().show(getChildFragmentManager(), FRAGMENT_DIALOG);
-//            } else {
-//                FragmentCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA},
-//                        REQUEST_CAMERA_PERMISSION);
-//            }
-//        }
-//    }
-//
-//    @Override
-//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-//                                           @NonNull int[] grantResults) {
-//        if (requestCode == REQUEST_CAMERA_PERMISSION) {
-//            if (grantResults.length != 1 || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-//                ErrorDialog.newInstance(getString(R.string.request_permission))
-//                        .show(getChildFragmentManager(), FRAGMENT_DIALOG);
-//            }
-//        } else {
-//            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-//        }
-//    }
-//
-//    /**
-//     * Shows an error message dialog.
-//     */
-//    public static class ErrorDialog extends DialogFragment {
-//
-//        private static final String ARG_MESSAGE = "message";
-//
-//        public static ErrorDialog newInstance(String message) {
-//            ErrorDialog dialog = new ErrorDialog();
-//            Bundle args = new Bundle();
-//            args.putString(ARG_MESSAGE, message);
-//            dialog.setArguments(args);
-//            return dialog;
-//        }
-//
-//        @Override
-//        public Dialog onCreateDialog(Bundle savedInstanceState) {
-//            final Activity activity = getActivity();
-//            return new AlertDialog.Builder(activity)
-//                    .setMessage(getArguments().getString(ARG_MESSAGE))
-//                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-//                        @Override
-//                        public void onClick(DialogInterface dialogInterface, int i) {
-//                            activity.finish();
-//                        }
-//                    })
-//                    .create();
-//        }
-//
-//    }
-//
-//    /**
-//     * Shows OK/Cancel confirmation dialog about camera permission.
-//     */
-//    public static class ConfirmationDialog extends DialogFragment {
-//
-//        @Override
-//        public Dialog onCreateDialog(Bundle savedInstanceState) {
-//            final Fragment parent = getParentFragment();
-//            return new AlertDialog.Builder(getActivity())
-//                    .setMessage(R.string.request_permission)
-//                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-//                        @Override
-//                        public void onClick(DialogInterface dialog, int which) {
-//                            FragmentCompat.requestPermissions(parent,
-//                                    new String[]{Manifest.permission.CAMERA},
-//                                    REQUEST_CAMERA_PERMISSION);
-//                        }
-//                    })
-//                    .setNegativeButton(android.R.string.cancel,
-//                            new DialogInterface.OnClickListener() {
-//                                @Override
-//                                public void onClick(DialogInterface dialog, int which) {
-//                                    Activity activity = parent.getActivity();
-//                                    if (activity != null) {
-//                                        activity.finish();
-//                                    }
-//                                }
-//                            })
-//                    .create();
-//        }
-//    }
+
 }

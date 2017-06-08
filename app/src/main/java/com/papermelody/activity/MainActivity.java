@@ -1,22 +1,22 @@
 package com.papermelody.activity;
 
+import android.Manifest;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.ColorStateList;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.IdRes;
-import android.support.design.widget.TabLayout;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.papermelody.R;
@@ -53,6 +53,14 @@ public class MainActivity extends BaseActivity {
     public static final int USER_INFO = 7;
     public static final int REGISTER = 8;
 
+    private static final int REQUEST_PERMISSION = 1;
+
+    /**
+     * 请求类permissions：防止所有需要手动申请才能获取的权限
+     */
+    private String[] permissions = {Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+    private AlertDialog dialog;
+
     private FragmentManager fragmentManager;
 
     @Override
@@ -62,6 +70,8 @@ public class MainActivity extends BaseActivity {
         Intent intent = getIntent();
         int currentTab = intent.getIntExtra("currentTab", 0);
         fragmentManager = getSupportFragmentManager();
+
+        requestPermissions();
 
         initTabView();
         updateToolbar(currentTab);
@@ -260,6 +270,106 @@ public class MainActivity extends BaseActivity {
         @Override
         public int getCount() {
             return pageCount;
+        }
+    }
+
+    private void requestPermissions() {
+        if (Build.VERSION.SDK_INT >= 23) {
+            // 检查该权限是否已经获取
+            // 权限是否已经 授权 GRANTED---授权  DINIED---拒绝
+            for (int i=0; i<permissions.length; ++i) {
+                if (ContextCompat.checkSelfPermission(this, permissions[i]) != PackageManager.PERMISSION_GRANTED) {
+                    // 如果没有授予该权限，就去提示用户请求
+                    ActivityCompat.requestPermissions(this, permissions, REQUEST_PERMISSION);
+                    break;
+                }
+            }
+        }
+    }
+
+    /**
+     * 用户权限申请的回调方法
+     * @param requestCode   请求码
+     * @param permissions   请求的所有权限
+     * @param grantResults  权限的结果
+     */
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == REQUEST_PERMISSION) {
+            if (Build.VERSION.SDK_INT >= 23) {
+                for (int i=0; i<grantResults.length; ++i) {
+                    if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
+                        // 判断用户是否 点击了不再提醒。(检测该权限是否还可以申请)
+                        boolean b = shouldShowRequestPermissionRationale(permissions[i]);
+                        if (!b) {
+                            // 用户还是想用我的 APP 的
+                            // 提示用户去应用设置界面手动开启权限
+                            showDialogTipUserGoToAppSetting();
+                        } else
+                            finish();
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * 提示用户去应用设置界面手动开启权限
+     */
+    private void showDialogTipUserGoToAppSetting() {
+
+        dialog = new AlertDialog.Builder(this)
+                .setTitle("权限不可用")
+                .setMessage("请在-应用设置-权限-中，允许该应用使用照相机和存储等权限")
+                .setPositiveButton("立即开启", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // 跳转到应用设置界面
+                        goToAppSetting();
+                    }
+                })
+                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                }).setCancelable(false).show();
+    }
+
+    /**
+     * 若权限被始终禁止，跳转到当前应用的设置界面
+     */
+    private void goToAppSetting() {
+        Intent intent = new Intent();
+
+        intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+        Uri uri = Uri.fromParts("package", getPackageName(), null);
+        intent.setData(uri);
+
+        startActivityForResult(intent, REQUEST_PERMISSION);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_PERMISSION) {
+            if (android.os.Build.VERSION.SDK_INT >= 23) {
+                for (int i=0; i<permissions.length; ++i) {
+                    // 检查该权限是否已经获取
+                    int per = ContextCompat.checkSelfPermission(this, permissions[i]);
+                    // 权限是否已经 授权 GRANTED---授权  DINIED---拒绝
+                    if (per != PackageManager.PERMISSION_GRANTED) {
+                        // 提示用户应该去应用设置界面手动开启权限
+                        showDialogTipUserGoToAppSetting();
+                    } else {
+                        if (dialog != null && dialog.isShowing()) {
+                            dialog.dismiss();
+                        }
+                    }
+                }
+            }
         }
     }
 }

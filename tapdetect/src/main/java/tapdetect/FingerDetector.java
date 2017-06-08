@@ -36,7 +36,7 @@ public class FingerDetector {
 
         ArrayList<Point> finger_tips = new ArrayList<>();
         for (MatOfPoint cnt : contours) {
-            finger_tips.addAll(this.findFingerTips(cnt, hand));
+            finger_tips.addAll(this.findFingerTips(cnt.toList(), hand));
         }
 
         Mat hand_with_finger_tips = Util.drawPoints(hand_with_contour, finger_tips, new Scalar(255, 0, 0));
@@ -47,7 +47,45 @@ public class FingerDetector {
         return finger_tips;
     }
 
-    private List<Point> findFingerTips(MatOfPoint contour, Mat hand) {
+    private List<Point> findFingerTips(List<Point> contour, Mat hand) {
+        int len = contour.size();
+
+        List<Point> ret = new ArrayList<>();
+        List<Point> cache = new ArrayList<>();
+        double cacheY = 0.0;
+        double lastY = contour.get(0).y;
+
+        for (int i = 2; i < len; ++i) {
+            Point pt = contour.get(i);
+
+            if (cache.isEmpty()) { cacheY = pt.y; }
+
+            if (pt.y == cacheY) {
+                cache.add(pt);
+            } else {
+
+                if (cacheY >= lastY && cacheY >= pt.y                // 1. is local lowest point
+                        && cache.size() < Config.FINGER_TIP_WIDTH           // 2. not too long
+                        ) {
+
+                    Point aver = Util.averPoint(cache);
+                    if (hand.get((int) aver.y - 1, (int) aver.x)[0] > 0){ // 3. is lower bound
+                        ret.add(aver);
+                    }
+                }
+                cache.clear();
+                lastY = cacheY;
+                i -= 1;
+            }
+        }
+
+        return ret;
+    }
+
+    private List<Point> findFingerTipsOld(MatOfPoint contour, Mat hand) {
+        /*
+         * @deprecated
+         */
         List<Point> contour_pt = contour.toList();
         int step = Config.FINGER_TIP_STEP;
         int len = contour_pt.size();

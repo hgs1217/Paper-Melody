@@ -109,7 +109,18 @@ public class Util {
         Point v2 = new Point(end2.x - start.x, end2.y - start.y);
 
         double dot = Math.abs(v1.x * v2.x + v1.y * v2.y);
-        double mod = Math.sqrt(v1.x * v1.x + v1.y * v1.y) * Math.sqrt(v2.x * v2.x + v2.y * v2.y);
+        double mod = Math.sqrt((v1.x * v1.x + v1.y * v1.y) * (v2.x * v2.x + v2.y * v2.y));
         return dot / mod;
+    }
+
+    public static Point averPoint(List<Point> points) {
+        double x = 0.0, y = 0.0;
+        for (Point pt: points) {
+            x += pt.x;
+            y += pt.y;
+        }
+        x /= points.size();
+        y /= points.size();
+        return new Point(x, y);
     }
 }

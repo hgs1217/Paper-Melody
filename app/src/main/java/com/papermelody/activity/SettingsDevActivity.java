@@ -1,11 +1,17 @@
 package com.papermelody.activity;
 
+import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.papermelody.R;
+import com.papermelody.util.App;
+import com.papermelody.util.RetrofitClient;
+import com.papermelody.util.ToastUtil;
 
 import java.lang.reflect.Field;
 
@@ -21,7 +27,8 @@ public class SettingsDevActivity extends BaseActivity {
      * Settings for tap detection algorithm     by gigaflw
      */
 
-
+    @BindView(R.id.edit_server_ip)  EditText editServerIP;
+    @BindView(R.id.btn_server_ip)   Button btnServerIP;
     @BindView(R.id.seekbar1)        SeekBar sb1;
     @BindView(R.id.seekbar2)        SeekBar sb2;
     @BindView(R.id.seekbar3)        SeekBar sb3;
@@ -45,6 +52,17 @@ public class SettingsDevActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         SeekBar[] seekbars = { sb1, sb2, sb3, sb4, sb5, sb6, sb7, sb8 };
         TextView[] texts = { text1, text2, text3, text4, text5, text6, text7, text8 };
+
+        editServerIP.setText(App.getServerIP());
+        closeInputKeyboard();
+        btnServerIP.setOnClickListener((view) -> {
+            String serverIP = editServerIP.getText().toString();
+            App.setServerIP(serverIP);
+            RetrofitClient.updateBaseUrl(serverIP);
+            ToastUtil.showShort("当前ip地址被修改为："+serverIP);
+            editServerIP.clearFocus();
+            closeInputKeyboard();
+        });
 
 
         // Use reflect to dynamically set the value of seek bars
@@ -87,6 +105,15 @@ public class SettingsDevActivity extends BaseActivity {
                 public void onStopTrackingTouch(SeekBar seekBar) {}
             });
             ind += 1;
+        }
+    }
+
+    private void closeInputKeyboard() {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        boolean isOpen = imm.isActive();
+        if (isOpen) {
+            // imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);//没有显示则显示
+            imm.hideSoftInputFromWindow(editServerIP.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
         }
     }
 

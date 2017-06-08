@@ -2,7 +2,6 @@ package com.papermelody.util;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.papermelody.R;
 
 import java.util.Date;
 import java.util.concurrent.Executor;
@@ -22,7 +21,7 @@ public class RetrofitClient {
      */
 
     // url改为当前寝室网络的ip地址，详见server的文档
-    private static final String BASE_URL = App.getInstance().getString(R.string.server_ip);
+    private static String BASE_URL = App.getServerIP();
 
     private static SocialSystemAPI socialSystemAPI;
 
@@ -42,5 +41,21 @@ public class RetrofitClient {
             socialSystemAPI = retrofit.create(SocialSystemAPI.class);
         }
         return socialSystemAPI;
+    }
+
+    public static void updateBaseUrl(String baseUrl) {
+        BASE_URL = baseUrl;
+        Executor executor = Executors.newCachedThreadPool();
+        final Gson gson = new GsonBuilder().registerTypeAdapter(Date.class, new GsonDateTypeAdapter()).create();
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .callbackExecutor(executor)
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .client(OkHttpProvider.getInstance())
+                .build();
+
+        socialSystemAPI = retrofit.create(SocialSystemAPI.class);
     }
 }

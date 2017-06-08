@@ -98,7 +98,7 @@ public class UserFragment extends BaseFragment {
     }
 
     public void updateUser() {
-        user = ((App) getActivity().getApplication()).getUser();
+        user = App.getUser();
         if (user == null) {
             Log.d("TEST2", "TEST2");
             textUsername.setText(R.string.un_log_in);

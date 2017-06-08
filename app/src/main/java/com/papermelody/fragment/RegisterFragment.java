@@ -41,7 +41,6 @@ public class RegisterFragment extends BaseFragment {
     EditText editPassword;
     @BindView(R.id.btn_register)
     Button btnRegister;
-    private SocialSystemAPI api;
 
     public static RegisterFragment newInstance() {
         RegisterFragment fragment = new RegisterFragment();
@@ -61,12 +60,10 @@ public class RegisterFragment extends BaseFragment {
         //设置可以计数
 
         ButterKnife.bind(this, view);
-        api = RetrofitClient.getSocialSystemAPI();
         pwTextInputLayoutUser.setCounterEnabled(true);
 
         //计数的最大值
         pwTextInputLayoutUser.setCounterMaxLength(20);
-
 
 
         initView();
@@ -81,12 +78,12 @@ public class RegisterFragment extends BaseFragment {
                     String em = editemail.getText().toString();
 
                     pwTextInputLayoutUser.setErrorEnabled(false);
-                    if(TextUtils.isEmpty(pw)||pw.length()<6){
+                    if (TextUtils.isEmpty(pw) || pw.length() < 6) {
 
                         pwTextInputLayoutUser.setError("密码错误不能少于6个字符");
 
-                    }
-                    else {
+                    } else {
+                        SocialSystemAPI api = RetrofitClient.getSocialSystemAPI();
                         addSubscription(api.register(name, pw)
                                 .flatMap(NetworkFailureHandler.httpFailureFilter)
                                 .subscribeOn(Schedulers.io())
@@ -101,7 +98,7 @@ public class RegisterFragment extends BaseFragment {
                                 ));
                     }
 
-        }
+                }
 
         );
     }
@@ -110,7 +107,7 @@ public class RegisterFragment extends BaseFragment {
     private void updateUser(UserResponse.UserInfo userInfo) {
         User user = new User();
         user.setUsername(userInfo.getName());
-        ((App) getActivity().getApplication()).setUser(user);
+        App.setUser(user);
         MainActivity mainActivity = (MainActivity) getActivity();
         mainActivity.updateFragment(2);
     }

@@ -3,6 +3,7 @@ package com.papermelody.util;
 import android.app.Application;
 import android.content.Context;
 
+import com.papermelody.R;
 import com.papermelody.model.User;
 
 /**
@@ -15,6 +16,7 @@ public class App extends Application {
      */
 
     private static User user;
+    private static String serverIP;
     private static Context context;
 
     public static Context getInstance() { return context; }
@@ -24,6 +26,7 @@ public class App extends Application {
         super.onCreate();
         context = this;
         user = null;
+        serverIP = getString(R.string.server_ip);
     }
 
     public static User getUser() {
@@ -34,4 +37,11 @@ public class App extends Application {
         App.user = user;
     }
 
+    public static String getServerIP() {
+        return serverIP;
+    }
+
+    public static void setServerIP(String serverIP) {
+        App.serverIP = serverIP;
+    }
 }

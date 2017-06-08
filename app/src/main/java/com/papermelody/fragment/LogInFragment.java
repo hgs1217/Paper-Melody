@@ -34,6 +34,7 @@ public class LogInFragment extends BaseFragment {
      * 用例：注册、登录
      * 注册与登录页面，（暂弃用：此页面包含2个Fragment）
      */
+
     @BindView(R.id.ttl_username)
     TextInputLayout userTextInputLayoutUser;
     @BindView(R.id.ttl_password)
@@ -43,11 +44,10 @@ public class LogInFragment extends BaseFragment {
     @BindView(R.id.et_password)
     EditText editPassword;
     @BindView(R.id.btn_register)
-   Button btnRegister;
+    Button btnRegister;
     @BindView(R.id.bt_go)
     Button btnLogIn;
 
-    private SocialSystemAPI api;
     private Context context;
 
     public static LogInFragment newInstance() {
@@ -70,7 +70,6 @@ public class LogInFragment extends BaseFragment {
         ButterKnife.bind(this, view);
 
         context = getActivity();
-        api = RetrofitClient.getSocialSystemAPI();
         userTextInputLayoutUser.setCounterEnabled(true);
         //计数的最大值
         userTextInputLayoutUser.setCounterMaxLength(20);
@@ -89,33 +88,32 @@ public class LogInFragment extends BaseFragment {
         btnLogIn.setOnClickListener((View v) -> {
             String name = editUsername.getText().toString();
             userTextInputLayoutUser.setErrorEnabled(false);
-            if(TextUtils.isEmpty(name)||name.length()<6){
+            if (TextUtils.isEmpty(name) || name.length() < 6) {
 
                 userTextInputLayoutUser.setError("用户名过短");
 
-            }
-            else{
-            String pw = editPassword.getText().toString();
-            pwTextInputLayoutUser.setErrorEnabled(false);
-            if(TextUtils.isEmpty(pw)||pw.length()<6){
+            } else {
+                String pw = editPassword.getText().toString();
+                pwTextInputLayoutUser.setErrorEnabled(false);
+                if (TextUtils.isEmpty(pw) || pw.length() < 6) {
 
-                pwTextInputLayoutUser.setError("密码错误不能少于6个字符");
+                    pwTextInputLayoutUser.setError("密码错误不能少于6个字符");
 
-            }
-            else {
-                addSubscription(api.login(name, pw)
-                        .flatMap(NetworkFailureHandler.httpFailureFilter)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .map(response -> ((UserResponse) response).getResult())
-                        .subscribe(
-                                userInfo -> {
-                                    ToastUtil.showShort(R.string.login_success);
-                                    updateUser(userInfo);
-                                },
-                                NetworkFailureHandler.loginErrorHandler
-                        ));
-            }
+                } else {
+                    SocialSystemAPI api = RetrofitClient.getSocialSystemAPI();
+                    addSubscription(api.login(name, pw)
+                            .flatMap(NetworkFailureHandler.httpFailureFilter)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .map(response -> ((UserResponse) response).getResult())
+                            .subscribe(
+                                    userInfo -> {
+                                        ToastUtil.showShort(R.string.login_success);
+                                        updateUser(userInfo);
+                                    },
+                                    NetworkFailureHandler.loginErrorHandler
+                            ));
+                }
             /*String name = editUsername.getText().toString();
             String pw = editPassword.getText().toString();
             addSubscription(api.register(name, pw)
@@ -130,14 +128,14 @@ public class LogInFragment extends BaseFragment {
                             },
                             NetworkFailureHandler.loginErrorHandler
                     ));*/
-        }
-    });
+            }
+        });
         btnRegister.setOnClickListener((View v) -> {
                     MainActivity mainActivity = (MainActivity) getActivity();
                     mainActivity.updateFragment(MainActivity.REGISTER);
            /*
             */
-        }
+                }
         );
 
     }
@@ -146,7 +144,7 @@ public class LogInFragment extends BaseFragment {
     private void updateUser(UserResponse.UserInfo userInfo) {
         User user = new User();
         user.setUsername(userInfo.getName());
-        ((App) getActivity().getApplication()).setUser(user);
+        App.setUser(user);
         MainActivity mainActivity = (MainActivity) getActivity();
         mainActivity.updateFragment(2);
     }

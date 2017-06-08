@@ -26,6 +26,8 @@ import com.papermelody.widget.CommentRecyclerViewAdapter;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import butterknife.BindView;
@@ -115,6 +117,16 @@ public class CommentFragment extends BaseFragment {
                             for (CommentInfo info : commentList) {
                                 comments.add(new Comment(info));
                             }
+                            Collections.sort(comments, new Comparator() {
+                                @Override
+                                public int compare(Object o1, Object o2) {
+                                    Comment a = (Comment) o1;
+                                    Comment b = (Comment) o2;
+                                    return b.getCreateTime().toString().compareTo(
+                                            a.getCreateTime().toString());
+                                }
+                            });
+                            System.out.print("sorted!");
                             initRecyclerView(comments);
                         },
                         NetworkFailureHandler.loginErrorHandler
@@ -139,39 +151,44 @@ public class CommentFragment extends BaseFragment {
         */
 
         button.setOnClickListener((View v) -> {
-            String comment = editText.getText().toString();
-            SimpleDateFormat sDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-            String createtime = sDateFormat.format(new java.util.Date());
-            String author = "AnonymousUser"; //FIXME: 这里先方便上传，不然每次要登录
-            String musicID = "music1";  // FIXME: 需修改为真实的ID
-            boolean hasUser = true;
-            try {
-                author = ((App) getActivity().getApplication()).getUser().getUsername();
-            } catch (NullPointerException e) {
-                ToastUtil.showShort("登录了发表评论可以保存记录哦！");
-                //hasUser = false;
-            }
+                    String comment = editText.getText().toString();
+                    SimpleDateFormat sDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                    String createtime = sDateFormat.format(new java.util.Date());
+                    String author = "AnonymousUser"; //FIXME: 这里先方便上传，不然每次要登录
+                    String musicID = "music1";  // FIXME: 需修改为真实的ID
+                    boolean hasUser = true;
+                    try {
+                        author = ((App) getActivity().getApplication()).getUser().getUsername();
+                    } catch (NullPointerException e) {
+                        ToastUtil.showShort("登录了发表评论可以保存记录哦！");
+                        //hasUser = false;
+                    }
 
-            if (hasUser) {
-                addSubscription(api.uploadComment(musicID, author, comment, createtime)
-                        .flatMap(NetworkFailureHandler.httpFailureFilter)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .map(response -> (HttpResponse) response)
-                        .subscribe(
-                                upload_com_res -> {
-                                    ToastUtil.showShort(R.string.upload_comment_success);
-                },
-                NetworkFailureHandler.loginErrorHandler
-        ));
-    }
+                    if (hasUser) {
+                        addSubscription(api.uploadComment(musicID, author, comment, createtime)
+                                .flatMap(NetworkFailureHandler.httpFailureFilter)
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .map(response -> (HttpResponse) response)
+                                .subscribe(
+                                        upload_com_res -> {
+                                            ToastUtil.showShort(R.string.upload_comment_success);
+                                        },
+                                        NetworkFailureHandler.loginErrorHandler
+                                ));
+                    }
 
-            try {//模拟延迟
-        Thread.sleep(800);
-    } catch (InterruptedException e) {
-        e.printStackTrace();
-    }
+                    try {
+                        Thread.sleep(700);
+                        editText.setText("");
+                        editText.setHint(R.string.add_new_comment_here);
+                        initGetCommentList();
 
-        });
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+        );
     }
 }

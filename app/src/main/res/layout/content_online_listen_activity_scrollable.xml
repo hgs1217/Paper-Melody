@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="fill_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.papermelody.activity.OnlineListenActivityScrollable"
     tools:showIn="@layout/activity_online_listen_scrollable">
@@ -15,7 +15,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="30dp"
+            android:layout_height="25dp"
             android:background="@color/white">
 
         </LinearLayout>
@@ -64,11 +64,14 @@
         <LinearLayout
             android:id="@+id/container_comment"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="fill_parent"
             android:gravity="center"
             android:orientation="vertical">
-
         </LinearLayout>
+
+
+
+
     </LinearLayout>
 
 

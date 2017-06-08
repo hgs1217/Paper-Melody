@@ -52,7 +52,9 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.SettingsDevActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden"
+            android:configChanges="orientation|keyboardHidden"/>
         <activity
             android:name=".activity.TutorialActivity"
             android:screenOrientation="portrait" />

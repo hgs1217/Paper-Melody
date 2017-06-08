@@ -53,8 +53,8 @@ public class SettingsDevActivity extends BaseActivity {
         SeekBar[] seekbars = { sb1, sb2, sb3, sb4, sb5, sb6, sb7, sb8 };
         TextView[] texts = { text1, text2, text3, text4, text5, text6, text7, text8 };
 
+        // 初始化用于修改ip地址的编辑框和按钮
         editServerIP.setText(App.getServerIP());
-        closeInputKeyboard();
         btnServerIP.setOnClickListener((view) -> {
             String serverIP = editServerIP.getText().toString();
             App.setServerIP(serverIP);
@@ -110,11 +110,7 @@ public class SettingsDevActivity extends BaseActivity {
 
     private void closeInputKeyboard() {
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        boolean isOpen = imm.isActive();
-        if (isOpen) {
-            // imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);//没有显示则显示
-            imm.hideSoftInputFromWindow(editServerIP.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-        }
+        imm.hideSoftInputFromWindow(editServerIP.getWindowToken(), 0);
     }
 
     @Override

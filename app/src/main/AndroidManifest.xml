@@ -61,13 +61,7 @@
             android:name=".activity.LocalListenActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.OnlineListenActivity"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".activity.PlayListenActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".activity.UploadActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.CameraDebugActivity"
@@ -88,8 +82,8 @@
                 android:value="com.papermelody.activity.MainActivity" />
         </activity>
         <activity
-            android:name=".activity.UploadActivity2"
-            android:label="@string/title_activity_upload2"
+            android:name=".activity.UploadActivity"
+            android:label="@string/title_activity_upload"
             android:theme="@style/AppTheme"></activity>
     </application>
 

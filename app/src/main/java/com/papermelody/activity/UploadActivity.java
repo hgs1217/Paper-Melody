@@ -2,10 +2,13 @@ package com.papermelody.activity;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -39,26 +42,18 @@ import okhttp3.RequestBody;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-/**
- * Created by HgS_1217_ on 2017/4/10.
- */
-
 public class UploadActivity extends BaseActivity {
-    /**
-     * 用例：上传作品
-     * 上传作品页面
-     */
 
     @BindView(R.id.edit_music_title)
     EditText editMusicTitle;
     @BindView(R.id.edit_music_des)
     EditText editMusicDes;
-    @BindView(R.id.btn_upload_img)
-    Button btnUploadImg;
     @BindView(R.id.img_upload)
     ImageView imgUpload;
-    @BindView(R.id.btn_upload_confirm)
-    Button btnConfirm;
+    @BindView(R.id.fab_upload_confirm)
+    FloatingActionButton fabConfirm;
+    @BindView(R.id.toolbar_upload)
+    Toolbar toolbarUpload;
 
     public static final int LOAD_PIC = 0;
 
@@ -77,25 +72,29 @@ public class UploadActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         api = RetrofitClient.getSocialSystemAPI();
 
-        // 默认图片
-        bmp = BitmapFactory.decodeResource(getResources(), R.drawable.pyj);
-
         initView();
     }
 
     private void initView() {
-        Picasso.with(this).load(R.drawable.pyj).into(imgUpload);
-        btnUploadImg.setOnClickListener((View v) -> {
-            chooseImg();
+        setSupportActionBar(toolbarUpload);
+        if (getSupportActionBar() != null) getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbarUpload.setNavigationOnClickListener((View v) -> {
+            finish();
         });
-        btnConfirm.setOnClickListener((View v) -> {
+        Log.i("nib", "view initialized");
+        imgUpload.setOnClickListener((View v) -> {
+            chooseImg();
+            Log.i("nib", "img clicked");
+        });
+        fabConfirm.setOnClickListener((View v) -> {
+            Log.i("nib", "fab clicked");
             uploadConfirm();
         });
     }
 
     private void chooseImg() {
         try {
-            Intent intent= new Intent(Intent.ACTION_GET_CONTENT);
+            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
             intent.addCategory(Intent.CATEGORY_OPENABLE);
             intent.setType("image/*");
             intent.putExtra("crop", true);
@@ -226,12 +225,6 @@ public class UploadActivity extends BaseActivity {
                 ));
     }
 
-    @Override
-    protected int getContentViewId() {
-
-        return R.layout.activity_upload;
-    }
-
     //    将文件uploadFile上传到actionUrl，以newName重命名
     private boolean uploadMusic(String actionUrl, String newName, File uploadFile) {
         String end = "\r\n";
@@ -303,5 +296,10 @@ public class UploadActivity extends BaseActivity {
             Log.i("nib", "failed");
             return false;
         }
+    }
+
+    @Override
+    protected int getContentViewId() {
+        return R.layout.activity_upload;
     }
 }

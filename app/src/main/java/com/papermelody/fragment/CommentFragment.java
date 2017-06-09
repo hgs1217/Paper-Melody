@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -136,10 +137,11 @@ public class CommentFragment extends BaseFragment {
                             Collections.sort(comments, new Comparator() {
                                 @Override
                                 public int compare(Object o1, Object o2) {
+                                    SimpleDateFormat sDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
                                     Comment a = (Comment) o1;
                                     Comment b = (Comment) o2;
-                                    return b.getCreateTime().toString().compareTo(
-                                            a.getCreateTime().toString());
+                                    return sDateFormat.format(b.getCreateTime()).compareTo(
+                                            sDateFormat.format(a.getCreateTime()));
                                 }
                             });
                             System.out.print("sorted!");
@@ -194,7 +196,8 @@ public class CommentFragment extends BaseFragment {
         button.setOnClickListener((View v) -> {
                     String comment = editText.getText().toString();
                     SimpleDateFormat sDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-                    String createtime = sDateFormat.format(sDateFormat);
+                    String createtime = sDateFormat.format(new java.util.Date());
+                    Log.d("TAG",createtime);
                     String author = "AnonymousUser"; //FIXME: 这里先方便上传，不然每次要登录
                     String musicID = String.valueOf(onlineMusic.getMusicID());
                     boolean hasUser = true;

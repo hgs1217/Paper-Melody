@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.papermelody.R;
 import com.papermelody.model.Comment;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -83,7 +84,8 @@ public class CommentRecyclerViewAdapter extends RecyclerView.Adapter<CommentRecy
 
         private void setView(Comment comment) {
             textComment.setText(comment.getContent());
-            textCommentTime.setText(comment.getCreateTime().toString());
+            SimpleDateFormat sDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+            textCommentTime.setText(sDateFormat.format(comment.getCreateTime()));
             textUserName.setText(comment.getAuthor());
         }
     }

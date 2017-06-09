@@ -38,7 +38,7 @@ import rx.schedulers.Schedulers;
 
 import static android.os.Environment.getExternalStorageDirectory;
 
-public class OnlineListenActivityScrollable extends BaseActivity {
+public class OnlineListenActivity extends BaseActivity {
 
     @BindView(R.id.toolbar_layout)
     CollapsingToolbarLayout ctl;
@@ -207,7 +207,7 @@ public class OnlineListenActivityScrollable extends BaseActivity {
 
     @Override
     protected int getContentViewId() {
-        return R.layout.activity_online_listen_scrollable;
+        return R.layout.activity_online_listen;
     }
 
     @Override

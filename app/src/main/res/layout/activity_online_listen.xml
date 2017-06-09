@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="false"
-    tools:context="com.papermelody.activity.OnlineListenActivityScrollable">
+    tools:context="com.papermelody.activity.OnlineListenActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar"
@@ -47,7 +47,7 @@
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_online_listen_activity_scrollable" />
+    <include layout="@layout/content_online_listen_activity" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"

@@ -73,7 +73,7 @@
         <!-- </receiver> -->
 
         <activity
-            android:name=".activity.OnlineListenActivityScrollable"
+            android:name=".activity.OnlineListenActivity"
             android:label="@string/title_activity_online_listen_scrollable"
             android:parentActivityName=".activity.MainActivity"
             android:theme="@style/AppTheme">

@@ -105,7 +105,7 @@ public class CommentFragment extends BaseFragment {
     }
 
     private void initGetCommentList() {
-        String musicID = "music1";   // FIXME: 现在仅供测试，之后需修改为真实的musicID
+        String musicID = String.valueOf(onlineMusic.getMusicID());
         addSubscription(api.getComment(musicID)
                 .flatMap(NetworkFailureHandler.httpFailureFilter)
                 .subscribeOn(Schedulers.io())
@@ -155,10 +155,10 @@ public class CommentFragment extends BaseFragment {
                     SimpleDateFormat sDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
                     String createtime = sDateFormat.format(new java.util.Date());
                     String author = "AnonymousUser"; //FIXME: 这里先方便上传，不然每次要登录
-                    String musicID = "music1";  // FIXME: 需修改为真实的ID
+                    String musicID = String.valueOf(onlineMusic.getMusicID());
                     boolean hasUser = true;
                     try {
-                        author = ((App) getActivity().getApplication()).getUser().getUsername();
+                        author = App.getUser().getUsername();
                     } catch (NullPointerException e) {
                         ToastUtil.showShort("登录了发表评论可以保存记录哦！");
                         //hasUser = false;

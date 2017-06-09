@@ -5,8 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="fill_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.papermelody.activity.OnlineListenActivityScrollable"
-    tools:showIn="@layout/activity_online_listen_scrollable">
+    tools:context="com.papermelody.activity.OnlineListenActivity"
+    tools:showIn="@layout/activity_online_listen">
 
     <LinearLayout
         android:layout_width="match_parent"

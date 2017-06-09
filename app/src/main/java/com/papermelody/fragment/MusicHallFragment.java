@@ -15,7 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 import com.papermelody.R;
-import com.papermelody.activity.OnlineListenActivityScrollable;
+import com.papermelody.activity.OnlineListenActivity;
 import com.papermelody.model.MusicBanner;
 import com.papermelody.model.OnlineMusic;
 import com.papermelody.model.response.OnlineMusicInfo;
@@ -68,7 +68,7 @@ public class MusicHallFragment extends BaseFragment {
             MusicHallRecyclerViewAdapter.OnItemClickListener() {
                 @Override
                 public void OnItemClick(OnlineMusic music) {
-                    Intent intent = new Intent(context, OnlineListenActivityScrollable.class);
+                    Intent intent = new Intent(context, OnlineListenActivity.class);
                     Bundle bundle = new Bundle();
                     bundle.putSerializable(SERIAL_ONLINEMUSIC, music);
                     intent.putExtras(bundle);

@@ -77,6 +77,7 @@ public class ListenFragment extends BaseFragment {
     }
 
     private void initView() {
+        seekBar.setMax(100);
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -100,13 +101,6 @@ public class ListenFragment extends BaseFragment {
         };
         timer = new Timer();
         timer.schedule(timerTask, 0, 1000);
-//        btnPause.setOnClickListener((View v) -> {
-//            if (playState) {
-//                pausePlay();
-//            } else {
-//                starPlay();
-//            }
-//        });
     }
 
     @Override
@@ -119,7 +113,6 @@ public class ListenFragment extends BaseFragment {
     public void starPlay() {
         if (mediaPlayer != null) {
             mediaPlayer.start();
-//            btnPause.setBackground(getResources().getDrawable(R.drawable.ic_pause_circle_outline_white_48dp));
             playState = true;
         }
     }
@@ -127,8 +120,21 @@ public class ListenFragment extends BaseFragment {
     public void pausePlay() {
         if (mediaPlayer != null) {
             mediaPlayer.pause();
-//            btnPause.setBackground(getResources().getDrawable(R.drawable.ic_play_circle_outline_white_48dp));
             playState = false;
+        }
+    }
+
+    public void forwardPlay() {
+        if (mediaPlayer != null) {
+            int targetProgress = (seekBar.getProgress() + 3) <= 100 ? (seekBar.getProgress() + 3) : 100;
+            mediaPlayer.seekTo(targetProgress * mediaPlayer.getDuration() / 100);
+        }
+    }
+
+    public void backwardPlay() {
+        if (mediaPlayer != null) {
+            int targetProgress = (seekBar.getProgress() - 3) >= 0 ? (seekBar.getProgress() - 3) : 0;
+            mediaPlayer.seekTo(targetProgress * mediaPlayer.getDuration() / 100);
         }
     }
 

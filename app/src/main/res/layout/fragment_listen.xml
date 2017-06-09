@@ -1,30 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rl_music"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/rl_music"
     android:fitsSystemWindows="false">
 
+    <ImageView
+        android:id="@+id/img_music"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:contentDescription="@string/picture"
+        android:scaleType="centerCrop"
+        android:src="@drawable/testimg1" />
 
-        <ImageView
-            android:id="@+id/img_music"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:contentDescription="@string/picture"
-            android:src="@drawable/testimg1"
-            android:scaleType="centerCrop"
-            android:layout_alignParentTop="true" />
-
-        <SeekBar
-            android:id="@+id/seekBar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:maxHeight="@dimen/app_bar_height"
-            android:minHeight="@dimen/app_bar_height"
-            android:paddingEnd="0dp"
-            android:paddingStart="0dp"
-            android:layout_centerInParent="true"
-            android:progressDrawable="@drawable/seekbar_bg"
-            android:thumb="@drawable/seekbar_thumb" />
+    <SeekBar
+        android:id="@+id/seekBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:maxHeight="@dimen/app_bar_height"
+        android:minHeight="@dimen/app_bar_height"
+        android:paddingEnd="0dp"
+        android:paddingStart="0dp"
+        android:progressDrawable="@drawable/seekbar_bg"
+        android:thumb="@drawable/seekbar_thumb" />
 
 </RelativeLayout>

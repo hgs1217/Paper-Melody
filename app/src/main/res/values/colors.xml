@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#2196F3</color>
-    <color name="colorPrimaryDark">#1976D2</color>
-    <color name="colorPrimaryLight">#bbdefb</color>
-    <color name="colorAccent">#FF9800</color>
-    <color name="tab0">#2196F3</color>
-    <color name="tab1">#47a3ec</color>
-    <color name="tab2">#83bce7</color>
-    <color name="tab3">#b3cdde</color>
+    <color name="colorPrimary">#009688</color>
+    <color name="colorPrimaryDark">#00796b</color>
+    <color name="colorPrimaryLight">#4db6ac</color>
+    <color name="colorAccent">#1de9b6</color>
+    <color name="tab0">#ffffff</color>
+    <color name="tab1">#ffffff</color>
+    <color name="tab2">#ffffff</color>
+    <color name="tab3">#ffffff</color>
     <color name="textPrimary">#212121</color>
     <color name="textSecondary">#757575</color>
     <color name="divider">#bdbdbd</color>
-    <color name="seekBarBackground">#652196f3</color>
-    <color name="seekBarProgress">#65ff9800</color>
+    <color name="seekBarBackground">#65ffffff</color>
+    <color name="seekBarProgress">#331de9b6</color>
     <color name="white">#ffffff</color>
     <color name="black">#000000</color>
     <color name="transparent">#00000000</color>

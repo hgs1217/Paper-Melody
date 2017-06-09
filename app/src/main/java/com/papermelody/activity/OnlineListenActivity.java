@@ -1,5 +1,6 @@
 package com.papermelody.activity;
 
+import android.animation.Animator;
 import android.app.DownloadManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -14,7 +15,10 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewAnimationUtils;
+import android.view.animation.Animation;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.papermelody.R;
@@ -55,8 +59,18 @@ public class OnlineListenActivity extends BaseActivity {
     TextView upvoteNum;
     @BindView(R.id.btn_music_upvote)
     Button btnUpvote;
+    @BindView(R.id.btn_play_backward)
+    Button btnPlayBack;
+    @BindView(R.id.btn_play_control)
+    Button btnPlayCtrl;
+    @BindView(R.id.btn_play_forward)
+    Button btnPlayFor;
     @BindView(R.id.fab)
     FloatingActionButton fab;
+    @BindView(R.id.layout_play_control)
+    LinearLayout layoutPlayControl;
+    @BindView(R.id.container_online_listen)
+    LinearLayout containerOnlineListen;
 
     private FragmentManager fragmentManager;
     private String fileName;    // 从intent中得到文件名称，下载到本地然后播放
@@ -69,7 +83,7 @@ public class OnlineListenActivity extends BaseActivity {
     private Timer timer;
     private BroadcastReceiver dmReceiver;
     private IntentFilter intentFilter;
-    private View.OnClickListener startPlay, pausePlay;
+    private View.OnClickListener startPlay, pausePlay, startPlayFirst;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,15 +103,36 @@ public class OnlineListenActivity extends BaseActivity {
         intentFilter = new IntentFilter();
         intentFilter.addAction(DownloadManager.ACTION_DOWNLOAD_COMPLETE);
         registerReceiver(dmReceiver, intentFilter);
-        startPlay = (View v) -> {
+        startPlayFirst = (View v) -> {
             fragment.starPlay();
             fab.setOnClickListener(pausePlay);
             fab.setImageDrawable(getDrawable(android.R.drawable.ic_media_pause));
+
+            int cx = (fab.getLeft() + fab.getRight()) / 2;
+            int cy = (fab.getTop() + fab.getBottom()) / 2;
+            int finalRadius1 = Math.max(layoutPlayControl.getWidth(), layoutPlayControl.getHeight());
+            Animator anim1 = ViewAnimationUtils.createCircularReveal(layoutPlayControl,
+                    cx, cy, 0, finalRadius1);
+            int finalRadius2 = Math.max(containerOnlineListen.getWidth(), containerOnlineListen.getHeight());
+            Animator anim2 = ViewAnimationUtils.createCircularReveal(containerOnlineListen,
+                    cx, cy, 0, finalRadius2);
+            layoutPlayControl.setVisibility(View.VISIBLE);
+            containerOnlineListen.setVisibility(View.VISIBLE);
+            anim1.start();
+            anim2.start();
+            fab.setVisibility(View.INVISIBLE);
+            btnPlayCtrl.setOnClickListener(pausePlay);
+            btnPlayCtrl.setBackground(getDrawable(android.R.drawable.ic_media_pause));
+        };
+        startPlay = (View v) -> {
+            fragment.starPlay();
+            btnPlayCtrl.setOnClickListener(pausePlay);
+            btnPlayCtrl.setBackground(getDrawable(android.R.drawable.ic_media_pause));
         };
         pausePlay = (View v) -> {
             fragment.pausePlay();
-            fab.setOnClickListener(startPlay);
-            fab.setImageDrawable(getDrawable(android.R.drawable.ic_media_play));
+            btnPlayCtrl.setOnClickListener(startPlay);
+            btnPlayCtrl.setBackground(getDrawable(android.R.drawable.ic_media_play));
         };
         timerTask = new TimerTask() {
             @Override
@@ -139,6 +174,13 @@ public class OnlineListenActivity extends BaseActivity {
 //            downloadFile();       // TODO: 已经改用Retrofit获取格式，暂时没用，可以删除
             timer.schedule(timerTask, 0, 100);
         }
+
+        btnPlayBack.setOnClickListener((View v) -> {
+            fragment.backwardPlay();
+        });
+        btnPlayFor.setOnClickListener((View v) -> {
+            fragment.forwardPlay();
+        });
     }
 
     private void addViewNum() {
@@ -269,7 +311,7 @@ public class OnlineListenActivity extends BaseActivity {
     private void initListenFragment() {
         fragment = ListenFragment.newInstance(fileName);
         fragmentManager.beginTransaction().add(R.id.container_online_listen, fragment).commit();
-        fab.setOnClickListener(startPlay);
+        fab.setOnClickListener(startPlayFirst);
     }
 
     @Override

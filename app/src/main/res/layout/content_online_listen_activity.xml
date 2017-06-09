@@ -14,9 +14,40 @@
         android:orientation="vertical">
 
         <LinearLayout
+            android:id="@+id/layout_play_control"
+            style="?android:attr/buttonBarStyle"
             android:layout_width="match_parent"
-            android:layout_height="25dp"
-            android:background="@color/white">
+            android:layout_height="40dp"
+            android:background="@color/white"
+            android:elevation="5dp"
+            android:gravity="center_horizontal"
+            android:visibility="invisible">
+
+            <Button
+                android:id="@+id/btn_play_backward"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="40dp"
+                android:layout_height="wrap_content"
+                android:background="@android:drawable/ic_media_previous"
+                android:backgroundTint="@color/colorAccent" />
+
+            <Button
+                android:id="@+id/btn_play_control"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="40dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp"
+                android:background="@android:drawable/ic_media_play"
+                android:backgroundTint="@color/colorAccent" />
+
+            <Button
+                android:id="@+id/btn_play_forward"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="40dp"
+                android:layout_height="wrap_content"
+                android:background="@android:drawable/ic_media_next"
+                android:backgroundTint="@color/colorAccent" />
 
         </LinearLayout>
 
@@ -24,10 +55,10 @@
             android:id="@+id/music_info_num"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
             android:layout_marginEnd="20dp"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp">
+            android:layout_marginTop="8dp">
 
             <Button
                 android:id="@+id/btn_music_upvote"
@@ -67,9 +98,8 @@
             android:layout_height="fill_parent"
             android:gravity="center"
             android:orientation="vertical">
+
         </LinearLayout>
-
-
 
 
     </LinearLayout>

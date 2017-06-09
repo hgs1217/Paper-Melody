@@ -23,9 +23,10 @@
     <com.roughike.bottombar.BottomBar
         android:id="@+id/bottomBar"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        app:bb_activeTabAlpha="0.8"
+        android:layout_height="45dp"
+        app:bb_activeTabAlpha="1"
         app:bb_activeTabColor="@color/colorAccent"
-        app:bb_tabXmlResource="@xml/bottombar_menu" />
+        app:bb_tabXmlResource="@xml/bottombar_menu"
+        app:bb_titleTextAppearance="@style/TextAppearance.AppCompat.Caption" />
 
 </LinearLayout>

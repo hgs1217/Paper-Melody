@@ -87,39 +87,30 @@ public class MainActivity extends BaseActivity {
         switch (position) {
             case 0:
                 toolbarTitle.setText(R.string.tab_mode);
-                toolbar.setBackgroundColor(getResources().getColor(R.color.tab0));
                 break;
             case 1:
                 toolbarTitle.setText(R.string.tab_music_hall);
-                toolbar.setBackgroundColor(getResources().getColor(R.color.tab1));
                 break;
             case 2:
                 toolbarTitle.setText(R.string.tab_user);
-                toolbar.setBackgroundColor(getResources().getColor(R.color.tab2));
                 break;
             case 3:
                 toolbarTitle.setText(R.string.tab_settings);
-                toolbar.setBackgroundColor(getResources().getColor(R.color.tab3));
                 break;
             case MODE_FREE:
                 toolbarTitle.setText(R.string.mode_free);
-                toolbar.setBackgroundColor(getResources().getColor(R.color.tab0));
                 break;
             case MODE_OPERN:
                 toolbarTitle.setText(R.string.mode_opern);
-                toolbar.setBackgroundColor(getResources().getColor(R.color.tab0));
                 break;
             case LOG_IN:
                 toolbarTitle.setText(R.string.log_in);
-                toolbar.setBackgroundColor(getResources().getColor(R.color.tab0));
                 break;
             case USER_INFO:
                 toolbarTitle.setText(R.string.user_info);
-                toolbar.setBackgroundColor(getResources().getColor(R.color.tab0));
                 break;
             case REGISTER:
                 toolbarTitle.setText(R.string.register);
-                toolbar.setBackgroundColor(getResources().getColor(R.color.tab0));
                 break;
             default:
                 break;

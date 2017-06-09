@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <tabs>
     <tab
-        barColorWhenSelected="#2196F3"
+        barColorWhenSelected="#ffffff"
         icon="@drawable/ic_audiotrack_black_24dp"
         id="@+id/tab_1"
         title="开始演奏" />
     <tab
-        barColorWhenSelected="#55a9ec"
+        barColorWhenSelected="#ffffff"
         icon="@drawable/ic_cloud_circle_black_24dp"
         id="@+id/tab_2"
         title="音乐圈" />
     <tab
-        barColorWhenSelected="#9ecaec"
+        barColorWhenSelected="#ffffff"
         icon="@drawable/ic_account_circle_black_24dp"
         id="@+id/tab_3"
         title="用户管理" />
     <tab
-        barColorWhenSelected="#e2e7ea"
+        barColorWhenSelected="#ffffff"
         icon="@drawable/ic_settings_black_24dp"
         id="@+id/tab_4"
         title="设置" />

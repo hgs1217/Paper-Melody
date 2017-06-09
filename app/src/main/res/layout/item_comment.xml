@@ -27,14 +27,14 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="title"
-            android:textColor="@color/black"
+            android:textColor="@color/colorAccent"
             android:textSize="20sp" />
 
         <TextView
             android:id="@+id/item_this_comment_time"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/colorAccent"
+            android:textColor="@color/textSecondary"
             android:text="Loading comment time......" />
 
         <TextView

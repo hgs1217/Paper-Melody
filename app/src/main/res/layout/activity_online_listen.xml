@@ -32,7 +32,8 @@
                 android:gravity="center"
                 android:orientation="horizontal"
                 app:layout_collapseMode="parallax"
-                app:layout_collapseParallaxMultiplier="0.5">
+                app:layout_collapseParallaxMultiplier="0.5"
+                android:visibility="invisible">
 
             </LinearLayout>
 

@@ -16,7 +16,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewAnimationUtils;
-import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -163,7 +162,7 @@ public class OnlineListenActivity extends BaseActivity {
         upvoteNum.setText(String.valueOf(onlineMusic.getUpvoteNum()));
         addViewNum();
         btnUpvote.setOnClickListener((view) -> {
-            addUpvoteNum();  // FIXME: 存在可以多次点赞的bug
+            addUpvoteNum();  // FIXME: 存在可以多次点赞的bug，且点赞完之后图标会消失
             btnUpvote.setBackground(getDrawable(R.drawable.ic_thumb_up_white_18dp));
         });
         File file = new File(getExternalStorageDirectory() + "/Download/" + fileName);
@@ -191,6 +190,7 @@ public class OnlineListenActivity extends BaseActivity {
                 .map(response -> ((HttpResponse) response))
                 .subscribe(
                         response -> {
+                            viewNum.setText(String.valueOf(onlineMusic.getViewNum() + 1));
                         },
                         NetworkFailureHandler.basicErrorHandler
                 ));
@@ -234,7 +234,7 @@ public class OnlineListenActivity extends BaseActivity {
         try {
             // todo change the file location/name according to your needs
             File file = new File(getExternalStorageDirectory() + "/Download/" + fileName);
-            if (file.exists()) {
+            if (file.isFile() && file.exists()) {
                 file.delete();
             }
             InputStream inputStream = null;

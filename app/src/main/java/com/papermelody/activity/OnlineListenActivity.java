@@ -12,6 +12,7 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -26,13 +27,17 @@ import com.papermelody.util.App;
 import com.papermelody.util.NetworkFailureHandler;
 import com.papermelody.util.RetrofitClient;
 import com.papermelody.util.SocialSystemAPI;
-import com.papermelody.util.ToastUtil;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import butterknife.BindView;
+import okhttp3.ResponseBody;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -114,6 +119,7 @@ public class OnlineListenActivity extends BaseActivity {
         ctl.setCollapsedTitleTextColor(getResources().getColor(R.color.white));
         initView();
 
+        downloadMusic();
     }
 
     private void initView() {
@@ -130,7 +136,7 @@ public class OnlineListenActivity extends BaseActivity {
         if (fileExist) {
             initListenFragment();
         } else {
-            downloadFile();
+//            downloadFile();       // TODO: 已经改用Retrofit获取格式，暂时没用，可以删除
             timer.schedule(timerTask, 0, 100);
         }
     }
@@ -162,6 +168,67 @@ public class OnlineListenActivity extends BaseActivity {
                 ));
     }
 
+    private void downloadMusic() {
+        String sourceURL = App.getServerIP() + "downloadmusic/" + fileName; // FIXME: fileName 需要修改
+        addSubscription(api.downloadMusic(sourceURL)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .map(response -> (ResponseBody) response)
+                .subscribe(
+                        response -> {
+                            Log.d("TESTD", response.contentLength() + "");
+                            boolean b = writeResponseBodyToDisk(response);
+                            Log.d("TESTD", b+"");
+                        }, NetworkFailureHandler.uploadErrorHandler
+                ));
+    }
+
+    /**
+     * 将response获取到的文件写入到手机里
+     * @param body  获取到的response
+     * @return      成功状态
+     */
+    private boolean writeResponseBodyToDisk(ResponseBody body) {
+        try {
+            // todo change the file location/name according to your needs
+            File file = new File(getExternalStorageDirectory() + "/Download/" + fileName);
+            if (file.exists()) {
+                file.delete();
+            }
+            InputStream inputStream = null;
+            OutputStream outputStream = null;
+            try {
+                byte[] fileReader = new byte[4096];
+                long fileSize = body.contentLength();
+                long fileSizeDownloaded = 0;
+                inputStream = body.byteStream();
+                outputStream = new FileOutputStream(file);
+                while (true) {
+                    int read = inputStream.read(fileReader);
+                    if (read == -1) {
+                        break;
+                    }
+                    outputStream.write(fileReader, 0, read);
+                    fileSizeDownloaded += read;
+                    Log.d("TESTDD", "file download: " + fileSizeDownloaded + " of " + fileSize);
+                }
+                outputStream.flush();
+                return true;
+            } catch (IOException e) {
+                return false;
+            } finally {
+                if (inputStream != null) {
+                    inputStream.close();
+                }
+                if (outputStream != null) {
+                    outputStream.close();
+                }
+            }
+        } catch (IOException e) {
+            return false;
+        }
+    }
+
     // 这是监听是否下载完成的类
     public class DMReceiver extends BroadcastReceiver {
         @Override
@@ -187,16 +254,16 @@ public class OnlineListenActivity extends BaseActivity {
     }
 
     private void downloadFile() {
-        String dataPath = getApplicationContext().getFilesDir().getAbsolutePath() + "/";
-        String sourceURL;
-//            防止server_ip忘记加/导致无法下载的情况
-        if (App.getServerIP().endsWith("/")) {
-            sourceURL = App.getServerIP() + "uploaded/" + fileName;
-        } else {
-            sourceURL = App.getServerIP() + "/uploaded/" + fileName;
-        }
-        ToastUtil.showShort(R.string.downloading);
-        download_2(sourceURL, dataPath, fileName);
+//        String dataPath = getApplicationContext().getFilesDir().getAbsolutePath() + "/";
+//        String sourceURL;
+////            防止server_ip忘记加/导致无法下载的情况
+//        if (App.getServerIP().endsWith("/")) {
+//            sourceURL = App.getServerIP() + "downloadmusic/" + fileName;
+//        } else {
+//            sourceURL = App.getServerIP() + "/downloadmusic/" + fileName;
+//        }
+//        ToastUtil.showShort(R.string.downloading);
+//        download_2(sourceURL, dataPath, fileName);
     }
 
     private void initListenFragment() {

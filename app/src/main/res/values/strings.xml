@@ -112,7 +112,7 @@
     <string name="user_comment_not_exist">你还没有评论过哦</string>
     <string name="test_long_text">test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1test1</string>
     <string name="title_activity_upload">UploadActivity</string>
-
+    <string name="not_logged_in">用户尚未登录</string>
     <string name="request_permission">请求申请</string>
 
     <string-array name="spinner_order_mode">
@@ -120,4 +120,5 @@
         <item>按热度</item>
         <item>按点赞数</item>
     </string-array>
+
 </resources>

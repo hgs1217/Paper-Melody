@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.papermelody.R;
 import com.papermelody.model.Comment;
@@ -53,6 +54,27 @@ public class CommentFragment extends BaseFragment {
     EditText editText;
     @BindView(R.id.current_comment_list)
     RecyclerView commentList;
+    @BindView(R.id.user_newest_comment_not_exist)
+    TextView userNoComment;
+    @BindView(R.id.my_comment_name)
+    TextView myCommentName;
+    @BindView(R.id.my_comment_context)
+    TextView myCommentContext;
+    @BindView(R.id.my_comment_time)
+    TextView myCommentTime;
+
+    boolean hasUser;
+    String author = "AnnonymousUser";
+
+    private void checkIfHasUser() {
+        try {
+            author = App.getUser().getUsername();
+            hasUser = true;
+        } catch (NullPointerException e) {
+            //ToastUtil.showShort("登录了发表评论可以保存记录哦！");
+            hasUser = false;
+        }
+    }
 
 
     private SocialSystemAPI api;
@@ -80,6 +102,8 @@ public class CommentFragment extends BaseFragment {
         super.onCreate(savedInstanceState);
 
         onlineMusic = (OnlineMusic) getArguments().getSerializable(SERIAL_ONLINEMUSIC);
+        checkIfHasUser();
+
     }
 
     @Override
@@ -95,14 +119,6 @@ public class CommentFragment extends BaseFragment {
         return view;
     }
 
-    private ArrayList<String> getData() {
-        String musicID = "music1";
-        ArrayList<String> listx = new ArrayList<>();
-
-        listx.add("I like it!");
-        listx.add("This is good.");
-        return listx;
-    }
 
     private void initGetCommentList() {
         String musicID = String.valueOf(onlineMusic.getMusicID());
@@ -128,9 +144,34 @@ public class CommentFragment extends BaseFragment {
                             });
                             System.out.print("sorted!");
                             initRecyclerView(comments);
+                            refreshMyComment(comments);
                         },
                         NetworkFailureHandler.loginErrorHandler
                 ));
+
+    }
+
+    private void refreshMyComment(List<Comment> list) {
+        if (!hasUser) {
+            userNoComment.setText(R.string.not_logged_in);
+            userNoComment.setVisibility(View.VISIBLE);
+        } else {
+            boolean hasCommented = false;
+            for (Comment singleComment : list) {
+                if (singleComment.getAuthor().equals(author)) {
+                    hasCommented = true;
+                    myCommentContext.setText(singleComment.getContent());
+                    myCommentTime.setText(singleComment.getCreateTime().toString());
+                    myCommentName.setText(singleComment.getAuthor());
+                    break;
+                }
+            }
+            if (!hasCommented) {
+                userNoComment.setText(R.id.user_newest_comment_not_exist);
+                userNoComment.setVisibility(View.VISIBLE);
+            }
+        }
+
     }
 
     private void initRecyclerView(List<Comment> comments) {
@@ -153,7 +194,7 @@ public class CommentFragment extends BaseFragment {
         button.setOnClickListener((View v) -> {
                     String comment = editText.getText().toString();
                     SimpleDateFormat sDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-                    String createtime = sDateFormat.format(new java.util.Date());
+                    String createtime = sDateFormat.format(sDateFormat);
                     String author = "AnonymousUser"; //FIXME: 这里先方便上传，不然每次要登录
                     String musicID = String.valueOf(onlineMusic.getMusicID());
                     boolean hasUser = true;
@@ -161,31 +202,34 @@ public class CommentFragment extends BaseFragment {
                         author = App.getUser().getUsername();
                     } catch (NullPointerException e) {
                         ToastUtil.showShort("登录了发表评论可以保存记录哦！");
-                        //hasUser = false;
+                        hasUser = false;
                     }
 
-                    if (hasUser) {
-                        addSubscription(api.uploadComment(musicID, author, comment, createtime)
-                                .flatMap(NetworkFailureHandler.httpFailureFilter)
-                                .subscribeOn(Schedulers.io())
-                                .observeOn(AndroidSchedulers.mainThread())
-                                .map(response -> (HttpResponse) response)
-                                .subscribe(
-                                        upload_com_res -> {
-                                            ToastUtil.showShort(R.string.upload_comment_success);
-                                        },
-                                        NetworkFailureHandler.loginErrorHandler
-                                ));
-                    }
+
+                    addSubscription(api.uploadComment(musicID, author, comment, createtime)
+                            .flatMap(NetworkFailureHandler.httpFailureFilter)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .map(response -> (HttpResponse) response)
+                            .subscribe(
+                                    upload_com_res -> {
+                                        ToastUtil.showShort(R.string.upload_comment_success);
+                                    },
+                                    NetworkFailureHandler.loginErrorHandler
+                            ));
 
                     try {
-                        Thread.sleep(700);
+                        Thread.sleep(10);
                         editText.setText("");
                         editText.setHint(R.string.add_new_comment_here);
                         initGetCommentList();
-
                     } catch (InterruptedException e) {
                         e.printStackTrace();
+                    }
+
+                    if (hasUser) {
+                        userNoComment.setVisibility(View.GONE);
+                        myCommentContext.setText("");
                     }
 
                 }

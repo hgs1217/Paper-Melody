@@ -64,14 +64,15 @@ public class CommentFragment extends BaseFragment {
     @BindView(R.id.my_comment_time)
     TextView myCommentTime;
 
-    boolean hasUser;
-    String author = "AnnonymousUser";
+    private boolean hasUser;
+    private String author = "AnnonymousUser";
 
     private void checkIfHasUser() {
         try {
             author = App.getUser().getUsername();
             hasUser = true;
         } catch (NullPointerException e) {
+            Log.d("TAG_USER", "NO USER LOGGED");
             //ToastUtil.showShort("登录了发表评论可以保存记录哦！");
             hasUser = false;
         }
@@ -101,10 +102,8 @@ public class CommentFragment extends BaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         onlineMusic = (OnlineMusic) getArguments().getSerializable(SERIAL_ONLINEMUSIC);
         checkIfHasUser();
-
     }
 
     @Override
@@ -115,6 +114,7 @@ public class CommentFragment extends BaseFragment {
 
         context = getActivity();
         api = RetrofitClient.getSocialSystemAPI();
+        checkIfHasUser();
         initGetCommentList();
         initView();
         return view;
@@ -144,7 +144,10 @@ public class CommentFragment extends BaseFragment {
                                             sDateFormat.format(a.getCreateTime()));
                                 }
                             });
-                            System.out.print("sorted!");
+                            //System.out.print("sorted!");
+                            SimpleDateFormat sDateFormat2 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                            Log.d("TAG", "before init View: " + sDateFormat2.format(comments.get(0).getCreateTime()));
+                            Log.d("TAG2", "!!!!!");
                             initRecyclerView(comments);
                             refreshMyComment(comments);
                         },
@@ -197,7 +200,7 @@ public class CommentFragment extends BaseFragment {
                     String comment = editText.getText().toString();
                     SimpleDateFormat sDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
                     String createtime = sDateFormat.format(new java.util.Date());
-                    Log.d("TAG",createtime);
+                    Log.d("TAG", createtime);
                     String author = "AnonymousUser"; //FIXME: 这里先方便上传，不然每次要登录
                     String musicID = String.valueOf(onlineMusic.getMusicID());
                     boolean hasUser = true;

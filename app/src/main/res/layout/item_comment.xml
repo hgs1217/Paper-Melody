@@ -6,8 +6,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:gravity="top"
     android:layout_margin="2sp"
+    android:gravity="top"
     android:orientation="horizontal">
 
 
@@ -15,11 +15,13 @@
         android:id="@+id/item_user_head_icon"
         android:layout_width="40sp"
         android:layout_height="40sp"
+        android:layout_marginBottom="2sp"
         app:srcCompat="@drawable/ic_account_circle_black_24dp" />
 
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="3sp"
         android:orientation="vertical">
 
         <TextView
@@ -34,19 +36,17 @@
             android:id="@+id/item_this_comment_time"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/textSecondary"
-            android:text="Loading comment time......" />
+            android:text="Loading comment time......"
+            android:textColor="@color/textSecondary" />
 
         <TextView
-            android:layout_width="fill_parent"
             android:id="@+id/item_this_comment_context"
-            android:layout_marginRight="30sp"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/black"
+            android:layout_marginRight="15sp"
+            android:text="@string/test_long_text"
             android:textAlignment="viewStart"
-            android:text="@string/test_long_text"/>
-
-
+            android:textColor="@color/black" />
     </LinearLayout>
 
 </LinearLayout>

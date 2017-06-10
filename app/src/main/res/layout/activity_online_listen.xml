@@ -21,8 +21,8 @@
             android:layout_height="match_parent"
             android:fitsSystemWindows="false"
             app:contentScrim="?attr/colorPrimary"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
-            app:expandedTitleTextAppearance="@style/TextAppearance.AppCompat.Title">
+            app:expandedTitleTextAppearance="@style/TextAppearance.AppCompat.Title"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
 
             <LinearLayout
                 android:id="@+id/container_online_listen"
@@ -31,17 +31,17 @@
                 android:fitsSystemWindows="false"
                 android:gravity="center"
                 android:orientation="horizontal"
+                android:visibility="invisible"
                 app:layout_collapseMode="parallax"
-                app:layout_collapseParallaxMultiplier="0.5"
-                android:visibility="invisible">
+                app:layout_collapseParallaxMultiplier="0.5">
 
             </LinearLayout>
 
             <android.support.v7.widget.Toolbar
-                android:layout_marginTop="20dp"
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
+                android:layout_marginTop="20dp"
                 app:layout_collapseMode="pin"
                 app:popupTheme="@style/AppTheme.PopupOverlay" />
 
@@ -54,13 +54,13 @@
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        myApp:backgroundTint="@color/colorAccent"
-        myApp:backgroundTintMode="multiply"
-        myApp:foregroundTint="@color/colorPrimary"
-        myApp:foregroundTintMode="add"
         android:layout_margin="@dimen/fab_margin"
         app:layout_anchor="@id/app_bar"
         app:layout_anchorGravity="bottom|end"
-        app:srcCompat="@android:drawable/ic_media_play" />
+        app:srcCompat="@android:drawable/ic_media_play"
+        myApp:backgroundTint="@color/colorAccent"
+        myApp:backgroundTintMode="multiply"
+        myApp:foregroundTint="@color/colorPrimary"
+        myApp:foregroundTintMode="add" />
 
 </android.support.design.widget.CoordinatorLayout>

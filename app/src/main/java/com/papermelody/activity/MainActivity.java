@@ -268,7 +268,7 @@ public class MainActivity extends BaseActivity {
         if (Build.VERSION.SDK_INT >= 23) {
             // 检查该权限是否已经获取
             // 权限是否已经 授权 GRANTED---授权  DINIED---拒绝
-            for (int i=0; i<permissions.length; ++i) {
+            for (int i = 0; i < permissions.length; ++i) {
                 if (ContextCompat.checkSelfPermission(this, permissions[i]) != PackageManager.PERMISSION_GRANTED) {
                     // 如果没有授予该权限，就去提示用户请求
                     ActivityCompat.requestPermissions(this, permissions, REQUEST_PERMISSION);
@@ -280,9 +280,10 @@ public class MainActivity extends BaseActivity {
 
     /**
      * 用户权限申请的回调方法
-     * @param requestCode   请求码
-     * @param permissions   请求的所有权限
-     * @param grantResults  权限的结果
+     *
+     * @param requestCode  请求码
+     * @param permissions  请求的所有权限
+     * @param grantResults 权限的结果
      */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -290,7 +291,7 @@ public class MainActivity extends BaseActivity {
 
         if (requestCode == REQUEST_PERMISSION) {
             if (Build.VERSION.SDK_INT >= 23) {
-                for (int i=0; i<grantResults.length; ++i) {
+                for (int i = 0; i < grantResults.length; ++i) {
                     if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
                         // 判断用户是否 点击了不再提醒。(检测该权限是否还可以申请)
                         boolean b = shouldShowRequestPermissionRationale(permissions[i]);
@@ -347,7 +348,7 @@ public class MainActivity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_PERMISSION) {
             if (android.os.Build.VERSION.SDK_INT >= 23) {
-                for (int i=0; i<permissions.length; ++i) {
+                for (int i = 0; i < permissions.length; ++i) {
                     // 检查该权限是否已经获取
                     int per = ContextCompat.checkSelfPermission(this, permissions[i]);
                     // 权限是否已经 授权 GRANTED---授权  DINIED---拒绝

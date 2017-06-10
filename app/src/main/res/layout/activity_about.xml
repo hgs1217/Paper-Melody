@@ -3,18 +3,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_about"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="300sp"
     android:fitsSystemWindows="true"
     android:orientation="vertical"
     tools:context="com.papermelody.activity.AboutActivity">
 
-    <fragment
-        android:id="@+id/fragment_comment"
-        android:name="com.papermelody.fragment.CommentFragment"
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-    />
+        android:layout_weight="1"/>
 
-
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="100sp"
+        android:background="@color/bb_darkBackgroundColor"/>
 
 </LinearLayout>

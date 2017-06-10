@@ -9,8 +9,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.papermelody.R;
@@ -63,6 +65,10 @@ public class CommentFragment extends BaseFragment {
     TextView myCommentContext;
     @BindView(R.id.my_comment_time)
     TextView myCommentTime;
+    @BindView(R.id.my_comment_overall)
+    LinearLayout my_comment_overall;
+    @BindView(R.id.all_comment_title)
+    TextView refocusPos;
 
     private boolean hasUser;
     private String author = "AnnonymousUser";
@@ -111,7 +117,8 @@ public class CommentFragment extends BaseFragment {
                              Bundle savedInstance) {
         View view = inflater.inflate(R.layout.fragment_comment, container, false);
         ButterKnife.bind(this, view);
-
+        my_comment_overall.setVisibility(View.GONE);
+        userNoComment.setVisibility(View.GONE);
         context = getActivity();
         api = RetrofitClient.getSocialSystemAPI();
         checkIfHasUser();
@@ -159,12 +166,16 @@ public class CommentFragment extends BaseFragment {
     private void refreshMyComment(List<Comment> list) {
         if (!hasUser) {
             userNoComment.setText(R.string.not_logged_in);
+            my_comment_overall.setVisibility(View.GONE);
             userNoComment.setVisibility(View.VISIBLE);
+
         } else {
             boolean hasCommented = false;
             for (Comment singleComment : list) {
                 if (singleComment.getAuthor().equals(author)) {
                     hasCommented = true;
+                    my_comment_overall.setVisibility(View.VISIBLE);
+                    userNoComment.setVisibility(View.GONE);
                     myCommentContext.setText(singleComment.getContent());
                     myCommentTime.setText(singleComment.getCreateTime().toString());
                     myCommentName.setText(singleComment.getAuthor());
@@ -172,7 +183,8 @@ public class CommentFragment extends BaseFragment {
                 }
             }
             if (!hasCommented) {
-                userNoComment.setText(R.id.user_newest_comment_not_exist);
+                userNoComment.setText(R.string.user_comment_not_exist);
+                my_comment_overall.setVisibility(View.GONE);
                 userNoComment.setVisibility(View.VISIBLE);
             }
         }
@@ -186,6 +198,7 @@ public class CommentFragment extends BaseFragment {
         commentList.setLayoutManager(new LinearLayoutManager(context));
         commentList.setItemAnimator(new DefaultItemAnimator());
     }
+
 
     private void initView() {
         /*refreshbtn.setOnClickListener((View vx)->
@@ -237,8 +250,16 @@ public class CommentFragment extends BaseFragment {
                         userNoComment.setVisibility(View.GONE);
                         myCommentContext.setText("");
                     }
-
+                    hideInput(context, this.getView());
+                    refocusPos.requestFocus();
+                    Log.d("TAG-ref", "OKKKKKK");
                 }
         );
+    }
+
+    private void hideInput(Context context, View view) {
+        InputMethodManager inputMethodManager =
+                (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 }

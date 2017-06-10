@@ -1,137 +1,158 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="fill_parent"
+    android:layout_height="match_parent"
     android:layout_margin="1dp"
-    android:orientation="vertical">
-    <!--android:weightSum="1">-->
+    android:layout_weight="1"
+    android:gravity="bottom"
+    android:orientation="vertical"
+    android:weightSum="1111">
 
-    <TextView
-        android:id="@+id/user_comment_title"
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="0"
-        android:background="@color/colorPrimaryDark"
-        android:paddingLeft="2sp"
-        android:paddingStart="2sp"
-        android:text="@string/user_comment_title"
-        android:textColor="@color/white"
-        android:textSize="15sp" />
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="top"
-        android:layout_margin="2sp"
-        android:orientation="horizontal">
-
-
-        <ImageView
-            android:id="@+id/my_comment_icon"
-            android:layout_width="40sp"
-            android:layout_height="40sp"
-            app:srcCompat="@drawable/ic_account_circle_black_24dp" />
-
-        <LinearLayout
+        <TextView
+            android:id="@+id/user_comment_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:background="@color/colorPrimaryDark"
+            android:paddingLeft="2sp"
+            android:text="@string/user_comment_title"
+            android:textColor="@color/white"
+            android:textSize="15sp" />
 
-            <TextView
-                android:id="@+id/my_comment_name"
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/my_comment_overall"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="2sp"
+            android:gravity="top"
+            android:orientation="horizontal">
+
+
+            <ImageView
+                android:id="@+id/my_comment_icon"
+                android:layout_width="40sp"
+                android:layout_height="40sp"
+                app:srcCompat="@drawable/ic_account_circle_black_24dp" />
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="title"
-                android:textColor="@color/black"
-                android:textSize="20sp" />
+                android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/my_comment_time"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/colorAccent"
-                android:text="Loading comment time......" />
+                <TextView
+                    android:id="@+id/my_comment_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="title"
+                    android:textColor="@color/black"
+                    android:textSize="20sp" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:id="@+id/my_comment_context"
-                android:layout_marginRight="30sp"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:textAlignment="viewStart"
-                android:text="@string/test_long_text"/>
+                <TextView
+                    android:id="@+id/my_comment_time"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Loading comment time......"
+                    android:textColor="@color/colorAccent" />
 
+                <TextView
+                    android:id="@+id/my_comment_context"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="30sp"
+                    android:text="TEST11111我爱JAVA"
+                    android:textAlignment="viewStart"
+                    android:textColor="@color/black" />
+
+            </LinearLayout>
 
         </LinearLayout>
 
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="4sp"></LinearLayout>
-    <TextView
-        android:id="@+id/user_newest_comment_not_exist"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="0sp"
-        android:layout_marginTop="0sp"
-        android:paddingStart="4sp"
-        android:text="@string/user_comment_not_exist"
-        android:textSize="18sp" />
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="4sp"></LinearLayout>
-
-    <TextView
-        android:id="@+id/all_comment_title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="0"
-        android:background="@color/colorPrimaryDark"
-        android:paddingLeft="2sp"
-        android:paddingStart="2sp"
-        android:text="@string/all_comment_title"
-        android:textColor="@color/white"
-        android:textSize="15sp" />
-
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/current_comment_list"
-        android:layout_width="match_parent"
-        android:layout_height="fill_parent"
-        android:layout_marginTop="6sp"
-        android:layout_weight="99999"
-        android:fillViewport="true"
-        android:paddingLeft="4sp"
-        android:paddingRight="4sp"
-        android:scrollbarStyle="insideInset" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="0">
-
-        <EditText
-            android:id="@+id/add_new_comment"
+        <TextView
+            android:id="@+id/user_newest_comment_not_exist"
             android:layout_width="match_parent"
-            android:layout_height="60sp"
-            android:layout_weight="1"
-            android:ems="10"
-            android:hint="@string/add_new_comment_here"
-            android:inputType="textMultiLine"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="0sp"
+            android:layout_marginTop="0sp"
+            android:paddingStart="4sp"
+            android:text="@string/user_comment_not_exist"
             android:textSize="18sp" />
 
-        <Button
-            android:id="@+id/upload_comment_btn"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:background="@color/colorAccent"
-            android:text="@string/upload_comment"
-            android:textColor="@color/textPrimary"
-            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/all_comment_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4sp"
+            android:layout_weight="0"
+            android:background="@color/colorPrimaryDark"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:paddingLeft="2sp"
+            android:text="@string/all_comment_title"
+            android:textColor="@color/white"
+            android:textSize="15sp" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1111"
+            android:fillViewport="false">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/current_comment_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="6sp"
+                    android:layout_weight="1111"
+                    android:fillViewport="true"
+                    android:paddingLeft="4sp"
+                    android:paddingRight="4sp"
+                    android:scrollbars="vertical" />
 
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="40sp"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <EditText
+                        android:id="@+id/add_new_comment"
+                        android:layout_width="match_parent"
+                        android:layout_height="40sp"
+                        android:layout_weight="3"
+                        android:ems="10"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:gravity="center_vertical"
+                        android:hint="@string/add_new_comment_here"
+                        android:inputType="textMultiLine"
+                        android:textSize="18sp" />
+
+                    <Button
+                        android:id="@+id/upload_comment_btn"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/ic_send_white_48dp"
+                        android:backgroundTint="@color/colorAccent"
+                        android:textColor="@color/textPrimary"
+                        android:textSize="12sp" />
+
+                </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
     </LinearLayout>
 
 

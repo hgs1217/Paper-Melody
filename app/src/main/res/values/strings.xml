@@ -120,5 +120,6 @@
         <item>按热度</item>
         <item>按点赞数</item>
     </string-array>
+    <string name="reply">回复</string>
 
 </resources>

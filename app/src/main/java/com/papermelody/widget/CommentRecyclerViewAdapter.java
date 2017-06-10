@@ -5,10 +5,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.papermelody.R;
 import com.papermelody.model.Comment;
+import com.papermelody.util.ToastUtil;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -21,7 +23,7 @@ import butterknife.ButterKnife;
  * Created by HgS_1217_ on 2017/5/22.
  */
 
-public class CommentRecyclerViewAdapter extends RecyclerView.Adapter<CommentRecyclerViewAdapter.ViewHolder>  {
+public class CommentRecyclerViewAdapter extends RecyclerView.Adapter<CommentRecyclerViewAdapter.ViewHolder> {
     /**
      * 用于网络作品显示评论的RecyclerView的Adapter
      */
@@ -31,13 +33,13 @@ public class CommentRecyclerViewAdapter extends RecyclerView.Adapter<CommentRecy
     private OnItemClickListener onItemClickListener;
     private List<Comment> comments;
 
-    public CommentRecyclerViewAdapter (Context context) {
+    public CommentRecyclerViewAdapter(Context context) {
         this.context = context;
         comments = new ArrayList<>();
         layoutInflater = LayoutInflater.from(context);
     }
 
-    public CommentRecyclerViewAdapter (Context context, List<Comment> comments) {
+    public CommentRecyclerViewAdapter(Context context, List<Comment> comments) {
         this.context = context;
         this.comments = new ArrayList<>(comments);
         layoutInflater = LayoutInflater.from(context);
@@ -74,6 +76,8 @@ public class CommentRecyclerViewAdapter extends RecyclerView.Adapter<CommentRecy
         TextView textUserName;
         @BindView(R.id.item_this_comment_time)
         TextView textCommentTime;
+        @BindView(R.id.reply_this_comment)
+        LinearLayout replyButton;
         //@BindView User ICON
 
 
@@ -87,6 +91,12 @@ public class CommentRecyclerViewAdapter extends RecyclerView.Adapter<CommentRecy
             SimpleDateFormat sDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
             textCommentTime.setText(sDateFormat.format(comment.getCreateTime()));
             textUserName.setText(comment.getAuthor());
+            replyButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ToastUtil.showShort("RePLY!");
+                }
+            });
         }
     }
 

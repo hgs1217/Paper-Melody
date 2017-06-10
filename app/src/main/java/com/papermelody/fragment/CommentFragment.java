@@ -65,6 +65,7 @@ public class CommentFragment extends BaseFragment {
     TextView myCommentContext;
     @BindView(R.id.my_comment_time)
     TextView myCommentTime;
+
     @BindView(R.id.my_comment_overall)
     LinearLayout my_comment_overall;
     @BindView(R.id.all_comment_title)
@@ -208,6 +209,7 @@ public class CommentFragment extends BaseFragment {
         }
         );
         */
+
 
         button.setOnClickListener((View v) -> {
                     String comment = editText.getText().toString();

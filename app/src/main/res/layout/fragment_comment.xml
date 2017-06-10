@@ -107,7 +107,9 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:paddingLeft="5sp"
+                android:paddingRight="5sp">
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/current_comment_list"
@@ -131,7 +133,7 @@
                         android:id="@+id/add_new_comment"
                         android:layout_width="match_parent"
                         android:layout_height="40sp"
-                        android:layout_weight="3"
+                        android:layout_weight="5"
                         android:ems="10"
                         android:focusable="true"
                         android:focusableInTouchMode="true"
@@ -142,8 +144,8 @@
 
                     <Button
                         android:id="@+id/upload_comment_btn"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
                         android:layout_weight="1"
                         android:background="@drawable/ic_send_white_48dp"
                         android:backgroundTint="@color/colorAccent"

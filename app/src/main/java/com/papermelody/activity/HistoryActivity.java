@@ -6,10 +6,14 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 
 import com.papermelody.R;
+import com.papermelody.model.HistoryMusic;
+import com.papermelody.util.ToastUtil;
 import com.papermelody.widget.HistoryItemRecyclerViewAdapter;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +28,8 @@ public class HistoryActivity extends BaseActivity {
     CollapsingToolbarLayout ctl;
     @BindView(R.id.history_item_list)
     RecyclerView mRecyclerView;
-    private String[] datas = new String[]{"MUSIC 1","MUSIC 2", "A","B"};
+
+    private String[] datas = new String[]{"MUSIC 1", "MUSIC 2", "A", "B"};
 
     private Context context;
     private HistoryItemRecyclerViewAdapter adapter;
@@ -34,8 +39,8 @@ public class HistoryActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         // ctl.setExpandedTitleMarginBottom(5);
         initRecyclerView();
+        getFileDir(getFilesDir().getAbsolutePath());
     }
-
 
 
     private void initRecyclerView() {
@@ -44,6 +49,38 @@ public class HistoryActivity extends BaseActivity {
         mRecyclerView.setAdapter(adapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+    }
+
+    private List<HistoryMusic> historyMusic = new ArrayList<HistoryMusic>();
+
+    public void getFileDir(String filePath) {
+        try {
+            File f = new File(filePath);
+            Log.d("FILEE", "1");
+            File[] files = f.listFiles();// 列出所有文件
+            Log.d("FILEE", "2");
+            if (files != null) {
+                int count = files.length;// 文件个数
+                for (int i = 0; i < count; i++) {
+                    File file = files[i];
+                    Log.d("FILEE", "3");
+                    try {
+                        if (true || file.getName().split(".")[-1].equals("mp3")) {
+                            Log.d("FILEE", "4");
+                            historyMusic.add(new HistoryMusic(
+                                    file.getName(), file.lastModified(), file.length()));
+                        }
+                    } catch (Exception e) {
+                        ToastUtil.showShort("Read this error, but continuing");
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d("FILEE", e.toString());
+
+            ToastUtil.showShort("Wrong Reading");
+        }
     }
 
 

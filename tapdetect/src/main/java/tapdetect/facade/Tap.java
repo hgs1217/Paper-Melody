@@ -13,9 +13,13 @@ import java.util.ArrayList;
 
 import org.opencv.core.*;
 import org.opencv.imgproc.Imgproc;
+import org.opencv.video.BackgroundSubtractor;
+import org.opencv.video.Video;
 
+import tapdetect.ColorRange;
 import tapdetect.Config;
 import tapdetect.FingerDetector;
+import tapdetect.ForegroundDetector;
 import tapdetect.HandDetector;
 import tapdetect.ImgLogger;
 import tapdetect.TapDetector;
@@ -30,18 +34,26 @@ public class Tap {
     private static final HandDetector hd = new HandDetector();
     private static final FingerDetector fd = new FingerDetector();
     private static final TapDetector td = new TapDetector();
+    private static final ForegroundDetector fgd = new ForegroundDetector();
 
     private static long lastProcess = 0;
     private static long processInterval;
     private static List<List<Point>> resultCache = new ArrayList<>();
 
     static {
-        for (int i=0; i<5; ++i) { resultCache.add(new ArrayList<Point>()); }
+        for (int i = 0; i < 5; ++i) {
+            resultCache.add(new ArrayList<Point>());
+        }
+    }
+
+    public static void reset() {
+        ColorRange.reset();
     }
 
     public static long getProcessInterval() {
         return processInterval;
     }
+
     public static boolean readyForNextFrame() {
         return System.currentTimeMillis() - lastProcess > Config.PROCESS_INTERVAL_MS;
     }
@@ -51,7 +63,7 @@ public class Tap {
      * Facade for outside to use the tap detector
      *
      * @param im: a Image in the type of org.opencv.core.Mat
-     * required to be in <strong>YCrCb</strong> color mode!
+     *            required to be in <strong>YCrCb</strong> color mode!
      * @return : a <code>List</code> of <code>Points</code>
      * which takes the left top point as (0, 0) point
      * <p>
@@ -70,9 +82,10 @@ public class Tap {
 
         // resize to the standard size
         double recover_ratio = 1.0 / Util.resize(im);
-        Imgproc.cvtColor(im, im, Imgproc.COLOR_BGR2YCrCb);
+        Mat fgmask = fgd.getForeground(im);
 
-        Mat hand = hd.getHand(im);
+        Imgproc.cvtColor(im, im, Imgproc.COLOR_BGR2YCrCb);
+        Mat hand = hd.getHand(im, fgmask);
         List<Point> fingers = fd.getFingers(im, hand);
         List<Point> taps = td.getTapping(im, fingers);
 
@@ -106,10 +119,10 @@ public class Tap {
         }
 
         double recover_ratio = 1.0 / Util.resize(im);
+        Mat fgmask = fgd.getForeground(im);
 
         Imgproc.cvtColor(im, im, Imgproc.COLOR_BGR2YCrCb);
-
-        Mat hand = hd.getHand(im);
+        Mat hand = hd.getHand(im, fgmask);
 
         List<MatOfPoint> hand_contour = Util.largeContours(hand, Config.HAND_AREA_MIN);
         List<Point> hand_contour_pt = Util.contoursToPoints(hand_contour);
@@ -140,7 +153,7 @@ public class Tap {
         resultCache.add(new ArrayList<Point>());
         resultCache.add(new ArrayList<Point>());
         resultCache.add(new ArrayList<Point>());
-        for (TapDetector.TapDetectPoint p: taps) {
+        for (TapDetector.TapDetectPoint p : taps) {
             if (p.isFalling()) {
                 resultCache.get(2).add(p.getPoint());
             } else if (p.isLinger()) {

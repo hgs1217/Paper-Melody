@@ -17,16 +17,10 @@ import org.opencv.core.Mat;
 import org.opencv.core.Scalar;
 
 public class FingerDetector {
-    public List<Point> getFingers(Mat im) {
-        HandDetector hd = new HandDetector();
-        Mat hand = hd.getHand(im.clone());
-        return getFingers(im, hand);
-    }
-
     public List<Point> getFingers(Mat im, Mat hand) {
         assert im.size().height == Config.IM_HEIGHT;
 
-        List<MatOfPoint> contours = Util.largeContours(hand, 0);
+        List<MatOfPoint> contours = Util.largeContours(hand, Config.HAND_AREA_MIN);
         if (contours.isEmpty()) {
             return new ArrayList<>();
         }

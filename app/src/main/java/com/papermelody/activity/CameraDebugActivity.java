@@ -46,6 +46,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindView;
+import tapdetect.ColorRange;
 import tapdetect.facade.Tap;
 
 /**
@@ -165,6 +166,7 @@ public class CameraDebugActivity extends BaseActivity {
         // 开启子线程，绑定TextureView的响应事件
         startBackgroundThread();
         viewCameraDebug.setSurfaceTextureListener(surfaceTextureListener);
+        Tap.reset();
     }
 
     /**

@@ -6,6 +6,7 @@
 */
 package tapdetect;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.opencv.core.Core;
@@ -18,11 +19,47 @@ import org.opencv.core.CvType;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.imgproc.Moments;
 
+
 public class HandDetector {
-    public Mat getHand(Mat im) {
+
+    public Mat getHand(Mat im, Mat fgmask) {
+        /**
+         * @param im: image in YCrCb color space
+         * @param fgmask: foreground mask given by `org.opencv.video.BackgroundSubtractor`,
+         *              denoting whether or not a pixel is moving
+         * this function will not change `im` or `fgmask`
+         */
+//        if (ColorRange.getUpdatedCnt() < 200) {
+            List<Point> movingPixels = new ArrayList<>();
+            for (int r = 0; r < fgmask.height(); r += 4) {
+                pixelLoop: for (int c = 0; c < fgmask.width(); c += 4) {
+                    if (fgmask.get(r, c)[0] == 0) {
+                        continue;
+                    }
+
+                    // found a moving pixel
+                    for (int ch = 0; ch < 3; ++ch) { // channels
+                        if (Math.abs(im.get(r, c)[ch] - ColorRange.getCenter()[ch])
+                                >= Config.FINGER_COLOR_TOLERANCE[ch]) {
+                            continue pixelLoop;
+                        }
+                    }
+                    movingPixels.add(new Point(c, r));
+                    if (movingPixels.size() > 1000) {
+                        break;
+                    }
+                }
+            }
+            if (movingPixels.size() > 10 && movingPixels.size() < 1000) {
+                ColorRange.updateRange(im, movingPixels);
+            }
+//        }
+        return this.colorRange(im.clone(), ColorRange.getRange()); // will color range change im?
+    }
+
+    @Deprecated
+    public Mat getHandOld(Mat im) {
         assert im.size().height == Config.IM_HEIGHT;
-
-
         Mat handSm = this.colorRange(im.clone(), Config.FINGER_COLOR_RANGE_SM);
         Mat handLg = this.colorRange(im.clone(), Config.FINGER_COLOR_RANGE_LG);
 

@@ -45,13 +45,6 @@ public class TapDetector {
         }
     }
 
-    public List<Point> getTapping(Mat im) {
-        FingerDetector fd = new FingerDetector();
-        List<Point> fingers = fd.getFingers(im);
-
-        return getTapping(im, fingers);
-    }
-
     public List<Point> getTapping(Mat im, List<Point> fingers) {
         List<TapDetectPoint> all = getTappingAll(im, fingers);
         List<Point> result = new ArrayList<>();

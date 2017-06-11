@@ -13,6 +13,8 @@ import org.opencv.core.Point;
 import java.util.ArrayList;
 import java.util.List;
 
+import tapdetect.ColorRange;
+
 /**
  * Created by gigaflw on 2017/5/12.
  * Draw on the canvas as you wish
@@ -71,7 +73,10 @@ public class CameraDebugView extends View {
                 "Finger tip: " + fingerTips.size() + " pts",
                 "Falling: " + falling.size() + " pts",
                 "Lingering: " + lingering.size() + " pts",
-                "Tapping: " + tapping.size() + " pts"
+                "Tapping: " + tapping.size() + " pts",
+                "ColorRange: " + ColorRange.getRange()[0],
+                "ColorRange: " + ColorRange.getRange()[1],
+                "updated: " + ColorRange.getUpdatedCnt()
         };
         CanvasUtil.writeText(canvas, to_be_write);
     }

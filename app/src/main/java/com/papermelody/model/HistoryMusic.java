@@ -30,7 +30,8 @@ public class HistoryMusic {
     }
 
     public void __TEST() {
-        String r = getName() + "**TIME:" + Long.toString(createTime) + "**SIZE" + Long.toString(size);
+        String r = name + "**TIME:" + Long.toString(createTime) + "**SIZE" + Long.toString(size);
         Log.d("FILEE", r);
     }
+
 }

@@ -17,10 +17,11 @@
                 android:id="@+id/item_history_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/colorAccent"
+                android:background="@color/colorPrimary"
                 android:padding="5sp"
                 android:text="History Music 1"
                 android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                android:textColor="@color/white"
                 android:textSize="15sp" />
 
             <TextView
@@ -32,6 +33,33 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Caption"
                 android:textColor="@color/textPrimary"
                 android:textSize="12sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/item_history_time"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:paddingLeft="10px"
+                    android:text="Modified Time"
+                    android:textSize="10sp" />
+
+                <TextView
+                    android:id="@+id/item_history_fileSize"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:text="File Size"
+                    android:textSize="10sp" />
+
+            </LinearLayout>
+
 
         </LinearLayout>
 

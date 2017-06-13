@@ -14,6 +14,7 @@ import com.papermelody.model.HistoryMusic;
 import com.papermelody.util.ToastUtil;
 import com.papermelody.widget.HistoryItemRecyclerViewAdapter;
 import com.papermelody.widget.HistoryItemRecyclerViewDecoration;
+import com.papermelody.widget.HistoryItemRecyclerViewLayoutManager;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -33,7 +34,7 @@ public class HistoryActivity extends BaseActivity {
     @BindView(R.id.history_item_list)
     RecyclerView mRecyclerView;
 
-    private String[] datas = new String[]{"MUSIC 1", "MUSIC 2", "A", "B", "HGS", "ZB", "TTH"};
+    private String[] musicCaption = new String[]{"MUSIC 1", "MUSIC 2", "A", "B", "HGS", "ZB", "TTH"};
     private Context context;
     private String musicExtendedName = ".txt";
     private HistoryItemRecyclerViewAdapter adapter;
@@ -68,11 +69,11 @@ public class HistoryActivity extends BaseActivity {
 
 
     private void initRecyclerView() {
-        adapter = new HistoryItemRecyclerViewAdapter(datas, historyMusic);
+        adapter = new HistoryItemRecyclerViewAdapter(musicCaption, historyMusic);
         //// TODO: 2017-6-10
         mRecyclerView.addItemDecoration(new HistoryItemRecyclerViewDecoration(1));
         mRecyclerView.setAdapter(adapter);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mRecyclerView.setLayoutManager(new HistoryItemRecyclerViewLayoutManager());
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
     }
 

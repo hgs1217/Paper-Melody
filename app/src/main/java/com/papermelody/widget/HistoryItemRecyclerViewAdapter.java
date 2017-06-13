@@ -50,7 +50,10 @@ public class HistoryItemRecyclerViewAdapter extends RecyclerView.Adapter<History
     //将数据与界面进行绑定的操作
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
-        viewHolder.setView(datas[position], musics.get(position));
+        if (position >= datas.length)
+            viewHolder.setView("Caption Fetch Failed", musics.get(position));
+        else
+            viewHolder.setView(datas[position], musics.get(position));
         viewHolder.itemView.setOnClickListener((View view) ->
                 {
                     int pos = viewHolder.getLayoutPosition();
@@ -84,13 +87,13 @@ public class HistoryItemRecyclerViewAdapter extends RecyclerView.Adapter<History
 
         private void setView(String datas, HistoryMusic music) {
             itemTitle.setText(music.getName());
-            itemCaption.setText("NO caption");
+            itemCaption.setText(datas);
             itemModifiedTime.setText(timeLongToString(music.getCreateTime()));
             itemSize.setText(fileSizeToString(music.getSize()));
         }
 
         private String timeLongToString(long m) {
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss");
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd  HH:mm");
             String time = sdf.format(new Date(m));
             return time;
         }

@@ -29,7 +29,7 @@ public class SplashActivity extends BaseActivity {
                 SplashActivity.this.startActivity(mainIntent);//跳转到MainActivity
                 SplashActivity.this.finish();//结束SplashActivity
             }
-        }, 2000);//给postDelayed()方法传递延迟参数
+        }, 1000);//给postDelayed()方法传递延迟参数
     }
 
     @Override

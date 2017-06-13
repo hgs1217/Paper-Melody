@@ -37,6 +37,8 @@ public class SettingsDevActivity extends BaseActivity {
     @BindView(R.id.seekbar6)        SeekBar sb6;
     @BindView(R.id.seekbar7)        SeekBar sb7;
     @BindView(R.id.seekbar8)        SeekBar sb8;
+    @BindView(R.id.seekbar9)        SeekBar sb9;
+    @BindView(R.id.seekbar10)        SeekBar sb10;
 
     @BindView(R.id.seekbar_caption1) TextView text1;
     @BindView(R.id.seekbar_caption2) TextView text2;
@@ -46,12 +48,14 @@ public class SettingsDevActivity extends BaseActivity {
     @BindView(R.id.seekbar_caption6) TextView text6;
     @BindView(R.id.seekbar_caption7) TextView text7;
     @BindView(R.id.seekbar_caption8) TextView text8;
+    @BindView(R.id.seekbar_caption9) TextView text9;
+    @BindView(R.id.seekbar_caption10) TextView text10;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        SeekBar[] seekbars = { sb1, sb2, sb3, sb4, sb5, sb6, sb7, sb8 };
-        TextView[] texts = { text1, text2, text3, text4, text5, text6, text7, text8 };
+        SeekBar[] seekbars = { sb1, sb2, sb3, sb4, sb5, sb6, sb7, sb8, sb9, sb10 };
+        TextView[] texts = { text1, text2, text3, text4, text5, text6, text7, text8, text9, text10 };
 
         // 初始化用于修改ip地址的编辑框和按钮
         editServerIP.setText(App.getServerIP());

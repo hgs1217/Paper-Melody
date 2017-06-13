@@ -12,8 +12,10 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.papermelody.R;
+import com.papermelody.activity.FavoriteActivity;
 import com.papermelody.activity.HistoryActivity;
 import com.papermelody.activity.MainActivity;
+import com.papermelody.activity.UpProductsActivity;
 import com.papermelody.model.User;
 import com.papermelody.util.App;
 import com.papermelody.util.ToastUtil;
@@ -91,10 +93,20 @@ public class UserFragment extends BaseFragment {
             startActivity(intent);
         });
         btnUserUpload.setOnClickListener((View v) -> {
-            // TODO:
+            if (App.getUser() == null) {
+                ToastUtil.showShort("请先登录");
+            } else {
+                Intent intent = new Intent(context, UpProductsActivity.class);
+                startActivity(intent);
+            }
         });
         btnUserFavorite.setOnClickListener((View v) -> {
-            // TODO:
+            if (App.getUser() == null) {
+                ToastUtil.showShort("请先登录");
+            } else {
+                Intent intent = new Intent(context, FavoriteActivity.class);
+                startActivity(intent);
+            }
         });
     }
 

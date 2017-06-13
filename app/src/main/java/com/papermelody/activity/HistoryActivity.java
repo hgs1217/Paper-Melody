@@ -9,7 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
 import com.papermelody.R;
-import com.papermelody.model.HistoryMusic;
+import com.papermelody.model.LocalMusic;
 import com.papermelody.util.ToastUtil;
 import com.papermelody.widget.HistoryItemRecyclerViewAdapter;
 
@@ -51,7 +51,7 @@ public class HistoryActivity extends BaseActivity {
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
     }
 
-    private List<HistoryMusic> historyMusic = new ArrayList<HistoryMusic>();
+    private List<LocalMusic> localMusic = new ArrayList<LocalMusic>();
 
     public void getFileDir(String filePath) {
         try {
@@ -67,7 +67,7 @@ public class HistoryActivity extends BaseActivity {
                     try {
                         if (true || file.getName().split(".")[-1].equals("mp3")) {
                             Log.d("FILEE", "4");
-                            historyMusic.add(new HistoryMusic(
+                            localMusic.add(new LocalMusic(
                                     file.getName(), file.lastModified(), file.length()));
                         }
                     } catch (Exception e) {

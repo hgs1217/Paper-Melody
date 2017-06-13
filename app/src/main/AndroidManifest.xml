@@ -63,6 +63,12 @@
             android:name=".activity.PlayListenActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".activity.FavoriteActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.UpProductsActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".activity.CameraDebugActivity"
             android:screenOrientation="landscape" />
         <!-- <receiver android:name=".activity.OnlineListenActivity$DMReceiver"> -->

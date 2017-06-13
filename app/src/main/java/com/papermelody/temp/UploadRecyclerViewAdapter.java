@@ -1,4 +1,4 @@
-package com.papermelody.widget;
+package com.papermelody.temp;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -14,9 +14,9 @@ import butterknife.ButterKnife;
  * Created by HgS_1217_ on 2017/4/10.
  */
 
-public class FavoriteRecyclerViewAdapter extends RecyclerView.Adapter<FavoriteRecyclerViewAdapter.ViewHolder>  {
+public class UploadRecyclerViewAdapter extends RecyclerView.Adapter<UploadRecyclerViewAdapter.ViewHolder>  {
     /**
-     * 收藏作品中用于显示作品的RecyclerView的Adapter
+     * 上传作品中用于显示作品的RecyclerView的Adapter
      */
 
     private LayoutInflater layoutInflater;

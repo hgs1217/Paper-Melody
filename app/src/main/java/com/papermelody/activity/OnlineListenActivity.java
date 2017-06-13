@@ -96,7 +96,7 @@ public class OnlineListenActivity extends BaseActivity {
 
         Intent intent = getIntent();
 //         获取从音乐圈传入的onlineMusic实例
-        onlineMusic = (OnlineMusic) intent.getSerializableExtra(MusicHallFragment.SERIAL_ONLINEMUSIC);
+        onlineMusic = (OnlineMusic) intent.getSerializableExtra(OnlineMusic.SERIAL_ONLINEMUSIC);
         api = RetrofitClient.getSocialSystemAPI();
         dmReceiver = new DMReceiver();
         intentFilter = new IntentFilter();

@@ -17,6 +17,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.papermelody.R;
@@ -46,6 +47,8 @@ public class MainActivity extends BaseActivity {
     Toolbar toolbar;
     @BindView(R.id.toolbar_title)
     TextView toolbarTitle;
+    @BindView(R.id.toolbar_icon)
+    ImageView toolbarIcon;
 
     public static final int MAIN_HOME = 0;
     public static final int MAIN_HALL = 1;
@@ -86,8 +89,7 @@ public class MainActivity extends BaseActivity {
     }
 
     private void updateToolbar(int position) {
-        toolbar.setLogo(null);
-        toolbar.setTitle(null);
+        // TODO: back图标太丑，不和设计风格
         switch (position) {
             case MAIN_HOME:
                 toolbarTitle.setText(R.string.tab_mode);
@@ -119,7 +121,23 @@ public class MainActivity extends BaseActivity {
             default:
                 break;
         }
-        toolbar.getMenu().clear();
+
+        switch (position) {
+            case MODE_FREE:
+            case MODE_OPERN:
+            case USER_INFO:
+            case LOG_IN:
+            case REGISTER:
+                toolbarIcon.setImageDrawable(getDrawable(R.drawable.back));
+                toolbarIcon.setOnClickListener((view) -> {
+                    onBackPressed();
+                });
+                break;
+            default:;
+                toolbarIcon.setImageDrawable(null);
+                toolbarIcon.setOnClickListener((view) -> { });
+                break;
+        }
     }
 
     private void initTabView() {

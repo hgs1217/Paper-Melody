@@ -8,7 +8,7 @@
     android:layout_height="wrap_content"
     android:layout_gravity="top"
     android:background="@color/colorPrimary"
-    android:elevation="5dp">
+    android:elevation="15dp">
 
     <android.support.v7.widget.Toolbar
         android:fitsSystemWindows="false"

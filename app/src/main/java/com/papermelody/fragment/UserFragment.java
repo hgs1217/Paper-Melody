@@ -3,6 +3,7 @@ package com.papermelody.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,13 +36,13 @@ public class UserFragment extends BaseFragment {
     @BindView(R.id.btn_login)
     Button btnLogIn;
     @BindView(R.id.btn_user_info)
-    Button btnUserInfo;
+    CardView btnUserInfo;
     @BindView(R.id.btn_user_history)
-    Button btnUserHistory;
+    CardView btnUserHistory;
     @BindView(R.id.btn_user_upload)
-    Button btnUserUpload;
+    CardView btnUserUpload;
     @BindView(R.id.btn_user_favorite)
-    Button btnUserFavorite;
+    CardView btnUserFavorite;
 
     private User user;
     private Context context;

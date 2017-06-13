@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
@@ -19,6 +18,8 @@ import com.papermelody.widget.HistoryItemRecyclerViewLayoutManager;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import butterknife.BindView;
@@ -106,6 +107,16 @@ public class HistoryActivity extends BaseActivity {
                     }
                 }
             }
+            Collections.sort(historyMusic, new Comparator() {
+                @Override
+                public int compare(Object o1, Object o2) {
+                    HistoryMusic a = (HistoryMusic) o1;
+                    HistoryMusic b = (HistoryMusic) o2;
+                    return Long.toString(b.getCreateTime()).compareTo(
+                            Long.toString(a.getCreateTime()));
+                }
+            });
+
         } catch (Exception e) {
             e.printStackTrace();
             Log.d("FILEE", e.toString());

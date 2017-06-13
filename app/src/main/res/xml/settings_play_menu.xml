@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout="@layout/preference_item"
+    android:title="设置">
+
+    <PreferenceCategory
+        android:layout="@layout/preference_category_widget"
+        android:title="演奏模式">
+        <CheckBoxPreference
+            android:layout="@layout/preference_item"
+            android:summary="一边弹奏一边录制"
+            android:title="边弹边录" />
+        <Preference
+            android:layout="@layout/preference_item"
+            android:summary="默认的演奏模式"
+            android:title="默认模式" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:layout="@layout/preference_category_widget"
+        android:title="技术设置">
+        <Preference
+            android:layout="@layout/preference_item"
+            android:summary="检测系统的灵敏度"
+            android:title="灵敏度" />
+        <Preference
+            android:layout="@layout/preference_item"
+            android:summary="支持最大到10个手指哦"
+            android:title="最多的手指识别数量" />
+    </PreferenceCategory>
+
+</PreferenceScreen>

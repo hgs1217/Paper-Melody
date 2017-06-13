@@ -5,6 +5,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.papermelody.R;
+import com.papermelody.fragment.SettingsPlayPreferenceFragment;
 
 import butterknife.BindView;
 
@@ -23,6 +24,12 @@ public class SettingsPlayActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initToolbar();
+        initPreferenceMenu();
+    }
+
+    private void initPreferenceMenu() {
+        getFragmentManager().beginTransaction().replace(
+                R.id.frameLayout_settings_play, new SettingsPlayPreferenceFragment()).commit();
     }
 
 

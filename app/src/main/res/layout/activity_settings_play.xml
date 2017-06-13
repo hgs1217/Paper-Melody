@@ -8,4 +8,23 @@
     android:orientation="vertical"
     tools:context="com.papermelody.activity.SettingsPlayActivity">
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_settings_play"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        android:title="@string/play_settings"
+        android:titleTextColor="@color/white" />
+
+
+    <FrameLayout
+        android:id="@+id/frameLayout_settings_play"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </FrameLayout>
+
+
 </LinearLayout>

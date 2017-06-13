@@ -123,4 +123,7 @@
     <string name="reply">回复</string>
     <string name="play_settings">演奏设置</string>
 
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>

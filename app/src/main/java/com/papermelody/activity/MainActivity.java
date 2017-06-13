@@ -74,18 +74,16 @@ public class MainActivity extends BaseActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Intent intent = getIntent();
-        int currentTab = intent.getIntExtra("currentTab", 0);
         fragmentManager = getSupportFragmentManager();
 
         requestPermissions();
 
         initTabView();
-        updateToolbar(currentTab);
+        updateToolbar(currentPage);
 
         TabPagerAdapter tabPagerAdapter = new TabPagerAdapter(fragmentManager);
         container.setAdapter(tabPagerAdapter);
-        container.setCurrentItem(currentTab);
+        container.setCurrentItem(currentPage);
     }
 
     private void updateToolbar(int position) {

@@ -2,6 +2,7 @@ package com.papermelody.activity;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,6 +15,7 @@ import com.papermelody.util.ToastUtil;
 import com.papermelody.widget.HistoryItemRecyclerViewAdapter;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,7 +31,7 @@ public class HistoryActivity extends BaseActivity {
     @BindView(R.id.history_item_list)
     RecyclerView mRecyclerView;
 
-    private String[] datas = new String[]{"MUSIC 1", "MUSIC 2", "A", "B"};
+    private String[] datas = new String[]{"MUSIC 1", "MUSIC 2", "A", "B", "HGS", "ZB", "TTH"};
 
     private Context context;
     private HistoryItemRecyclerViewAdapter adapter;
@@ -39,13 +41,32 @@ public class HistoryActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         // ctl.setExpandedTitleMarginBottom(5);
         initRecyclerView();
-        getFileDir(getFilesDir().getAbsolutePath());
+        String readyPath = Environment.getExternalStorageDirectory().getAbsolutePath();
+
+
+        try {
+            for (int i = 0; i < 5; ++i) {
+                File file = new File(Environment.getExternalStorageDirectory(),
+                        "Music" + Integer.toString(i) + ".txt");
+                FileOutputStream fos = new FileOutputStream(file);
+                String info = "I am a chinese!";
+                fos.write(info.getBytes());
+                fos.close();
+                Log.d("FILEE", "写入成功");
+                Thread.sleep(1000);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        getFileDir(Environment.getExternalStorageDirectory().getAbsolutePath());
+        Log.d("FILEPATH", Environment.getExternalStorageDirectory().getAbsolutePath());
     }
 
 
     private void initRecyclerView() {
         adapter = new HistoryItemRecyclerViewAdapter(datas);
-        //// TODO: 2017-6-10 0010
+        //// TODO: 2017-6-10
         mRecyclerView.setAdapter(adapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -64,21 +85,23 @@ public class HistoryActivity extends BaseActivity {
                 for (int i = 0; i < count; i++) {
                     File file = files[i];
                     Log.d("FILEE", "3");
-                    try {
-                        if (true || file.getName().split(".")[-1].equals("mp3")) {
-                            Log.d("FILEE", "4");
-                            historyMusic.add(new HistoryMusic(
-                                    file.getName(), file.lastModified(), file.length()));
-                        }
-                    } catch (Exception e) {
-                        ToastUtil.showShort("Read this error, but continuing");
+                    // try {
+                    String __name = file.getName();
+                    if (true||__name.substring(__name.indexOf("."), __name.length()).equals("txt")) {
+                        Log.d("FILEE", "4");
+                        historyMusic.add(new HistoryMusic(
+                                file.getName(), file.lastModified(), file.length()));
+                        historyMusic.get(historyMusic.size() - 1).__TEST();
+                        //     }
+                        // } catch (Exception e) {
+                        //     e.printStackTrace();
+                        //    ToastUtil.showShort("Read this error, but continuing");
                     }
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
             Log.d("FILEE", e.toString());
-
             ToastUtil.showShort("Wrong Reading");
         }
     }

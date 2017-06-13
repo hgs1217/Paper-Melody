@@ -1,5 +1,7 @@
 package com.papermelody.model;
 
+import android.util.Log;
+
 /**
  * Created by 潘宇杰 on 2017-6-11 0011.
  */
@@ -25,5 +27,10 @@ public class HistoryMusic {
 
     public long getSize() {
         return size;
+    }
+
+    public void __TEST() {
+        String r = getName() + "**TIME:" + Long.toString(createTime) + "**SIZE" + Long.toString(size);
+        Log.d("FILEE", r);
     }
 }

@@ -6,7 +6,9 @@ import android.os.Environment;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.View;
 
 import com.papermelody.R;
 import com.papermelody.model.HistoryMusic;
@@ -34,6 +36,8 @@ public class HistoryActivity extends BaseActivity {
     CollapsingToolbarLayout ctl;
     @BindView(R.id.history_item_list)
     RecyclerView mRecyclerView;
+    @BindView(R.id.toolbar_history)
+    Toolbar toolbar;
 
     private String[] musicCaption = new String[]{"MUSIC 1", "MUSIC 2", "A", "B", "HGS", "ZB", "TTH"};
     private Context context;
@@ -63,9 +67,18 @@ public class HistoryActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // ctl.setExpandedTitleMarginBottom(5);
+        initToolbar();
         initRecyclerView();
         getFileDir(Environment.getExternalStorageDirectory().getAbsolutePath());
         //Log.d("FILEPATH", Environment.getExternalStorageDirectory().getAbsolutePath());
+    }
+
+    private void initToolbar() {
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.setNavigationOnClickListener((View v) -> {
+            finish();
+        });
     }
 
 

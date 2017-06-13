@@ -1,12 +1,13 @@
 package com.papermelody.activity;
 
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.view.View;
 
 import com.papermelody.R;
 
-/**
- * Created by HgS_1217_ on 2017/4/10.
- */
+import butterknife.BindView;
+
 
 public class SettingsPlayActivity extends BaseActivity {
     /**
@@ -14,10 +15,25 @@ public class SettingsPlayActivity extends BaseActivity {
      * 弹奏设置页面
      */
 
+    @BindView(R.id.toolbar_settings_play)
+    Toolbar toolbar;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
+        initToolbar();
+    }
+
+
+    private void initToolbar() {
+        toolbar.setTitle(R.string.settings_play);
+        toolbar.setTitleTextColor(getResources().getColor(R.color.white));
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.setNavigationOnClickListener((View v) -> {
+            finish();
+        });
     }
 
     @Override

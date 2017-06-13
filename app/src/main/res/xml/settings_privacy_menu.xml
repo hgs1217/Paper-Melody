@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout="@layout/preference_item"
+    android:title="设置">
+
+    <PreferenceCategory
+        android:layout="@layout/preference_category_widget"
+        android:title="账号">
+        <Preference
+            android:layout="@layout/preference_item"
+            android:summary="在音乐中记录我的名字"
+            android:title="我的名字" />
+        <Preference
+            android:layout="@layout/preference_item"
+            android:summary="绑定QQ"
+            android:title="绑定QQ或微博" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:layout="@layout/preference_category_widget"
+        android:title="隐私">
+        <Preference
+            android:layout="@layout/preference_item"
+            android:summary="他人是否可以查看我"
+            android:title="我的个人信息可见" />
+        <Preference
+            android:layout="@layout/preference_item"
+            android:summary="没什么东西了吧"
+            android:title="评论？" />
+    </PreferenceCategory>
+
+</PreferenceScreen>

@@ -14,6 +14,7 @@
         android:layout_height="wrap_content"
         android:background="?attr/colorPrimary"
         android:minHeight="?attr/actionBarSize"
+        android:popupTheme="@style/ThemeOverlay.AppCompat.Light"
         android:theme="?attr/actionBarTheme"
         android:title="@string/play_settings"
         android:titleTextColor="@color/white" />

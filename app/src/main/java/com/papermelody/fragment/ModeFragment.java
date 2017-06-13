@@ -36,7 +36,6 @@ public class ModeFragment extends BaseFragment {
     Button btnModeFree;
     @BindView(R.id.btn_mode_opern)
     Button btnModeOpern;
-
     @BindView(R.id.btn_mode_camera_debug)
     Button btnModeCameraDebug;
 

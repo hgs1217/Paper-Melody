@@ -1,8 +1,6 @@
 package com.papermelody.fragment;
 
-import android.content.Context;
 import android.content.Intent;
-import android.database.ContentObservable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +11,6 @@ import android.widget.Button;
 import android.widget.Spinner;
 
 import com.papermelody.R;
-import com.papermelody.activity.MainActivity;
 import com.papermelody.activity.PlayActivity;
 
 import butterknife.BindView;

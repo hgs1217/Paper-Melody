@@ -26,7 +26,6 @@ import rx.schedulers.Schedulers;
 
 public class RegisterFragment extends BaseFragment {
 
-
     @BindView(R.id.ttl_username)
     TextInputLayout userTextInputLayoutUser;
     @BindView(R.id.ttl_password)
@@ -65,23 +64,19 @@ public class RegisterFragment extends BaseFragment {
         //计数的最大值
         pwTextInputLayoutUser.setCounterMaxLength(20);
 
-
         initView();
         return view;
     }
 
     private void initView() {
         btnRegister.setOnClickListener((View v) -> {
-
                     String name = editUsername.getText().toString();
                     String pw = editPassword.getText().toString();
                     String em = editemail.getText().toString();
 
                     pwTextInputLayoutUser.setErrorEnabled(false);
                     if (TextUtils.isEmpty(pw) || pw.length() < 6) {
-
                         pwTextInputLayoutUser.setError("密码错误不能少于6个字符");
-
                     } else {
                         SocialSystemAPI api = RetrofitClient.getSocialSystemAPI();
                         addSubscription(api.register(name, pw)
@@ -97,18 +92,15 @@ public class RegisterFragment extends BaseFragment {
                                         NetworkFailureHandler.loginErrorHandler
                                 ));
                     }
-
                 }
-
         );
     }
-
 
     private void updateUser(UserResponse.UserInfo userInfo) {
         User user = new User();
         user.setUsername(userInfo.getName());
         App.setUser(user);
         MainActivity mainActivity = (MainActivity) getActivity();
-        mainActivity.updateFragment(2);
+        mainActivity.updateFragment(MainActivity.MAIN_USER);
     }
 }

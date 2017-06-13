@@ -133,19 +133,15 @@ public class LogInFragment extends BaseFragment {
         btnRegister.setOnClickListener((View v) -> {
                     MainActivity mainActivity = (MainActivity) getActivity();
                     mainActivity.updateFragment(MainActivity.REGISTER);
-           /*
-            */
                 }
         );
-
     }
-
 
     private void updateUser(UserResponse.UserInfo userInfo) {
         User user = new User();
         user.setUsername(userInfo.getName());
         App.setUser(user);
         MainActivity mainActivity = (MainActivity) getActivity();
-        mainActivity.updateFragment(2);
+        mainActivity.updateFragment(MainActivity.MAIN_USER);
     }
 }

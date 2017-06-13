@@ -42,5 +42,4 @@ public class BaseFragment extends Fragment {
             this.compositeSubscription.unsubscribe();
         }
     }
-
 }

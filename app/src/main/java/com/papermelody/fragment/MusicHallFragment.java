@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
+import com.bartoszlipinski.recyclerviewheader2.RecyclerViewHeader;
 import com.papermelody.R;
 import com.papermelody.activity.OnlineListenActivity;
 import com.papermelody.model.MusicBanner;
@@ -52,6 +54,8 @@ public class MusicHallFragment extends BaseFragment {
     SwipeRefreshLayout layoutRefresh;
     @BindView(R.id.spinner_hall)
     Spinner spinnerHall;
+//    @BindView(R.id.recycler_header)
+//    RecyclerViewHeader recyclerViewHeader;
 
     public static final String SERIAL_ONLINEMUSIC = "SERIAL_ONLINEMUSIC";
 
@@ -126,19 +130,20 @@ public class MusicHallFragment extends BaseFragment {
         recyclerViewHall.setAdapter(adapter);
         recyclerViewHall.setLayoutManager(new GridLayoutManager(context, 1));
         recyclerViewHall.setItemAnimator(new DefaultItemAnimator());
+//        recyclerViewHeader.attachTo(recyclerViewHall);
     }
 
     private void initBannerView(List<OnlineMusic> musics) {
         // TODO: 此处后期需修改为MusicBanner与某些音乐绑定数据
         List<MusicBanner> banners = new ArrayList<>();
         int sz = musics.size();
-        banners.add(new MusicBanner(musics.get(sz-1).getMusicName(), musics.get(sz-1).getMusicPhotoUrl()));
-        banners.add(new MusicBanner(musics.get(sz-2).getMusicName(), musics.get(sz-2).getMusicPhotoUrl()));
-        banners.add(new MusicBanner(musics.get(sz-3).getMusicName(), musics.get(sz-3).getMusicPhotoUrl()));
+        banners.add(new MusicBanner(musics.get(sz - 1).getMusicName(), musics.get(sz - 1).getMusicPhotoUrl()));
+        banners.add(new MusicBanner(musics.get(sz - 2).getMusicName(), musics.get(sz - 2).getMusicPhotoUrl()));
+        banners.add(new MusicBanner(musics.get(sz - 3).getMusicName(), musics.get(sz - 3).getMusicPhotoUrl()));
 
         cyclePoster.setIndicatorsSelected(R.drawable.shape_cycle_indicator_selected,
                 R.drawable.shape_cycle_indicator_unselected);
-        cyclePoster.setDelay(2000);
+        cyclePoster.setDelay(3000);
         cyclePoster.setData(banners, null);
     }
 

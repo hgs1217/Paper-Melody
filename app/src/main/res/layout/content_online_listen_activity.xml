@@ -34,7 +34,7 @@
                     style="?android:attr/buttonBarButtonStyle"
                     android:layout_width="40dp"
                     android:layout_height="wrap_content"
-                    android:background="@android:drawable/ic_media_previous"
+                    android:background="@android:drawable/ic_media_rew"
                     android:backgroundTint="@color/colorAccent" />
 
                 <Button
@@ -52,7 +52,7 @@
                     style="?android:attr/buttonBarButtonStyle"
                     android:layout_width="40dp"
                     android:layout_height="wrap_content"
-                    android:background="@android:drawable/ic_media_next"
+                    android:background="@android:drawable/ic_media_ff"
                     android:backgroundTint="@color/colorAccent" />
 
             </LinearLayout>

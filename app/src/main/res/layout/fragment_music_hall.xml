@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <com.papermelody.widget.MusicHallCycleViewPager
@@ -13,22 +14,50 @@
 
     <Spinner
         android:id="@+id/spinner_hall"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"/>
+        android:layout_gravity="center"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:dropDownWidth="120dp"
+        android:dropDownSelector="@color/colorPrimaryLight" />
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/layout_hall_refresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <!--<RelativeLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent">-->
+
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recycler_view_hall"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true">
 
         </android.support.v7.widget.RecyclerView>
 
+        <!--尝试让cycleviewpager跟着列表一起滚动，但失败了-->
+        <!--<com.bartoszlipinski.recyclerviewheader2.RecyclerViewHeader-->
+        <!--android:id="@+id/recycler_header"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentTop="true">-->
+
+        <!--<com.papermelody.widget.MusicHallCycleViewPager-->
+        <!--android:id="@+id/hall_cycle_view_pager"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="200dp">-->
+
+        <!--</com.papermelody.widget.MusicHallCycleViewPager>-->
+        <!--</com.bartoszlipinski.recyclerviewheader2.RecyclerViewHeader>-->
+        <!--</RelativeLayout>-->
+
+
     </android.support.v4.widget.SwipeRefreshLayout>
 
+
 </LinearLayout>
+

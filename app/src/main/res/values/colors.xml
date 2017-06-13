@@ -11,6 +11,7 @@
     <color name="textPrimary">#212121</color>
     <color name="textSecondary">#757575</color>
     <color name="divider">#bdbdbd</color>
+    <color name="card_view_background">#fafafa</color>
     <color name="seekBarBackground">#65ffffff</color>
     <color name="seekBarProgress">#331de9b6</color>
     <color name="white">#ffffff</color>

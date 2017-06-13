@@ -47,7 +47,7 @@ public class MusicHallRecyclerViewAdapter extends RecyclerView.Adapter<MusicHall
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new ViewHolder(layoutInflater.inflate(R.layout.item_online_music, parent, false));
+        return new ViewHolder(layoutInflater.inflate(R.layout.item_online_music_card, parent, false));
     }
 
     @Override

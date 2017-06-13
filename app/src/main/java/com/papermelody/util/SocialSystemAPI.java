@@ -89,4 +89,12 @@ public interface SocialSystemAPI {
     @Streaming
     @GET
     Observable<ResponseBody> downloadMusic(@Url String fileUrl);
+
+    // 上传作品获取
+    @GET("uploadmusics")
+    Observable<OnlineMusicListResponse> getUploadMusicList(@Query("userID") @Nullable Integer userID);
+
+    // 收藏作品获取
+    @GET("favoritemusics")
+    Observable<OnlineMusicListResponse> getFavoriteMusicList(@Query("userID") @Nullable Integer userID);
 }

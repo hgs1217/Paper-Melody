@@ -85,17 +85,18 @@ public class HistoryActivity extends BaseActivity {
                 for (int i = 0; i < count; i++) {
                     File file = files[i];
                     Log.d("FILEE", "3");
-                    // try {
-                    String __name = file.getName();
-                    if (true||__name.substring(__name.indexOf("."), __name.length()).equals("txt")) {
-                        Log.d("FILEE", "4");
-                        historyMusic.add(new HistoryMusic(
-                                file.getName(), file.lastModified(), file.length()));
-                        historyMusic.get(historyMusic.size() - 1).__TEST();
-                        //     }
-                        // } catch (Exception e) {
-                        //     e.printStackTrace();
-                        //    ToastUtil.showShort("Read this error, but continuing");
+                    try {
+                        String __name = file.getName();
+
+                        if (__name.length() > 4 && __name.substring(__name.length() - 4, __name.length()).equals(".txt")) {
+                            Log.d("FILEE", "4");
+                            historyMusic.add(new HistoryMusic(
+                                    file.getName(), file.lastModified(), file.length()));
+                            historyMusic.get(historyMusic.size() - 1).__TEST();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        //  ToastUtil.showShort("Read this error, but continuing");
                     }
                 }
             }

@@ -39,7 +39,7 @@ import butterknife.ButterKnife;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-import static com.papermelody.fragment.MusicHallFragment.SERIAL_ONLINEMUSIC;
+import static com.papermelody.model.OnlineMusic.SERIAL_ONLINEMUSIC;
 
 /**
  * Created by HgS_1217_ on 2017/4/10.
@@ -101,7 +101,7 @@ public class CommentFragment extends BaseFragment {
     public static CommentFragment newInstance(OnlineMusic onlineMusic) {
         CommentFragment fragment = new CommentFragment();
         Bundle bundle = new Bundle();
-        bundle.putSerializable(SERIAL_ONLINEMUSIC, onlineMusic);
+        bundle.putSerializable(OnlineMusic.SERIAL_ONLINEMUSIC, onlineMusic);
         fragment.setArguments(bundle);
         return fragment;
     }

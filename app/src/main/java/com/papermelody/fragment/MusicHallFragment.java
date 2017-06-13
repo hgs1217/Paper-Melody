@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +14,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
-import com.bartoszlipinski.recyclerviewheader2.RecyclerViewHeader;
 import com.papermelody.R;
 import com.papermelody.activity.OnlineListenActivity;
 import com.papermelody.model.MusicBanner;
@@ -26,7 +24,7 @@ import com.papermelody.util.NetworkFailureHandler;
 import com.papermelody.util.RetrofitClient;
 import com.papermelody.util.SocialSystemAPI;
 import com.papermelody.widget.MusicHallCycleViewPager;
-import com.papermelody.widget.MusicHallRecyclerViewAdapter;
+import com.papermelody.widget.OnlineMusicRecyclerViewAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,24 +55,18 @@ public class MusicHallFragment extends BaseFragment {
 //    @BindView(R.id.recycler_header)
 //    RecyclerViewHeader recyclerViewHeader;
 
-    public static final String SERIAL_ONLINEMUSIC = "SERIAL_ONLINEMUSIC";
-
-    public static final int ORDER_DEFAULT = 0;
-    public static final int ORDER_HOT = 1;
-    public static final int ORDER_WELCOME = 2;
-
     private Context context;
-    private MusicHallRecyclerViewAdapter adapter;
+    private OnlineMusicRecyclerViewAdapter adapter;
     private int orderMode = 0;
     private ArrayAdapter<CharSequence> arrayAdapterOrder;
 
-    private MusicHallRecyclerViewAdapter.OnItemClickListener hallOnItemClickListener = new
-            MusicHallRecyclerViewAdapter.OnItemClickListener() {
+    private OnlineMusicRecyclerViewAdapter.OnItemClickListener hallOnItemClickListener = new
+            OnlineMusicRecyclerViewAdapter.OnItemClickListener() {
                 @Override
                 public void OnItemClick(OnlineMusic music) {
                     Intent intent = new Intent(context, OnlineListenActivity.class);
                     Bundle bundle = new Bundle();
-                    bundle.putSerializable(SERIAL_ONLINEMUSIC, music);
+                    bundle.putSerializable(OnlineMusic.SERIAL_ONLINEMUSIC, music);
                     intent.putExtras(bundle);
                     startActivity(intent);
                 }
@@ -125,7 +117,7 @@ public class MusicHallFragment extends BaseFragment {
     }
 
     private void initRecyclerView(List<OnlineMusic> musics) {
-        adapter = new MusicHallRecyclerViewAdapter(context, musics);
+        adapter = new OnlineMusicRecyclerViewAdapter(context, musics);
         adapter.setOnItemClickListener(hallOnItemClickListener);
         recyclerViewHall.setAdapter(adapter);
         recyclerViewHall.setLayoutManager(new GridLayoutManager(context, 1));

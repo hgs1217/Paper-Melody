@@ -1,12 +1,10 @@
 package com.papermelody.model;
 
-import java.io.Serializable;
-
 /**
- * Created by HgS_1217_ on 2017/4/10.
+ * Created by 潘宇杰 on 2017-6-11 0011.
  */
 
-public class LocalMusic extends Music implements Serializable {
+public class LocalMusic extends Music {
     /**
      * 本地音乐类
      */
@@ -16,6 +14,14 @@ public class LocalMusic extends Music implements Serializable {
     private String musicName;
     private String musicAuthor;
     private String musicInfo;
+    private long createTime;
+    private long size;
+
+    public LocalMusic(String name, long createTime, long size) {
+        this.filename = name;
+        this.createTime = createTime;
+        this.size = size;
+    }
 
     @Override
     public String getFilename() {
@@ -47,23 +53,27 @@ public class LocalMusic extends Music implements Serializable {
         this.musicName = musicName;
     }
 
-    @Override
     public String getMusicAuthor() {
         return musicAuthor;
     }
 
-    @Override
     public void setMusicAuthor(String musicAuthor) {
         this.musicAuthor = musicAuthor;
     }
 
-    @Override
     public String getMusicInfo() {
         return musicInfo;
     }
 
-    @Override
     public void setMusicInfo(String musicInfo) {
         this.musicInfo = musicInfo;
+    }
+
+    public long getCreateTime() {
+        return createTime;
+    }
+
+    public long getSize() {
+        return size;
     }
 }

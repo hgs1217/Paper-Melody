@@ -28,7 +28,7 @@
                 android:layout_marginEnd="16dp"
                 android:contentDescription="@string/picture"
                 android:scaleType="centerCrop"
-                android:src="@drawable/ic_panorama_white_48dp" />
+                android:src="@drawable/ic_panorama_black_48dp" />
 
             <TextView
                 android:id="@+id/item_text_online_music_title"

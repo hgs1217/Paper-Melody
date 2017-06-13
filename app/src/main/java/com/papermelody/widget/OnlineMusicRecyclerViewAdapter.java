@@ -23,9 +23,9 @@ import butterknife.ButterKnife;
  * Created by HgS_1217_ on 2017/4/10.
  */
 
-public class MusicHallRecyclerViewAdapter extends RecyclerView.Adapter<MusicHallRecyclerViewAdapter.ViewHolder>  {
+public class OnlineMusicRecyclerViewAdapter extends RecyclerView.Adapter<OnlineMusicRecyclerViewAdapter.ViewHolder>  {
     /**
-     * 音乐圈用于显示作品的RecyclerView的Adapter
+     * 音乐圈用于显示作品的RecyclerView的Adapter，同时可以复用于上传作品页面和收藏作品页面
      */
 
     private LayoutInflater layoutInflater;
@@ -33,13 +33,13 @@ public class MusicHallRecyclerViewAdapter extends RecyclerView.Adapter<MusicHall
     private OnItemClickListener onItemClickListener;
     private List<OnlineMusic> onlineMusics;
 
-    public MusicHallRecyclerViewAdapter (Context context) {
+    public OnlineMusicRecyclerViewAdapter(Context context) {
         this.context = context;
         onlineMusics = new ArrayList<>();
         layoutInflater = LayoutInflater.from(context);
     }
 
-    public MusicHallRecyclerViewAdapter (Context context, List<OnlineMusic> musics) {
+    public OnlineMusicRecyclerViewAdapter(Context context, List<OnlineMusic> musics) {
         this.context = context;
         onlineMusics = new ArrayList<>(musics);
         layoutInflater = LayoutInflater.from(context);

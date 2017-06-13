@@ -1,74 +1,262 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <LinearLayout
+    <android.support.v7.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:orientation="vertical"
-        android:gravity="center">
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="20dp"
+        android:clickable="true"
+        android:foreground="?attr/selectableItemBackground"
+        card_view:cardBackgroundColor="@color/card_view_background"
+        card_view:cardCornerRadius="0dp"
+        card_view:cardElevation="2dp">
 
-        <TextView
-            android:id="@+id/text_username"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="username"
-            android:textColor="@color/black"
-            android:textSize="20sp" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="10dp">
 
-        <Button
-            android:id="@+id/btn_login"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="log in"
-            android:textColor="@color/black" />
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/img_user_avatar"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:src="@drawable/ic_tag_faces_black_48dp" />
 
-    </LinearLayout>
+            <TextView
+                android:id="@+id/text_username"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@id/img_user_avatar"
+                android:layout_marginStart="10dp"
+                android:layout_toEndOf="@id/img_user_avatar"
+                android:text="@string/Username"
+                android:textColor="@color/textPrimary"
+                android:textSize="25sp"
+                tools:ignore="RelativeOverlap" />
 
-    <LinearLayout
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@id/img_user_avatar"
+                android:layout_marginStart="10dp"
+                android:layout_toEndOf="@id/img_user_avatar"
+                android:text="@string/signature"
+                android:textColor="@color/textSecondary"
+                android:textSize="12sp"
+                tools:ignore="RelativeOverlap" />
+
+            <Button
+                android:id="@+id/btn_login"
+                android:layout_width="60dp"
+                android:layout_height="30dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:background="@drawable/btn_login_in"
+                android:text="@string/log_in"
+                android:textColor="@color/white" />
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/btn_user_info"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:gravity="center">
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:foreground="?attr/selectableItemBackground"
+        card_view:cardBackgroundColor="@color/card_view_background"
+        card_view:cardCornerRadius="0dp"
+        card_view:cardElevation="2dp">
 
-        <Button
-            android:id="@+id/btn_user_info"
-            android:layout_width="wrap_content"
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="20dp"
-            android:text="@string/user_info"
-            android:textColor="@color/black" />
+            android:padding="10dp">
 
-        <Button
-            android:id="@+id/btn_user_history"
-            android:layout_width="wrap_content"
+            <ImageView
+                android:id="@+id/img_user_info"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="20dp"
+                android:contentDescription="@string/user_info"
+                android:src="@android:drawable/ic_dialog_info"
+                android:tint="@color/textSecondary" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@id/img_user_info"
+                android:paddingEnd="0dp"
+                android:paddingStart="10dp"
+                android:text="@string/user_info"
+                android:textColor="@color/textPrimary" />
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/btn_user_history"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="1dp"
+        android:foreground="?attr/selectableItemBackground"
+        card_view:cardBackgroundColor="@color/card_view_background"
+        card_view:cardCornerRadius="0dp"
+        card_view:cardElevation="2dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="20dp"
-            android:text="@string/history_musics"
-            android:textColor="@color/black" />
+            android:padding="10dp">
 
-        <Button
-            android:id="@+id/btn_user_upload"
-            android:layout_width="wrap_content"
+            <ImageView
+                android:id="@+id/img_user_history"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="20dp"
+                android:contentDescription="@string/user_info"
+                android:src="@android:drawable/ic_menu_recent_history"
+                android:tint="@color/textSecondary" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@id/img_user_history"
+                android:paddingEnd="0dp"
+                android:paddingStart="10dp"
+                android:text="@string/history_musics"
+                android:textColor="@color/textPrimary" />
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/btn_user_upload"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="1dp"
+        android:foreground="?attr/selectableItemBackground"
+        card_view:cardBackgroundColor="@color/card_view_background"
+        card_view:cardCornerRadius="0dp"
+        card_view:cardElevation="2dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="20dp"
-            android:text="@string/upload_musics"
-            android:textColor="@color/black" />
+            android:padding="10dp">
 
-        <Button
-            android:id="@+id/btn_user_favorite"
-            android:layout_width="wrap_content"
+            <ImageView
+                android:id="@+id/img_user_upload"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="20dp"
+                android:contentDescription="@string/user_info"
+                android:src="@android:drawable/ic_menu_upload"
+                android:tint="@color/textSecondary" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@id/img_user_upload"
+                android:paddingEnd="0dp"
+                android:paddingStart="10dp"
+                android:text="@string/upload_musics"
+                android:textColor="@color/textPrimary" />
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/btn_user_favorite"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="1dp"
+        android:foreground="?attr/selectableItemBackground"
+        card_view:cardBackgroundColor="@color/card_view_background"
+        card_view:cardCornerRadius="0dp"
+        card_view:cardElevation="2dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="20dp"
-            android:text="@string/favorite_musics"
-            android:textColor="@color/black" />
+            android:padding="10dp">
 
-    </LinearLayout>
+            <ImageView
+                android:id="@+id/img_user_favorite"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="20dp"
+                android:contentDescription="@string/user_info"
+                android:src="@android:drawable/ic_menu_recent_history"
+                android:tint="@color/textSecondary" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@id/img_user_favorite"
+                android:paddingEnd="0dp"
+                android:paddingStart="10dp"
+                android:text="@string/favorite_musics"
+                android:textColor="@color/textPrimary" />
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+
+    <!--<LinearLayout-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:gravity="center"-->
+    <!--android:orientation="vertical">-->
+
+    <!--<Button-->
+    <!--android:id="@+id/btn_user_info"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_marginBottom="20dp"-->
+    <!--android:layout_marginTop="20dp"-->
+    <!--android:text="@string/user_info"-->
+    <!--android:textColor="@color/black" />-->
+
+    <!--<Button-->
+    <!--android:id="@+id/btn_user_history"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_marginBottom="20dp"-->
+    <!--android:layout_marginTop="20dp"-->
+    <!--android:text="@string/history_musics"-->
+    <!--android:textColor="@color/black" />-->
+
+    <!--<Button-->
+    <!--android:id="@+id/btn_user_upload"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_marginBottom="20dp"-->
+    <!--android:layout_marginTop="20dp"-->
+    <!--android:text="@string/upload_musics"-->
+    <!--android:textColor="@color/black" />-->
+
+    <!--<Button-->
+    <!--android:id="@+id/btn_user_favorite"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_marginBottom="20dp"-->
+    <!--android:layout_marginTop="20dp"-->
+    <!--android:text="@string/favorite_musics"-->
+    <!--android:textColor="@color/black" />-->
+
+    <!--</LinearLayout>-->
 
 </LinearLayout>

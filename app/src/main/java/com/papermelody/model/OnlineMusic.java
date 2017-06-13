@@ -18,6 +18,8 @@ public class OnlineMusic extends Music implements Serializable {
      * 上传音乐类
      */
 
+    public static final String SERIAL_ONLINEMUSIC = "SERIAL_ONLINEMUSIC";
+
     private String filename;
     private String path;
     private Integer musicID;
@@ -81,22 +83,18 @@ public class OnlineMusic extends Music implements Serializable {
         this.musicName = musicName;
     }
 
-    @Override
     public String getMusicAuthor() {
         return musicAuthor;
     }
 
-    @Override
     public void setMusicAuthor(String musicAuthor) {
         this.musicAuthor = musicAuthor;
     }
 
-    @Override
     public String getMusicInfo() {
         return musicInfo;
     }
 
-    @Override
     public void setMusicInfo(String musicInfo) {
         this.musicInfo = musicInfo;
     }

@@ -11,10 +11,19 @@ public class User {
      * 用户类
      */
 
+    private Integer userID;
     private String username;
     private String photoURL;
     private String userInfo;
     private ArrayList<Music> userMusics;
+
+    public Integer getUserID() {
+        return userID;
+    }
+
+    public void setUserID(Integer userID) {
+        this.userID = userID;
+    }
 
     public String getUsername() {
         return username;

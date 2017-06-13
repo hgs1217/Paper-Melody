@@ -3,6 +3,7 @@ package com.papermelody.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,8 +12,10 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.papermelody.R;
+import com.papermelody.activity.FavoriteActivity;
 import com.papermelody.activity.HistoryActivity;
 import com.papermelody.activity.MainActivity;
+import com.papermelody.activity.UpProductsActivity;
 import com.papermelody.model.User;
 import com.papermelody.util.App;
 import com.papermelody.util.ToastUtil;
@@ -35,13 +38,13 @@ public class UserFragment extends BaseFragment {
     @BindView(R.id.btn_login)
     Button btnLogIn;
     @BindView(R.id.btn_user_info)
-    Button btnUserInfo;
+    CardView btnUserInfo;
     @BindView(R.id.btn_user_history)
-    Button btnUserHistory;
+    CardView btnUserHistory;
     @BindView(R.id.btn_user_upload)
-    Button btnUserUpload;
+    CardView btnUserUpload;
     @BindView(R.id.btn_user_favorite)
-    Button btnUserFavorite;
+    CardView btnUserFavorite;
 
     private User user;
     private Context context;
@@ -90,10 +93,20 @@ public class UserFragment extends BaseFragment {
             startActivity(intent);
         });
         btnUserUpload.setOnClickListener((View v) -> {
-            // TODO:
+            if (App.getUser() == null) {
+                ToastUtil.showShort("请先登录");
+            } else {
+                Intent intent = new Intent(context, UpProductsActivity.class);
+                startActivity(intent);
+            }
         });
         btnUserFavorite.setOnClickListener((View v) -> {
-            // TODO:
+            if (App.getUser() == null) {
+                ToastUtil.showShort("请先登录");
+            } else {
+                Intent intent = new Intent(context, FavoriteActivity.class);
+                startActivity(intent);
+            }
         });
     }
 

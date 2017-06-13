@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_about"
     android:layout_width="match_parent"
-    android:layout_height="300sp"
+    android:layout_height="300dp"
     android:fitsSystemWindows="true"
     android:orientation="vertical"
     tools:context="com.papermelody.activity.AboutActivity">
@@ -15,7 +15,7 @@
 
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="100sp"
+        android:layout_height="100dp"
         android:background="@color/bb_darkBackgroundColor"/>
 
 </LinearLayout>

@@ -19,10 +19,4 @@ public abstract class Music implements Serializable {
 
     abstract public String getMusicName();
     abstract public void setMusicName(String musicName);
-
-    abstract public String getMusicAuthor();
-    abstract public void setMusicAuthor(String musicAuthor);
-
-    abstract public String getMusicInfo();
-    abstract public void setMusicInfo(String musicInfo);
 }

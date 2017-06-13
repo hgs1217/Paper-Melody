@@ -1,18 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_splash"
+    android:id="@+id/activity_up_product"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:orientation="vertical"
-    tools:context="com.papermelody.activity.SplashActivity">
+    tools:context="com.papermelody.activity.UpProductsActivity">
 
-    <ImageView
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/up_products_recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:adjustViewBounds="true"
-        android:scaleType="fitXY"
-        android:src="@drawable/testimg1"/>
+        android:layout_height="wrap_content" />
 
 </LinearLayout>

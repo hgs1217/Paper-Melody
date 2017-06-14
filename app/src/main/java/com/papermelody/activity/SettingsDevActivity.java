@@ -83,7 +83,11 @@ public class SettingsDevActivity extends BaseActivity {
                     .observeOn(AndroidSchedulers.mainThread())
                     .map(response -> response)
                     .subscribe(
-                            response -> {},
+                            response -> {
+                                if (response.getError() == 0) {
+                                    ToastUtil.showShort("服务器已重置");
+                                }
+                            },
                             NetworkFailureHandler.basicErrorHandler
                     ));
         });

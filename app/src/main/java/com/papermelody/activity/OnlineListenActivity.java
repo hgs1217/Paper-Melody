@@ -27,6 +27,7 @@ import com.papermelody.fragment.CommentFragment;
 import com.papermelody.fragment.ListenFragment;
 import com.papermelody.model.OnlineMusic;
 import com.papermelody.model.response.HttpResponse;
+import com.papermelody.model.response.UpvoteResponse;
 import com.papermelody.util.App;
 import com.papermelody.util.NetworkFailureHandler;
 import com.papermelody.util.RetrofitClient;
@@ -55,9 +56,9 @@ public class OnlineListenActivity extends BaseActivity {
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.music_view_num)
-    TextView viewNum;
+    TextView textViewNum;
     @BindView(R.id.music_upvote_num)
-    TextView upvoteNum;
+    TextView textUpvoteNum;
     @BindView(R.id.btn_music_upvote)
     Button btnUpvote;
     @BindView(R.id.btn_play_backward)
@@ -85,6 +86,9 @@ public class OnlineListenActivity extends BaseActivity {
     private BroadcastReceiver dmReceiver;
     private IntentFilter intentFilter;
     private View.OnClickListener startPlay, pausePlay, startPlayFirst;
+    private boolean isUpvoted = false;
+    private Integer userID = -1;
+    private int upvoteNum = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,11 +103,13 @@ public class OnlineListenActivity extends BaseActivity {
         Intent intent = getIntent();
 //         获取从音乐圈传入的onlineMusic实例
         onlineMusic = (OnlineMusic) intent.getSerializableExtra(OnlineMusic.SERIAL_ONLINEMUSIC);
+
         api = RetrofitClient.getSocialSystemAPI();
         dmReceiver = new DMReceiver();
         intentFilter = new IntentFilter();
         intentFilter.addAction(DownloadManager.ACTION_DOWNLOAD_COMPLETE);
         registerReceiver(dmReceiver, intentFilter);
+
         startPlayFirst = (View v) -> {
             fragment.starPlay();
             fab.setOnClickListener(pausePlay);
@@ -158,17 +164,35 @@ public class OnlineListenActivity extends BaseActivity {
         ctl.setExpandedTitleMargin(10, 0, 0, 15);
         ctl.setExpandedTitleColor(getResources().getColor(R.color.colorAccent));
         ctl.setCollapsedTitleTextColor(getResources().getColor(R.color.white));
+
+        if (App.getUser() != null) {
+            userID = App.getUser().getUserID();
+        }
+
+        getUpvoteStatus();
         initView();
     }
 
     private void initView() {
         // FIXME: 点赞数和浏览数只有每次重进后才会刷新
-        viewNum.setText(String.valueOf(onlineMusic.getViewNum()));
-        upvoteNum.setText(String.valueOf(onlineMusic.getUpvoteNum()));
+        textViewNum.setText(String.valueOf(onlineMusic.getViewNum()));
+        textUpvoteNum.setText(String.valueOf(onlineMusic.getUpvoteNum()));
+
         addViewNum();
+
         btnUpvote.setOnClickListener((view) -> {
-            addUpvoteNum();  // FIXME: 存在可以多次点赞的bug，且点赞完之后图标会消失
-            btnUpvote.setBackground(getDrawable(R.drawable.ic_thumb_up_white_18dp));
+            if (userID >= 0) {
+                if (isUpvoted) {
+                    cancelUpvote();
+                    isUpvoted = false;
+                } else {
+                    addUpvote();
+                    isUpvoted = true;
+                }
+                updateUpvoteIcon();
+            } else {
+                ToastUtil.showShort(getString(R.string.not_logged_in));
+            }
         });
         File file = new File(getExternalStorageDirectory() + "/Download/" + fileName);
         fileExist = file.exists();
@@ -195,25 +219,65 @@ public class OnlineListenActivity extends BaseActivity {
                 .observeOn(AndroidSchedulers.mainThread())
                 .map(response -> ((HttpResponse) response))
                 .subscribe(
-                        response -> {
-                            viewNum.setText(String.valueOf(onlineMusic.getViewNum() + 1));
-                        },
+                        response -> {},
                         NetworkFailureHandler.basicErrorHandler
                 ));
     }
 
-    private void addUpvoteNum() {
-        addSubscription(api.addUpvote(onlineMusic.getMusicID())
+    private void addUpvote() {
+        addSubscription(api.addUpvote(userID, onlineMusic.getMusicID())
                 .flatMap(NetworkFailureHandler.httpFailureFilter)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .map(response -> ((HttpResponse) response))
                 .subscribe(
                         response -> {
-                            upvoteNum.setText(String.valueOf(onlineMusic.getUpvoteNum() + 1));
+                            textUpvoteNum.setText(String.valueOf(++upvoteNum));
+                            ToastUtil.showShort("收藏成功");
                         },
                         NetworkFailureHandler.basicErrorHandler
                 ));
+    }
+
+    private void cancelUpvote() {
+        addSubscription(api.cancelUpvote(userID, onlineMusic.getMusicID())
+                .flatMap(NetworkFailureHandler.httpFailureFilter)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .map(response -> ((HttpResponse) response))
+                .subscribe(
+                        response -> {
+                            textUpvoteNum.setText(String.valueOf(--upvoteNum));
+                            ToastUtil.showShort("取消收藏成功");
+                        },
+                        NetworkFailureHandler.basicErrorHandler
+                ));
+    }
+
+    private void getUpvoteStatus() {
+        addSubscription(api.getUpvoteStatus(userID, onlineMusic.getMusicID())
+                .flatMap(NetworkFailureHandler.httpFailureFilter)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .map(response -> (UpvoteResponse) response)
+                .subscribe(
+                        result -> {
+                            isUpvoted = result.isStatus();
+                            upvoteNum = result.getUpvoteNum();
+                            textUpvoteNum.setText(String.valueOf(result.getUpvoteNum()));
+                            textViewNum.setText(String.valueOf(result.getViewNum()));
+                            updateUpvoteIcon();
+                        },
+                        NetworkFailureHandler.basicErrorHandler
+                ));
+    }
+
+    private void updateUpvoteIcon() {
+        if (isUpvoted) {
+            btnUpvote.setBackground(getDrawable(R.drawable.ic_thumb_up_white_18dp));  // FIXME: 白色图标和背景重合，会消失
+        } else {
+            btnUpvote.setBackground(getDrawable(R.drawable.ic_thumb_up_black_18dp));
+        }
     }
 
     private void downloadMusic() {
@@ -228,7 +292,7 @@ public class OnlineListenActivity extends BaseActivity {
                             boolean b = writeResponseBodyToDisk(response);
                             Log.d("DownloadOnlineListen", b+"");
                             initListenFragment();
-                        }, NetworkFailureHandler.uploadErrorHandler
+                        }, NetworkFailureHandler.basicErrorHandler
                 ));
     }
 

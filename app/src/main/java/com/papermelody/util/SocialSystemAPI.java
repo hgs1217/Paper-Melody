@@ -7,6 +7,7 @@ import com.papermelody.model.response.HttpResponse;
 import com.papermelody.model.response.OnlineMusicListResponse;
 import com.papermelody.model.response.UploadImgResponse;
 import com.papermelody.model.response.UploadResponse;
+import com.papermelody.model.response.UpvoteResponse;
 import com.papermelody.model.response.UserResponse;
 
 import java.util.Date;
@@ -67,10 +68,22 @@ public interface SocialSystemAPI {
     @POST("addview")
     Observable<HttpResponse> addView(@Field("musicID") Integer musicID);
 
-    // 音乐点赞人数加一
+    // 音乐点赞
     @FormUrlEncoded
     @POST("addupvote")
-    Observable<HttpResponse> addUpvote(@Field("musicID") Integer musicID);
+    Observable<HttpResponse> addUpvote(@Field("userID") Integer userID,
+                                       @Field("musicID") Integer musicID);
+
+    // 音乐取消点赞
+    @FormUrlEncoded
+    @POST("cancelupvote")
+    Observable<HttpResponse> cancelUpvote(@Field("userID") Integer userID,
+                                          @Field("musicID") Integer musicID);
+
+    // 获取音乐点赞状态
+    @GET("getupvotestatus")
+    Observable<UpvoteResponse> getUpvoteStatus(@Query("userID") @Nullable Integer userID,
+                                               @Query("musicID") @Nullable Integer musicID);
 
     //upload comment
     @FormUrlEncoded
@@ -93,7 +106,7 @@ public interface SocialSystemAPI {
     Observable<OnlineMusicListResponse> getUploadMusicList(@Query("userID") @Nullable Integer userID);
 
     // 收藏作品获取
-    @GET("getfavoritemusics")
+    @GET("getfavorites")
     Observable<OnlineMusicListResponse> getFavoriteMusicList(@Query("userID") @Nullable Integer userID);
 
     // 服务器重启

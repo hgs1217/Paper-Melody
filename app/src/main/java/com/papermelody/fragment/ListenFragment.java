@@ -7,7 +7,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.SeekBar;
 
 import com.papermelody.R;
@@ -96,7 +95,11 @@ public class ListenFragment extends BaseFragment {
             @Override
             public void run() {
                 // FIXME: duration为0时，会崩溃闪退
-                seekBar.setProgress(100 * mediaPlayer.getCurrentPosition() / mediaPlayer.getDuration());
+                if (mediaPlayer.getDuration() != 0) {
+                    seekBar.setProgress(100 * mediaPlayer.getCurrentPosition() / mediaPlayer.getDuration());
+                } else {
+                    seekBar.setProgress(0);  // FIXME: 临时处理崩溃情况
+                }
             }
         };
         timer = new Timer();

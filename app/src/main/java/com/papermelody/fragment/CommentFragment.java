@@ -159,7 +159,7 @@ public class CommentFragment extends BaseFragment {
                             initRecyclerView(comments);
                             refreshMyComment(comments);
                         },
-                        NetworkFailureHandler.loginErrorHandler
+                        NetworkFailureHandler.basicErrorHandler
                 ));
 
     }
@@ -236,7 +236,7 @@ public class CommentFragment extends BaseFragment {
                                     upload_com_res -> {
                                         ToastUtil.showShort(R.string.upload_comment_success);
                                     },
-                                    NetworkFailureHandler.loginErrorHandler
+                                    NetworkFailureHandler.basicErrorHandler
                             ));
 
                     try {

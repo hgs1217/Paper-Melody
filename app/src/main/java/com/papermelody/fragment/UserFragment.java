@@ -95,7 +95,7 @@ public class UserFragment extends BaseFragment {
         });
         btnUserUpload.setOnClickListener((View v) -> {
             if (App.getUser() == null) {
-                ToastUtil.showShort("请先登录");
+                ToastUtil.showShort(getString(R.string.not_logged_in));
             } else {
                 Intent intent = new Intent(context, UpProductsActivity.class);
                 startActivity(intent);
@@ -103,7 +103,7 @@ public class UserFragment extends BaseFragment {
         });
         btnUserFavorite.setOnClickListener((View v) -> {
             if (App.getUser() == null) {
-                ToastUtil.showShort("请先登录");
+                ToastUtil.showShort(getString(R.string.not_logged_in));
             } else {
                 Intent intent = new Intent(context, FavoriteActivity.class);
                 startActivity(intent);

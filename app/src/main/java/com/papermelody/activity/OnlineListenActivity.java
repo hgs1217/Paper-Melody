@@ -19,8 +19,8 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewAnimationUtils;
-import android.view.WindowManager;
 import android.view.animation.AccelerateInterpolator;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -408,11 +408,11 @@ public class OnlineListenActivity extends BaseActivity {
     }
 
     private void hideInput(/*Context context, View view*/) {
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
-        /*InputMethodManager inputMethodManager =
-                (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
-    */
+        //   getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+
+        InputMethodManager inputMethodManager =
+                (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
     }
 
     private void initComment() {
@@ -421,8 +421,9 @@ public class OnlineListenActivity extends BaseActivity {
                 {
                     String comment = editText.getText().toString();
                     SimpleDateFormat sDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-                    String createtime = sDateFormat.format(new java.util.Date());
+                    String createtime = sDateFormat.format(new java.util.Date().getTime());
                     Log.d("TAG", createtime);
+                    createtime = Long.toString(new java.util.Date().getTime());
                     String author = "AnonymousUser"; //FIXME: 这里先方便上传，不然每次要登录
                     String musicID = String.valueOf(onlineMusic.getMusicID());
                     boolean hasUser = true;
@@ -453,8 +454,15 @@ public class OnlineListenActivity extends BaseActivity {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    freshCommentFragment();
                     hideInput();
+                    Timer timer = new Timer();//实例化Timer类
+                    timer.schedule(new TimerTask() {
+                        public void run() {
+                            Log.d("FILEE", "delay 800ms");
+                            this.cancel();
+                        }
+                    }, 800);
+                    freshCommentFragment();
                     refocusPos.requestFocus();
                     Log.d("TAG-ref", "OKKKKKK");
                 }

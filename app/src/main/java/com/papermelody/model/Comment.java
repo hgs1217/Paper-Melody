@@ -2,8 +2,6 @@ package com.papermelody.model;
 
 import com.papermelody.model.response.CommentInfo;
 
-import java.util.Date;
-
 /**
  * Created by HgS_1217_ on 2017/4/10.
  */
@@ -16,7 +14,7 @@ public class Comment {
     private String author;
     private String musicID;
     private String content;
-    private Date createTime;
+    private String createTime;
 
     public Comment(CommentInfo info) {
         author = info.getAuthor();
@@ -37,7 +35,7 @@ public class Comment {
         return content;
     }
 
-    public Date getCreateTime() {
+    public String getCreateTime() {
         return createTime;
     }
 }

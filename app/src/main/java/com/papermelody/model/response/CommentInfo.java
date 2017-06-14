@@ -2,8 +2,6 @@ package com.papermelody.model.response;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.Date;
-
 /**
  * Created by HgS_1217_ on 2017/5/22.
  */
@@ -18,7 +16,7 @@ public class CommentInfo {
     @SerializedName("author")
     private String author;
     @SerializedName("createTime")
-    private Date createTime;
+    private String createTime;
     @SerializedName("comment")
     private String comment;
 
@@ -34,7 +32,7 @@ public class CommentInfo {
         return author;
     }
 
-    public Date getCreateTime() {
+    public String getCreateTime() {
         return createTime;
     }
 }

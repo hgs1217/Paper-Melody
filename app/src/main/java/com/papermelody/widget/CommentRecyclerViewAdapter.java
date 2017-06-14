@@ -14,7 +14,9 @@ import com.papermelody.util.ToastUtil;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -67,6 +69,14 @@ public class CommentRecyclerViewAdapter extends RecyclerView.Adapter<CommentRecy
         return comments.size();
     }
 
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
+    }
+
+    public interface OnItemClickListener {
+        void OnItemClick();
+    }
+
     class ViewHolder extends RecyclerView.ViewHolder {
         /* 持有每个item的所有界面元素 */
 
@@ -88,8 +98,11 @@ public class CommentRecyclerViewAdapter extends RecyclerView.Adapter<CommentRecy
 
         private void setView(Comment comment) {
             textComment.setText(comment.getContent());
-            SimpleDateFormat sDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-            textCommentTime.setText(sDateFormat.format(comment.getCreateTime()));
+            Date date = new Date();
+            date.setTime(Long.parseLong(comment.getCreateTime()));
+            SimpleDateFormat sDateFormat = new SimpleDateFormat(
+                    "yyyy-MM-dd hh:mm:ss", Locale.CHINA);
+            textCommentTime.setText(sDateFormat.format(date));
             textUserName.setText(comment.getAuthor());
             replyButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -98,13 +111,5 @@ public class CommentRecyclerViewAdapter extends RecyclerView.Adapter<CommentRecy
                 }
             });
         }
-    }
-
-    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
-        this.onItemClickListener = onItemClickListener;
-    }
-
-    public interface OnItemClickListener {
-        void OnItemClick();
     }
 }

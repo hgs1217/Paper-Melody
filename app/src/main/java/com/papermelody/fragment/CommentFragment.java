@@ -28,6 +28,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -140,13 +141,13 @@ public class CommentFragment extends BaseFragment {
                                     SimpleDateFormat sDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
                                     Comment a = (Comment) o1;
                                     Comment b = (Comment) o2;
-                                    return sDateFormat.format(b.getCreateTime()).compareTo(
-                                            sDateFormat.format(a.getCreateTime()));
+                                    return b.getCreateTime().compareTo(
+                                            a.getCreateTime());
                                 }
                             });
                             //System.out.print("sorted!");
                             SimpleDateFormat sDateFormat2 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-                            Log.d("TAG", "before init View: " + sDateFormat2.format(comments.get(0).getCreateTime()));
+                            Log.d("TAG", "before init View: " + comments.get(0).getCreateTime());
                             Log.d("TAG2", "!!!!!");
                             initRecyclerView(comments);
                             refreshMyComment(comments);
@@ -192,6 +193,11 @@ public class CommentFragment extends BaseFragment {
         commentList.setItemAnimator(new DefaultItemAnimator());
     }
 
+    private String timeIntegerToString(Integer m) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss");
+        String time = sdf.format(new Date(m));
+        return time;
+    }
 
     private void initView() {
         /*refreshbtn.setOnClickListener((View vx)->

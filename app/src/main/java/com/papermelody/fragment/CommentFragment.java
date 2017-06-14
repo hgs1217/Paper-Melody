@@ -10,8 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -20,12 +18,10 @@ import com.papermelody.model.Comment;
 import com.papermelody.model.OnlineMusic;
 import com.papermelody.model.response.CommentInfo;
 import com.papermelody.model.response.CommentResponse;
-import com.papermelody.model.response.HttpResponse;
 import com.papermelody.util.App;
 import com.papermelody.util.NetworkFailureHandler;
 import com.papermelody.util.RetrofitClient;
 import com.papermelody.util.SocialSystemAPI;
-import com.papermelody.util.ToastUtil;
 import com.papermelody.widget.CommentRecyclerViewAdapter;
 
 import java.text.SimpleDateFormat;
@@ -51,10 +47,7 @@ public class CommentFragment extends BaseFragment {
      * 用户评论页面，作为Fragment放置于OnlineListenActivity中
      */
 
-    @BindView(R.id.upload_comment_btn)
-    Button button;
-    @BindView(R.id.add_new_comment)
-    EditText editText;
+
     @BindView(R.id.current_comment_list)
     RecyclerView commentList;
     @BindView(R.id.user_newest_comment_not_exist)
@@ -73,19 +66,6 @@ public class CommentFragment extends BaseFragment {
 
     private boolean hasUser;
     private String author = "AnnonymousUser";
-
-    private void checkIfHasUser() {
-        try {
-            author = App.getUser().getUsername();
-            hasUser = true;
-        } catch (NullPointerException e) {
-            Log.d("TAG_USER", "NO USER LOGGED");
-            //ToastUtil.showShort("登录了发表评论可以保存记录哦！");
-            hasUser = false;
-        }
-    }
-
-
     private SocialSystemAPI api;
     private OnlineMusic onlineMusic;
     private Context context;
@@ -106,6 +86,17 @@ public class CommentFragment extends BaseFragment {
         return fragment;
     }
 
+    private void checkIfHasUser() {
+        try {
+            author = App.getUser().getUsername();
+            hasUser = true;
+        } catch (NullPointerException e) {
+            Log.d("TAG_USER", "NO USER LOGGED");
+            //ToastUtil.showShort("登录了发表评论可以保存记录哦！");
+            hasUser = false;
+        }
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -118,6 +109,7 @@ public class CommentFragment extends BaseFragment {
                              Bundle savedInstance) {
         View view = inflater.inflate(R.layout.fragment_comment, container, false);
         ButterKnife.bind(this, view);
+        checkIfHasUser();
         my_comment_overall.setVisibility(View.GONE);
         userNoComment.setVisibility(View.GONE);
         context = getActivity();
@@ -129,7 +121,7 @@ public class CommentFragment extends BaseFragment {
     }
 
 
-    private void initGetCommentList() {
+    public void initGetCommentList() {
         String musicID = String.valueOf(onlineMusic.getMusicID());
         addSubscription(api.getComment(musicID)
                 .flatMap(NetworkFailureHandler.httpFailureFilter)
@@ -209,7 +201,7 @@ public class CommentFragment extends BaseFragment {
         }
         );
         */
-
+/*
 
         button.setOnClickListener((View v) -> {
                     String comment = editText.getText().toString();
@@ -256,7 +248,7 @@ public class CommentFragment extends BaseFragment {
                     refocusPos.requestFocus();
                     Log.d("TAG-ref", "OKKKKKK");
                 }
-        );
+        );*/
     }
 
     private void hideInput(Context context, View view) {

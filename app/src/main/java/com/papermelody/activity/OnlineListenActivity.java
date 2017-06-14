@@ -11,14 +11,17 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewAnimationUtils;
+import android.view.WindowManager;
 import android.view.animation.AccelerateInterpolator;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -39,6 +42,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.text.SimpleDateFormat;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -73,6 +77,14 @@ public class OnlineListenActivity extends BaseActivity {
     LinearLayout layoutPlayControl;
     @BindView(R.id.container_online_listen)
     LinearLayout containerOnlineListen;
+
+    @BindView(R.id.upload_comment_btn)
+    Button button;
+    @BindView(R.id.add_new_comment)
+    EditText editText;
+    @BindView(R.id.refocusCorr)
+    CoordinatorLayout refocusPos;
+
 
     private FragmentManager fragmentManager;
     private String fileName;    // 从intent中得到文件名称，下载到本地然后播放
@@ -171,6 +183,8 @@ public class OnlineListenActivity extends BaseActivity {
 
         getUpvoteStatus();
         initView();
+        initComment();
+
     }
 
     private void initView() {
@@ -219,7 +233,8 @@ public class OnlineListenActivity extends BaseActivity {
                 .observeOn(AndroidSchedulers.mainThread())
                 .map(response -> ((HttpResponse) response))
                 .subscribe(
-                        response -> {},
+                        response -> {
+                        },
                         NetworkFailureHandler.basicErrorHandler
                 ));
     }
@@ -290,7 +305,7 @@ public class OnlineListenActivity extends BaseActivity {
                         response -> {
                             Log.d("DownloadOnlineListen", response.contentLength() + "");
                             boolean b = writeResponseBodyToDisk(response);
-                            Log.d("DownloadOnlineListen", b+"");
+                            Log.d("DownloadOnlineListen", b + "");
                             initListenFragment();
                         }, NetworkFailureHandler.basicErrorHandler
                 ));
@@ -298,8 +313,9 @@ public class OnlineListenActivity extends BaseActivity {
 
     /**
      * 将response获取到的文件写入到手机里
-     * @param body  获取到的response
-     * @return      成功状态
+     *
+     * @param body 获取到的response
+     * @return 成功状态
      */
     private boolean writeResponseBodyToDisk(ResponseBody body) {
         try {
@@ -342,17 +358,6 @@ public class OnlineListenActivity extends BaseActivity {
         } catch (IOException e) {
             Log.d("DownloadOnlineListen", "Error2");
             return false;
-        }
-    }
-
-    // 这是监听是否下载完成的类
-    public class DMReceiver extends BroadcastReceiver {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-            if (DownloadManager.ACTION_DOWNLOAD_COMPLETE.equals(action)) {
-                downloadSuccess = true;
-            }
         }
     }
 
@@ -399,4 +404,69 @@ public class OnlineListenActivity extends BaseActivity {
         super.onDestroy();
         unregisterReceiver(dmReceiver);
     }
+
+    private void hideInput(/*Context context, View view*/) {
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+        /*InputMethodManager inputMethodManager =
+                (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    */
+    }
+
+    private void initComment() {
+
+        button.setOnClickListener((View v) ->
+                {
+                    String comment = editText.getText().toString();
+                    SimpleDateFormat sDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                    String createtime = sDateFormat.format(new java.util.Date());
+                    Log.d("TAG", createtime);
+                    String author = "AnonymousUser"; //FIXME: 这里先方便上传，不然每次要登录
+                    String musicID = String.valueOf(onlineMusic.getMusicID());
+                    boolean hasUser = true;
+                    try {
+                        author = App.getUser().getUsername();
+                    } catch (NullPointerException e) {
+                        ToastUtil.showShort("登录了发表评论可以保存记录哦！");
+                        hasUser = false;
+                    }
+
+
+                    addSubscription(api.uploadComment(musicID, author, comment, createtime)
+                            .flatMap(NetworkFailureHandler.httpFailureFilter)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .map(response -> (HttpResponse) response)
+                            .subscribe(
+                                    upload_com_res -> {
+                                        ToastUtil.showShort(R.string.upload_comment_success);
+                                    },
+                                    NetworkFailureHandler.basicErrorHandler
+                            ));
+
+                    try {
+                        Thread.sleep(10);
+                        editText.setText("");
+                        editText.setHint(R.string.add_new_comment_here);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    hideInput();
+                    refocusPos.requestFocus();
+                    Log.d("TAG-ref", "OKKKKKK");
+                }
+        );
+    }
+
+    // 这是监听是否下载完成的类
+    public class DMReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (DownloadManager.ACTION_DOWNLOAD_COMPLETE.equals(action)) {
+                downloadSuccess = true;
+            }
+        }
+    }
 }
+

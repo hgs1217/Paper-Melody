@@ -126,5 +126,6 @@
     <string name="setting_title_all">主要设置</string>
     <string name="developer">开发者</string>
     <string name="others">其他</string>
+    <string name="license">Open Source Project\nhttps://github.com/hgs1217/Paper-Melody</string>
 
 </resources>

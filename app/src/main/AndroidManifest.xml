@@ -80,7 +80,6 @@
 
         <activity
             android:name=".activity.OnlineListenActivity"
-            android:label="@string/title_activity_online_listen_scrollable"
             android:parentActivityName=".activity.MainActivity"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden|adjustPan">
@@ -91,7 +90,7 @@
         <activity
             android:name=".activity.UploadActivity"
             android:label="@string/title_activity_upload"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
     </application>
 
 </manifest>

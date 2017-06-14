@@ -17,10 +17,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
         android:dropDownWidth="120dp"
-        android:dropDownSelector="@color/colorPrimaryLight" />
+        android:dropDownSelector="@color/colorPrimaryLight"
+        android:background="@color/layout_background" />
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/layout_hall_refresh"

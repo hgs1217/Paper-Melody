@@ -117,10 +117,12 @@ public class UserFragment extends BaseFragment {
             Log.d("TEST2", "TEST2");
             textUsername.setText(R.string.un_log_in);
             btnLogIn.setText(R.string.user_log_in);
+            btnLogIn.setBackground(getResources().getDrawable(R.drawable.btn_log_in));
         } else {
             Log.d("TEST3", user.getUsername());
             textUsername.setText(user.getUsername());
             btnLogIn.setText(R.string.user_log_out);
+            btnLogIn.setBackground(getResources().getDrawable(R.drawable.btn_log_out));
         }
     }
 }

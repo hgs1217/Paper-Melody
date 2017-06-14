@@ -30,6 +30,7 @@ import com.papermelody.util.App;
 import com.papermelody.util.NetworkFailureHandler;
 import com.papermelody.util.RetrofitClient;
 import com.papermelody.util.SocialSystemAPI;
+import com.papermelody.util.ToastUtil;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -153,7 +154,7 @@ public class OnlineListenActivity extends BaseActivity {
         ctl.setCollapsedTitleTextColor(getResources().getColor(R.color.white));
         initView();
 
-        downloadMusic();
+//        downloadMusic();
     }
 
     private void initView() {
@@ -170,7 +171,7 @@ public class OnlineListenActivity extends BaseActivity {
         if (fileExist) {
             initListenFragment();
         } else {
-//            downloadFile();       // TODO: 已经改用Retrofit获取格式，暂时没用，可以删除
+            downloadFile();       // TODO: 已经改用Retrofit获取格式，暂时没用，可以删除
             timer.schedule(timerTask, 0, 100);
         }
 
@@ -296,16 +297,16 @@ public class OnlineListenActivity extends BaseActivity {
     }
 
     private void downloadFile() {
-//        String dataPath = getApplicationContext().getFilesDir().getAbsolutePath() + "/";
-//        String sourceURL;
-////            防止server_ip忘记加/导致无法下载的情况
-//        if (App.getServerIP().endsWith("/")) {
-//            sourceURL = App.getServerIP() + "downloadmusic/" + fileName;
-//        } else {
-//            sourceURL = App.getServerIP() + "/downloadmusic/" + fileName;
-//        }
-//        ToastUtil.showShort(R.string.downloading);
-//        download_2(sourceURL, dataPath, fileName);
+        String dataPath = getApplicationContext().getFilesDir().getAbsolutePath() + "/";
+        String sourceURL;
+//            防止server_ip忘记加/导致无法下载的情况
+        if (App.getServerIP().endsWith("/")) {
+            sourceURL = App.getServerIP() + "downloadmusic/" + fileName;
+        } else {
+            sourceURL = App.getServerIP() + "/downloadmusic/" + fileName;
+        }
+        ToastUtil.showShort(R.string.downloading);
+        download_2(sourceURL, dataPath, fileName);
     }
 
     private void initListenFragment() {

@@ -1,5 +1,6 @@
 package com.papermelody.activity;
 
+import android.animation.Animator;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -9,7 +10,10 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewAnimationUtils;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.papermelody.R;
 import com.papermelody.fragment.ListenFragment;
@@ -38,10 +42,20 @@ public class PlayListenActivity extends BaseActivity {
     CollapsingToolbarLayout ctl;
     @BindView(R.id.fab_play_listen)
     FloatingActionButton fab;
+    @BindView(R.id.btn_play_backward)
+    Button btnPlayBack;
+    @BindView(R.id.btn_play_control)
+    Button btnPlayCtrl;
+    @BindView(R.id.btn_play_forward)
+    Button btnPlayFor;
     @BindView(R.id.btn_upload)
     Button btnUpload;
     @BindView(R.id.btn_quit_upload)
     Button btnQuitUpload;
+    @BindView(R.id.layout_play_listen)
+    RelativeLayout layoutPlayListen;
+    @BindView(R.id.container_play_listen)
+    LinearLayout containerPlayListen;
 
     private FragmentManager fragmentManager;
     private FragmentTransaction transaction;
@@ -68,30 +82,54 @@ public class PlayListenActivity extends BaseActivity {
         fragmentManager = getSupportFragmentManager();
         transaction = fragmentManager.beginTransaction();
         fragment = ListenFragment.newInstance(fileName);
-        transaction.add(R.id.fragment_play_listen, fragment);
+        transaction.add(R.id.container_play_listen, fragment);
         transaction.commit();
         startPlay = (View v) -> {
             fragment.starPlay();
-            fab.setOnClickListener(pausePlay);
-            fab.setImageDrawable(getDrawable(android.R.drawable.ic_media_pause));
+            btnPlayCtrl.setOnClickListener(pausePlay);
+            btnPlayCtrl.setBackground(getDrawable(android.R.drawable.ic_media_pause));
         };
         pausePlay = (View v) -> {
             fragment.pausePlay();
-            fab.setOnClickListener(startPlay);
-            fab.setImageDrawable(getDrawable(android.R.drawable.ic_media_play));
+            btnPlayCtrl.setOnClickListener(startPlay);
+            btnPlayCtrl.setBackground(getDrawable(android.R.drawable.ic_media_play));
         };
+        btnPlayCtrl.setOnClickListener(pausePlay);
+        btnPlayBack.setOnClickListener((View v) -> {
+            fragment.backwardPlay();
+        });
+        btnPlayFor.setOnClickListener((View v) -> {
+            fragment.forwardPlay();
+        });
+        fab.setOnClickListener((View v) -> {
+            fragment.starPlay();
+            int cx = (fab.getLeft() + fab.getRight()) / 2;
+            int cy = (fab.getTop() + fab.getBottom()) / 2;
+            int finalRadius1 = Math.max(layoutPlayListen.getWidth(), layoutPlayListen.getHeight());
+            Animator anim1 = ViewAnimationUtils.createCircularReveal(layoutPlayListen,
+                    cx, cy, 0, finalRadius1);
+            int finalRadius2 = Math.max(containerPlayListen.getWidth(), containerPlayListen.getHeight());
+            Animator anim2 = ViewAnimationUtils.createCircularReveal(containerPlayListen,
+                    cx, cy, 0, finalRadius2);
+            fab.setVisibility(View.INVISIBLE);
+            layoutPlayListen.setVisibility(View.VISIBLE);
+            containerPlayListen.setVisibility(View.VISIBLE);
+            anim1.start();
+            anim2.start();
+            btnPlayCtrl.setBackground(getDrawable(android.R.drawable.ic_media_pause));
+        });
         ctl.setTitle(getString(R.string.play_listen));
         ctl.setExpandedTitleMargin(10, 0, 0, 15);
         ctl.setExpandedTitleColor(getResources().getColor(R.color.colorAccent));
         ctl.setCollapsedTitleTextColor(getResources().getColor(R.color.white));
         btnUpload.setOnClickListener((View v) -> {
             Intent intent1 = new Intent(getApplicationContext(), UploadActivity.class);
-            startActivity(intent);
+            startActivity(intent1);
         });
         btnQuitUpload.setOnClickListener((View v) -> {
             Intent intent2 = new Intent();
-            intent.setClass(this, MainActivity.class);
-            startActivity(intent);
+            intent2.setClass(this, MainActivity.class);
+            startActivity(intent2);
             finish();
         });
     }

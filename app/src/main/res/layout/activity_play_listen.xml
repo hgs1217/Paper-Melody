@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:myApp="http://schemas.android.com/apk/lib/com.papermelody.PlayListenActivity"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_play_listen"
     android:layout_width="match_parent"
@@ -23,10 +24,11 @@
             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
 
             <LinearLayout
-                android:id="@+id/fragment_play_listen"
+                android:id="@+id/container_play_listen"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal"
+                android:visibility="invisible"
                 app:layout_collapseMode="parallax"
                 app:layout_collapseParallaxMultiplier="0.5">
 
@@ -39,32 +41,77 @@
                 app:layout_collapseMode="pin"
                 app:popupTheme="@style/AppTheme.PopupOverlay" />
         </android.support.design.widget.CollapsingToolbarLayout>
-
-
     </android.support.design.widget.AppBarLayout>
 
     <RelativeLayout
+        android:id="@+id/layout_play_listen"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="bottom|center_horizontal">
-        <Button
-            android:id="@+id/btn_quit_upload"
-            android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <LinearLayout
+            android:id="@+id/layout_play_control"
+            style="?android:attr/buttonBarStyle"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@color/white"
+            android:elevation="5dp"
+            android:gravity="center_horizontal">
+
+            <Button
+                android:id="@+id/btn_play_backward"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="40dp"
+                android:layout_height="wrap_content"
+                android:background="@android:drawable/ic_media_rew"
+                android:backgroundTint="@color/colorAccent" />
+
+            <Button
+                android:id="@+id/btn_play_control"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="40dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp"
+                android:background="@android:drawable/ic_media_play"
+                android:backgroundTint="@color/colorAccent" />
+
+            <Button
+                android:id="@+id/btn_play_forward"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="40dp"
+                android:layout_height="wrap_content"
+                android:background="@android:drawable/ic_media_ff"
+                android:backgroundTint="@color/colorAccent" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:text="@string/quit_save"
-            android:backgroundTint="@color/textSecondary"
-            android:textColor="@color/white" />
-        <Button
-            android:id="@+id/btn_upload"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_toEndOf="@id/btn_quit_upload"
-            android:layout_marginStart="40dp"
-            android:text="@string/upload_musics"
-            android:backgroundTint="@color/colorAccent"
-            android:textColor="@color/white"/>
+            android:layout_below="@id/layout_play_control"
+            android:layout_marginTop="20dp"
+            android:gravity="center_horizontal">
+
+            <Button
+                android:id="@+id/btn_quit_upload"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/textSecondary"
+                android:text="@string/quit_save"
+                android:textColor="@color/white" />
+
+            <Button
+                android:id="@+id/btn_upload"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="40dp"
+                android:backgroundTint="@color/colorAccent"
+                android:text="@string/upload_musics"
+                android:textColor="@color/white" />
+        </LinearLayout>
+
     </RelativeLayout>
 
     <android.support.design.widget.FloatingActionButton
@@ -72,13 +119,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/fab_margin"
-        android:backgroundTint="@color/colorAccent"
-        android:backgroundTintMode="multiply"
-        android:foregroundTint="@color/colorPrimary"
-        android:foregroundTintMode="add"
         app:layout_anchor="@id/app_bar"
         app:layout_anchorGravity="bottom|end"
-        app:srcCompat="@android:drawable/ic_media_play" />
+        app:srcCompat="@android:drawable/ic_media_play"
+        myApp:backgroundTint="@color/colorAccent"
+        myApp:backgroundTintMode="multiply"
+        myApp:foregroundTint="@color/colorPrimary"
+        myApp:foregroundTintMode="add" />
 
 
 </android.support.design.widget.CoordinatorLayout>

@@ -122,8 +122,9 @@
     </string-array>
     <string name="reply">回复</string>
     <string name="play_settings">演奏设置</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="setting_title_all">主要设置</string>
+    <string name="developer">开发者</string>
+    <string name="others">其他</string>
 
 </resources>

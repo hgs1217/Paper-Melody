@@ -26,6 +26,7 @@
             android:summary="检测系统的灵敏度"
             android:title="灵敏度" />
         <Preference
+            android:key="test_pref"
             android:layout="@layout/preference_item"
             android:summary="支持最大到10个手指哦"
             android:title="最多的手指识别数量" />

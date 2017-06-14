@@ -19,7 +19,7 @@ so manually move them:
 * javadoc/org/opencv/android/
 * javadoc/org/opencv/android/BaseLoaderCallback.html
 * javadoc/org/opencv/android/CameraBridgeViewBase.CvCameraViewFrame.html
-* javadoc/org/opencv/android/CameraBridgeViewBase.CvCameraViewListener.html
+* javadoc/org/     opencv/android/CameraBridgeViewBase.CvCameraViewListener.html
 * javadoc/org/opencv/android/CameraBridgeViewBase.CvCameraViewListener2.html
 * javadoc/org/opencv/android/CameraBridgeViewBase.ListItemAccessor.html
 * javadoc/org/opencv/android/CameraBridgeViewBase.html

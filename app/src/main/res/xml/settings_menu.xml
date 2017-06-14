@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:layout="@layout/preference_category_widget"
+        android:title="@string/setting_title_all">
+        <Preference
+            android:key="btn_developer"
+            android:layout="@layout/preference_item"
+            android:summary=""
+            android:title="@string/developer" />
+
+        <Preference
+            android:key="btn_play_setting"
+            android:layout="@layout/preference_item"
+            android:summary=""
+            android:title="@string/settings_play" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:layout="@layout/preference_category_widget"
+        android:title="@string/others">
+
+        <Preference
+            android:key="btn_privacy"
+            android:layout="@layout/preference_item"
+            android:summary=""
+            android:title="@string/settings_privacy" />
+
+        <Preference
+            android:key="btn_about"
+            android:layout="@layout/preference_item"
+            android:summary=""
+            android:title="@string/about" />
+        <Preference
+            android:key="btn_viewTutorial"
+            android:layout="@layout/preference_item"
+            android:summary=""
+            android:title="@string/view_tutorial" />
+    </PreferenceCategory>
+
+
+</PreferenceScreen>

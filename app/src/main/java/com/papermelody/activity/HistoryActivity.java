@@ -56,7 +56,7 @@ public class HistoryActivity extends BaseActivity {
                 fos.write(info.getBytes());
                 fos.close();
                 Log.d("FILEE", "写入成功");
-                Thread.sleep(1000);
+                Thread.sleep(10);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -67,6 +67,7 @@ public class HistoryActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // ctl.setExpandedTitleMarginBottom(5);
+        __TEST();
         initToolbar();
         initRecyclerView();
         getFileDir(Environment.getExternalStorageDirectory().getAbsolutePath());

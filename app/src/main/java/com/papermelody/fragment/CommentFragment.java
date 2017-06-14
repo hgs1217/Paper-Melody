@@ -171,7 +171,8 @@ public class CommentFragment extends BaseFragment {
                     my_comment_overall.setVisibility(View.VISIBLE);
                     userNoComment.setVisibility(View.GONE);
                     myCommentContext.setText(singleComment.getContent());
-                    myCommentTime.setText(singleComment.getCreateTime().toString());
+                    myCommentTime.setText(timeLongToString(Long.parseLong(
+                            singleComment.getCreateTime())));
                     myCommentName.setText(singleComment.getAuthor());
                     break;
                 }
@@ -193,7 +194,7 @@ public class CommentFragment extends BaseFragment {
         commentList.setItemAnimator(new DefaultItemAnimator());
     }
 
-    private String timeIntegerToString(Integer m) {
+    private String timeLongToString(Long m) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss");
         String time = sdf.format(new Date(m));
         return time;

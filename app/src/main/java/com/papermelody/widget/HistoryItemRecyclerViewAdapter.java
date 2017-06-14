@@ -14,6 +14,7 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -68,6 +69,14 @@ public class HistoryItemRecyclerViewAdapter extends RecyclerView.Adapter<History
         return musics.size();
     }
 
+    public void setOnItemClickListener(mOnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
+    }
+
+    public interface mOnItemClickListener {
+        void OnItemClick();
+    }
+
     //自定义的ViewHolder，持有每个Item的的所有界面元素
     public static class ViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.item_history_title)
@@ -93,7 +102,7 @@ public class HistoryItemRecyclerViewAdapter extends RecyclerView.Adapter<History
         }
 
         private String timeLongToString(long m) {
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd  HH:mm");
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd  HH:mm", Locale.CHINA);
             String time = sdf.format(new Date(m));
             return time;
         }
@@ -125,13 +134,5 @@ public class HistoryItemRecyclerViewAdapter extends RecyclerView.Adapter<History
                     return str;
             }
         }
-    }
-
-    public void setOnItemClickListener(mOnItemClickListener onItemClickListener) {
-        this.onItemClickListener = onItemClickListener;
-    }
-
-    public interface mOnItemClickListener {
-        void OnItemClick();
     }
 }

@@ -44,6 +44,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -420,53 +422,63 @@ public class OnlineListenActivity extends BaseActivity {
         button.setOnClickListener((View v) ->
                 {
                     String comment = editText.getText().toString();
-                    SimpleDateFormat sDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-                    String createtime = sDateFormat.format(new java.util.Date().getTime());
-                    Log.d("TAG", createtime);
-                    createtime = Long.toString(new java.util.Date().getTime());
-                    String author = "AnonymousUser"; //FIXME: 这里先方便上传，不然每次要登录
-                    String musicID = String.valueOf(onlineMusic.getMusicID());
-                    boolean hasUser = true;
-                    try {
-                        author = App.getUser().getUsername();
-                    } catch (NullPointerException e) {
-                        ToastUtil.showShort("登录了发表评论可以保存记录哦！");
-                        hasUser = false;
-                    }
-
-
-                    addSubscription(api.uploadComment(musicID, author, comment, createtime)
-                            .flatMap(NetworkFailureHandler.httpFailureFilter)
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .map(response -> (HttpResponse) response)
-                            .subscribe(
-                                    upload_com_res -> {
-                                        ToastUtil.showShort(R.string.upload_comment_success);
-                                    },
-                                    NetworkFailureHandler.basicErrorHandler
-                            ));
-
-                    try {
-                        Thread.sleep(10);
-                        editText.setText("");
-                        editText.setHint(R.string.add_new_comment_here);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    hideInput();
-                    Timer timer = new Timer();//实例化Timer类
-                    timer.schedule(new TimerTask() {
-                        public void run() {
-                            Log.d("FILEE", "delay 800ms");
-                            this.cancel();
+                    if (comment.length() < 1) {
+                        ToastUtil.showShort("请填写评论之后再提交");
+                    } else {
+                        SimpleDateFormat sDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                        String createtime = sDateFormat.format(new java.util.Date().getTime());
+                        Log.d("TAG", createtime);
+                        createtime = Long.toString(new java.util.Date().getTime());
+                        String author = "AnonymousUser"; //FIXME: 这里先方便上传，不然每次要登录
+                        String musicID = String.valueOf(onlineMusic.getMusicID());
+                        boolean hasUser = true;
+                        try {
+                            author = App.getUser().getUsername();
+                        } catch (NullPointerException e) {
+                            ToastUtil.showShort("登录了发表评论可以保存记录哦！");
+                            hasUser = false;
                         }
-                    }, 800);
-                    freshCommentFragment();
-                    refocusPos.requestFocus();
-                    Log.d("TAG-ref", "OKKKKKK");
+
+
+                        addSubscription(api.uploadComment(musicID, author, comment, createtime)
+                                .flatMap(NetworkFailureHandler.httpFailureFilter)
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .map(response -> (HttpResponse) response)
+                                .subscribe(
+                                        upload_com_res -> {
+                                            ToastUtil.showShort(R.string.upload_comment_success);
+                                        },
+                                        NetworkFailureHandler.basicErrorHandler
+                                ));
+
+                        try {
+                            Thread.sleep(10);
+                            editText.setText("");
+                            editText.setHint(R.string.add_new_comment_here);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        hideInput();
+                        Timer timer = new Timer();//实例化Timer类
+                        timer.schedule(new TimerTask() {
+                            public void run() {
+                                Log.d("FILEE", "delay 800ms");
+                                this.cancel();
+                            }
+                        }, 800);
+                        freshCommentFragment();
+                        refocusPos.requestFocus();
+                        Log.d("TAG-ref", "OKKKKKK");
+                    }
                 }
         );
+    }
+
+    private String timeLongToString(long m) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd  HH:mm", Locale.CHINA);
+        String time = sdf.format(new Date(m));
+        return time;
     }
 
     private void freshCommentFragment() {

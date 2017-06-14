@@ -107,7 +107,8 @@ public class CommentRecyclerViewAdapter extends RecyclerView.Adapter<CommentRecy
             replyButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ToastUtil.showShort("RePLY!");
+                    ToastUtil.showShort("REPLY!");
+
                 }
             });
         }

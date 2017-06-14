@@ -19,6 +19,7 @@ import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.Image;
 import android.media.ImageReader;
+import android.media.MediaRecorder;
 import android.media.SoundPool;
 import android.os.Bundle;
 import android.os.Handler;
@@ -60,11 +61,15 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
+
+import static android.os.Environment.getExternalStorageDirectory;
 
 /**
  * Created by HgS_1217_ on 2017/3/18.
@@ -204,6 +209,7 @@ public class PlayActivity extends BaseActivity {
     public static final String EXTRA_INSTRUMENT = "EXTRA_INSTRUMENT";
     public static final String EXTRA_CATIGORY = "EXTRA_CATIGORY";
     public static final String EXTRA_OPERN = "EXTRA_OPERN";
+    public static final String FILENAME = "FILENAME";
 
     private static final String TAG = "PlayAct";
 
@@ -256,6 +262,10 @@ public class PlayActivity extends BaseActivity {
     private Size previewSize;
 
     private CaptureRequest.Builder previewRequestBuilder;
+
+    private MediaRecorder mediaRecorder;
+
+    private String fileName = "";
 
     private final TextureView.SurfaceTextureListener surfaceTextureListener =
             new TextureView.SurfaceTextureListener() {
@@ -337,6 +347,7 @@ public class PlayActivity extends BaseActivity {
         
         initSoundPool();
         initView();
+        initMediaRecorder();
     }
 
     public void processImage(Image image) {
@@ -369,6 +380,26 @@ public class PlayActivity extends BaseActivity {
         soundPool = spb.build();
     }
 
+    private void initMediaRecorder() {
+        try {
+            mediaRecorder = new MediaRecorder();
+            mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+            mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.DEFAULT);
+            mediaRecorder.setAudioSamplingRate(44100);
+            mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT);
+            mediaRecorder.setAudioEncodingBitRate(96000);
+            Date currentTime = new Date();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddhhmmss");
+            fileName = dateFormat.format(currentTime) + ".m4a";
+            File audioFile = new File(getExternalStorageDirectory() + "/Download/" + fileName);  // FIXME: 路径待确定
+            mediaRecorder.setOutputFile(audioFile.getAbsolutePath());
+            mediaRecorder.prepare();
+            mediaRecorder.start();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     private void initView() {
         /**
          * 初始化界面上的文字标签、按键响应等等
@@ -394,8 +425,10 @@ public class PlayActivity extends BaseActivity {
         btnPlayOver.setOnClickListener((View v) -> {
             /*先假装生成一个midi文件（实际上是从assets里复制的），
               存放在应用的数据目录（data/data/com.papermelody/）下*/
-            copyMusicToData();
+            //copyMusicToData();
+            mediaRecorder.stop();
             Intent intent = new Intent(this, PlayListenActivity.class);
+            intent.putExtra(FILENAME, fileName);
             startActivity(intent);
             finish();
         });
@@ -682,6 +715,13 @@ public class PlayActivity extends BaseActivity {
                 }
             }
         }).start();*/
+    }
+
+    @Override
+    public void onBackPressed() {
+        // TODO: @tth 做一个确认提示框，返回到首页
+        mediaRecorder.stop();
+        finish();
     }
 
     @Override

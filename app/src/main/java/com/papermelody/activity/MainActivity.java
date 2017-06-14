@@ -65,7 +65,8 @@ public class MainActivity extends BaseActivity {
     /**
      * 请求类permissions：防止所有需要手动申请才能获取的权限
      */
-    private String[] permissions = {Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+    private String[] permissions = {Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                                    Manifest.permission.RECORD_AUDIO};
     private AlertDialog dialog;
     private FragmentManager fragmentManager;
     private int currentPage = 0;

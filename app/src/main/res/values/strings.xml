@@ -132,4 +132,6 @@
     <string name="describe_viewTutorial">查看本应用的使用方法</string>
     <string name="describe_privacy">用户隐私设置</string>
 
+    <string name="license">Open Source Project\nhttps://github.com/hgs1217/Paper-Melody</string>
+
 </resources>

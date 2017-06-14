@@ -547,10 +547,13 @@ public class CalibrationActivity extends BaseActivity {
     }
 
     @Override
+    public void onBackPressed() {
+        // TODO: @tth 做一个确认提示框，询问是否退出标定
+        finish();
+    }
+
+    @Override
     protected int getContentViewId() {
         return R.layout.activity_calibration;
     }
-
-    // TODO: 权限请求暂时未实现
-
 }

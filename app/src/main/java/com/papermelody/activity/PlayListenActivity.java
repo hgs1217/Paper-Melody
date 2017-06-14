@@ -63,7 +63,7 @@ public class PlayListenActivity extends BaseActivity {
     private FragmentTransaction transaction;
     private ListenFragment fragment = null;
     private View.OnClickListener startPlay, pausePlay;
-    private String fileName;
+    private String fileName = "";
     private LocalMusic localMusic;
 
 // TODO:   没有经过调试，可能会有bug
@@ -73,9 +73,10 @@ public class PlayListenActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
 
         Intent intent = getIntent();
+        fileName = intent.getStringExtra(PlayActivity.FILENAME);
 //        localMusic = ???
 
-        fileName = "Kissbye.mid";
+//        fileName = "Kissbye.mid";
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.setNavigationOnClickListener((View v) -> {
@@ -139,6 +140,12 @@ public class PlayListenActivity extends BaseActivity {
             startActivity(intent2);
             finish();
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        // TODO: @ssb 做一个确认提示框，是否放弃更改
+        finish();
     }
 
     @Override

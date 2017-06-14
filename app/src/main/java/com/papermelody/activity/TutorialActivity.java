@@ -33,6 +33,7 @@ public class TutorialActivity extends BaseActivity implements ViewPager.OnPageCh
     @BindView(R.id.tutorial_dots)
     LinearLayout layoutDots;
 
+    public static final String FROM_SPLASH = "FROM_SPLASH";
 
     private TutorialViewPagerAdapter viewPagerAdapter;
     private List<View> views;
@@ -42,11 +43,15 @@ public class TutorialActivity extends BaseActivity implements ViewPager.OnPageCh
 
     // 记录当前选中位置
     private int currentIndex;
-    Boolean isFirst;
+    private boolean isFirst;
+    private boolean fromSplash = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Intent intent = getIntent();
+        fromSplash = intent.getBooleanExtra(FROM_SPLASH, true);
 
         initViews();
         initDots();
@@ -57,7 +62,7 @@ public class TutorialActivity extends BaseActivity implements ViewPager.OnPageCh
         SharedPreferences pref = getSharedPreferences("firstStart", Activity.MODE_PRIVATE);
         isFirst = pref.getBoolean("firstStart", true);
 
-        if (!isFirst) {
+        if (!isFirst && fromSplash) {
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
             finish();
@@ -68,11 +73,13 @@ public class TutorialActivity extends BaseActivity implements ViewPager.OnPageCh
         guideFour.findViewById(R.id.btn_to_main).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SharedPreferences.Editor editor = pref.edit();
-                editor.putBoolean("firstStart", false);
-                editor.apply();
-                Intent intent = new Intent(TutorialActivity.this, MainActivity.class);
-                startActivity(intent);
+                if (fromSplash) {
+                    SharedPreferences.Editor editor = pref.edit();
+                    editor.putBoolean("firstStart", false);
+                    editor.apply();
+                    Intent intent = new Intent(TutorialActivity.this, MainActivity.class);
+                    startActivity(intent);
+                }
                 finish();
             }
         });

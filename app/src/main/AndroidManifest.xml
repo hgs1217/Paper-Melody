@@ -11,6 +11,7 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
 
     <application
         android:name=".util.App"
@@ -80,7 +81,6 @@
 
         <activity
             android:name=".activity.OnlineListenActivity"
-            android:label="@string/title_activity_online_listen_scrollable"
             android:parentActivityName=".activity.MainActivity"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden|adjustPan">
@@ -91,7 +91,7 @@
         <activity
             android:name=".activity.UploadActivity"
             android:label="@string/title_activity_upload"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
     </application>
 
 </manifest>

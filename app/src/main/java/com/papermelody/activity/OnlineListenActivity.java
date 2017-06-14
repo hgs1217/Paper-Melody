@@ -159,8 +159,6 @@ public class OnlineListenActivity extends BaseActivity {
         ctl.setExpandedTitleColor(getResources().getColor(R.color.colorAccent));
         ctl.setCollapsedTitleTextColor(getResources().getColor(R.color.white));
         initView();
-
-//        downloadMusic();
     }
 
     private void initView() {
@@ -177,8 +175,9 @@ public class OnlineListenActivity extends BaseActivity {
         if (fileExist) {
             initListenFragment();
         } else {
-            downloadFile();       // TODO: 已经改用Retrofit获取格式，暂时没用，可以删除
-            timer.schedule(timerTask, 0, 100);
+            downloadMusic();
+//            downloadFile();       // TODO: 已经改用Retrofit获取格式，暂时没用，可以删除
+//            timer.schedule(timerTask, 0, 100);
         }
 
         btnPlayBack.setOnClickListener((View v) -> {
@@ -218,16 +217,17 @@ public class OnlineListenActivity extends BaseActivity {
     }
 
     private void downloadMusic() {
-        String sourceURL = App.getServerIP() + "downloadmusic/" + fileName; // FIXME: fileName 需要修改
-        addSubscription(api.downloadMusic(sourceURL)
+        ToastUtil.showShort("下载中");
+        addSubscription(api.downloadMusic(fileName)   // FIXME: fileName 需要修改
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .map(response -> (ResponseBody) response)
                 .subscribe(
                         response -> {
-                            Log.d("TESTD", response.contentLength() + "");
+                            Log.d("DownloadOnlineListen", response.contentLength() + "");
                             boolean b = writeResponseBodyToDisk(response);
-                            Log.d("TESTD", b+"");
+                            Log.d("DownloadOnlineListen", b+"");
+                            initListenFragment();
                         }, NetworkFailureHandler.uploadErrorHandler
                 ));
     }
@@ -259,11 +259,13 @@ public class OnlineListenActivity extends BaseActivity {
                     }
                     outputStream.write(fileReader, 0, read);
                     fileSizeDownloaded += read;
-                    Log.d("TESTDD", "file download: " + fileSizeDownloaded + " of " + fileSize);
+                    Log.d("DownloadOnlineListen", "file download: " + fileSizeDownloaded + " of " + fileSize);
                 }
                 outputStream.flush();
                 return true;
-            } catch (IOException e) {
+            } catch (Exception e) {
+                e.printStackTrace();
+                Log.d("DownloadOnlineListen", "Error1");
                 return false;
             } finally {
                 if (inputStream != null) {
@@ -274,6 +276,7 @@ public class OnlineListenActivity extends BaseActivity {
                 }
             }
         } catch (IOException e) {
+            Log.d("DownloadOnlineListen", "Error2");
             return false;
         }
     }
@@ -316,6 +319,7 @@ public class OnlineListenActivity extends BaseActivity {
     }
 
     private void initListenFragment() {
+        ToastUtil.showShort("下载完成");
         fragment = ListenFragment.newInstance(fileName);
         fragmentManager.beginTransaction().add(R.id.container_online_listen, fragment).commit();
         fab.setOnClickListener(startPlayFirst);

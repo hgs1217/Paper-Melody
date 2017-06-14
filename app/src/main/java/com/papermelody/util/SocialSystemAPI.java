@@ -19,9 +19,8 @@ import retrofit2.http.GET;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
-import retrofit2.http.Streaming;
-import retrofit2.http.Url;
 import rx.Observable;
 
 /**
@@ -86,9 +85,8 @@ public interface SocialSystemAPI {
     Observable<CommentResponse> getComment(@Query("musicID") @Nullable String musicID);
 
     // 获取音乐
-    @Streaming
-    @GET
-    Observable<ResponseBody> downloadMusic(@Url String fileUrl);
+    @GET("downloadmusic/{filename}")
+    Observable<ResponseBody> downloadMusic(@Path("filename") String fileName);
 
     // 上传作品获取
     @GET("getuploadmusics")

@@ -48,7 +48,167 @@
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_online_listen_activity" />
+
+    <!--<include layout="@layout/content_online_listen_activity" />
+    -->
+
+    <android.support.v4.widget.NestedScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/CommentAnchorLinear"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="0"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:context="com.papermelody.activity.OnlineListenActivity"
+        tools:showIn="@layout/activity_online_listen">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:id="@+id/CommentAnchor"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/layout_play_control"
+                    style="?android:attr/buttonBarStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:background="@color/white"
+                    android:elevation="5dp"
+                    android:gravity="center_horizontal"
+                    android:visibility="invisible">
+
+                    <Button
+                        android:id="@+id/btn_play_backward"
+                        style="?android:attr/buttonBarButtonStyle"
+                        android:layout_width="40dp"
+                        android:layout_height="wrap_content"
+                        android:background="@android:drawable/ic_media_rew"
+                        android:backgroundTint="@color/colorAccent" />
+
+                    <Button
+                        android:id="@+id/btn_play_control"
+                        style="?android:attr/buttonBarButtonStyle"
+                        android:layout_width="40dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginStart="10dp"
+                        android:background="@android:drawable/ic_media_play"
+                        android:backgroundTint="@color/colorAccent" />
+
+                    <Button
+                        android:id="@+id/btn_play_forward"
+                        style="?android:attr/buttonBarButtonStyle"
+                        android:layout_width="40dp"
+                        android:layout_height="wrap_content"
+                        android:background="@android:drawable/ic_media_ff"
+                        android:backgroundTint="@color/colorAccent" />
+
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:id="@+id/music_info_num"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="8dp">
+
+                    <Button
+                        android:id="@+id/btn_music_upvote"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:layout_alignParentStart="true"
+                        android:background="@drawable/ic_thumb_up_black_18dp" />
+
+                    <TextView
+                        android:id="@+id/music_upvote_num"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_toEndOf="@id/btn_music_upvote"
+                        android:text="@string/zero" />
+
+                    <TextView
+                        android:id="@+id/music_view_num"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginStart="10dp"
+                        android:text="@string/zero" />
+
+                    <ImageView
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:layout_toStartOf="@id/music_view_num"
+                        android:contentDescription="@string/view_count"
+                        android:src="@drawable/ic_remove_red_eye_black_18dp" />
+                </RelativeLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/container_comment"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="22"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+
+                </LinearLayout>
+            </LinearLayout>
+
+        </ScrollView>
+    </android.support.v4.widget.NestedScrollView>
+
+
+    <LinearLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_anchor="@id/CommentAnchorLinear"
+        app:layout_anchorGravity="bottom|end">
+
+        <EditText
+            android:id="@+id/add_new_comment"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_weight="5"
+            android:ems="10"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:gravity="center_vertical"
+            android:hint="@string/add_new_comment_here"
+            android:inputType="textMultiLine"
+            android:textSize="18sp" />
+
+        <Button
+            android:id="@+id/upload_comment_btn"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_weight="1"
+            android:background="@drawable/ic_send_white_48dp"
+            android:backgroundTint="@color/colorAccent"
+            android:textColor="@color/textPrimary"
+            android:textSize="12sp" />
+
+    </LinearLayout>
+
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"

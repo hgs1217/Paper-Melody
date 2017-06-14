@@ -11,7 +11,7 @@
     <string name="view_count">浏览次数</string>
     <string name="vote_count">赞</string>
     <string name="edit_music_title">音乐名称</string>
-    <string name="edit_music_des">说点什么</string>
+    <string name="edit_music_des" translatable="false">说点什么</string>
     <string name="submit">提交</string>
     <string name="browse">浏览</string>
     <string name="upload">上传</string>
@@ -126,5 +126,10 @@
     <string name="setting_title_all">主要设置</string>
     <string name="developer">开发者</string>
     <string name="others">其他</string>
+    <string name="describe_developer">开发者模式的一些高级设置</string>
+    <string name="describe_setting_play">演奏设置，如乐器等</string>
+    <string name="describe_about">查看本应用的开发详情</string>
+    <string name="describe_viewTutorial">查看本应用的使用方法</string>
+    <string name="describe_privacy">用户隐私设置</string>
 
 </resources>

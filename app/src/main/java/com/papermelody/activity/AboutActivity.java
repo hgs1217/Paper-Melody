@@ -3,9 +3,6 @@ package com.papermelody.activity;
 import android.os.Bundle;
 
 import com.papermelody.R;
-import com.papermelody.model.Comment;
-import android.view.View;
-import butterknife.BindView;
 
 /**
  * Created by HgS_1217_ on 2017/3/18.
@@ -20,8 +17,6 @@ public class AboutActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
     }
 
 

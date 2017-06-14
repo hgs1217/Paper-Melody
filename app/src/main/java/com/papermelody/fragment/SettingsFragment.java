@@ -56,38 +56,29 @@ public class SettingsFragment extends BaseFragment {
 
     public void initCardView() {
         btn_setting_play.setOnClickListener((View v) -> {
-                    Intent intent = new Intent(getActivity(), SettingsPlayActivity.class);
-                    startActivity(intent);
-                }
-        );
-
-        btn_developer.setOnClickListener((View v) -> {
-                    Intent intent = new Intent(getActivity(), SettingsDevActivity.class);
-                    startActivity(intent);
-
-                }
-        );
-
-
-        btn_privacy.setOnClickListener((View v) -> {
-                    Intent intent = new Intent(getActivity(), SettingsPrivacyActivity.class);
-                    startActivity(intent);
-
-                }
-        );
-
-
-        btn_about.setOnClickListener((View v) -> {
-                    Intent intent = new Intent(getActivity(), AboutActivity.class);
-                    startActivity(intent);
-
-                }
-        );
-
-        btn_viewTutorial.setOnClickListener((View v) -> {
-            Intent intent = new Intent(getActivity(), TutorialActivity.class);
+            Intent intent = new Intent(getActivity(), SettingsPlayActivity.class);
             startActivity(intent);
         });
 
+        btn_developer.setOnClickListener((View v) -> {
+            Intent intent = new Intent(getActivity(), SettingsDevActivity.class);
+            startActivity(intent);
+        });
+
+        btn_privacy.setOnClickListener((View v) -> {
+            Intent intent = new Intent(getActivity(), SettingsPrivacyActivity.class);
+            startActivity(intent);
+        });
+
+        btn_about.setOnClickListener((View v) -> {
+            Intent intent = new Intent(getActivity(), AboutActivity.class);
+            startActivity(intent);
+        });
+
+        btn_viewTutorial.setOnClickListener((View v) -> {
+            Intent intent = new Intent(getActivity(), TutorialActivity.class);
+            intent.putExtra(TutorialActivity.FROM_SPLASH, false);
+            startActivity(intent);
+        });
     }
 }

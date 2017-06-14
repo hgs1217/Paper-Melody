@@ -30,6 +30,7 @@ public class CommentRecyclerViewAdapter extends RecyclerView.Adapter<CommentRecy
      * 用于网络作品显示评论的RecyclerView的Adapter
      */
 
+
     private LayoutInflater layoutInflater;
     private Context context;
     private OnItemClickListener onItemClickListener;
@@ -55,10 +56,13 @@ public class CommentRecyclerViewAdapter extends RecyclerView.Adapter<CommentRecy
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.setView(comments.get(position));
+        holder.setContext(context);
         holder.itemView.setOnClickListener((View view) -> {
             int pos = holder.getLayoutPosition();
-            onItemClickListener.OnItemClick(); // TODO:
+            onItemClickListener.OnItemClick();
+            // TODO:
         });
+        holder.setReply(context, comments.get(position).getAuthor());
     }
 
     @Override
@@ -88,12 +92,23 @@ public class CommentRecyclerViewAdapter extends RecyclerView.Adapter<CommentRecy
         TextView textCommentTime;
         @BindView(R.id.reply_this_comment)
         LinearLayout replyButton;
+
+        Context contextViewH = null;
         //@BindView User ICON
 
+
+        public ViewHolder(View view, Context context) {
+            super(view);
+            ButterKnife.bind(this, view);
+        }
 
         public ViewHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);
+        }
+
+        public void setContext(Context context) {
+            contextViewH = context;
         }
 
         private void setView(Comment comment) {
@@ -104,11 +119,14 @@ public class CommentRecyclerViewAdapter extends RecyclerView.Adapter<CommentRecy
                     "yyyy-MM-dd hh:mm:ss", Locale.CHINA);
             textCommentTime.setText(sDateFormat.format(date));
             textUserName.setText(comment.getAuthor());
+        }
+
+        public void setReply(Context contextViewH, String name) {
             replyButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ToastUtil.showShort("REPLY!");
-
+                    //   contextViewH.focusOnEdit(name);
+                    ToastUtil.showShort("REPLY to " + name);
                 }
             });
         }

@@ -492,6 +492,15 @@ public class OnlineListenActivity extends BaseActivity {
         trans.replace(R.id.container_comment, comment_fragment).commit();
     }
 
+    public void focusOnEdit(String name) {
+        editText.setText("@" + name + ":");
+        editText.requestFocus();
+    }
+
+    public void __test() {
+        ;
+    }
+
     // 这是监听是否下载完成的类
     public class DMReceiver extends BroadcastReceiver {
         @Override

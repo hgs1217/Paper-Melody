@@ -74,7 +74,7 @@ public class RegisterFragment extends BaseFragment {
                     String pw = editPassword.getText().toString();
                     String em = editemail.getText().toString();
 
-                    pwTextInputLayoutUser.setErrorEnabled(false);
+                    pwTextInputLayoutUser.setErrorEnabled(false);  // FIXME: 存在某些情况下点击用户名editText不会弹出输入框的bug
                     if (TextUtils.isEmpty(pw) || pw.length() < 6) {
                         pwTextInputLayoutUser.setError("密码错误不能少于6个字符");
                     } else {

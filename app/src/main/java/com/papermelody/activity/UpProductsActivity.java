@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 
 import com.papermelody.R;
 import com.papermelody.model.OnlineMusic;
@@ -62,6 +63,7 @@ public class UpProductsActivity extends BaseActivity {
 
     private void initGetMusicList() {
         SocialSystemAPI api = RetrofitClient.getSocialSystemAPI();
+        Log.d("TESTUSER", App.getUser().getUserID()+"");
         addSubscription(api.getUploadMusicList(App.getUser().getUserID())
                 .flatMap(NetworkFailureHandler.httpFailureFilter)
                 .subscribeOn(Schedulers.io())

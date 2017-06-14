@@ -91,11 +91,11 @@ public interface SocialSystemAPI {
     Observable<ResponseBody> downloadMusic(@Url String fileUrl);
 
     // 上传作品获取
-    @GET("uploadmusics")
+    @GET("getuploadmusics")
     Observable<OnlineMusicListResponse> getUploadMusicList(@Query("userID") @Nullable Integer userID);
 
     // 收藏作品获取
-    @GET("favoritemusics")
+    @GET("getfavoritemusics")
     Observable<OnlineMusicListResponse> getFavoriteMusicList(@Query("userID") @Nullable Integer userID);
 
     // 服务器重启

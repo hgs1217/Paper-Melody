@@ -88,7 +88,7 @@ public class LogInFragment extends BaseFragment {
         btnLogIn.setOnClickListener((View v) -> {
             String name = editUsername.getText().toString();
             userTextInputLayoutUser.setErrorEnabled(false);
-            if (TextUtils.isEmpty(name) || name.length() < 6) {
+            if (TextUtils.isEmpty(name) || name.length() < 2) {  // FIXME: 此处需和register统一
 
                 userTextInputLayoutUser.setError("用户名过短");
 

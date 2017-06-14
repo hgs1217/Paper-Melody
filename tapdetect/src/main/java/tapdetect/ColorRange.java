@@ -73,10 +73,10 @@ public class ColorRange {
             newRange[0][i] = Math.max(aver[i] - std[i], 0);
             newRange[1][i] = Math.min(aver[i] + std[i], 255.0);
 
-//            range[0][i] += (newRange[0][i] - range[0][i]) / updatedCnt;
-//            range[1][i] += (newRange[1][i] - range[1][i]) / updatedCnt;
-            range[0][i] = newRange[0][i] * 0.3 + range[0][i] * 0.7;
-            range[1][i] = newRange[1][i] * 0.3 + range[1][i] * 0.7;
+            range[0][i] += (newRange[0][i] - range[0][i]) / updatedCnt;
+            range[1][i] += (newRange[1][i] - range[1][i]) / updatedCnt;
+//            range[0][i] = newRange[0][i] * 0.3 + range[0][i] * 0.7;
+//            range[1][i] = newRange[1][i] * 0.3 + range[1][i] * 0.7;
             center[i] = (range[0][i] + range[1][i]) / 2;
         }
 

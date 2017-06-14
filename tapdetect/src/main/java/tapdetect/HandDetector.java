@@ -29,7 +29,7 @@ public class HandDetector {
          *              denoting whether or not a pixel is moving
          * this function will not change `im` or `fgmask`
          */
-//        if (ColorRange.getUpdatedCnt() < 200) {
+        if (ColorRange.getUpdatedCnt() < 200) {
             List<Point> movingPixels = new ArrayList<>();
             for (int r = 0; r < fgmask.height(); r += 4) {
                 pixelLoop: for (int c = 0; c < fgmask.width(); c += 4) {
@@ -53,7 +53,7 @@ public class HandDetector {
             if (movingPixels.size() > 10 && movingPixels.size() < 1000) {
                 ColorRange.updateRange(im, movingPixels);
             }
-//        }
+        }
         return this.colorRange(im.clone(), ColorRange.getRange()); // will color range change im?
     }
 

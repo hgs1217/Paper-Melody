@@ -1,6 +1,7 @@
 package com.papermelody.activity;
 
 import android.animation.Animator;
+import android.animation.AnimatorSet;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -11,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewAnimationUtils;
+import android.view.animation.AccelerateInterpolator;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -107,15 +109,20 @@ public class PlayListenActivity extends BaseActivity {
             int cy = (fab.getTop() + fab.getBottom()) / 2;
             int finalRadius1 = Math.max(layoutPlayListen.getWidth(), layoutPlayListen.getHeight());
             Animator anim1 = ViewAnimationUtils.createCircularReveal(layoutPlayListen,
-                    cx, cy, 0, finalRadius1);
+                    cx, 0, 0, finalRadius1);
             int finalRadius2 = Math.max(containerPlayListen.getWidth(), containerPlayListen.getHeight());
             Animator anim2 = ViewAnimationUtils.createCircularReveal(containerPlayListen,
                     cx, cy, 0, finalRadius2);
+            anim1.setDuration(500);
+            anim2.setDuration(500);
+            anim1.setInterpolator(new AccelerateInterpolator());
+            anim2.setInterpolator(new AccelerateInterpolator());
             fab.setVisibility(View.INVISIBLE);
             layoutPlayListen.setVisibility(View.VISIBLE);
             containerPlayListen.setVisibility(View.VISIBLE);
-            anim1.start();
-            anim2.start();
+            AnimatorSet animatorSet = new AnimatorSet();
+            animatorSet.playTogether(anim1, anim2);
+            animatorSet.start();
             btnPlayCtrl.setBackground(getDrawable(android.R.drawable.ic_media_pause));
         });
         ctl.setTitle(getString(R.string.play_listen));

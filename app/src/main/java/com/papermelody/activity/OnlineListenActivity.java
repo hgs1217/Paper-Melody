@@ -1,6 +1,7 @@
 package com.papermelody.activity;
 
 import android.animation.Animator;
+import android.animation.AnimatorSet;
 import android.app.DownloadManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -16,6 +17,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewAnimationUtils;
+import android.view.animation.AccelerateInterpolator;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -23,7 +25,6 @@ import android.widget.TextView;
 import com.papermelody.R;
 import com.papermelody.fragment.CommentFragment;
 import com.papermelody.fragment.ListenFragment;
-import com.papermelody.fragment.MusicHallFragment;
 import com.papermelody.model.OnlineMusic;
 import com.papermelody.model.response.HttpResponse;
 import com.papermelody.util.App;
@@ -111,15 +112,20 @@ public class OnlineListenActivity extends BaseActivity {
             int cx = (fab.getLeft() + fab.getRight()) / 2;
             int cy = (fab.getTop() + fab.getBottom()) / 2;
             int finalRadius1 = Math.max(layoutPlayControl.getWidth(), layoutPlayControl.getHeight());
-            Animator anim1 = ViewAnimationUtils.createCircularReveal(layoutPlayControl,
-                    cx, cy, 0, finalRadius1);
             int finalRadius2 = Math.max(containerOnlineListen.getWidth(), containerOnlineListen.getHeight());
+            Animator anim1 = ViewAnimationUtils.createCircularReveal(layoutPlayControl,
+                    cx, 0, 0, finalRadius1);
             Animator anim2 = ViewAnimationUtils.createCircularReveal(containerOnlineListen,
                     cx, cy, 0, finalRadius2);
+            anim1.setDuration(500);
+            anim2.setDuration(500);
+            anim1.setInterpolator(new AccelerateInterpolator());
+            anim2.setInterpolator(new AccelerateInterpolator());
             layoutPlayControl.setVisibility(View.VISIBLE);
             containerOnlineListen.setVisibility(View.VISIBLE);
-            anim1.start();
-            anim2.start();
+            AnimatorSet animatorSet = new AnimatorSet();
+            animatorSet.playTogether(anim1, anim2);
+            animatorSet.start();
             fab.setVisibility(View.INVISIBLE);
             btnPlayCtrl.setOnClickListener(pausePlay);
             btnPlayCtrl.setBackground(getDrawable(android.R.drawable.ic_media_pause));

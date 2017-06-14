@@ -14,6 +14,7 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
@@ -91,6 +92,7 @@ public class OnlineListenActivity extends BaseActivity {
     private SocialSystemAPI api;
     private OnlineMusic onlineMusic;
     private ListenFragment fragment = null;
+    private CommentFragment comment_fragment = null;
     private boolean downloadSuccess = false;
     private boolean fileExist = false;
     private TimerTask timerTask;
@@ -451,11 +453,19 @@ public class OnlineListenActivity extends BaseActivity {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
+                    freshCommentFragment();
                     hideInput();
                     refocusPos.requestFocus();
                     Log.d("TAG-ref", "OKKKKKK");
                 }
         );
+    }
+
+    private void freshCommentFragment() {
+        comment_fragment = CommentFragment.newInstance(onlineMusic);
+        FragmentTransaction trans = fragmentManager.beginTransaction();
+        trans.setCustomAnimations(R.anim.comment_show, R.anim.comment_gone);
+        trans.replace(R.id.container_comment, comment_fragment).commit();
     }
 
     // 这是监听是否下载完成的类

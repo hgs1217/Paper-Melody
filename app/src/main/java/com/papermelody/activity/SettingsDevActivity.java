@@ -1,6 +1,7 @@
 package com.papermelody.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -10,12 +11,16 @@ import android.widget.TextView;
 
 import com.papermelody.R;
 import com.papermelody.util.App;
+import com.papermelody.util.NetworkFailureHandler;
 import com.papermelody.util.RetrofitClient;
+import com.papermelody.util.SocialSystemAPI;
 import com.papermelody.util.ToastUtil;
 
 import java.lang.reflect.Field;
 
 import butterknife.BindView;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 import tapdetect.Config;
 
 /**
@@ -29,6 +34,8 @@ public class SettingsDevActivity extends BaseActivity {
 
     @BindView(R.id.edit_server_ip)  EditText editServerIP;
     @BindView(R.id.btn_server_ip)   Button btnServerIP;
+    @BindView(R.id.btn_reset)       Button btnReset;
+    @BindView(R.id.btn_play_listen) Button btnPlayListen;
     @BindView(R.id.seekbar1)        SeekBar sb1;
     @BindView(R.id.seekbar2)        SeekBar sb2;
     @BindView(R.id.seekbar3)        SeekBar sb3;
@@ -68,6 +75,23 @@ public class SettingsDevActivity extends BaseActivity {
             closeInputKeyboard();
         });
 
+        btnReset.setOnClickListener((view) -> {
+            SocialSystemAPI api = RetrofitClient.getSocialSystemAPI();
+            addSubscription(api.reset()
+                    .flatMap(NetworkFailureHandler.httpFailureFilter)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .map(response -> response)
+                    .subscribe(
+                            response -> {},
+                            NetworkFailureHandler.basicErrorHandler
+                    ));
+        });
+
+        btnPlayListen.setOnClickListener((view) -> {
+            Intent intent = new Intent(this, PlayListenActivity.class);
+            startActivity(intent);
+        });
 
         // Use reflect to dynamically set the value of seek bars
         // according to values in `tapdetect.Config`

@@ -33,6 +33,20 @@
                 android:text="@string/confirm"/>
 
         </LinearLayout>
+        
+        <Button
+            android:id="@+id/btn_reset"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="重启服务器"/>
+
+        <Button
+            android:id="@+id/btn_play_listen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="演奏试听界面"/>
 
         <TextView
             android:id="@+id/seekbar_caption1"

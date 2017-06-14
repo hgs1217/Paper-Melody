@@ -66,6 +66,7 @@ public class UserFragment extends BaseFragment {
         ButterKnife.bind(this, view);
         context = view.getContext();
         initView();
+
         return view;
     }
 

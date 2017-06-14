@@ -8,9 +8,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.papermelody.R;
-import com.papermelody.activity.CalibrationActivity;
 import com.papermelody.activity.CameraDebugActivity;
-import com.papermelody.activity.UploadActivity;
+import com.papermelody.activity.MainActivity;
 import com.papermelody.model.ImgBanner;
 import com.papermelody.widget.MainCycleViewPager;
 
@@ -62,17 +61,17 @@ public class ModeFragment extends BaseFragment {
     public void initView() {
         btnModeFree.setOnClickListener((View v) -> {
             // TODO: 当设置完成后需修改
-            /*MainActivity mainActivity = (MainActivity) getActivity();
-            mainActivity.updateFragment(MainActivity.MODE_FREE);*/
-            Intent intent = new Intent(getActivity(), CalibrationActivity.class);
-            startActivity(intent);
+            MainActivity mainActivity = (MainActivity) getActivity();
+            mainActivity.updateFragment(MainActivity.MODE_FREE);
+//            Intent intent = new Intent(getActivity(), CalibrationActivity.class);
+//            startActivity(intent);
         });
         btnModeOpern.setOnClickListener((View v) -> {
             // TODO: 当设置完成后需修改
-            /*MainActivity mainActivity = (MainActivity) getActivity();
-            mainActivity.updateFragment(MainActivity.MODE_OPERN);*/
-            Intent intent = new Intent(getActivity(), UploadActivity.class);
-            startActivity(intent);
+            MainActivity mainActivity = (MainActivity) getActivity();
+            mainActivity.updateFragment(MainActivity.MODE_OPERN);
+//            Intent intent = new Intent(getActivity(), UploadActivity.class);
+//            startActivity(intent);
         });
         btnModeCameraDebug.setOnClickListener((View v) -> {
             Intent intent = new Intent(getActivity(), CameraDebugActivity.class);

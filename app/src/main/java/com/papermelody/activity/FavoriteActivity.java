@@ -75,7 +75,7 @@ public class FavoriteActivity extends BaseActivity {
                             }
                             initRecyclerView(musics);
                         },
-                        NetworkFailureHandler.loginErrorHandler
+                        NetworkFailureHandler.basicErrorHandler
                 ));
     }
 

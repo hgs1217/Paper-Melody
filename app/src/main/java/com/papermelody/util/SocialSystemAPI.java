@@ -97,4 +97,8 @@ public interface SocialSystemAPI {
     // 收藏作品获取
     @GET("favoritemusics")
     Observable<OnlineMusicListResponse> getFavoriteMusicList(@Query("userID") @Nullable Integer userID);
+
+    // 服务器重启
+    @GET("reset")
+    Observable<HttpResponse> reset();
 }

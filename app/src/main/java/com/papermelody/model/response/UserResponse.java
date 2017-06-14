@@ -20,14 +20,21 @@ public class UserResponse extends HttpResponse {
 
     public class UserInfo {
 
+        @SerializedName("userID")
+        private Integer userID;
         @SerializedName("name")
         private String name;
         @SerializedName("password")
         private String password;
 
-        public UserInfo (String name, String pw) {
+        public UserInfo (String name, String pw, Integer id) {
+            userID = id;
             this.name = name;
             password = pw;
+        }
+
+        public Integer getUserID() {
+            return userID;
         }
 
         public String getName() {

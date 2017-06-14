@@ -87,7 +87,7 @@ public class MainActivity extends BaseActivity {
     }
 
     private void updateToolbar(int position) {
-        // TODO: back图标太丑，不和设计风格
+        // TODO: back图标太丑，不合设计风格
         switch (position) {
             case MAIN_HOME:
                 toolbarTitle.setText(R.string.tab_mode);

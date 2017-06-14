@@ -75,7 +75,7 @@ public class UpProductsActivity extends BaseActivity {
                             }
                             initRecyclerView(musics);
                         },
-                        NetworkFailureHandler.loginErrorHandler
+                        NetworkFailureHandler.basicErrorHandler
                 ));
     }
 

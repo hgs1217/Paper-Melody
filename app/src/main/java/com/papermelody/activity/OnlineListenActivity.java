@@ -422,6 +422,10 @@ public class OnlineListenActivity extends BaseActivity {
         button.setOnClickListener((View v) ->
                 {
                     String comment = editText.getText().toString();
+                    Log.d("II", comment);
+                    if (comment.contains("'"))
+                        comment = comment.replaceAll("'", "\"");
+                    Log.d("II", "NOW:" + comment);
                     if (comment.length() < 1) {
                         ToastUtil.showShort("请填写评论之后再提交");
                     } else {

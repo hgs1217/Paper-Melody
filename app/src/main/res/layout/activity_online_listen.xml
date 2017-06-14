@@ -219,6 +219,7 @@
             android:hint="@string/add_new_comment_here"
             android:inputType="textMultiLine"
             android:maxLines="14"
+            android:minLines="1"
             android:scrollbars="vertical"
             android:textSize="18sp" />
 

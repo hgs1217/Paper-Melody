@@ -335,7 +335,7 @@ public class UploadActivity extends BaseActivity {
     private void confirmQuit() {
         long currentTime = System.currentTimeMillis();
         if (currentTime - lastClickTime > 2000) {
-            ToastUtil.showShort(R.string.confirm_quit);
+            ToastUtil.showShort(R.string.confirm_quit_upload);
             lastClickTime = currentTime;
         } else {
             finish();

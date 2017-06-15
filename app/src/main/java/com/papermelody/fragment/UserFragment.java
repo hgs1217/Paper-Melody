@@ -56,8 +56,8 @@ public class UserFragment extends BaseFragment {
     CardView btnUserFavorite;
     @BindView(R.id.btn_user_msg)
     CardView btnMessage;
-    @BindView(R.id.text_news)
-    TextView textNews;  // TODO: 新消息数量，改成类似新消息提醒图标形式
+    @BindView(R.id.text_msg_count)
+    TextView textMsgCount;
 
     public static final String MESSAGE_NUM = "MESSAGE_NUM";
 
@@ -151,7 +151,17 @@ public class UserFragment extends BaseFragment {
                 .map(response -> ((MessageResponse) response).getResult())
                 .subscribe(
                         result -> {
-                            textNews.setText(String.valueOf(result.getNewMsgNum()));
+                            Integer count = result.getCount();
+                            if (count != 0) {
+                                textMsgCount.setVisibility(View.VISIBLE);
+                                textMsgCount.setText(String.valueOf(count));
+                            } else if (count > 99) {
+                                textMsgCount.setVisibility(View.VISIBLE);
+                                textMsgCount.setText(getString(R.string.over99));
+                            } else {
+                                textMsgCount.setVisibility(View.INVISIBLE);
+
+                            }
                         },
                         NetworkFailureHandler.basicErrorHandler
                 ));

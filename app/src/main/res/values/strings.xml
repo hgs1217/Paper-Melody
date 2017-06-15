@@ -57,6 +57,10 @@
     <string name="view_tutorial">浏览教程</string>
     <string name="user_info">用户信息</string>
     <string name="user_msg">消息通知</string>
+    <string name="over99">99+</string>
+    <string name="jackMa">马云</string>
+    <string name="reply_to_you">回复了你：</string>
+    <string name="message_sample">小伙子很有前途！</string>
     <string name="history_musics">历史作品</string>
     <string name="upload_musics">上传作品</string>
     <string name="favorite_musics">收藏作品</string>

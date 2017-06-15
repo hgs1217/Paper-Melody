@@ -50,7 +50,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="title"
-                    android:textColor="@color/black"
+                    android:textColor="@color/colorAccent"
                     android:textSize="20sp" />
 
                 <TextView
@@ -58,7 +58,7 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:text="Loading comment time......"
-                    android:textColor="@color/colorAccent" />
+                    android:textColor="@color/textSecondary" />
 
                 <TextView
                     android:id="@+id/my_comment_context"
@@ -68,7 +68,7 @@
 
                     android:text="TEST11111我爱JAVA"
                     android:textAlignment="viewStart"
-                    android:textColor="@color/black" />
+                    android:textColor="@color/textPrimary" />
 
             </LinearLayout>
 

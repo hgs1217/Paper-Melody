@@ -346,6 +346,7 @@ public class PlayActivity extends BaseActivity {
         /**
          * Process image here
          */
+        Log.d("TESTAA", image.getHeight()+""+image.getWidth());
         // TODO: postpone connect until algorithm gets stable
         // TransformResult transformResult = ImageProcessor.getKeyTransform(calibrationResult);
         // Mat mat = ImageUtil.imageToBgr(image);
@@ -420,10 +421,10 @@ public class PlayActivity extends BaseActivity {
         for (int i = 0; i < keys.length; ++i) {
             voiceId[i] = soundPool.load(this, voiceResId[i], 1);
 
-            /*final int fi = i;
+            final int fi = i;
             keys[i].setOnClickListener((View v) -> {
                 playSound(fi);
-            });*/
+            });
         }
     }
 

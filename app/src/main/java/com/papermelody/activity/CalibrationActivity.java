@@ -108,6 +108,7 @@ public class CalibrationActivity extends BaseActivity {
     LinearLayout layoutLegal;
 
 
+
     public static final String EXTRA_RESULT = "EXTRA_RESULT";
 
     private static final String TAG = "CalibrationAct";
@@ -216,6 +217,7 @@ public class CalibrationActivity extends BaseActivity {
         startBackgroundThread();
         viewCalibration.setSurfaceTextureListener(surfaceTextureListener);
 
+
         initView();
     }
 
@@ -262,9 +264,9 @@ public class CalibrationActivity extends BaseActivity {
 
         // FIXME: 暂时调慢了标定视频帧率
         cnt++;
-        if (cnt % 2 != 0) {
-            return;
-        }
+        //if (cnt % 2 != 0) {
+            //return;
+        //}
 
         Mat mat = ImageUtil.imageToBgr(image);
         calibrationResult = ImageProcessor.getCalibrationCoordinate(mat, targetHeightStart, targetHeightEnd);
@@ -325,7 +327,7 @@ public class CalibrationActivity extends BaseActivity {
     private void setUpCameraOutputs(int width, int height) {
 
         cameraManager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
-        cameraID = String.valueOf(CameraCharacteristics.LENS_FACING_BACK);  //前摄像头
+        cameraID = String.valueOf(CameraCharacteristics.LENS_FACING_FRONT);  //前摄像头
         ImageProcessor.initProcessor();
 
         try {

@@ -31,11 +31,11 @@ public class Calibration {
 
 
     public static CalibrationResult main(Mat srcImage, int upbound, int lowbound) {
-
         Mat dstImage = new Mat();
-        Mat grayImage = new Mat();
+        Size dsize = new Size(srcImage.width() /2, srcImage.height() /2);
+        Imgproc.resize(srcImage,dstImage,dsize);
         Mat dilateImage = new Mat();
-        Mat histImage=new Mat();
+        Mat histImage;
         Mat medianBlurImage=new Mat();
         Mat bilateralFilterImage=new Mat();
         Mat blurImage=new Mat();
@@ -45,7 +45,7 @@ public class Calibration {
         //System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
         //Imgproc.cvtColor(srcImage, histImage, Imgproc.COLOR_BGR2GRAY);
 
-        histImage = ImgTransform.Hist(srcImage);
+        histImage = ImgTransform.Hist(dstImage);
        // Log.d("TESThist", histImage.rows() + " " + histImage.cols());
         Mat element = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, (new Size(5,5)));
 
@@ -73,6 +73,9 @@ public class Calibration {
         int[] a3 = new int[lencontour];
         double [] avarea = new double [lencontour];
         int[] avcy = new int[lencontour];
+        double [] contourarea = new double [lencontour];
+        int[] contourcy = new int[lencontour];
+        Moments[] contourmoment=new Moments[lencontour];
         for (int j = 0; j < a1.length; j++) {
 
             a1[j] = -1;
@@ -89,13 +92,16 @@ public class Calibration {
         for (int i = 0; i < lencontour; i++) {
             MatOfPoint item = contours.get(i);
             Moments m = Imgproc.moments(item);
+            contourmoment[i]=m;
             if ((m.get_m00() != 0) && (contourArea(item) > 0)) {
                 double d1 = (m.get_m01() / m.get_m00());
                 Double D1 = new Double(d1);
                 int cy = D1.intValue();
+                contourcy[i]=cy;
                 double area=Imgproc.contourArea(item);
-                if (cy > histImage.height() *11/20 && cy < histImage.height()*19/20) {
-                    Log.d("TESThist2",cy+" ");
+                contourarea[i]=area;
+                if (cy > histImage.height() *11/20 && cy < histImage.height()*19/20&& area>histImage.height()*histImage.width()/1000) {
+                    //Log.d("TESThist2",cy+" ");
                     nnn += 1;
                     flag = false;
                     for (int j = 0; j < count; j++) {
@@ -156,15 +162,13 @@ public class Calibration {
                 int cx, cy, uptemp;
 
                 MatOfPoint item = contours.get(i);
-                Moments m = Imgproc.moments(item);
-
-                double d1 = (m.get_m01() / m.get_m00());
-                Double D1 = new Double(d1);
-                cy = D1.intValue();
+                //Moments m = Imgproc.moments(item);
+                Moments m = contourmoment[i];
+                cy = contourcy[i];
                 double d2 = (m.get_m10() / m.get_m00());
                 Double D2 = new Double(d2);
                 cx = D2.intValue();
-                double area=Imgproc.contourArea(item);
+                double area=contourarea[i];
 
                 org.opencv.core.Point[] points = item.toArray();
                 org.opencv.core.Point leftmost = points[0];
@@ -223,6 +227,18 @@ public class Calibration {
 
             }
         }
+        leftlow_x*=2;
+        leftlow_y*=2;
+        leftup_x*=2;
+        leftup_y*=2;
+        rightlow_x*=2;
+        rightlow_y*=2;
+        rightup_x*=2;
+        rightup_y*=2;
+        leftupright_x*=2;
+        leftupright_y*=2;
+        rightupleft_x*=2;
+        rightupleft_y*=2;
         Log.d("TESTtemp6",ddd+" ");
         out.setLeftLowX(leftlow_x);
         out.setLeftLowY(leftlow_y);
@@ -249,16 +265,16 @@ public class Calibration {
         if (Math.abs(leftlow_y - leftup_y) > 5
                 &&
                 Math.abs(rightlow_y - rightup_y) > 5 &&
-                Math.abs(rightlow_x - leftlow_x) > histImage.width() / 2 &&
-                Math.abs(rightup_x - leftup_x) > histImage.width() / 2 &&
+                Math.abs(rightlow_x - leftlow_x) > srcImage.width() / 2 &&
+                Math.abs(rightup_x - leftup_x) > srcImage.width() / 2 &&
                 temp1>12&&temp1<=16&&
                 leftup_y > upbound && rightup_y > upbound &&
                 leftlow_y < lowbound &&
                 rightlow_y < lowbound
-                &&leftlow_x<histImage.width() / 4
-                &&rightlow_x>histImage.width()*3/4
+                &&leftlow_x<srcImage.width() / 4
+                &&rightlow_x>srcImage.width()*3/4
                 &&leftlow_x>0
-                &&rightlow_x<histImage.width()
+                &&rightlow_x<srcImage.width()
                 &&leftlow_x<leftup_x
                 && leftlow_y > leftup_y
                 &&rightlow_x>rightup_x

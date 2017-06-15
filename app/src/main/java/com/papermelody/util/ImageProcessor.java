@@ -54,6 +54,7 @@ public class ImageProcessor {
 
         return (result.isFlag() && Calibration.whether_stable(calibrationResultsOfLatest5)) ||
                 (ImageProcessor.getCntOfCall() > 200 && result.isFlag());
+                //ImageProcessor.getCntOfCall() > 10;
     }
 
     public static TransformResult getKeyTransform (CalibrationResult result) {

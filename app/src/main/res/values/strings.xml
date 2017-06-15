@@ -4,8 +4,12 @@
     <string name="pause">暂停</string>
     <string name="conti">继续</string>
     <string name="stop">停止</string>
+    <string name="calibration_notice">请将琴谱完全放置于矩形选定框内</string>
     <string name="quit_save">放弃上传</string>
     <string name="play_start">播放</string>
+    <string name="cali_yes">Y</string>
+    <string name="cali_no">N</string>
+
     <string name="comment">评论</string>
     <string name="zero">0</string>
     <string name="view_count">浏览次数</string>

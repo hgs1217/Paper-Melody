@@ -22,19 +22,81 @@
         android:orientation="vertical">
 
         <LinearLayout
-            android:background="#88000000"
+
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
-            android:layout_gravity="top" />
+            android:layout_weight="0.5"
+            android:layout_gravity="top"
+            android:orientation="vertical">
+
+
+
+
+
+            <LinearLayout
+                android:background="#88000000"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="vertical"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:background="#88000000"
+                android:layout_height="wrap_content"
+
+                android:orientation="vertical"
+                >
+
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:text="@string/calibration_notice"
+                    android:textColor="#E8A227"
+                    android:textSize="@dimen/activity_vertical_margin"/>
+            </LinearLayout>
+
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/layout_legal"
-            android:background="#44000000"
+            android:background="#00000000"
             android:layout_width="match_parent"
-            android:layout_height="160dp"
+            android:layout_height="0dp"
+            android:layout_weight="0.4"
             android:layout_gravity="bottom"
-            android:orientation="vertical"/>
+            android:orientation="horizontal">
+
+
+            <LinearLayout
+                android:background="#88000000"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.05"
+                android:orientation="vertical"/>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:background="@drawable/calibration_border"
+                android:layout_height="match_parent"
+                android:layout_weight="0.9"
+                android:orientation="vertical"/>
+
+            <LinearLayout
+                android:background="#88000000"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.05"
+                android:orientation="vertical"/>
+        </LinearLayout>
+        <LinearLayout
+            android:background="#88000000"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.1"
+            android:layout_gravity="top" />
 
     </LinearLayout>
 
@@ -42,39 +104,63 @@
         android:id="@+id/img_calibration"
         android:layout_gravity="center"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:contentDescription="" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal" >
 
-        <Button
+        android:orientation="horizontal" >
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+
+
+        android:orientation="horizontal"
+        tools:ignore="RtlHardcoded">
+
+    <Button
             android:id="@+id/btn_calibration_cancel"
-            android:background="#888888"
+            android:background="@android:color/transparent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="120dp"
-            android:text="@string/calibration_cancel"
-            android:textColor="@color/white"
-            android:textSize="14sp" />
+            android:text="@string/cali_no"
+            android:textColor="#E8A227"
 
+
+            android:textSize="14sp" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+
+        android:orientation="horizontal"/>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+
+
+        android:orientation="horizontal" >
         <Button
             android:id="@+id/btn_calibration_complete"
-            android:background="@color/green"
+            android:background="@android:color/transparent"
             android:layout_width="wrap_content"
+
             android:layout_height="wrap_content"
-            android:layout_marginLeft="120dp"
-            android:text="@string/calibration_complete"
-            android:textColor="@color/white"
+            android:text="@string/cali_yes"
+            android:textColor="#E8A227"
+
             android:textSize="14sp" />
 
+    </LinearLayout>
     </LinearLayout>
 
     <com.papermelody.widget.CalibrationView
         android:id="@+id/canvas_calibration"
         android:layout_gravity="center"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-    
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
 </FrameLayout>

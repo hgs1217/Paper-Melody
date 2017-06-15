@@ -28,6 +28,7 @@ import android.widget.TextView;
 import com.papermelody.R;
 import com.papermelody.fragment.CommentFragment;
 import com.papermelody.fragment.ListenFragment;
+import com.papermelody.model.Comment;
 import com.papermelody.model.OnlineMusic;
 import com.papermelody.model.response.HttpResponse;
 import com.papermelody.model.response.UpvoteResponse;
@@ -102,6 +103,7 @@ public class OnlineListenActivity extends BaseActivity {
     private boolean isUpvoted = false;
     private Integer userID = -1;
     private int upvoteNum = 0;
+    private Comment replyToThisComment = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -391,10 +393,26 @@ public class OnlineListenActivity extends BaseActivity {
         inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
     }
 
+    private void showInput() {
+        InputMethodManager inputMethodManager =
+                (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.SHOW_FORCED);
+    }
+
+
+    private void checkIfIsReplyingToAComment(String comment) {
+        if (replyToThisComment != null) {
+            String header = '@' + replyToThisComment.getAuthor() + ":";
+            if (!comment.contains(header))
+                replyToThisComment = null;
+        }
+    }
+
     private void initComment() {
 
         button.setOnClickListener((View v) ->
                 {
+                    String __label = getString(R.string.__label);
                     String comment = editText.getText().toString();
                     Log.d("II", comment);
                     if (comment.contains("'"))
@@ -402,11 +420,14 @@ public class OnlineListenActivity extends BaseActivity {
                     Log.d("II", "NOW:" + comment);
                     if (comment.length() < 1) {
                         ToastUtil.showShort("请填写评论之后再提交");
-                    } else {
+                    } else if (comment.contains(__label))
+                        ToastUtil.showShort("恭喜你解锁了内部标识符！" + __label + "是一个内部标记，用户不能使用哦");
+                    else {
                         SimpleDateFormat sDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
                         String createtime = sDateFormat.format(new java.util.Date().getTime());
                         Log.d("TAG", createtime);
                         createtime = Long.toString(new java.util.Date().getTime());
+                        Integer replyUserID = 0;
                         String author = "AnonymousUser"; // FIXME: 这里先方便上传，不然每次要登录
                         Integer authorID = 0;
                         Integer musicID = onlineMusic.getMusicID();
@@ -419,9 +440,17 @@ public class OnlineListenActivity extends BaseActivity {
                             hasUser = false;
                         }
 
+                        checkIfIsReplyingToAComment(comment);
 
-                        // FIXME: 不是评论回复的话，设置replyUserID为0，否则为comment的authorID
-                        addSubscription(api.uploadComment(musicID, author, authorID, 0, comment, createtime)
+                        if (replyToThisComment != null) {
+                            replyUserID = replyToThisComment.getAuthorID();
+                            comment = comment + __label + replyToThisComment.getAuthor() + __label +
+                                    replyToThisComment.getCreateTime() + __label + replyToThisComment.getContent();
+                        } else {
+                            replyUserID = 0;
+                        }
+
+                        addSubscription(api.uploadComment(musicID, author, authorID, replyUserID, comment, createtime)
                                 .flatMap(NetworkFailureHandler.httpFailureFilter)
                                 .subscribeOn(Schedulers.io())
                                 .observeOn(AndroidSchedulers.mainThread())
@@ -440,6 +469,7 @@ public class OnlineListenActivity extends BaseActivity {
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
+                        replyToThisComment = null;
                         hideInput();
                         Timer timer = new Timer();//实例化Timer类
                         timer.schedule(new TimerTask() {
@@ -469,9 +499,13 @@ public class OnlineListenActivity extends BaseActivity {
         trans.replace(R.id.container_comment, comment_fragment).commit();
     }
 
-    public void focusOnEdit(String name) {
-        editText.setText("@" + name + ":");
+    public void focusOnEdit(Comment replyToThis) {
+        String generateText = "@" + replyToThis.getAuthor() + ": ";
+        editText.setText(generateText);
+        editText.setSelection(generateText.length());
         editText.requestFocus();
+        showInput();
+        replyToThisComment = replyToThis;
     }
 
     public void __test() {

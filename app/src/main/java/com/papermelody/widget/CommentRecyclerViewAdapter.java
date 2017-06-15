@@ -2,7 +2,6 @@ package com.papermelody.widget;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +11,6 @@ import android.widget.TextView;
 import com.papermelody.R;
 import com.papermelody.activity.OnlineListenActivity;
 import com.papermelody.model.Comment;
-import com.papermelody.util.ToastUtil;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -64,7 +62,7 @@ public class CommentRecyclerViewAdapter extends RecyclerView.Adapter<CommentRecy
             onItemClickListener.OnItemClick();
             // TODO:
         });
-        holder.setReply(context, comments.get(position).getAuthor());
+        holder.setReply(context, comments.get(position));
     }
 
     @Override
@@ -123,12 +121,12 @@ public class CommentRecyclerViewAdapter extends RecyclerView.Adapter<CommentRecy
             textUserName.setText(comment.getAuthor());
         }
 
-        public void setReply(Context contextViewH, String name) {
+        public void setReply(Context contextViewH, Comment commentToThisGuy) {
             replyButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ((OnlineListenActivity)contextViewH).focusOnEdit(name);
-                    ToastUtil.showShort("REPLY to " + name);
+                    ((OnlineListenActivity) contextViewH).focusOnEdit(commentToThisGuy);
+                    //ToastUtil.showShort("REPLY to " + name);
                 }
             });
         }

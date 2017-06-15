@@ -34,17 +34,17 @@ public class ListenFragment extends BaseFragment {
 //    @BindView(R.id.btn_pause)
 //    Button btnPause;
 
-    private static final String FILENAME = "";
+    private static final String FILEPATH = "";
     private static MediaPlayer mediaPlayer;
     private TimerTask timerTask;
     private Timer timer;
     private boolean playState;
-    private static String filename;
+    private static String filepath;
 
     public static ListenFragment newInstance(String fn) {
         ListenFragment fragment = new ListenFragment();
         Bundle bundle = new Bundle();
-        bundle.putString(FILENAME, fn);
+        bundle.putString(FILEPATH, fn);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -53,15 +53,13 @@ public class ListenFragment extends BaseFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mediaPlayer = new MediaPlayer();
-        filename = getArguments().getString(FILENAME);
+        filepath = getArguments().getString(FILEPATH);
         playState = false;
         try {
-            mediaPlayer.setDataSource(getContext()
-                    .getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS) + "/" + filename);
+            mediaPlayer.setDataSource(filepath);
             mediaPlayer.prepare();
         } catch (IOException e) {
-            Log.i("nib", getContext()
-                    .getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS) + "/" + filename);
+            Log.i("nib", filepath);
             ToastUtil.showShort(R.string.unable_to_play);
         }
     }

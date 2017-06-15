@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
@@ -79,6 +80,7 @@ public class PlayListenActivity extends BaseActivity {
 
         Intent intent = getIntent();
         fileName = intent.getStringExtra(PlayActivity.FILENAME);
+        Log.i("nib", fileName);
 
 //        fileName = "Kissbye.mid";
         initView();
@@ -92,7 +94,7 @@ public class PlayListenActivity extends BaseActivity {
         });
         fragmentManager = getSupportFragmentManager();
         transaction = fragmentManager.beginTransaction();
-        fragment = ListenFragment.newInstance(fileName);
+        fragment = ListenFragment.newInstance(getCacheDir().getAbsolutePath() + "/" + fileName);
         transaction.add(R.id.container_play_listen, fragment);
         transaction.commit();
         startPlay = (View v) -> {
@@ -150,10 +152,8 @@ public class PlayListenActivity extends BaseActivity {
             finish();
         });
         btnSaveToLocal.setOnClickListener((View v) -> {
-            Log.i("nib", getFilesDir().getAbsolutePath() + "/" + fileName);
-            Log.i("nib", getExternalFilesDir(fileName).getAbsolutePath());
-            copyToAndroidData(getFilesDir().getAbsolutePath() + fileName,
-                    getExternalFilesDir(fileName).getAbsolutePath());
+            copyToAndroidData(getCacheDir().getAbsolutePath() + "/" + fileName,
+                    getExternalFilesDir(Environment.DIRECTORY_MUSIC).getAbsolutePath() + "/" + fileName);
         });
     }
 
@@ -189,13 +189,11 @@ public class PlayListenActivity extends BaseActivity {
         return R.layout.activity_play_listen;
     }
 
-    //    从data/data/packagename/caches/复制到sdcard/Android/data/packagename/files/
-//    以便于其他应用访问，同时也属于应用私有数据
     private void copyToAndroidData(String sourcePath, String destPath) {
         Log.i("nib", "dest: " + destPath + "\n" + "source:" + sourcePath);
         try {
-            InputStream inputStream = new FileInputStream(sourcePath);
-            OutputStream outputStream = new FileOutputStream(destPath);
+            FileInputStream inputStream = new FileInputStream(new File(sourcePath));
+            FileOutputStream outputStream = new FileOutputStream(new File(destPath));
             byte bt[] = new byte[1024];
             int c;
             while ((c = inputStream.read(bt)) > 0) {

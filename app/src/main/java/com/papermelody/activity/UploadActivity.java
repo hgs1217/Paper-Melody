@@ -194,7 +194,7 @@ public class UploadActivity extends BaseActivity {
                 .subscribe(
                         imgName -> {
                             this.imgName = imgName;
-                            // TODO: 路径不知道对不对
+                            // TODO: 路径应该是对的，待测试
                             Log.i("nib", getCacheDir().getAbsolutePath() + "/" + fileName);
                             uploadMusicFile(getCacheDir().getAbsolutePath() + "/" + fileName);
 

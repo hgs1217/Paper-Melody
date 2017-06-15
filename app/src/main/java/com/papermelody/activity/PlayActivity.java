@@ -388,7 +388,7 @@ public class PlayActivity extends BaseActivity {
             Date currentTime = new Date();
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddhhmmss");
             fileName = dateFormat.format(currentTime) + ".m4a";
-            File audioFile = new File(getCacheDir().getAbsolutePath() + "/Download/" + fileName);  // FIXME: 路径待确定
+            File audioFile = new File(getCacheDir().getAbsolutePath() + "/" + fileName);  // FIXED: 路径待确定
             Log.i("nib", audioFile.getAbsolutePath());
             mediaRecorder.setOutputFile(audioFile.getAbsolutePath());
             mediaRecorder.prepare();

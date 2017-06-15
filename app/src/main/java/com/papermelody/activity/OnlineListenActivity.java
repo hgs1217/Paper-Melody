@@ -120,6 +120,7 @@ public class OnlineListenActivity extends BaseActivity {
         onlineMusic = (OnlineMusic) intent.getSerializableExtra(OnlineMusic.SERIAL_ONLINEMUSIC);
 
         fileName = onlineMusic.getFilename();
+        Log.i("nib", fileName);
         api = RetrofitClient.getSocialSystemAPI();
         dmReceiver = new DMReceiver();
         intentFilter = new IntentFilter();

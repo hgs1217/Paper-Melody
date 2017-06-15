@@ -75,7 +75,7 @@ public class CommentFragment extends BaseFragment {
             CommentRecyclerViewAdapter.OnItemClickListener() {
                 @Override
                 public void OnItemClick() {
-                    // TODO：
+                    // TODO： 点击评论事件
                 }
             };
 

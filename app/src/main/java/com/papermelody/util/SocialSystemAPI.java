@@ -54,7 +54,7 @@ public interface SocialSystemAPI {
                                            @Field("author") String author,
                                            @Field("authorID") Integer authorID,
                                            @Field("date") Date date,
-                                           @Field("link") String link,
+                                           @Field("musicName") String musicName,
                                            @Field("imgName") String imgName);
 
     // 上传作品图片
@@ -122,7 +122,8 @@ public interface SocialSystemAPI {
 
     // 消息获取
     @GET("download/messages")
-    Observable<MessageResponse> getMessages(@Query("userID") @Nullable Integer userID);
+    Observable<MessageResponse> getMessages(@Query("userID") @Nullable Integer userID,
+                                            @Query("hasRead") @Nullable Boolean hasRead);
 
     // 服务器重启
     @GET("reset")

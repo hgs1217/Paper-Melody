@@ -141,4 +141,7 @@
     <string name="describe_privacy">用户隐私设置</string>
     <string name="license">Open Source Project\nhttps://github.com/hgs1217/Paper-Melody</string>
 
+    <string name="file_wrong_upload">文件不存在或者格式不正确</string>
+    <string name="message">消息</string>
+
 </resources>

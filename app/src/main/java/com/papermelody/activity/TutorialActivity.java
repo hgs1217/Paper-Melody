@@ -34,6 +34,7 @@ public class TutorialActivity extends BaseActivity implements ViewPager.OnPageCh
     LinearLayout layoutDots;
 
     public static final String FROM_SPLASH = "FROM_SPLASH";
+    public static final String FIRST_START = "FIRST_START";
 
     private TutorialViewPagerAdapter viewPagerAdapter;
     private List<View> views;
@@ -59,8 +60,8 @@ public class TutorialActivity extends BaseActivity implements ViewPager.OnPageCh
 
     private void initViews() {
 
-        SharedPreferences pref = getSharedPreferences("firstStart", Activity.MODE_PRIVATE);
-        isFirst = pref.getBoolean("firstStart", true);
+        SharedPreferences pref = getSharedPreferences(FIRST_START, Activity.MODE_PRIVATE);
+        isFirst = pref.getBoolean(FIRST_START, true);
 
         if (!isFirst && fromSplash) {
             Intent intent = new Intent(this, MainActivity.class);
@@ -75,7 +76,7 @@ public class TutorialActivity extends BaseActivity implements ViewPager.OnPageCh
             public void onClick(View v) {
                 if (fromSplash) {
                     SharedPreferences.Editor editor = pref.edit();
-                    editor.putBoolean("firstStart", false);
+                    editor.putBoolean(FIRST_START, false);
                     editor.apply();
                     Intent intent = new Intent(TutorialActivity.this, MainActivity.class);
                     startActivity(intent);

@@ -19,6 +19,8 @@ public class MessageInfo {
     private Date createTime;
     @SerializedName("message")
     private String message;
+    @SerializedName("isNew")
+    private Boolean isNew;
 
     public String getAuthor() {
         return author;
@@ -30,5 +32,9 @@ public class MessageInfo {
 
     public String getMessage() {
         return message;
+    }
+
+    public Boolean isNew() {
+        return isNew;
     }
 }

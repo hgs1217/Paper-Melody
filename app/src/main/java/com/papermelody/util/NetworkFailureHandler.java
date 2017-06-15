@@ -36,10 +36,10 @@ public class NetworkFailureHandler {
         if (e instanceof HttpException) {
             int code = ((HttpException) e).code();
             switch (code) {
-                case 403:   ToastUtil.showShort(R.string.wrong_password);   break;
-                case 404:   ToastUtil.showShort(R.string.user_not_exist);  break;
-                case 409:   ToastUtil.showShort(R.string.user_already_exist);  break;
-                default:    ToastUtil.showShort(R.string.network_failure); break;
+                case 403:   ToastUtil.showShort(R.string.wrong_password);    break;
+                case 404:   ToastUtil.showShort(R.string.user_not_exist);    break;
+                case 409:   ToastUtil.showShort(R.string.user_already_exist);   break;
+                default:    ToastUtil.showShort(R.string.network_failure);   break;
             }
         } else {
             if (TextUtils.isEmpty(e.getMessage())) {
@@ -55,8 +55,9 @@ public class NetworkFailureHandler {
         if (e instanceof HttpException) {
             int code = ((HttpException) e).code();
             switch (code) {
-                case 409:   ToastUtil.showShort(R.string.name_already_exist);  break;
-                default:    ToastUtil.showShort(R.string.network_failure); break;
+                case 404:   ToastUtil.showShort(R.string.file_wrong_upload);    break;
+                case 409:   ToastUtil.showShort(R.string.name_already_exist);    break;
+                default:    ToastUtil.showShort(R.string.network_failure);  break;
             }
         } else {
             if (TextUtils.isEmpty(e.getMessage())) {

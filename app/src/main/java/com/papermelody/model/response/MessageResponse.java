@@ -24,16 +24,23 @@ public class MessageResponse extends HttpResponse {
 
         @SerializedName("count")
         private Integer count;
+        @SerializedName("newMsgNum")
+        private Integer newMsgNum;
         @SerializedName("messages")
         private List<MessageInfo> messages;
 
-        public MessageListInfo (Integer count, List<MessageInfo> messages) {
+        public MessageListInfo (Integer count, Integer newMsgNum, List<MessageInfo> messages) {
             this.count = count;
+            this.newMsgNum = newMsgNum;
             this.messages = messages;
         }
 
         public Integer getCount() {
             return count;
+        }
+
+        public Integer getNewMsgNum() {
+            return newMsgNum;
         }
 
         public List<MessageInfo> getMessages() {

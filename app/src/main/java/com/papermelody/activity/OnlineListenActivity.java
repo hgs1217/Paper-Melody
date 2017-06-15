@@ -7,7 +7,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -53,8 +52,6 @@ import butterknife.BindView;
 import okhttp3.ResponseBody;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
-
-import static android.os.Environment.getExternalStorageDirectory;
 
 public class OnlineListenActivity extends BaseActivity {
 
@@ -117,12 +114,10 @@ public class OnlineListenActivity extends BaseActivity {
         });
 
         Intent intent = getIntent();
-//         获取从音乐圈传入的onlineMusic实例
+        // 获取从音乐圈传入的onlineMusic实例
         onlineMusic = (OnlineMusic) intent.getSerializableExtra(OnlineMusic.SERIAL_ONLINEMUSIC);
 
-        // TODO: filename得到的是"link*"
-        fileName = "Kissbye.mid";
-//        fileName = onlineMusic.getFilename();
+        fileName = onlineMusic.getFilename();
         api = RetrofitClient.getSocialSystemAPI();
         dmReceiver = new DMReceiver();
         intentFilter = new IntentFilter();
@@ -296,7 +291,7 @@ public class OnlineListenActivity extends BaseActivity {
 
     private void updateUpvoteIcon() {
         if (isUpvoted) {
-            btnUpvote.setBackground(getDrawable(R.drawable.ic_favorite_black_48dp));  // FIXME: 白色图标和背景重合，会消失
+            btnUpvote.setBackground(getDrawable(R.drawable.ic_favorite_black_48dp));
         } else {
             btnUpvote.setBackground(getDrawable(R.drawable.ic_favorite_border_black_48dp));
         }
@@ -368,32 +363,6 @@ public class OnlineListenActivity extends BaseActivity {
             Log.d("DownloadOnlineListen", "Error2");
             return false;
         }
-    }
-
-    // 调用系统的下载器下载
-    private void download_2(String strurl, String path, String fileName) {
-        File file = new File(getExternalStorageDirectory() + "/Download/" + fileName);
-        if (file.exists()) {
-            return;
-        }
-        DownloadManager downloadManager = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
-        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(strurl));
-        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileName);
-        downloadManager.enqueue(request);
-//        Log.i("nib", Environment.DIRECTORY_DOWNLOADS + "/" + fileName);
-    }
-
-    private void downloadFile() {
-        String dataPath = getApplicationContext().getFilesDir().getAbsolutePath() + "/";
-        String sourceURL;
-//            防止server_ip忘记加/导致无法下载的情况
-        if (App.getServerIP().endsWith("/")) {
-            sourceURL = App.getServerIP() + "downloadmusic/" + fileName;
-        } else {
-            sourceURL = App.getServerIP() + "/downloadmusic/" + fileName;
-        }
-        ToastUtil.showShort(R.string.downloading);
-        download_2(sourceURL, dataPath, fileName);
     }
 
     private void initListenFragment() {

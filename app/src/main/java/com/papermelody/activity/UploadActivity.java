@@ -223,17 +223,17 @@ public class UploadActivity extends BaseActivity {
                 .observeOn(AndroidSchedulers.mainThread())
                 .map(response -> ((UploadMusicResponse) response).getFileName())
                 .subscribe(
-                        link -> {
-                            uploadMusicInfo(imgName, link);
+                        musicName -> {
+                            uploadMusicInfo(imgName, musicName);
                         }, NetworkFailureHandler.uploadErrorHandler
                 ));
     }
 
-    private void uploadMusicInfo(String imgName, String link) {
+    private void uploadMusicInfo(String imgName, String musicName) {
         Log.d("TESTUSER", App.getUser().getUserID()+"");
-        Log.d("TESTUSER", link);
+        Log.d("TESTUSER", musicName);
         addSubscription(api.uploadMusic(editMusicTitle.getText().toString(), author,
-                App.getUser().getUserID(), new Date(), link, imgName)
+                App.getUser().getUserID(), new Date(), musicName, imgName)
                 .flatMap(NetworkFailureHandler.httpFailureFilter)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

@@ -22,10 +22,12 @@ import android.widget.TextView;
 
 import com.papermelody.R;
 import com.papermelody.fragment.LogInFragment;
+import com.papermelody.fragment.MessageFragment;
 import com.papermelody.fragment.ModeFragment;
 import com.papermelody.fragment.ModeFreeSettingsFragment;
 import com.papermelody.fragment.ModeOpernSettingsFragment;
 import com.papermelody.fragment.MusicHallFragment;
+import com.papermelody.fragment.RegisterFragment;
 import com.papermelody.fragment.SettingsFragment;
 import com.papermelody.fragment.UserFragment;
 import com.papermelody.fragment.UserInfoFragment;
@@ -59,6 +61,7 @@ public class MainActivity extends BaseActivity {
     public static final int LOG_IN = 6;
     public static final int USER_INFO = 7;
     public static final int REGISTER = 8;
+    public static final int MESSAGE = 9;
 
     private static final int REQUEST_PERMISSION = 1;
 
@@ -117,6 +120,9 @@ public class MainActivity extends BaseActivity {
             case REGISTER:
                 toolbarTitle.setText(R.string.register);
                 break;
+            case MESSAGE:
+                toolbarTitle.setText(R.string.message);
+                break;
             default:
                 break;
         }
@@ -127,6 +133,7 @@ public class MainActivity extends BaseActivity {
             case USER_INFO:
             case LOG_IN:
             case REGISTER:
+            case MESSAGE:
                 toolbarIcon.setImageDrawable(getDrawable(R.drawable.back));
                 toolbarIcon.setOnClickListener((view) -> {
                     onBackPressed();
@@ -184,6 +191,7 @@ public class MainActivity extends BaseActivity {
                 break;
             case USER_INFO:
             case LOG_IN:
+            case MESSAGE:
                 updateFragment(MAIN_USER);
                 break;
             case REGISTER:
@@ -201,7 +209,7 @@ public class MainActivity extends BaseActivity {
 
     public class TabPagerAdapter extends FragmentStatePagerAdapter {
 
-        private final int pageCount = 9;
+        private final int pageCount = 10;
 
         public TabPagerAdapter(FragmentManager fragmentManager) {
             super(fragmentManager);
@@ -228,7 +236,9 @@ public class MainActivity extends BaseActivity {
                 case USER_INFO:
                     return UserInfoFragment.newInstance();
                 case REGISTER:
-                    return com.papermelody.fragment.RegisterFragment.newInstance();
+                    return RegisterFragment.newInstance();
+                case MESSAGE:
+                    return MessageFragment.newInstance();
                 default:
                     return null;
             }

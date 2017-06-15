@@ -147,6 +147,6 @@
 
     <string name="file_wrong_upload">文件不存在或者格式不正确</string>
     <string name="message">消息</string>
-    <string name="__label">{*REPLY*TO*THIS*}</string>
-
+    <string name="__label">$REPLY2THIS$</string>
+    <string name="__labelForSplit">\\$REPLY2THIS\\$</string>
 </resources>

@@ -25,6 +25,14 @@ public class Comment {
         musicID = info.getMusicID();
     }
 
+    public Comment(Integer autID, Integer musID, String aut, String cre, String con) {
+        author = aut;
+        authorID = autID;
+        content = con;
+        createTime = cre;
+        musicID = musID;
+    }
+
     public String getAuthor() {
         return author;
     }

@@ -1,7 +1,9 @@
 package com.papermelody.widget;
 
 import android.content.Context;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -77,6 +79,7 @@ public class CommentRecyclerViewAdapter extends RecyclerView.Adapter<CommentRecy
         this.onItemClickListener = onItemClickListener;
     }
 
+
     public interface OnItemClickListener {
         void OnItemClick();
     }
@@ -92,10 +95,17 @@ public class CommentRecyclerViewAdapter extends RecyclerView.Adapter<CommentRecy
         TextView textCommentTime;
         @BindView(R.id.reply_this_comment)
         LinearLayout replyButton;
+        @BindView(R.id.item_this_comment_context2)
+        TextView textComment2;
+        @BindView(R.id.item_this_user_name2)
+        TextView textUserName2;
+        @BindView(R.id.item_this_comment_time2)
+        TextView textCommentTine2;
+        @BindView(R.id.subComment)
+        CardView subComment;
 
         Context contextViewH = null;
         //@BindView User ICON
-
 
         public ViewHolder(View view, Context context) {
             super(view);
@@ -107,20 +117,6 @@ public class CommentRecyclerViewAdapter extends RecyclerView.Adapter<CommentRecy
             ButterKnife.bind(this, view);
         }
 
-        public void setContext(Context context) {
-            contextViewH = context;
-        }
-
-        private void setView(Comment comment) {
-            textComment.setText(comment.getContent());
-            Date date = new Date();
-            date.setTime(Long.parseLong(comment.getCreateTime()));
-            SimpleDateFormat sDateFormat = new SimpleDateFormat(
-                    "yyyy-MM-dd hh:mm:ss", Locale.CHINA);
-            textCommentTime.setText(sDateFormat.format(date));
-            textUserName.setText(comment.getAuthor());
-        }
-
         public void setReply(Context contextViewH, Comment commentToThisGuy) {
             replyButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -129,6 +125,82 @@ public class CommentRecyclerViewAdapter extends RecyclerView.Adapter<CommentRecy
                     //ToastUtil.showShort("REPLY to " + name);
                 }
             });
+        }
+
+        public void setContext(Context context) {
+            contextViewH = context;
+        }
+
+        private Comment splitSonCommnet(String[] info) {
+            ////// TODO: 2017-6-16 0016 commnet升级！
+
+            String[] commentX = info[2].split("@.+?:\\s?");
+            String comment = "";
+            for (int i = 0; i < commentX.length; ++i) {
+                if (commentX[i] != "")
+                    comment = commentX[i];
+            }
+            Comment res = new Comment(-1, -1, info[0], info[1], comment);
+            return res;
+        }
+
+        private void setView(Comment comment) {
+            String __label = context.getString(R.string.__label);
+            String __labelForSplit = context.getString(R.string.__labelForSplit);
+            Date date = new Date();
+            SimpleDateFormat sDateFormat = new SimpleDateFormat(
+                    "yyyy-MM-dd hh:mm:ss", Locale.CHINA);
+            Comment replyToThis = null;
+            String curComment = comment.getContent();
+
+            if (curComment.contains(__label)) {
+                int idx = curComment.indexOf(__label);
+                String sub = curComment.substring(idx + __label.length(), curComment.length());
+                curComment = curComment.substring(0, idx);
+                if (curComment == "") curComment = " ";
+                //process sub comment
+                Log.d("FILEE", "cur_comment:" + curComment);
+                Log.d("FILEE", "parenr_comment:" + sub);
+
+                boolean valid = false;
+
+                if (!sub.contains(__label)) {
+                    valid = false;
+                    Log.d("FILEE", "NO label??");
+                    subComment.setVisibility(View.GONE);
+                } else {
+                    Log.d("FILEE", "has label");
+                    try {
+                        Log.d("FILEE", "SPLIT:");
+                        // Log.d("FILEE", sub);
+                        if (sub.split(__labelForSplit).length < 3) {
+                            valid = false;
+                            Log.d("FILEE", "LENGTH<3");
+                            subComment.setVisibility(View.GONE);
+                        } else {
+                            valid = true;
+                        }
+                    } catch (Exception e) {
+                        Log.d("FILEE", e.toString());
+                        e.printStackTrace();
+                        valid = false;
+                    }
+                }
+                if (valid) {
+                    String[] infox = sub.split(__labelForSplit);
+                    replyToThis = splitSonCommnet(infox);
+                    textComment2.setText(replyToThis.getContent());
+                    textUserName2.setText(replyToThis.getAuthor());
+                    date.setTime(Long.parseLong(replyToThis.getCreateTime()));
+                    textCommentTine2.setText(sDateFormat.format(date));
+                    subComment.setVisibility(View.VISIBLE);
+                }
+            }
+
+            textComment.setText(curComment);
+            date.setTime(Long.parseLong(comment.getCreateTime()));
+            textCommentTime.setText(sDateFormat.format(date));
+            textUserName.setText(comment.getAuthor());
         }
     }
 }

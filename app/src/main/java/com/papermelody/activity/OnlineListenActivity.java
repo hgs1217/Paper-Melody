@@ -388,7 +388,6 @@ public class OnlineListenActivity extends BaseActivity {
 
     private void hideInput(/*Context context, View view*/) {
         //   getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
-
         InputMethodManager inputMethodManager =
                 (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
@@ -444,9 +443,10 @@ public class OnlineListenActivity extends BaseActivity {
                         checkIfIsReplyingToAComment(comment);
 
                         if (replyToThisComment != null) {
+                            String replyToThisCommentContent = removeLabel(replyToThisComment.getContent(), __label);
                             replyUserID = replyToThisComment.getAuthorID();
                             comment = comment + __label + replyToThisComment.getAuthor() + __label +
-                                    replyToThisComment.getCreateTime() + __label + replyToThisComment.getContent();
+                                    replyToThisComment.getCreateTime() + __label + replyToThisCommentContent;
                         } else {
                             replyUserID = 0;
                         }
@@ -485,6 +485,14 @@ public class OnlineListenActivity extends BaseActivity {
                     }
                 }
         );
+    }
+
+    private String removeLabel(String res, String label) {
+        int idx = res.indexOf(label);
+        if (idx >= 0)
+            return res.substring(0, idx);
+        else
+            return res;
     }
 
     private String timeLongToString(long m) {

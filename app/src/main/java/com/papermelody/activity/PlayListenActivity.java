@@ -132,6 +132,7 @@ public class PlayListenActivity extends BaseActivity {
         ctl.setCollapsedTitleTextColor(getResources().getColor(R.color.white));
         btnUpload.setOnClickListener((View v) -> {
             Intent intent1 = new Intent(getApplicationContext(), UploadActivity.class);
+            intent1.putExtra(PlayActivity.FILENAME, fileName);
             startActivity(intent1);
         });
         btnQuitUpload.setOnClickListener((View v) -> {

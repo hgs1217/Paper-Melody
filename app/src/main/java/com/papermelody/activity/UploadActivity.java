@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import com.papermelody.R;
 import com.papermelody.model.response.HttpResponse;
 import com.papermelody.model.response.UploadImgResponse;
+import com.papermelody.model.response.UploadMusicResponse;
 import com.papermelody.util.App;
 import com.papermelody.util.NetworkFailureHandler;
 import com.papermelody.util.RetrofitClient;
@@ -63,10 +64,16 @@ public class UploadActivity extends BaseActivity {
     private Date date = null;
     private Bitmap bmp = null;
     private String filePath = null;
+    private String imgName = "";
+    private String fileName = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Intent intent = getIntent();
+        fileName = intent.getStringExtra(PlayActivity.FILENAME);
+
         api = RetrofitClient.getSocialSystemAPI();
 
         initView();
@@ -127,38 +134,39 @@ public class UploadActivity extends BaseActivity {
             hasUser = false;
         }
         if (hasUser) {
-            Thread thread = new Thread(new Runnable() {
-                @Override
-                public void run() {
-//                      这里上传的是data/data/~/cache/目录下已经存在的文件
-                    File file = new File(getApplicationContext().getCacheDir()
-                            .getAbsolutePath() + cacheName);
-                    isSuccess = uploadMusic(App.getServerIP() + "uploadFile",
-                            cacheName, file);
-                    Log.i("nib", "isSuccess1=" + isSuccess);
-                }
-            });
-            thread.start();
-            try {
-                thread.join();
-            } catch (InterruptedException e) {
-                Log.i("nib", "InterruptedException");
-//                e.printStackTrace();
-            }
-            Log.i("nib", "isSuccess2=" + isSuccess);
-
-            isSuccess = true; // FIXME: 仅供暂时的跟谱模式入口测试，到时候要删掉
-            if (isSuccess) {
-                name = editMusicTitle.getText().toString();
-                date = new Date(System.currentTimeMillis());
-                Log.i("nib", date.toString());
-
-                uploadImg();
-
-            } else {
-                Log.i("nib", "isSuccess==false");
-                ToastUtil.showShort(R.string.upload_failed);
-            }
+            uploadImg();
+//            Thread thread = new Thread(new Runnable() {
+//                @Override
+//                public void run() {
+////                      这里上传的是data/data/~/cache/目录下已经存在的文件
+//                    File file = new File(getApplicationContext().getCacheDir()
+//                            .getAbsolutePath() + cacheName);
+//                    isSuccess = uploadMusic(App.getServerIP() + "uploadFile",
+//                            cacheName, file);
+//                    Log.i("nib", "isSuccess1=" + isSuccess);
+//                }
+//            });
+//            thread.start();
+//            try {
+//                thread.join();
+//            } catch (InterruptedException e) {
+//                Log.i("nib", "InterruptedException");
+////                e.printStackTrace();
+//            }
+//            Log.i("nib", "isSuccess2=" + isSuccess);
+//
+//            isSuccess = true; // FIXME: 仅供暂时的跟谱模式入口测试，到时候要删掉
+//            if (isSuccess) {
+//                name = editMusicTitle.getText().toString();
+//                date = new Date(System.currentTimeMillis());
+//                Log.i("nib", date.toString());
+//
+//                uploadImg();
+//
+//            } else {
+//                Log.i("nib", "isSuccess==false");
+//                ToastUtil.showShort(R.string.upload_failed);
+//            }
         }
     }
 
@@ -168,13 +176,14 @@ public class UploadActivity extends BaseActivity {
             file = new File(filePath);
         } else {
             String filename = "test.png";
-            filePath = Environment.getExternalStorageDirectory() + "/" + filename;
+            filePath = Environment.getExternalStorageDirectory() + "/Download/" + filename;
             file = StorageUtil.saveBitmap(filePath, bmp);
         }
         Log.d("TESTPATH", filePath);
         RequestBody requestBody = RequestBody.create(MediaType.parse("image/*"), file);
         MultipartBody.Part body = MultipartBody.Part.createFormData("image", file.getName(), requestBody);
 
+        ToastUtil.showLong("上传中");
         addSubscription(api.uploadImg(body)
                 .flatMap(NetworkFailureHandler.httpFailureFilter)
                 .subscribeOn(Schedulers.io())
@@ -182,7 +191,8 @@ public class UploadActivity extends BaseActivity {
                 .map(response -> ((UploadImgResponse) response).getImgName())
                 .subscribe(
                         imgName -> {
-                            uploadMusicInfo(imgName);
+                            this.imgName = imgName;
+                            uploadMusicFile(Environment.getExternalStorageDirectory() + "/Download/" + fileName);
 
                             /*if (errorCode == 0) {
                                 Log.i("nib", "errCode==0");
@@ -199,8 +209,27 @@ public class UploadActivity extends BaseActivity {
                 ));
     }
 
-    private void uploadMusicInfo(String imgName) {
-        addSubscription(api.uploadMusic(name, author, date, "", imgName)  // FIXME: link 需要修改
+    private void uploadMusicFile(String filePath) {
+        File file = new File(filePath);
+        RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+        MultipartBody.Part body = MultipartBody.Part.createFormData("file", file.getName(), requestBody);
+        addSubscription(api.uploadMusicFile(body)
+                .flatMap(NetworkFailureHandler.httpFailureFilter)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .map(response -> ((UploadMusicResponse) response).getFileName())
+                .subscribe(
+                        link -> {
+                            uploadMusicInfo(imgName, link);
+                        }, NetworkFailureHandler.uploadErrorHandler
+                ));
+    }
+
+    private void uploadMusicInfo(String imgName, String link) {
+        Log.d("TESTUSER", App.getUser().getUserID()+"");
+        Log.d("TESTUSER", link);
+        addSubscription(api.uploadMusic(editMusicTitle.getText().toString(), author,
+                App.getUser().getUserID(), new Date(), link, imgName)
                 .flatMap(NetworkFailureHandler.httpFailureFilter)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -210,9 +239,6 @@ public class UploadActivity extends BaseActivity {
                             if (errorCode == 0) {
                                 Log.i("nib", "errCode==0");
                                 ToastUtil.showShort(R.string.upload_success);
-                                Intent intent = new Intent();
-                                intent.setClass(this, MainActivity.class);
-                                startActivity(intent);
                                 finish();
                             } else {
                                 Log.i("nib", "errCode!=0");

@@ -69,7 +69,7 @@
             android:layout_marginStart="5dp"
             android:background="@drawable/image_border"
             android:contentDescription="@string/picture"
-            android:scaleType="center"
+            android:scaleType="fitXY"
             android:src="@drawable/ic_add_to_photos_black_48dp" />
 
     </RelativeLayout>

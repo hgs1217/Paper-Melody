@@ -6,6 +6,7 @@ import com.papermelody.model.response.CommentResponse;
 import com.papermelody.model.response.HttpResponse;
 import com.papermelody.model.response.OnlineMusicListResponse;
 import com.papermelody.model.response.UploadImgResponse;
+import com.papermelody.model.response.UploadMusicResponse;
 import com.papermelody.model.response.UploadResponse;
 import com.papermelody.model.response.UpvoteResponse;
 import com.papermelody.model.response.UserResponse;
@@ -47,17 +48,23 @@ public interface SocialSystemAPI {
 
     // 上传作品
     @FormUrlEncoded
-    @POST("uploadmusic")
+    @POST("upload/music")
     Observable<UploadResponse> uploadMusic(@Field("name") String name,
                                            @Field("author") String author,
+                                           @Field("authorID") Integer authorID,
                                            @Field("date") Date date,
                                            @Field("link") String link,
                                            @Field("imgName") String imgName);
 
     // 上传作品图片
     @Multipart
-    @POST("uploadimg")
+    @POST("upload/img")
     Observable<UploadImgResponse> uploadImg(@Part MultipartBody.Part image);
+
+    // 上传音乐
+    @Multipart
+    @POST("upload/musicfile")
+    Observable<UploadMusicResponse> uploadMusicFile(@Part MultipartBody.Part file);
 
     // 音乐圈作品获取
     @GET("onlinemusics")
@@ -70,43 +77,43 @@ public interface SocialSystemAPI {
 
     // 音乐点赞
     @FormUrlEncoded
-    @POST("addupvote")
+    @POST("upvote/add")
     Observable<HttpResponse> addUpvote(@Field("userID") Integer userID,
                                        @Field("musicID") Integer musicID);
 
     // 音乐取消点赞
     @FormUrlEncoded
-    @POST("cancelupvote")
+    @POST("upvote/cancel")
     Observable<HttpResponse> cancelUpvote(@Field("userID") Integer userID,
                                           @Field("musicID") Integer musicID);
 
     // 获取音乐点赞状态
-    @GET("getupvotestatus")
+    @GET("upvote/status")
     Observable<UpvoteResponse> getUpvoteStatus(@Query("userID") @Nullable Integer userID,
                                                @Query("musicID") @Nullable Integer musicID);
 
-    //upload comment
+    // 上传评论
     @FormUrlEncoded
-    @POST("uploadcomment")
+    @POST("upload/comment")
     Observable<HttpResponse> uploadComment(@Field("musicID") String musicID,
                                            @Field("user") String user,
                                            @Field("comment") String comment,
                                            @Field("time") String time);
 
     // 获取评论
-    @GET("getcomment")
+    @GET("download/comment")
     Observable<CommentResponse> getComment(@Query("musicID") @Nullable String musicID);
 
     // 获取音乐
-    @GET("downloadmusic/{filename}")
+    @GET("download/music/{filename}")
     Observable<ResponseBody> downloadMusic(@Path("filename") String fileName);
 
     // 上传作品获取
-    @GET("getuploadmusics")
+    @GET("download/uploadmusics")
     Observable<OnlineMusicListResponse> getUploadMusicList(@Query("userID") @Nullable Integer userID);
 
     // 收藏作品获取
-    @GET("getfavorites")
+    @GET("download/favorites")
     Observable<OnlineMusicListResponse> getFavoriteMusicList(@Query("userID") @Nullable Integer userID);
 
     // 服务器重启

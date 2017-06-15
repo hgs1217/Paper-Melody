@@ -120,6 +120,7 @@ public class OnlineListenActivity extends BaseActivity {
 //         获取从音乐圈传入的onlineMusic实例
         onlineMusic = (OnlineMusic) intent.getSerializableExtra(OnlineMusic.SERIAL_ONLINEMUSIC);
 
+        fileName = onlineMusic.getFilename();
         api = RetrofitClient.getSocialSystemAPI();
         dmReceiver = new DMReceiver();
         intentFilter = new IntentFilter();
@@ -173,7 +174,6 @@ public class OnlineListenActivity extends BaseActivity {
             }
         };
         timer = new Timer();
-        fileName = "Kissbye.mid";
         fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().add(R.id.container_comment, CommentFragment.newInstance(onlineMusic)).commit();
         ctl.setTitle(onlineMusic.getMusicName());
@@ -301,7 +301,7 @@ public class OnlineListenActivity extends BaseActivity {
 
     private void downloadMusic() {
         ToastUtil.showShort("下载中");
-        addSubscription(api.downloadMusic(fileName)   // FIXME: fileName 需要修改
+        addSubscription(api.downloadMusic(fileName)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .map(response -> (ResponseBody) response)

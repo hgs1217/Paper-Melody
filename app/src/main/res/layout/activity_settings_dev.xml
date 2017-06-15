@@ -48,6 +48,13 @@
             android:layout_marginTop="20dp"
             android:text="演奏试听界面"/>
 
+        <Button
+            android:id="@+id/btn_to_upload"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="上传界面"/>
+
         <TextView
             android:id="@+id/seekbar_caption1"
             style="@style/SeekBarCaption" />

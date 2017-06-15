@@ -20,14 +20,21 @@ public class OnlineMusic extends Music implements Serializable {
 
     public static final String SERIAL_ONLINEMUSIC = "SERIAL_ONLINEMUSIC";
 
+    /**
+     * musicLink: 服务器端存放的音乐文件名，通过downloadMusic接口下载，与本地音乐文件同名
+     */
     private String filename;
+
     private String path;
     private Integer musicID;
     private String musicName;
     private String musicAuthor;
     private String musicInfo;
     private Date musicCreateDate;
-    private String musicLink;
+
+    /**
+     * musicPhotoUrl: 服务器端存放的图片URL
+     */
     private String musicPhotoUrl;
     private String uploadName;
     private String uploadUser;
@@ -39,10 +46,20 @@ public class OnlineMusic extends Music implements Serializable {
     public OnlineMusic() { }
 
     public OnlineMusic(OnlineMusicInfo info, Context context) {
+
+        /**
+         * getName 获取到的是作品名
+         */
         musicName = info.getName();
+
         musicAuthor = info.getAuthor();
         musicCreateDate = info.getDate();
-        musicLink = info.getLink();
+
+        /**
+         * getMusicName 获取到的是文件名
+         */
+        filename = info.getMusicName();
+
         musicID = info.getMusicID();
         viewNum = info.getViewNum();
         upvoteNum = info.getUpvoteNum();
@@ -105,14 +122,6 @@ public class OnlineMusic extends Music implements Serializable {
 
     public void setMusicCreateDate(Date musicCreateDate) {
         this.musicCreateDate = musicCreateDate;
-    }
-
-    public String getMusicLink() {
-        return musicLink;
-    }
-
-    public void setMusicLink(String musicLink) {
-        this.musicLink = musicLink;
     }
 
     public String getUploadName() {

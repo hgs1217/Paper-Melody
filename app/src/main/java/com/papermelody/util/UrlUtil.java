@@ -12,6 +12,6 @@ public class UrlUtil {
      */
 
     public static String getImageUrl (Context context, String imgname) {
-        return App.getServerIP() + "getimage/" + imgname;
+        return App.getServerIP() + "download/img/" + imgname;
     }
 }

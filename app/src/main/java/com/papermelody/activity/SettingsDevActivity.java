@@ -36,6 +36,7 @@ public class SettingsDevActivity extends BaseActivity {
     @BindView(R.id.btn_server_ip)   Button btnServerIP;
     @BindView(R.id.btn_reset)       Button btnReset;
     @BindView(R.id.btn_play_listen) Button btnPlayListen;
+    @BindView(R.id.btn_to_upload)   Button btnUpload;
     @BindView(R.id.seekbar1)        SeekBar sb1;
     @BindView(R.id.seekbar2)        SeekBar sb2;
     @BindView(R.id.seekbar3)        SeekBar sb3;
@@ -94,6 +95,12 @@ public class SettingsDevActivity extends BaseActivity {
 
         btnPlayListen.setOnClickListener((view) -> {
             Intent intent = new Intent(this, PlayListenActivity.class);
+            startActivity(intent);
+        });
+
+        btnUpload.setOnClickListener((view) -> {
+            Intent intent = new Intent(this, UploadActivity.class);
+            intent.putExtra(PlayActivity.FILENAME, "Kissbye.mid");
             startActivity(intent);
         });
 

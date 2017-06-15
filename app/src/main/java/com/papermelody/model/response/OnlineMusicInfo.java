@@ -19,8 +19,8 @@ public class OnlineMusicInfo {
     private String author;
     @SerializedName("date")
     private Date date;
-    @SerializedName("link")
-    private String link;
+    @SerializedName("musicName")
+    private String musicName;
     @SerializedName("imgName")
     private String imgName;
     @SerializedName("musicID")
@@ -43,8 +43,8 @@ public class OnlineMusicInfo {
         return date;
     }
 
-    public String getLink() {
-        return link;
+    public String getMusicName() {
+        return musicName;
     }
 
     public String getImgName() {

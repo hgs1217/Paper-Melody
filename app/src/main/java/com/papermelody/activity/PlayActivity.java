@@ -44,6 +44,7 @@ import android.widget.TextView;
 
 import com.papermelody.R;
 import com.papermelody.core.calibration.CalibrationResult;
+import com.papermelody.core.calibration.TransformResult;
 import com.papermelody.util.CanvasUtil;
 import com.papermelody.util.ImageProcessor;
 import com.papermelody.util.ImageUtil;
@@ -51,6 +52,9 @@ import com.papermelody.util.ToastUtil;
 import com.papermelody.util.ViewUtil;
 import com.papermelody.widget.AutoFitTextureView;
 import com.papermelody.widget.CameraDebugView;
+
+import org.opencv.core.Mat;
+import org.opencv.core.Point;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -60,8 +64,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 import butterknife.BindView;
+import tapdetect.facade.Tap;
 
 /**
  * Created by HgS_1217_ on 2017/3/18.
@@ -340,17 +346,32 @@ public class PlayActivity extends BaseActivity {
         initSoundPool();
         initView();
         initMediaRecorder();
+        Tap.reset();
     }
 
     public void processImage(Image image) {
         /**
          * Process image here
          */
-        Log.d("TESTAA", image.getHeight()+""+image.getWidth());
-        // TODO: postpone connect until algorithm gets stable
-        // TransformResult transformResult = ImageProcessor.getKeyTransform(calibrationResult);
-        // Mat mat = ImageUtil.imageToBgr(image);
-        // List<Integer> keys = ImageProcessor.getPlaySoundKey(mat.clone(), transformResult);
+        if (!Tap.readyForNextFrame()) { return; }
+
+        TransformResult transformResult = ImageProcessor.getKeyTransform(calibrationResult);
+        Mat mat = ImageUtil.imageToBgr(image);
+
+        long t1 = System.currentTimeMillis();
+        List<Point> tapping = Tap.getAll(mat, canvasPlay.getHandContours(), canvasPlay.getFingerTips());
+        long t2 = System.currentTimeMillis();
+
+        CanvasUtil.setScreenHeight(ViewUtil.getScreenHeight(this));
+        canvasPlay.updateInfo(t2 - t1, 0, Tap.getProcessInterval());
+
+        List<Integer> keys = ImageProcessor.getPlaySoundKey(mat.clone(), transformResult, tapping);
+        for (Integer key : keys) {
+            if (!lastKeys.contains(key)){
+                playSound(key);
+            }
+        }
+        lastKeys = new ArrayList<>(keys);
     }
 
     private void initSoundPool() {

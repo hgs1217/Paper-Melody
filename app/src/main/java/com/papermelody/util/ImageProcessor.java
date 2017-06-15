@@ -65,6 +65,9 @@ public class ImageProcessor {
     }
 
     public static List<Integer> getPlaySoundKey (Mat bgrMat, TransformResult result) {
+        return getPlaySoundKey(bgrMat, result, null);
+    }
+    public static List<Integer> getPlaySoundKey (Mat bgrMat, TransformResult result, List<Point> tap) {
         /**
          * 获取坐标判定得到的按键结果
          */
@@ -74,7 +77,9 @@ public class ImageProcessor {
         for (int i = 0; i < count.length; i++) {
             count[i] = 0;
         }
-        List<Point> tap = Tap.getTaps(bgrMat);
+        if (tap == null) {
+            tap = Tap.getTaps(bgrMat);
+        }
         if (tap.isEmpty()) {
             return keys;
         }

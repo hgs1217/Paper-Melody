@@ -129,7 +129,8 @@ public class CameraDebugActivity extends BaseActivity {
                 }
 
                 @Override
-                public void onSurfaceTextureUpdated(SurfaceTexture texture) { }
+                public void onSurfaceTextureUpdated(SurfaceTexture texture) {
+                }
             };
 
 
@@ -144,15 +145,13 @@ public class CameraDebugActivity extends BaseActivity {
             Mat mat = ImageUtil.imageToBgr(image);
 
             long t1 = System.currentTimeMillis();
-            List<List<Point>> ret = Tap.getAllForDebug(mat);
+            List<Point> notUsedWhenDebug = Tap.getAll(mat,
+                    canvasCameraDebug.getHandContours(), canvasCameraDebug.getFingerTips());
             long t2 = System.currentTimeMillis();
-
-            mat.submat(new Range(0, (int) mat.size().height / 3), new Range(0, (int) mat.size().width)).setTo(new Scalar(0, 0, 0));
 
             CanvasUtil.setScreenHeight(ViewUtil.getScreenHeight(this));
             canvasCameraDebug.updateInfo(
-                    ret.get(0), ret.get(1), ret.get(2), ret.get(3), ret.get(4),
-                    t2-t1, frameTime - lastFrameTime, Tap.getProcessInterval()
+                    t2 - t1, frameTime - lastFrameTime, Tap.getProcessInterval()
             );
         }
 
@@ -175,8 +174,9 @@ public class CameraDebugActivity extends BaseActivity {
 
     /**
      * 相机开启
-     * @param width     TextureView的宽度
-     * @param height    TextureView的高度
+     *
+     * @param width  TextureView的宽度
+     * @param height TextureView的高度
      */
     private void openCamera(int width, int height) {
 
@@ -196,8 +196,9 @@ public class CameraDebugActivity extends BaseActivity {
 
     /**
      * 用来设置相机的输出选项，包括图像尺寸，图像获取，图像的标定操作等等
-     * @param width     TextureView的宽度
-     * @param height    TextureView的高度
+     *
+     * @param width  TextureView的宽度
+     * @param height TextureView的高度
      */
     private void setUpCameraOutputs(int width, int height) {
 
@@ -214,7 +215,7 @@ public class CameraDebugActivity extends BaseActivity {
             Size relativeMin = ImageUtil.getRelativeMinSize(Arrays.asList(map.getOutputSizes(ImageFormat.YUV_420_888)),
                     viewCameraDebug.getWidth(), viewCameraDebug.getHeight());
 
-            Log.d(TAG, relativeMin.getWidth()+" "+relativeMin.getHeight());
+            Log.d(TAG, relativeMin.getWidth() + " " + relativeMin.getHeight());
 
             imageReader = ImageReader.newInstance(relativeMin.getWidth(), relativeMin.getHeight(),
                     ImageFormat.YUV_420_888, 5);
@@ -230,7 +231,9 @@ public class CameraDebugActivity extends BaseActivity {
                     }
                     processImage(image);
                 } finally {
-                    if (image != null) { image.close(); }
+                    if (image != null) {
+                        image.close();
+                    }
                 }
             }, mainHandler);
 
@@ -282,7 +285,7 @@ public class CameraDebugActivity extends BaseActivity {
             previewSize = ImageUtil.chooseOptimalSize(map.getOutputSizes(SurfaceTexture.class),
                     rotatedPreviewWidth, rotatedPreviewHeight, maxPreviewWidth, maxPreviewHeight, relativeMin);
 
-            Log.d(TAG, previewSize.getWidth()+" "+previewSize.getHeight());
+            Log.d(TAG, previewSize.getWidth() + " " + previewSize.getHeight());
             viewCameraDebug.setAspectRatio(previewSize.getWidth(), previewSize.getHeight());
 
             FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(viewCameraDebug.getWidth(), viewCameraDebug.getHeight());
@@ -297,8 +300,9 @@ public class CameraDebugActivity extends BaseActivity {
 
     /**
      * 当手机屏幕的朝向改变时，要对获取到的视频流进行方向上的调整
-     * @param viewWidth     TextureView的宽度
-     * @param viewHeight    TextureView的高度
+     *
+     * @param viewWidth  TextureView的宽度
+     * @param viewHeight TextureView的高度
      */
     private void configureTransform(int viewWidth, int viewHeight) {
 

@@ -13,6 +13,8 @@ import org.opencv.core.Point;
 import java.util.ArrayList;
 import java.util.List;
 
+import tapdetect.facade.Tap;
+
 /**
  * Created by HgS_1217_ on 2017/4/10.
  */
@@ -72,7 +74,7 @@ public class ImageProcessor {
         for (int i = 0; i < count.length; i++) {
             count[i] = 0;
         }
-        List<Point> tap = TapDetectorAPI.getTaps(bgrMat);
+        List<Point> tap = Tap.getTaps(bgrMat);
         if (tap.isEmpty()) {
             return keys;
         }

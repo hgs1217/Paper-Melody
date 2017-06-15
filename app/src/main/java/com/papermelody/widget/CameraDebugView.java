@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import tapdetect.ColorRange;
+import tapdetect.TapDetector.TapDetectPoint;
 
 /**
  * Created by gigaflw on 2017/5/12.
@@ -22,11 +23,8 @@ import tapdetect.ColorRange;
 
 public class CameraDebugView extends View {
 
-    private List<Point> handContours = new ArrayList<>();
-    private List<Point> fingerTips = new ArrayList<>();
-    private List<Point> falling = new ArrayList<>();
-    private List<Point> lingering = new ArrayList<>();
-    private List<Point> tapping = new ArrayList<>();
+    private List<List<Point>> handContours = new ArrayList<>();
+    private List<TapDetectPoint> fingerTips = new ArrayList<>();
     private long processDelay, cameraInterval, processInterval;
 
     public CameraDebugView(Context c) {
@@ -41,28 +39,42 @@ public class CameraDebugView extends View {
         super(context, attrs, defStyle);
     }
 
+    public List<TapDetectPoint> getFingerTips() {
+        return fingerTips;
+    }
+
+    public List<List<Point>> getHandContours() {
+
+        return handContours;
+    }
+
+
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
         if (!handContours.isEmpty()) {
-            CanvasUtil.drawPoints(canvas, handContours, Color.RED);
-        }
-//        Log.w("fingers when draw", "" + fingerTips);
-        if (!fingerTips.isEmpty()) {
-            CanvasUtil.drawPoints(canvas, fingerTips, Color.GRAY);
-        }
-//        Log.w("tapping when draw", "" + tapping);
-        if (!falling.isEmpty()) {
-            CanvasUtil.drawPoints(canvas, falling, Color.rgb(0, 160, 0));
+            CanvasUtil.drawContours(canvas, handContours, Color.RED);
         }
 
-        if (!lingering.isEmpty()) {
-            CanvasUtil.drawPoints(canvas, lingering, Color.BLUE);
-        }
+        int cnt[] = {0, 0, 0};
 
-        if (!tapping.isEmpty()) {
-            CanvasUtil.drawPoints(canvas, tapping, Color.GREEN);
+        for (TapDetectPoint p: fingerTips) {
+            int color;
+            if (p.isFalling()) {
+                color = Color.rgb(0, 160, 0); // dark green
+                cnt[0] += 1;
+            } else if (p.isTapping()) {
+                color = Color.GREEN;
+                cnt[1] += 1;
+            } else if (p.isLingering()) {
+                color = Color.BLUE;
+                cnt[2] += 1;
+            } else {
+                color = Color.GRAY;
+            }
+
+            CanvasUtil.drawPoint(canvas, p.getPoint(), color);
         }
 
         String[] to_be_write = {
@@ -71,9 +83,9 @@ public class CameraDebugView extends View {
                 "Time consumed: " + processDelay + " ms",
                 "Hand contour: " + handContours.size() + " pts",
                 "Finger tip: " + fingerTips.size() + " pts",
-                "Falling: " + falling.size() + " pts",
-                "Lingering: " + lingering.size() + " pts",
-                "Tapping: " + tapping.size() + " pts",
+                "Falling: " + cnt[0] + " pts",
+                "Tapping: " + cnt[1] + " pts",
+                "Lingering: " + cnt[2] + " pts",
                 "ColorRange: " + ColorRange.getRange()[0],
                 "ColorRange: " + ColorRange.getRange()[1],
                 "updated: " + ColorRange.getUpdatedCnt()
@@ -81,19 +93,7 @@ public class CameraDebugView extends View {
         CanvasUtil.writeText(canvas, to_be_write);
     }
 
-    public void updateInfo(
-            List<Point> handContours,
-            List<Point> fingerTips,
-            List<Point> falling,
-            List<Point> lingering,
-            List<Point> tapping,
-            long processDelay, long cameraInterval, long processInterval
-    ) {
-        this.handContours = new ArrayList<>(handContours);
-        this.fingerTips = new ArrayList<>(fingerTips);
-        this.falling = new ArrayList<>(falling);
-        this.lingering = new ArrayList<>(lingering);
-        this.tapping = new ArrayList<>(tapping);
+    public void updateInfo(long processDelay, long cameraInterval, long processInterval) {
         this.processDelay = processDelay;
         this.cameraInterval = cameraInterval;
         this.processInterval = processInterval;

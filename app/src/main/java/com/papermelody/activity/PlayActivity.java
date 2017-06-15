@@ -44,18 +44,13 @@ import android.widget.TextView;
 
 import com.papermelody.R;
 import com.papermelody.core.calibration.CalibrationResult;
-import com.papermelody.core.calibration.TransformResult;
 import com.papermelody.util.CanvasUtil;
 import com.papermelody.util.ImageProcessor;
 import com.papermelody.util.ImageUtil;
-import com.papermelody.util.TapDetectorAPI;
 import com.papermelody.util.ToastUtil;
 import com.papermelody.util.ViewUtil;
 import com.papermelody.widget.AutoFitTextureView;
 import com.papermelody.widget.CameraDebugView;
-
-import org.opencv.core.Mat;
-import org.opencv.core.Point;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -354,21 +349,10 @@ public class PlayActivity extends BaseActivity {
         /**
          * Process image here
          */
-        TransformResult transformResult = ImageProcessor.getKeyTransform(calibrationResult);
-        Mat mat = ImageUtil.imageToBgr(image);
-        List<Integer> keys = ImageProcessor.getPlaySoundKey(mat.clone(), transformResult);
-
-        List<List<Point>> ret = TapDetectorAPI.getAllForDebug(mat);
-        canvasPlay.updateInfo(
-                ret.get(0), ret.get(1), ret.get(2), ret.get(3), ret.get(4), 0, 0, 0);
-//        Log.w("TESTK", "" + keys);
-//        Log.w("LAST_TESTK", "" + lastKeys);
-        for (Integer key : keys) {
-            if (!lastKeys.contains(key)){
-                playSound(key);
-            }
-        }
-        lastKeys = new ArrayList<>(keys);
+        // TODO: postpone connect until algorithm gets stable
+        // TransformResult transformResult = ImageProcessor.getKeyTransform(calibrationResult);
+        // Mat mat = ImageUtil.imageToBgr(image);
+        // List<Integer> keys = ImageProcessor.getPlaySoundKey(mat.clone(), transformResult);
     }
 
     private void initSoundPool() {

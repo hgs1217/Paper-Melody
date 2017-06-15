@@ -2,7 +2,7 @@
 * @Author: zhouben
 * @Date:   2017-05-10 22:47:18
 * @Last Modified by:   zhouben
-* @Last Modified time: 2017-05-30 16:12:37
+* @Last Modified time: 2017-06-15 10:58:43
 */
 
 package tapdetect.facade;
@@ -13,8 +13,6 @@ import java.util.ArrayList;
 
 import org.opencv.core.*;
 import org.opencv.imgproc.Imgproc;
-import org.opencv.video.BackgroundSubtractor;
-import org.opencv.video.Video;
 
 import tapdetect.ColorRange;
 import tapdetect.Config;
@@ -27,6 +25,8 @@ import tapdetect.Util;
 
 public class Tap {
     static {
+        // with opencv java, use Core.NATIVE_LIBRARY_NAME,
+        // with opencv android, use "opencv_java3"
         System.loadLibrary("opencv_java3");  // this line only need to be carried out once
         ImgLogger.silent();
     }
@@ -38,17 +38,7 @@ public class Tap {
 
     private static long lastProcess = 0;
     private static long processInterval;
-    private static List<List<Point>> resultCache = new ArrayList<>();
-
-    static {
-        for (int i = 0; i < 5; ++i) {
-            resultCache.add(new ArrayList<Point>());
-        }
-    }
-
-    public static void reset() {
-        ColorRange.reset();
-    }
+    private static List<Point> resultCache = new ArrayList<>();
 
     public static long getProcessInterval() {
         return processInterval;
@@ -56,6 +46,10 @@ public class Tap {
 
     public static boolean readyForNextFrame() {
         return System.currentTimeMillis() - lastProcess > Config.PROCESS_INTERVAL_MS;
+    }
+
+    public static void reset() {
+        ColorRange.reset();
     }
 
 
@@ -86,6 +80,7 @@ public class Tap {
 
         Imgproc.cvtColor(im, im, Imgproc.COLOR_BGR2YCrCb);
         Mat hand = hd.getHand(im, fgmask);
+
         List<Point> fingers = fd.getFingers(im, hand);
         List<Point> taps = td.getTapping(im, fingers);
 
@@ -99,24 +94,24 @@ public class Tap {
         //         .collect(Collectors.toList());
     }
 
-    public static List<List<Point>> getAllForDebug(Mat im) {
-        /*
-            e.g.
-                List<List<Point>> ret = getAllForDebug(im);
-                ret[0]   // contour points of detected hand
-                ret[1]   // detected fingers
-                ret[2]   // detected points which is 'falling down'
-                ret[3]   // detected points where tap happens
-        */
+    public static List<Point> getAll(Mat im,
+                                     List<List<Point>> contoursOutput,
+                                     List<TapDetector.TapDetectPoint> tapDetectPointsOutput
+    ) {
+        /**
+         * @param: im: A image in color space BGR
+         * @param: contoursOutput
+         *      if is not null, apexes of the contour of hand will be saved
+         * @param: tapDetectPointsOutput
+         *      if is not null, all results of detected points will be saved
+         * @retrun:
+         *      A list of points detected as being tapping
+         *      (nothing but `TapDetectPoint` with status `FALLING` in `tapDetectPointsOutput`)
+         *  This function will modify `im` into YCrCb as well as a smaller size
+         */
 
-        long t = System.currentTimeMillis();
-        if (t - lastProcess < Config.PROCESS_INTERVAL_MS) {
-            // too higher the camera fps
-            return resultCache;
-        } else {
-            processInterval = t - lastProcess;
-            lastProcess = t;
-        }
+        if (!checkTime()) { return resultCache; }
+
 
         double recover_ratio = 1.0 / Util.resize(im);
         Mat fgmask = fgd.getForeground(im);
@@ -124,44 +119,54 @@ public class Tap {
         Imgproc.cvtColor(im, im, Imgproc.COLOR_BGR2YCrCb);
         Mat hand = hd.getHand(im, fgmask);
 
-        List<MatOfPoint> hand_contour = Util.largeContours(hand, Config.HAND_AREA_MIN);
-        List<Point> hand_contour_pt = Util.contoursToPoints(hand_contour);
-
-        List<Point> fingers = fd.getFingers(im, hand);
-
+        List<MatOfPoint> contour = new ArrayList<>();
+        List<Point> fingers = fd.getFingers(im, hand, contour);
         List<TapDetector.TapDetectPoint> taps = td.getTappingAll(im, fingers);
 
-        for (Point pt : hand_contour_pt) {
-            pt.x *= recover_ratio;
-            pt.y *= recover_ratio;
+        if (contoursOutput != null) {
+            contoursOutput.clear();
+            for (MatOfPoint cnt : contour) {
+                List<Point> cntPt = cnt.toList();
+                for (Point pt: cntPt) {
+                    pt.x *= recover_ratio;
+                    pt.y *= recover_ratio;
+                }
+                contoursOutput.add(cntPt);
+            }
         }
-        for (Point pt : fingers) {
-            pt.x *= recover_ratio;
-            pt.y *= recover_ratio;
-        }
+
         for (TapDetector.TapDetectPoint pt : taps) {
             pt.getPoint().x *= recover_ratio;
             pt.getPoint().y *= recover_ratio;
         }
 
+        if (contoursOutput != null) {
+            tapDetectPointsOutput.clear();
+            tapDetectPointsOutput.addAll(taps);
+        }
 
-        // no need to shrink points in taps because Point in taps and Point in finger have same reference
-
+        List<Point> ret = new ArrayList<>();
         resultCache.clear();
-        resultCache.add(hand_contour_pt);
-        resultCache.add(fingers);
-        resultCache.add(new ArrayList<Point>());
-        resultCache.add(new ArrayList<Point>());
-        resultCache.add(new ArrayList<Point>());
-        for (TapDetector.TapDetectPoint p : taps) {
-            if (p.isFalling()) {
-                resultCache.get(2).add(p.getPoint());
-            } else if (p.isLinger()) {
-                resultCache.get(3).add(p.getPoint());
-            } else if (p.isTapping()) {
-                resultCache.get(4).add(p.getPoint());
+
+        for (TapDetector.TapDetectPoint pt : taps) {
+            if (pt.isFalling()) {
+                ret.add(pt.getPoint());
+                resultCache.add(pt.getPoint());
             }
         }
-        return resultCache;
+
+        return ret;
+    }
+
+    private static boolean checkTime() {
+        long t = System.currentTimeMillis();
+        if (t - lastProcess < Config.PROCESS_INTERVAL_MS) {
+            // too higher the camera fps
+            return false;
+        } else {
+            processInterval = t - lastProcess;
+            lastProcess = t;
+            return true;
+        }
     }
 }

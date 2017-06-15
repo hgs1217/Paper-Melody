@@ -38,7 +38,7 @@ public class TapDetector {
         public Point getPoint() { return point; }
 
         public boolean isFalling() { return status == FingerTipStatus.FALLING;  }
-        public boolean isLinger()  { return status == FingerTipStatus.LINGER;  }
+        public boolean isLingering()  { return status == FingerTipStatus.LINGER;  }
         public boolean isTapping() { return status == FingerTipStatus.TAPPING;  }
 
         public String toString() {
@@ -47,6 +47,12 @@ public class TapDetector {
     }
 
     public List<Point> getTapping(Mat im, List<Point> fingers) {
+        /**
+         * @param: im: A YCrCb image
+         * @param: fingers: A list of points indicating the position of finger tips
+         * @return:
+         *      A list of points detected as being tapping
+         */
         List<TapDetectPoint> all = getTappingAll(im, fingers);
         List<Point> result = new ArrayList<>();
         for (TapDetectPoint p: all) {
@@ -58,6 +64,12 @@ public class TapDetector {
     }
 
     public List<TapDetectPoint> getTappingAll(Mat im, List<Point> fingers) {
+        /**
+         * @param: im: A YCrCb image
+         * @param: fingers: A list of points indicating the position of finger tips
+         * @return:
+         *  A list of `TapDetectPoint` whose `status` indicating the status of each finger tip point
+         */
         ArrayList<FingerTipStatus> fingerTipsStatus = new ArrayList<>();
 
         TapDetectPoint nearestPt;

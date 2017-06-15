@@ -68,7 +68,7 @@ public class ImgLogger {
     }
 
     public static void show(String filename, Mat im) {
-        log(filename, im, LOG_LEVEL_SILENT - 1);  // shows unless level is silent
+        log(filename, im, LOG_LEVEL_SILENT + 1);  // shows even if level is silent
     }
 
     public static void setBaseDir(String baseDir) {

@@ -301,8 +301,6 @@ public class PlayActivity extends BaseActivity {
             keys[i].setAlpha(1);
             keys[i].startAnimation(animation);
         }
-
-        ;
     };
 
     private final Handler viewGoneHandler = new Handler() {
@@ -312,8 +310,6 @@ public class PlayActivity extends BaseActivity {
             Animation animation = AnimationUtils.loadAnimation(PlayActivity.this, R.anim.alpha_key_gone);
             keys[i].startAnimation(animation);
         }
-
-        ;
     };
 
     private final Handler viewEndHandler = new Handler() {
@@ -321,8 +317,6 @@ public class PlayActivity extends BaseActivity {
             int i = msg.what;
             keys[i].setAlpha(0);
         }
-
-        ;
     };
 
     @Override
@@ -442,10 +436,11 @@ public class PlayActivity extends BaseActivity {
         for (int i = 0; i < keys.length; ++i) {
             voiceId[i] = soundPool.load(this, voiceResId[i], 1);
 
-            final int fi = i;
-            keys[i].setOnClickListener((View v) -> {
-                playSound(fi);
-            });
+            // FIXME: 动画暂时被关闭
+//            final int fi = i;
+//            keys[i].setOnClickListener((View v) -> {
+//                playSound(fi);
+//            });
         }
     }
 
@@ -694,26 +689,27 @@ public class PlayActivity extends BaseActivity {
     public void playSound(int keyID) {
         soundPool.play(voiceId[keyID], 1, 1, 0, 0, 1);
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Message msg1 = new Message(), msg2 = new Message(), msg3 = new Message();
-                    msg1.what = keyID;
-                    msg2.what = keyID;
-                    msg3.what = keyID;
-                    viewStartHandler.sendMessage(msg1);
-                    Log.d("TEST", "THREAD1");
-                    Thread.sleep(100);
-                    viewGoneHandler.sendMessage(msg2);
-                    Log.d("TEST", "THREAD2");
-                    Thread.sleep(100);
-                    viewEndHandler.sendMessage(msg3);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
+        // FIXME: 动画暂时被关闭
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                try {
+//                    Message msg1 = new Message(), msg2 = new Message(), msg3 = new Message();
+//                    msg1.what = keyID;
+//                    msg2.what = keyID;
+//                    msg3.what = keyID;
+//                    viewStartHandler.sendMessage(msg1);
+//                    Log.d("TEST", "THREAD1");
+//                    Thread.sleep(100);
+//                    viewGoneHandler.sendMessage(msg2);
+//                    Log.d("TEST", "THREAD2");
+//                    Thread.sleep(100);
+//                    viewEndHandler.sendMessage(msg3);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }).start();
     }
 
     @Override

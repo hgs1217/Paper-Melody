@@ -17,13 +17,13 @@
     <com.papermelody.widget.AutoFitTextureView
         android:id="@+id/view_play"
         android:layout_gravity="center"
-        android:layout_width="1dp"
-        android:layout_height="1dp" />
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
     <com.papermelody.widget.CameraDebugView
         android:id="@+id/canvas_play"
-        android:layout_width="1dp"
-        android:layout_height="1dp" />
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
     <!--FIXME: 先设置背景为空，用镜头内容代替-->
     <ImageView
@@ -31,7 +31,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="fitXY"
-        android:visibility="visible"
+        android:visibility="gone"
         android:src="@drawable/piano_key21"/>
 
     <LinearLayout

@@ -19,10 +19,10 @@ public class Config {
     public static int TAP_THRESHOLD_ROW = 160;
     public static int HAND_AREA_MIN = 300;
     public static int FINGER_TIP_STEP = 10;  // deprecated
-    public static int FINGER_TIP_WIDTH = 20;
+    public static int FINGER_TIP_WIDTH = 15;
 
     // max distance the finger tip could move between 2 frames
-    public static int FINGER_TIP_MOVE_DIST_MAX = 20;
+    public static int FINGER_TIP_MOVE_DIST_MAX = 25;
     // max distance the finger tip could move if to judge the point as lingering
     public static int FINGER_TIP_LINGER_DIST_MAX = 4;
 

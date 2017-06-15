@@ -11,10 +11,13 @@ import java.util.List;
 import java.util.ArrayList;
 // import java.util.stream.Collectors;
 
+import org.opencv.core.CvType;
 import org.opencv.core.MatOfPoint;
+import org.opencv.core.MatOfPoint2f;
 import org.opencv.core.Point;
 import org.opencv.core.Mat;
 import org.opencv.core.Scalar;
+import org.opencv.imgproc.Imgproc;
 
 public class FingerDetector {
     public List<Point> getFingers(Mat im, Mat hand) {
@@ -25,124 +28,111 @@ public class FingerDetector {
             return new ArrayList<>();
         }
 
-        Mat hand_with_contour = Util.drawContours(im, contours, new Scalar(0, 0, 255));
-        ImgLogger.info("11_contour.jpg", hand_with_contour);
-
-        ArrayList<Point> finger_tips = new ArrayList<>();
+        ArrayList<Point> fingerTips = new ArrayList<>();
         for (MatOfPoint cnt : contours) {
-            finger_tips.addAll(this.findFingerTips(cnt.toList(), hand));
+            double epsilon = 5;
+            MatOfPoint2f approx = new MatOfPoint2f(), cntCvt = new MatOfPoint2f();
+
+            cnt.convertTo(cntCvt, CvType.CV_32FC2);
+            Imgproc.approxPolyDP(cntCvt, approx, epsilon, true);
+            approx.convertTo(cnt, CvType.CV_32S);
+
+            fingerTips.addAll(this.findFingerTips(approx.toList(), hand));
         }
+        Mat handWithContour = Util.drawContours(im, contours, new Scalar(0, 0, 255));
+        ImgLogger.info("11_contour.jpg", handWithContour);
 
-        Mat hand_with_finger_tips = Util.drawPoints(hand_with_contour, finger_tips, new Scalar(255, 0, 0));
+        Mat handWithFingerTips = Util.drawPoints(handWithContour, fingerTips, new Scalar(255, 0, 0));
 
-        ImgLogger.info("12_finger_tips.jpg", hand_with_finger_tips);
-        hand_with_finger_tips.assignTo(im);  // so that the caller can have the `im` with contour and fingertip painted
+        ImgLogger.info("12_finger_tips.jpg", handWithFingerTips);
+        handWithFingerTips.assignTo(im);  // so that the caller can have the `im` with contour and fingertip painted
 
-        return finger_tips;
+        return fingerTips;
     }
 
     private List<Point> findFingerTips(List<Point> contour, Mat hand) {
         int len = contour.size();
 
-        List<Point> ret = new ArrayList<>();
-        List<Point> cache = new ArrayList<>();
-        double cacheY = 0.0;
-        double lastY = contour.get(0).y;
-
-        for (int i = 2; i < len; ++i) {
-            Point pt = contour.get(i);
-
-            if (cache.isEmpty()) { cacheY = pt.y; }
-
-            if (pt.y == cacheY) {
-                cache.add(pt);
-            } else {
-
-                if (cacheY >= lastY && cacheY >= pt.y                // 1. is local lowest point
-                        && cache.size() < Config.FINGER_TIP_WIDTH           // 2. not too long
-                        ) {
-
-                    Point aver = Util.averPoint(cache);
-                    if (hand.get((int) aver.y - 1, (int) aver.x)[0] > 0){ // 3. is lower bound
-                        ret.add(aver);
-                    }
-                }
-                cache.clear();
-                lastY = cacheY;
-                i -= 1;
-            }
-        }
-
-        return ret;
-    }
-
-    private List<Point> findFingerTipsOld(MatOfPoint contour, Mat hand) {
-        /*
-         * @deprecated
-         */
-        List<Point> contour_pt = contour.toList();
-        int step = Config.FINGER_TIP_STEP;
-        int len = contour_pt.size();
-
-        ArrayList<Integer> finger_tips_ind = new ArrayList<>();
+        Point[] diff_n = new Point[len];  // vector_this_pt_to_next
+        Point[] diff_p = new Point[len];  // vector_this_pt_to_prev, = -diff_n[i - 1], preserved for convenience
+        double[] dist = new double[len]; // |<vector_this_pt_to_next>|
 
         for (int i = 0; i < len; ++i) {
-            Point pt = contour_pt.get(i);
-            Point ahead = contour_pt.get((i + step) % len);
-            Point behind = contour_pt.get((i - step) % len < 0 ? (i - step) % len + len : (i - step) % len);
+            int next_i = (i == len - 1) ? 0 : (i + 1);
+            int prev_i = (i == 0) ? (len - 1) : (i - 1);
 
-            int center_x = (int) (ahead.x + behind.x + pt.x) / 3;
-            int center_y = (int) (ahead.y + behind.y + pt.y) / 3;
+            Point p = contour.get(i), next = contour.get(next_i), prev = contour.get(prev_i);
 
-            if (center_y > pt.y) {
-                continue;
-            }
-
-            if ((int) hand.get(center_y, center_x)[0] == 0) {
-                continue;
-            }
-
-            double cos = Util.intersectCos(contour_pt.get(i), ahead, behind);
-
-            if (cos > 0.7) {
-                continue;
-            }
-
-            finger_tips_ind.add(i);
+            diff_n[i] = new Point(next.x - p.x, next.y - p.y);
+            diff_p[i] = new Point(prev.x - p.x, prev.y - p.y);
+            dist[i] = Math.sqrt(diff_n[i].x * diff_n[i].x + diff_n[i].y * diff_n[i].y);
         }
 
-        List<Integer> finger_tips_ind_separate = this.mergeNeighbors(finger_tips_ind, Config.FINGER_TIP_WIDTH);
+        boolean[] isConvex = new boolean[len];
+        double[] cos = new double[len]; // [0, 1], cos(<vector_this_pt_to_next>)
+        double[] tan = new double[len]; // (-inf, +inf), tan(<vector_this_pt_to_next>)
+        // tan:  | -1
+        //       |
+        // 0 ----+----> row
+        //       |
+        //  -1   |  1
+        //       v col
+        for (int i = 0; i < len; ++i) {
+            int next_i = (i == len - 1) ? 0 : (i + 1);
+            int prev_i = (i == 0) ? (len - 1) : (i - 1);
 
-        // FIXME: can't use stream until android sdk 24
-        // return finger_tips_ind_separate.stream().map(contour_pt::get).collect(Collectors.toList());
+            Point p = contour.get(i), next = contour.get(next_i), prev = contour.get(prev_i);
+
+            isConvex[i] = isConvexPoint(p, prev, next, hand);
+
+            if (isConvex[i]) {
+                tan[i] = diff_n[i].y / diff_n[i].x; // maybe infinity
+                cos[i] = Util.intersectCos(p, prev, next);
+            } // otherwise skip the calculation
+        }
+
         List<Point> ret = new ArrayList<>();
-        for (Integer ind: finger_tips_ind_separate) { ret.add(contour_pt.get(ind)); }
-        return ret;
-    }
+        for (int i = 0; i < len; ++i) {
+            if (!isConvex[i]) {
+                continue;
+            }
 
-    private List<Integer> mergeNeighbors(List<Integer> inds, int tolerance) {
-        List<Integer> ret = new ArrayList<>();
-        List<Integer> series = new ArrayList<>();
+            int next_i = (i == len - 1) ? 0 : (i + 1);
 
-        for (int ind : inds) {
-            if (series.isEmpty() || Math.abs(ind - series.get(series.size() - 1)) < tolerance) {
-                series.add(ind);
-            } else {
-                // ret.add(series.stream().reduce(0, (x, y) -> x + y) / series.size());
-                ret.add((int) aver(series));
-                series.clear();
+            boolean isLowestLocal = diff_p[i].y < 0 && diff_n[i].y < 0;
+            boolean goodAngle = cos[i] < 0.8;
+
+            boolean isLowestPair = diff_p[i].y <= 0 && diff_n[next_i].y <= 0;
+
+            boolean isFlat = Math.abs(tan[i]) < 0.5;
+            double distRatio = dist[i] / (double) Config.FINGER_TIP_WIDTH;
+            boolean goodDist = distRatio < 2 && distRatio > 0.5;
+            boolean isColumn = isConvex[i] && isConvex[next_i] && isLowestPair && isFlat && goodDist;
+            boolean isCorner = isConvex[i] && isLowestLocal && goodAngle;
+
+            Point p = contour.get(i);
+            if (isCorner) {
+                ret.add(p.clone());
+            }
+            if (isColumn) {
+                ret.add(new Point(
+                        (p.x + contour.get(next_i).x) / 2.0,
+                        (p.y + contour.get(next_i).y) / 2.0)
+                );
             }
         }
-        if (!series.isEmpty()) {
-            // ret.add(series.stream().reduce(0, (x, y) -> x + y) / series.size());
-            ret.add((int) aver(series));
-        }
         return ret;
     }
-    
-    private double aver(List<Integer> lst) {
-         double sum = 0.0;
-         for (int val: lst) { sum += val; }
-         return sum / lst.size();
+
+    private boolean isConvexPoint(Point p, Point prev, Point next, Mat hand) {
+        Point center = Util.incenter(p, prev, next);
+        double tan_normal = (center.y - p.y) / (center.x - p.x); // maybe infinity
+
+        // 2.414 = tan(67.5), 0.414 = tan(22.5), one-eighth of 360
+        int dx = (Math.abs(tan_normal) > 2.414) ? 0 : (center.x > p.x ? 1 : -1);
+        int dy = (Math.abs(tan_normal) < 0.414) ? 0 : (center.y > p.y ? 1 : -1);
+
+        return center.y < p.y && hand.get((int) p.y + dy, (int) p.x + dx)[0] > 0;
+        // hard to have 100% precision since of the holes in `hand`
     }
 }

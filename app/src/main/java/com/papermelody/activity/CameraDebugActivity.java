@@ -41,6 +41,8 @@ import com.papermelody.widget.CameraDebugView;
 
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
+import org.opencv.core.Range;
+import org.opencv.core.Scalar;
 
 import java.util.Arrays;
 import java.util.List;
@@ -144,6 +146,8 @@ public class CameraDebugActivity extends BaseActivity {
             long t1 = System.currentTimeMillis();
             List<List<Point>> ret = Tap.getAllForDebug(mat);
             long t2 = System.currentTimeMillis();
+
+            mat.submat(new Range(0, (int) mat.size().height / 3), new Range(0, (int) mat.size().width)).setTo(new Scalar(0, 0, 0));
 
             CanvasUtil.setScreenHeight(ViewUtil.getScreenHeight(this));
             canvasCameraDebug.updateInfo(

@@ -113,6 +113,24 @@ public class Util {
         return dot / mod;
     }
 
+
+    public static double pointDist(Point p1, Point p2) {
+        return Math.sqrt((p1.x - p2.x) * (p1.x - p2.x) + (p1.y - p2.y) * (p1.y - p2.y));
+    }
+
+    public static Point incenter(Point p1, Point p2, Point p3) {
+        // incenter of ∆ABC = (|AB| * C + |BC| * A + |AC| * B) / (|AB| + |BC| + |AC|)
+        double d12 = pointDist(p1, p2);
+        double d23 = pointDist(p2, p3);
+        double d13 = pointDist(p1, p3);
+
+        double circum = d12 + d23 + d13;
+        return new Point(
+                (p1.x * d23 + p2.x * d13 + p3.x * d12) / circum,
+                (p1.y * d23 + p2.y * d13 + p3.y * d12) / circum
+        );
+    }
+
     public static Point averPoint(List<Point> points) {
         double x = 0.0, y = 0.0;
         for (Point pt: points) {

@@ -370,7 +370,7 @@ public class OnlineListenActivity extends BaseActivity {
 
     private void initListenFragment() {
         ToastUtil.showShort("下载完成");
-        fragment = ListenFragment.newInstance(fileName);
+        fragment = ListenFragment.newInstance(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS) + "/" + fileName);
         fragmentManager.beginTransaction().add(R.id.container_online_listen, fragment).commit();
         fab.setOnClickListener(startPlayFirst);
     }

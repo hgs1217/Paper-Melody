@@ -12,12 +12,14 @@ public class Comment {
      */
 
     private String author;
-    private String musicID;
+    private Integer authorID;
+    private Integer musicID;
     private String content;
     private String createTime;
 
     public Comment(CommentInfo info) {
         author = info.getAuthor();
+        authorID = info.getAuthorID();
         content = info.getComment();
         createTime = info.getCreateTime();
         musicID = info.getMusicID();
@@ -27,7 +29,11 @@ public class Comment {
         return author;
     }
 
-    public String getMusicID() {
+    public Integer getAuthorID() {
+        return authorID;
+    }
+
+    public Integer getMusicID() {
         return musicID;
     }
 

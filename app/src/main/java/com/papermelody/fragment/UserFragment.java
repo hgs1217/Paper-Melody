@@ -15,13 +15,25 @@ import com.papermelody.R;
 import com.papermelody.activity.FavoriteActivity;
 import com.papermelody.activity.HistoryActivity;
 import com.papermelody.activity.MainActivity;
+import com.papermelody.activity.MessageActivity;
 import com.papermelody.activity.UpProductsActivity;
+import com.papermelody.model.Message;
 import com.papermelody.model.User;
+import com.papermelody.model.response.MessageInfo;
+import com.papermelody.model.response.MessageResponse;
 import com.papermelody.util.App;
+import com.papermelody.util.NetworkFailureHandler;
+import com.papermelody.util.RetrofitClient;
+import com.papermelody.util.SocialSystemAPI;
 import com.papermelody.util.ToastUtil;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by HgS_1217_ on 2017/4/10.
@@ -45,9 +57,12 @@ public class UserFragment extends BaseFragment {
     CardView btnUserUpload;
     @BindView(R.id.btn_user_favorite)
     CardView btnUserFavorite;
+    @BindView(R.id.btn_message)
+    Button btnMessage;
 
     private User user;
     private Context context;
+    private ArrayList<Message> messages;
 
     public static UserFragment newInstance() {
         UserFragment fragment = new UserFragment();
@@ -72,6 +87,10 @@ public class UserFragment extends BaseFragment {
 
     private void initView() {
         updateUser();
+
+        if (App.getUser() != null) {
+            getMessage();
+        }
 
         btnLogIn.setOnClickListener((View v) -> {
             if (user == null) {
@@ -109,6 +128,39 @@ public class UserFragment extends BaseFragment {
                 startActivity(intent);
             }
         });
+        btnMessage.setOnClickListener((View v) -> {
+            if (App.getUser() == null) {
+                ToastUtil.showShort(getString(R.string.not_logged_in));
+            } else {
+                // TODO: 此处可以搞一个新消息通知图标
+                Intent intent = new Intent(context, MessageActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable(Message.SERIAL_MESSAGE, messages);
+                intent.putExtras(bundle);
+                startActivity(intent);
+            }
+        });
+    }
+
+    private void getMessage() {
+        SocialSystemAPI api = RetrofitClient.getSocialSystemAPI();
+        addSubscription(api.getMessages(App.getUser().getUserID())
+                .flatMap(NetworkFailureHandler.httpFailureFilter)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .map(response -> ((MessageResponse) response).getResult())
+                .subscribe(
+                        result -> {
+                            // TODO: 消息数量判断
+
+                            List<MessageInfo> infoList = result.getMessages();
+                            messages = new ArrayList<>();
+                            for (MessageInfo info : infoList) {
+                                messages.add(new Message(info));
+                            }
+                        },
+                        NetworkFailureHandler.basicErrorHandler
+                ));
     }
 
     public void updateUser() {
@@ -123,6 +175,7 @@ public class UserFragment extends BaseFragment {
             textUsername.setText(user.getUsername());
             btnLogIn.setText(R.string.user_log_out);
             btnLogIn.setBackground(getResources().getDrawable(R.drawable.btn_log_out));
+            getMessage();
         }
     }
 }

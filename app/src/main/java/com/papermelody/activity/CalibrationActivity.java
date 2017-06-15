@@ -239,6 +239,7 @@ public class CalibrationActivity extends BaseActivity {
 
         btnCalibrationCancel.setOnClickListener((View v) -> {
             initViewStatus();
+            canCalibration = false;
         });
     }
 

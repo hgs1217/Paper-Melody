@@ -12,20 +12,26 @@ public class CommentInfo {
      */
 
     @SerializedName("musicID")
-    private String musicID;
+    private Integer musicID;
     @SerializedName("author")
     private String author;
+    @SerializedName("authorID")
+    private Integer authorID;
     @SerializedName("createTime")
     private String createTime;
     @SerializedName("comment")
     private String comment;
 
-    public String getMusicID() {
+    public Integer getMusicID() {
         return musicID;
     }
 
     public String getComment() {
         return comment;
+    }
+
+    public Integer getAuthorID() {
+        return authorID;
     }
 
     public String getAuthor() {

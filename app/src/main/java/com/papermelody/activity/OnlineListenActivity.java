@@ -433,18 +433,21 @@ public class OnlineListenActivity extends BaseActivity {
                         String createtime = sDateFormat.format(new java.util.Date().getTime());
                         Log.d("TAG", createtime);
                         createtime = Long.toString(new java.util.Date().getTime());
-                        String author = "AnonymousUser"; //FIXME: 这里先方便上传，不然每次要登录
-                        String musicID = String.valueOf(onlineMusic.getMusicID());
+                        String author = "AnonymousUser"; // FIXME: 这里先方便上传，不然每次要登录
+                        Integer authorID = 0;
+                        Integer musicID = onlineMusic.getMusicID();
                         boolean hasUser = true;
                         try {
                             author = App.getUser().getUsername();
+                            authorID = App.getUser().getUserID();
                         } catch (NullPointerException e) {
                             ToastUtil.showShort("登录了发表评论可以保存记录哦！");
                             hasUser = false;
                         }
 
 
-                        addSubscription(api.uploadComment(musicID, author, comment, createtime)
+                        // FIXME: 不是评论回复的话，设置replyUserID为0，否则为comment的authorID
+                        addSubscription(api.uploadComment(musicID, author, authorID, 0, comment, createtime)
                                 .flatMap(NetworkFailureHandler.httpFailureFilter)
                                 .subscribeOn(Schedulers.io())
                                 .observeOn(AndroidSchedulers.mainThread())

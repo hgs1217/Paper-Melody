@@ -22,7 +22,7 @@ public class CommentResponse extends HttpResponse {
 
         @SerializedName("count")
         private Integer count;
-        @SerializedName("musics")
+        @SerializedName("comments")
         private List<CommentInfo> comments;
 
         public CommentListInfo (Integer count, List<CommentInfo> comments) {

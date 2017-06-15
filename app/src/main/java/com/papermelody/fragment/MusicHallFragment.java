@@ -112,7 +112,7 @@ public class MusicHallFragment extends BaseFragment {
                             initRecyclerView(musics);
                             initBannerView(musics);
                         },
-                        NetworkFailureHandler.loginErrorHandler
+                        NetworkFailureHandler.basicErrorHandler
                 ));
     }
 

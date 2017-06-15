@@ -4,6 +4,7 @@ import android.support.annotation.Nullable;
 
 import com.papermelody.model.response.CommentResponse;
 import com.papermelody.model.response.HttpResponse;
+import com.papermelody.model.response.MessageResponse;
 import com.papermelody.model.response.OnlineMusicListResponse;
 import com.papermelody.model.response.UploadImgResponse;
 import com.papermelody.model.response.UploadMusicResponse;
@@ -95,8 +96,11 @@ public interface SocialSystemAPI {
     // 上传评论
     @FormUrlEncoded
     @POST("upload/comment")
-    Observable<HttpResponse> uploadComment(@Field("musicID") String musicID,
+    Observable<HttpResponse> uploadComment(@Field("musicID") Integer musicID,
                                            @Field("user") String user,
+                                           @Field("userID") Integer userID,
+                                           // 若不是评论回复，replyUserID 值取0
+                                           @Field("replyUserID") Integer replyUserID,
                                            @Field("comment") String comment,
                                            @Field("time") String time);
 
@@ -115,6 +119,10 @@ public interface SocialSystemAPI {
     // 收藏作品获取
     @GET("download/favorites")
     Observable<OnlineMusicListResponse> getFavoriteMusicList(@Query("userID") @Nullable Integer userID);
+
+    // 消息获取
+    @GET("download/messages")
+    Observable<MessageResponse> getMessages(@Query("userID") @Nullable Integer userID);
 
     // 服务器重启
     @GET("reset")

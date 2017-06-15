@@ -76,7 +76,7 @@
                 <LinearLayout
                     android:id="@+id/CommentAnchor"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:orientation="vertical">
 
                     <LinearLayout
@@ -92,28 +92,28 @@
                         <Button
                             android:id="@+id/btn_play_backward"
                             style="?android:attr/buttonBarButtonStyle"
-                            android:layout_width="40dp"
-                            android:layout_height="wrap_content"
-                            android:background="@android:drawable/ic_media_rew"
-                            android:backgroundTint="@color/colorAccent" />
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:background="@drawable/ic_fast_rewind_black_48dp"
+                            android:backgroundTint="@color/colorPrimary" />
 
                         <Button
                             android:id="@+id/btn_play_control"
                             style="?android:attr/buttonBarButtonStyle"
                             android:layout_width="40dp"
-                            android:layout_height="wrap_content"
+                            android:layout_height="40dp"
                             android:layout_marginEnd="10dp"
                             android:layout_marginStart="10dp"
-                            android:background="@android:drawable/ic_media_play"
-                            android:backgroundTint="@color/colorAccent" />
+                            android:background="@drawable/ic_play_circle_outline_white_48dp"
+                            android:backgroundTint="@color/colorPrimary" />
 
                         <Button
                             android:id="@+id/btn_play_forward"
                             style="?android:attr/buttonBarButtonStyle"
-                            android:layout_width="40dp"
-                            android:layout_height="wrap_content"
-                            android:background="@android:drawable/ic_media_ff"
-                            android:backgroundTint="@color/colorAccent" />
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:background="@drawable/ic_fast_forward_black_48dp"
+                            android:backgroundTint="@color/colorPrimary" />
 
                     </LinearLayout>
 

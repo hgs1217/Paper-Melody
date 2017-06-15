@@ -57,8 +57,8 @@ public class UserFragment extends BaseFragment {
     CardView btnUserUpload;
     @BindView(R.id.btn_user_favorite)
     CardView btnUserFavorite;
-    @BindView(R.id.btn_message)
-    Button btnMessage;
+    @BindView(R.id.btn_user_msg)
+    CardView btnMessage;
 
     private User user;
     private Context context;

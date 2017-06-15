@@ -375,7 +375,8 @@ public class PlayActivity extends BaseActivity {
             Date currentTime = new Date();
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddhhmmss");
             fileName = dateFormat.format(currentTime) + ".m4a";
-            File audioFile = new File(getExternalStorageDirectory() + "/Download/" + fileName);  // FIXME: 路径待确定
+            File audioFile = new File(getCacheDir().getAbsolutePath() + "/Download/" + fileName);  // FIXME: 路径待确定
+            Log.i("nib", audioFile.getAbsolutePath());
             mediaRecorder.setOutputFile(audioFile.getAbsolutePath());
             mediaRecorder.prepare();
             mediaRecorder.start();
@@ -407,9 +408,6 @@ public class PlayActivity extends BaseActivity {
         }
 
         btnPlayOver.setOnClickListener((View v) -> {
-            /*先假装生成一个midi文件（实际上是从assets里复制的），
-              存放在应用的数据目录（data/data/com.papermelody/）下*/
-            //copyMusicToData();
             mediaRecorder.stop();
             Intent intent = new Intent(this, PlayListenActivity.class);
             intent.putExtra(FILENAME, fileName);

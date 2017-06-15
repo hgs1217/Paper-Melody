@@ -103,6 +103,44 @@
     </android.support.v7.widget.CardView>
 
     <android.support.v7.widget.CardView
+        android:id="@+id/btn_user_msg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:foreground="?attr/selectableItemBackground"
+        card_view:cardBackgroundColor="@color/card_view_background"
+        card_view:cardCornerRadius="0dp"
+        card_view:cardElevation="2dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp">
+
+            <ImageView
+                android:id="@+id/img_user_msg"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="20dp"
+                android:contentDescription="@string/user_info"
+                android:src="@drawable/ic_mail_outline_black_48dp"
+                android:tint="@color/colorPrimary" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@id/img_user_msg"
+                android:paddingEnd="0dp"
+                android:paddingStart="10dp"
+                android:text="@string/user_msg"
+                android:textColor="@color/textPrimary" />
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
         android:id="@+id/btn_user_history"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -216,10 +254,10 @@
 
     </android.support.v7.widget.CardView>
 
-    <Button
-        android:id="@+id/btn_message"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="消息通知"/>
+    <!--<Button-->
+    <!--android:id="@+id/btn_message"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:text="消息通知"/>-->
 
 </LinearLayout>

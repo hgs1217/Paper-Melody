@@ -24,8 +24,11 @@
     <string name="download_failed">下载失败</string>
     <string name="upload_failed">上传失败T.T</string>
     <string name="play_over">弹奏结束</string>
+    <string name="re_play">重新弹奏</string>
+    <string name="confirm_quit">确定要放弃保存和上传吗？</string>
+    <string name="confirm_quit_upload">确定要放弃上传吗？</string>
     <string name="tip_download_before">先下载才能播放哦</string>
-    <string name="save_to_local">下载</string>
+    <string name="save_to_local">保存到本地</string>
     <string name="picture">图片</string>
     <string name="downloading">下载中……</string>
     <string name="file_exist">文件已经存在啦</string>
@@ -53,6 +56,7 @@
     <string name="about">关于</string>
     <string name="view_tutorial">浏览教程</string>
     <string name="user_info">用户信息</string>
+    <string name="user_msg">消息通知</string>
     <string name="history_musics">历史作品</string>
     <string name="upload_musics">上传作品</string>
     <string name="favorite_musics">收藏作品</string>

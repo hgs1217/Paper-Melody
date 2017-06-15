@@ -120,7 +120,9 @@ public class OnlineListenActivity extends BaseActivity {
 //         获取从音乐圈传入的onlineMusic实例
         onlineMusic = (OnlineMusic) intent.getSerializableExtra(OnlineMusic.SERIAL_ONLINEMUSIC);
 
-        fileName = onlineMusic.getFilename();
+        // TODO: filename得到的是"link*"
+        fileName = "Kissbye.mid";
+//        fileName = onlineMusic.getFilename();
         api = RetrofitClient.getSocialSystemAPI();
         dmReceiver = new DMReceiver();
         intentFilter = new IntentFilter();
@@ -151,17 +153,17 @@ public class OnlineListenActivity extends BaseActivity {
             animatorSet.start();
             fab.setVisibility(View.INVISIBLE);
             btnPlayCtrl.setOnClickListener(pausePlay);
-            btnPlayCtrl.setBackground(getDrawable(android.R.drawable.ic_media_pause));
+            btnPlayCtrl.setBackground(getDrawable(R.drawable.ic_pause_circle_outline_white_48dp));
         };
         startPlay = (View v) -> {
             fragment.starPlay();
             btnPlayCtrl.setOnClickListener(pausePlay);
-            btnPlayCtrl.setBackground(getDrawable(android.R.drawable.ic_media_pause));
+            btnPlayCtrl.setBackground(getDrawable(R.drawable.ic_pause_circle_outline_white_48dp));
         };
         pausePlay = (View v) -> {
             fragment.pausePlay();
             btnPlayCtrl.setOnClickListener(startPlay);
-            btnPlayCtrl.setBackground(getDrawable(android.R.drawable.ic_media_play));
+            btnPlayCtrl.setBackground(getDrawable(R.drawable.ic_play_circle_outline_white_48dp));
         };
         timerTask = new TimerTask() {
             @Override
@@ -212,14 +214,15 @@ public class OnlineListenActivity extends BaseActivity {
                 ToastUtil.showShort(getString(R.string.not_logged_in));
             }
         });
-        File file = new File(getExternalStorageDirectory() + "/Download/" + fileName);
+        File file = new File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS) + "/" + fileName);
+        Log.i("nib", file.getAbsolutePath());
         fileExist = file.exists();
         if (fileExist) {
+            Log.i("nib", "file exsits");
             initListenFragment();
         } else {
+            Log.i("nib", "downloading");
             downloadMusic();
-//            downloadFile();       // TODO: 已经改用Retrofit获取格式，暂时没用，可以删除
-//            timer.schedule(timerTask, 0, 100);
         }
 
         btnPlayBack.setOnClickListener((View v) -> {
@@ -293,9 +296,9 @@ public class OnlineListenActivity extends BaseActivity {
 
     private void updateUpvoteIcon() {
         if (isUpvoted) {
-            btnUpvote.setBackground(getDrawable(R.drawable.ic_thumb_up_white_18dp));  // FIXME: 白色图标和背景重合，会消失
+            btnUpvote.setBackground(getDrawable(R.drawable.ic_favorite_black_48dp));  // FIXME: 白色图标和背景重合，会消失
         } else {
-            btnUpvote.setBackground(getDrawable(R.drawable.ic_thumb_up_black_18dp));
+            btnUpvote.setBackground(getDrawable(R.drawable.ic_favorite_border_black_48dp));
         }
     }
 
@@ -323,8 +326,10 @@ public class OnlineListenActivity extends BaseActivity {
      */
     private boolean writeResponseBodyToDisk(ResponseBody body) {
         try {
-            // todo change the file location/name according to your needs
-            File file = new File(getExternalStorageDirectory() + "/Download/" + fileName);
+            // TODO: error code 404
+            Log.i("nib", fileName);
+            File file = new File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS) + "/" + fileName);
+            Log.i("nib", file.getAbsolutePath());
             if (file.isFile() && file.exists()) {
                 file.delete();
             }

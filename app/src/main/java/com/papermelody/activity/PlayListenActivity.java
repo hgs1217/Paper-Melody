@@ -20,7 +20,9 @@ import android.widget.RelativeLayout;
 import com.papermelody.R;
 import com.papermelody.fragment.ListenFragment;
 import com.papermelody.model.LocalMusic;
+import com.papermelody.util.ToastUtil;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
@@ -52,8 +54,10 @@ public class PlayListenActivity extends BaseActivity {
     Button btnPlayFor;
     @BindView(R.id.btn_upload)
     Button btnUpload;
-    @BindView(R.id.btn_quit_upload)
-    Button btnQuitUpload;
+    @BindView(R.id.btn_replay)
+    Button btnReplay;
+    @BindView(R.id.btn_save_to_local)
+    Button btnSaveToLocal;
     @BindView(R.id.layout_play_listen)
     RelativeLayout layoutPlayListen;
     @BindView(R.id.container_play_listen)
@@ -65,6 +69,7 @@ public class PlayListenActivity extends BaseActivity {
     private View.OnClickListener startPlay, pausePlay;
     private String fileName = "";
     private LocalMusic localMusic;
+    private long lastClickTime = 0;
 
 // TODO:   没有经过调试，可能会有bug
 
@@ -74,13 +79,16 @@ public class PlayListenActivity extends BaseActivity {
 
         Intent intent = getIntent();
         fileName = intent.getStringExtra(PlayActivity.FILENAME);
-//        localMusic = ???
 
 //        fileName = "Kissbye.mid";
+        initView();
+    }
+
+    private void initView() {
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.setNavigationOnClickListener((View v) -> {
-            finish();
+            confirmQuit();
         });
         fragmentManager = getSupportFragmentManager();
         transaction = fragmentManager.beginTransaction();
@@ -90,12 +98,12 @@ public class PlayListenActivity extends BaseActivity {
         startPlay = (View v) -> {
             fragment.starPlay();
             btnPlayCtrl.setOnClickListener(pausePlay);
-            btnPlayCtrl.setBackground(getDrawable(android.R.drawable.ic_media_pause));
+            btnPlayCtrl.setBackground(getDrawable(R.drawable.ic_pause_circle_outline_white_48dp));
         };
         pausePlay = (View v) -> {
             fragment.pausePlay();
             btnPlayCtrl.setOnClickListener(startPlay);
-            btnPlayCtrl.setBackground(getDrawable(android.R.drawable.ic_media_play));
+            btnPlayCtrl.setBackground(getDrawable(R.drawable.ic_play_circle_outline_white_48dp));
         };
         btnPlayCtrl.setOnClickListener(pausePlay);
         btnPlayBack.setOnClickListener((View v) -> {
@@ -124,7 +132,7 @@ public class PlayListenActivity extends BaseActivity {
             AnimatorSet animatorSet = new AnimatorSet();
             animatorSet.playTogether(anim1, anim2);
             animatorSet.start();
-            btnPlayCtrl.setBackground(getDrawable(android.R.drawable.ic_media_pause));
+            btnPlayCtrl.setBackground(getDrawable(R.drawable.ic_pause_circle_outline_white_48dp));
         });
         ctl.setTitle(getString(R.string.play_listen));
         ctl.setExpandedTitleMargin(10, 0, 0, 15);
@@ -135,18 +143,45 @@ public class PlayListenActivity extends BaseActivity {
             intent1.putExtra(PlayActivity.FILENAME, fileName);
             startActivity(intent1);
         });
-        btnQuitUpload.setOnClickListener((View v) -> {
+        btnReplay.setOnClickListener((View v) -> {
             Intent intent2 = new Intent();
-            intent2.setClass(this, MainActivity.class);
+            intent2.setClass(this, CalibrationActivity.class);
             startActivity(intent2);
             finish();
         });
+        btnSaveToLocal.setOnClickListener((View v) -> {
+            Log.i("nib", getFilesDir().getAbsolutePath() + "/" + fileName);
+            Log.i("nib", getExternalFilesDir(fileName).getAbsolutePath());
+            copyToAndroidData(getFilesDir().getAbsolutePath() + fileName,
+                    getExternalFilesDir(fileName).getAbsolutePath());
+        });
+    }
+
+    private void confirmQuit() {
+        long currentTime = System.currentTimeMillis();
+        if (currentTime - lastClickTime > 2000) {
+            ToastUtil.showShort(R.string.confirm_quit);
+            lastClickTime = currentTime;
+        } else {
+            deleteCache();
+            finish();
+        }
+    }
+
+    private void deleteCache() {
+        File file = new File(getCacheDir().getAbsolutePath() + "/" + fileName);
+        try {
+            file.delete();
+        } catch (Exception e) {
+            Log.i("nib", e.toString());
+        }
     }
 
     @Override
     public void onBackPressed() {
-        // TODO: @ssb 做一个确认提示框，是否放弃更改
-        finish();
+        // 再次点击退出
+        Log.i("nib", "back pressed");
+        confirmQuit();
     }
 
     @Override
@@ -154,8 +189,8 @@ public class PlayListenActivity extends BaseActivity {
         return R.layout.activity_play_listen;
     }
 
-    //    从data/data/packagename复制到sdcard/Android/data/packagename
-//    以便于其他应用访问，同时也属于应用数据
+    //    从data/data/packagename/caches/复制到sdcard/Android/data/packagename/files/
+//    以便于其他应用访问，同时也属于应用私有数据
     private void copyToAndroidData(String sourcePath, String destPath) {
         Log.i("nib", "dest: " + destPath + "\n" + "source:" + sourcePath);
         try {
@@ -170,7 +205,7 @@ public class PlayListenActivity extends BaseActivity {
             outputStream.close();
             Log.i("nib", "复制完成");
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.i("nib", e.toString());
         }
     }
 }

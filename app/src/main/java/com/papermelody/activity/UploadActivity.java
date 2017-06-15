@@ -66,6 +66,7 @@ public class UploadActivity extends BaseActivity {
     private String filePath = null;
     private String imgName = "";
     private String fileName = "";
+    private long lastClickTime = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,7 +84,7 @@ public class UploadActivity extends BaseActivity {
         setSupportActionBar(toolbarUpload);
         if (getSupportActionBar() != null) getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbarUpload.setNavigationOnClickListener((View v) -> {
-            finish();
+            confirmQuit();
         });
         Log.i("nib", "view initialized");
         imgUpload.setOnClickListener((View v) -> {
@@ -119,6 +120,7 @@ public class UploadActivity extends BaseActivity {
                     String imgPath = StorageUtil.imageGetPath(this, selectedImage);
                     Log.d("TESTPATH", String.valueOf(imgPath));
                     Picasso.with(this).load(selectedImage).into(imgUpload);
+                    imgUpload.setScaleType(ImageView.ScaleType.CENTER_CROP);
                     filePath = imgPath;
                 }
                 break;
@@ -192,7 +194,9 @@ public class UploadActivity extends BaseActivity {
                 .subscribe(
                         imgName -> {
                             this.imgName = imgName;
-                            uploadMusicFile(Environment.getExternalStorageDirectory() + "/Download/" + fileName);
+                            // TODO: 路径不知道对不对
+                            Log.i("nib", getCacheDir().getAbsolutePath() + "/" + fileName);
+                            uploadMusicFile(getCacheDir().getAbsolutePath() + "/" + fileName);
 
                             /*if (errorCode == 0) {
                                 Log.i("nib", "errCode==0");
@@ -318,6 +322,23 @@ public class UploadActivity extends BaseActivity {
             e.printStackTrace();
             Log.i("nib", "failed");
             return false;
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        // 再次点击退出
+        Log.i("nib", "back pressed");
+        confirmQuit();
+    }
+
+    private void confirmQuit() {
+        long currentTime = System.currentTimeMillis();
+        if (currentTime - lastClickTime > 2000) {
+            ToastUtil.showShort(R.string.confirm_quit);
+            lastClickTime = currentTime;
+        } else {
+            finish();
         }
     }
 

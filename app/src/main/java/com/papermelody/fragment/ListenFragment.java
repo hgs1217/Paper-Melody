@@ -56,12 +56,12 @@ public class ListenFragment extends BaseFragment {
         filename = getArguments().getString(FILENAME);
         playState = false;
         try {
-            mediaPlayer.setDataSource(getExternalStorageDirectory() + "/" +
-                    Environment.DIRECTORY_DOWNLOADS + "/" + filename);
+            mediaPlayer.setDataSource(getContext()
+                    .getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS) + "/" + filename);
             mediaPlayer.prepare();
         } catch (IOException e) {
-            Log.i("nib", getExternalStorageDirectory() + "/" +
-                    Environment.DIRECTORY_DOWNLOADS + "/" + filename);
+            Log.i("nib", getContext()
+                    .getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS) + "/" + filename);
             ToastUtil.showShort(R.string.unable_to_play);
         }
     }

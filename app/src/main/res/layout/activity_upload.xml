@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
+    android:background="@color/layout_background"
     tools:context="com.papermelody.activity.UploadActivity">
 
     <android.support.design.widget.AppBarLayout
@@ -69,7 +70,7 @@
             android:layout_marginStart="5dp"
             android:background="@drawable/image_border"
             android:contentDescription="@string/picture"
-            android:scaleType="fitXY"
+            android:scaleType="centerInside"
             android:src="@drawable/ic_add_to_photos_black_48dp" />
 
     </RelativeLayout>

@@ -327,7 +327,7 @@ public class CalibrationActivity extends BaseActivity {
     private void setUpCameraOutputs(int width, int height) {
 
         cameraManager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
-        cameraID = String.valueOf(CameraCharacteristics.LENS_FACING_FRONT);  //前摄像头
+        cameraID = String.valueOf(CameraCharacteristics.LENS_FACING_BACK);  //前摄像头
         ImageProcessor.initProcessor();
 
         try {

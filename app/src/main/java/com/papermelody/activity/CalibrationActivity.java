@@ -217,7 +217,6 @@ public class CalibrationActivity extends BaseActivity {
         startBackgroundThread();
         viewCalibration.setSurfaceTextureListener(surfaceTextureListener);
 
-
         initView();
     }
 
@@ -239,7 +238,6 @@ public class CalibrationActivity extends BaseActivity {
 
         btnCalibrationCancel.setOnClickListener((View v) -> {
             initViewStatus();
-            canCalibration = false;
         });
     }
 
@@ -261,13 +259,11 @@ public class CalibrationActivity extends BaseActivity {
      */
     private void processImage(Image image) {
 
-        // FIXME: 标定现在卡顿现象十分严重
-
-        // FIXME: 暂时调慢了标定视频帧率
+        // FIXME: 标定原帧率卡顿严重，暂时调慢了标定视频帧率，如果标定算法能优化则优化，不能的话就这样吧
         cnt++;
-        //if (cnt % 2 != 0) {
-            //return;
-        //}
+        if (cnt % 2 != 0) {
+            return;
+        }
 
         Mat mat = ImageUtil.imageToBgr(image);
         calibrationResult = ImageProcessor.getCalibrationCoordinate(mat, targetHeightStart, targetHeightEnd);
@@ -349,13 +345,10 @@ public class CalibrationActivity extends BaseActivity {
             imageReader.setOnImageAvailableListener((reader) -> {
                 /* 当获取到图片后，对图片进行操作 */
 
-                if (!canCalibration) {
-                    return;
-                }
                 Image image = null;
                 try {
                     image = imageReader.acquireLatestImage();
-                    if (image == null) {
+                    if (!canCalibration || image == null) {
                         return;
                     }
                     processImage(image);

@@ -60,11 +60,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
 
 import butterknife.BindView;
-
-import static android.os.Environment.getExternalStorageDirectory;
 
 /**
  * Created by HgS_1217_ on 2017/3/18.
@@ -423,7 +420,6 @@ public class PlayActivity extends BaseActivity {
         for (int i = 0; i < keys.length; ++i) {
             voiceId[i] = soundPool.load(this, voiceResId[i], 1);
 
-            // FIXME: 等键盘配置好了再打开吧
             /*final int fi = i;
             keys[i].setOnClickListener((View v) -> {
                 playSound(fi);
@@ -676,8 +672,7 @@ public class PlayActivity extends BaseActivity {
     public void playSound(int keyID) {
         soundPool.play(voiceId[keyID], 1, 1, 0, 0, 1);
 
-        // FIXME: 动画效果，当键盘配置好之后可以开启
-        /*new Thread(new Runnable() {
+        new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
@@ -696,7 +691,7 @@ public class PlayActivity extends BaseActivity {
                     e.printStackTrace();
                 }
             }
-        }).start();*/
+        }).start();
     }
 
     @Override

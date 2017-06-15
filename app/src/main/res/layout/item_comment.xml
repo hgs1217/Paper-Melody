@@ -75,6 +75,7 @@
 
         <android.support.v7.widget.CardView
             android:id="@+id/subComment"
+            android:visibility="visible"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"
@@ -94,6 +95,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:contentPaddingLeft="7dp"
+                app:cardBackgroundColor="#F5F5F5"
                 app:cardCornerRadius="8dp"
                 app:contentPadding="6dp">
 

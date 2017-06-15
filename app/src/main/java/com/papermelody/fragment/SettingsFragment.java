@@ -60,6 +60,7 @@ public class SettingsFragment extends BaseFragment {
             startActivity(intent);
         });
 
+
         btn_developer.setOnClickListener((View v) -> {
             Intent intent = new Intent(getActivity(), SettingsDevActivity.class);
             startActivity(intent);

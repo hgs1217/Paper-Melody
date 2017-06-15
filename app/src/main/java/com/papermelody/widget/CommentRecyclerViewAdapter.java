@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.papermelody.R;
+import com.papermelody.activity.OnlineListenActivity;
 import com.papermelody.model.Comment;
 import com.papermelody.util.ToastUtil;
 
@@ -126,7 +127,7 @@ public class CommentRecyclerViewAdapter extends RecyclerView.Adapter<CommentRecy
             replyButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //   contextViewH.focusOnEdit(name);
+                    ((OnlineListenActivity)contextViewH).focusOnEdit(name);
                     ToastUtil.showShort("REPLY to " + name);
                 }
             });

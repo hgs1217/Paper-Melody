@@ -8,3 +8,4 @@
 .externalNativeBuild
 /openCVLibrary320
 /app/src/main/jniLibs
+*.bak

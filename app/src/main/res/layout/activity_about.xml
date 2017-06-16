@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_about"
     android:layout_width="match_parent"
-    android:layout_height="300dp"
+    android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:orientation="vertical"
     tools:context="com.papermelody.activity.AboutActivity">
@@ -22,7 +22,7 @@
     <WebView
         android:id="@+id/webview"
         android:layout_width="match_parent"
-        android:layout_height="200dp" />
+        android:layout_height="wrap_content" />
 
 
 </LinearLayout>

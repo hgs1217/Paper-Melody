@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,7 +63,7 @@ public class UserFragment extends BaseFragment {
     private User user;
     private Context context;
     private ArrayList<Message> messages;
-    private boolean hasNews = false;
+    private int newsNum = 0;
 
     public static UserFragment newInstance() {
         UserFragment fragment = new UserFragment();
@@ -151,31 +150,34 @@ public class UserFragment extends BaseFragment {
                 .map(response -> ((MessageResponse) response).getResult())
                 .subscribe(
                         result -> {
-                            Integer count = result.getCount();
-                            if (count != 0) {
-                                textMsgCount.setVisibility(View.VISIBLE);
-                                textMsgCount.setText(String.valueOf(count));
-                            } else if (count > 99) {
-                                textMsgCount.setVisibility(View.VISIBLE);
-                                textMsgCount.setText(getString(R.string.over99));
-                            } else {
-                                textMsgCount.setVisibility(View.INVISIBLE);
-
-                            }
+                            newsNum = result.getNewMsgNum();
+                            updateMsgCount();
                         },
                         NetworkFailureHandler.basicErrorHandler
                 ));
     }
 
+    private void updateMsgCount() {
+        if (newsNum > 0 && newsNum <= 99) {
+            textMsgCount.setVisibility(View.VISIBLE);
+            textMsgCount.setText(String.valueOf(newsNum));
+        } else if (newsNum > 99) {
+            textMsgCount.setVisibility(View.VISIBLE);
+            textMsgCount.setText(getString(R.string.over99));
+        } else {
+            textMsgCount.setVisibility(View.INVISIBLE);
+        }
+    }
+
     public void updateUser() {
         user = App.getUser();
         if (user == null) {
-            Log.d("TEST2", "TEST2");
             textUsername.setText(R.string.un_log_in);
             btnLogIn.setText(R.string.user_log_in);
             btnLogIn.setBackground(getResources().getDrawable(R.drawable.btn_log_in));
+            newsNum = 0;
+            updateMsgCount();
         } else {
-            Log.d("TEST3", user.getUsername());
             textUsername.setText(user.getUsername());
             btnLogIn.setText(R.string.user_log_out);
             btnLogIn.setBackground(getResources().getDrawable(R.drawable.btn_log_out));

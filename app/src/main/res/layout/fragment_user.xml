@@ -141,6 +141,7 @@
                 android:id="@+id/text_msg_count"
                 android:layout_width="wrap_content"
                 android:minWidth="20dp"
+                android:visibility="invisible"
                 android:textAlignment="center"
                 android:layout_height="20dp"
                 android:layout_alignParentEnd="true"
@@ -266,12 +267,5 @@
         </RelativeLayout>
 
     </android.support.v7.widget.CardView>
-
-    <TextView
-        android:id="@+id/text_news"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="20sp" />
-
 
 </LinearLayout>

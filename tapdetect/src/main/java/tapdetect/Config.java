@@ -10,15 +10,15 @@ package tapdetect;
 import org.opencv.core.Scalar;
 
 public class Config {
-    // deprecated
+    @Deprecated
     public static Scalar[] FINGER_COLOR_RANGE_SM = {new Scalar(0, 150, 100), new Scalar(255, 160, 130)};
-    // deprecated
+    @Deprecated
     public static Scalar[] FINGER_COLOR_RANGE_LG = {new Scalar(0, 145, 100), new Scalar(255, 165, 140)};
 
     public static int IM_HEIGHT = 250;
     public static int TAP_THRESHOLD_ROW = 160;
     public static int HAND_AREA_MIN = 300;
-    public static int FINGER_TIP_STEP = 10;  // deprecated
+    @Deprecated public static int FINGER_TIP_STEP = 10;
     public static int FINGER_TIP_WIDTH = 15;
 
     // max distance the finger tip could move between 2 frames
@@ -30,9 +30,9 @@ public class Config {
     public static int PROCESS_INTERVAL_MS = 50;
 
     // 0-255, pixels from background substractor with intensity larger than this are regarded as moving
-    public static int FINGER_FG_THRESHOLD = 60;
+    @Deprecated public static int FINGER_FG_THRESHOLD = 60;
 
     public static double[][] FINGER_COLOR_RANGE = {{0, 135, 100}, {255, 142, 130}};
-    public static double[] FINGER_COLOR = {128, 150, 115};
-    public static double[] FINGER_COLOR_TOLERANCE = {128, 5, 10};
+    public static double[] FINGER_COLOR = {128, 145, 115};
+    public static double[] FINGER_COLOR_TOLERANCE = {128, 15, 15};
 }

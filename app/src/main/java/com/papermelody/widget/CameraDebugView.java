@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 
 import com.papermelody.util.CanvasUtil;
@@ -15,6 +16,7 @@ import java.util.List;
 
 import tapdetect.ColorRange;
 import tapdetect.TapDetector.TapDetectPoint;
+import tapdetect.facade.Tap;
 
 /**
  * Created by gigaflw on 2017/5/12.
@@ -53,6 +55,10 @@ public class CameraDebugView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
+        if (!Tap.sampleCompleted() && Tap.getSampleWindowContour() != null) {
+            CanvasUtil.drawContour(canvas, Tap.getSampleWindowContour(), Color.MAGENTA);
+        }
+
         if (!handContours.isEmpty()) {
             CanvasUtil.drawContours(canvas, handContours, Color.RED);
         }
@@ -88,7 +94,6 @@ public class CameraDebugView extends View {
                 "Lingering: " + cnt[2] + " pts",
                 "ColorRange: " + ColorRange.getRange()[0],
                 "ColorRange: " + ColorRange.getRange()[1],
-                "updated: " + ColorRange.getUpdatedCnt()
         };
         CanvasUtil.writeText(canvas, to_be_write);
     }

@@ -12,6 +12,7 @@ import org.opencv.imgproc.Imgproc;
 import org.opencv.video.BackgroundSubtractor;
 import org.opencv.video.Video;
 
+@Deprecated
 public class ForegroundDetector {
 
     private final BackgroundSubtractor bs = Video.createBackgroundSubtractorMOG2();

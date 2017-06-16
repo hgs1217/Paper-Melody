@@ -1,27 +1,56 @@
 package tapdetect;
 
+import android.util.Log;
+
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
 import org.opencv.core.Scalar;
 
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
-
-/**
- * Created by gigaflower on 2017/6/10.
- */
+import java.util.Queue;
 
 public class ColorRange {
     private static double[][] range =
             {Config.FINGER_COLOR_RANGE[0].clone(), Config.FINGER_COLOR_RANGE[1].clone()};
-    private static double[] center = Config.FINGER_COLOR.clone();
-    private static int updatedCnt = 1;
+    private static Queue<double[]> history = new LinkedList<>();
+    private static int historyCnt = 10;
 
     public static void reset() {
         range[0] = Config.FINGER_COLOR_RANGE[0].clone();
         range[1] = Config.FINGER_COLOR_RANGE[1].clone();
-        center = Config.FINGER_COLOR.clone();
-        updatedCnt = 1;
+        history.clear();
+    }
+
+    public static boolean isStable() {
+        if (history.size() < historyCnt) {
+            return false;
+        }
+
+        double[] max = {0, 0, 0}, min = {256, 256, 256};
+        for (double[] val : history) {
+            for (int i = 0; i < 3; ++i) {
+                max[i] = Math.max(val[i], max[i]);
+                min[i] = Math.min(val[i], min[i]);
+            }
+        }
+
+        // for debug
+        // double[] diff = new double[3];
+        // for (int i = 0; i < 3; ++i) {
+        //    diff[i] = max[i] - min[i];
+        // }
+        // Log.w("colorange diff", Arrays.toString(diff));
+
+        double stableThreshold = 0.5;
+        for (int i = 1; i < 3; ++i) {
+            // do not check Y channel because it changes much more than Cr or Cb
+            if (max[i] - min[i] > stableThreshold) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public static Scalar[] getRange() {
@@ -33,14 +62,6 @@ public class ColorRange {
             }
         }
         return new Scalar[]{new Scalar(ret[0]), new Scalar(ret[1])};
-    }
-
-    public static double[] getCenter() {
-        return center;
-    }
-
-    public static int getUpdatedCnt() {
-        return updatedCnt;
     }
 
     public static void updateRange(Mat im, List<Point> movingPixels) {
@@ -64,9 +85,9 @@ public class ColorRange {
             std[i] = Math.sqrt(std[i] / n - aver[i] * aver[i]);
         }
 
-//        std[0] *= 3;
-//        std[1] *= 2;
-//        std[2] *= 2;  // YCrCb, Y channel has a larger range
+         std[0] *= 2;
+         std[1] *= 1.4;
+         std[2] *= 1.4;  // YCrCb, Y channel has a larger range
 
         // calc new color range
         double[][] newRange = new double[2][3];
@@ -76,11 +97,14 @@ public class ColorRange {
 
             // range[0][i] += (newRange[0][i] - range[0][i]) / updatedCnt;
             // range[1][i] += (newRange[1][i] - range[1][i]) / updatedCnt;
+
             range[0][i] = newRange[0][i];
             range[1][i] = newRange[1][i];
-            center[i] = (range[0][i] + range[1][i]) / 2;
         }
 
-        updatedCnt += 1;
+        if (history.size() == historyCnt) {
+            history.remove();
+        }
+        history.add(aver);
     }
 }

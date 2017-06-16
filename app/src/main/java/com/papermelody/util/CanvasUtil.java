@@ -24,8 +24,6 @@ public class CanvasUtil {
 
     private static int screenHeight = -1;
 
-//    private static Context context;
-
     static {
         pointPaint.setStrokeWidth(10);
         textPaint.setColor(Color.CYAN);
@@ -70,6 +68,20 @@ public class CanvasUtil {
         for (Point pt : points) {
             canvas.drawCircle(transformX(pt.x), transformY(pt.y), 10, pointPaint);
             // subtracted by photoWidth because the point is reversed in X from front camera
+        }
+    }
+
+    public static void drawContour(Canvas canvas, List<Point> contour, int color) {
+        pointPaint.setColor(color);
+
+        int len = contour.size();
+        for (int i = 0; i < len; ++i) {
+            int next_i = (i + 1) % len;
+            Point p = contour.get(i), next = contour.get(next_i);
+
+            canvas.drawLine(
+                    transformX(p.x), transformY(p.y), transformX(next.x), transformY(next.y),
+                    pointPaint);
         }
     }
 

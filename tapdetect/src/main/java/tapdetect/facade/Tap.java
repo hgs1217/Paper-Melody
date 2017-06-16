@@ -17,7 +17,6 @@ import org.opencv.imgproc.Imgproc;
 import tapdetect.ColorRange;
 import tapdetect.Config;
 import tapdetect.FingerDetector;
-import tapdetect.ForegroundDetector;
 import tapdetect.HandDetector;
 import tapdetect.ImgLogger;
 import tapdetect.TapDetector;
@@ -35,11 +34,12 @@ public class Tap {
     private static final HandDetector hd = new HandDetector();
     private static final FingerDetector fd = new FingerDetector();
     private static final TapDetector td = new TapDetector();
-    private static final ForegroundDetector fgd = new ForegroundDetector();
 
+    private static double recoverRatio = 0.0;
     private static long lastProcess = 0;
     private static long processInterval;
     private static List<Point> resultCache = new ArrayList<>();
+    private static List<Point> sampleWindowContour = null;
 
     public static long getProcessInterval() {
         return processInterval;
@@ -87,10 +87,10 @@ public class Tap {
 
         // resize to the standard size
         double recover_ratio = 1.0 / Util.resize(im);
-        Mat fgmask = fgd.getForeground(im);
+        // Mat fgmask = fgd.getForeground(im);
 
         Imgproc.cvtColor(im, im, Imgproc.COLOR_BGR2YCrCb);
-        Mat hand = hd.getHand(im, fgmask);
+        Mat hand = hd.getHand(im, null);
 
         List<Point> fingers = fd.getFingers(im, hand);
         List<Point> taps = td.getTapping(im, fingers);
@@ -124,19 +124,18 @@ public class Tap {
         if (!checkTime()) {
             return resultCache;
         }
-        double recoverRatio = 1.0 / Util.resize(im);
+        recoverRatio = 1.0 / Util.resize(im);
 
-//        Imgproc.blur(im, im, new Size(20, 20));
 
-        Mat fgmask = fgd.getForeground(im);
         Imgproc.cvtColor(im, im, Imgproc.COLOR_BGR2YCrCb);
+        Imgproc.blur(im, im, new Size(10, 10));
 
         if (!Sampler.sampleCompleted()) {
             sample(im);
             // return resultCache;  // FIXME: for debug
         }
 
-        Mat hand = hd.getHand(im, fgmask);
+        Mat hand = hd.getHand(im, null);
 
         List<MatOfPoint> contour = new ArrayList<>();
         List<Point> fingers = fd.getFingers(im, hand, contour);
@@ -177,6 +176,20 @@ public class Tap {
         return ret;
     }
 
+    public static boolean sampleCompleted() {
+        return Sampler.sampleCompleted();
+    }
+
+    public static List<Point> getSampleWindowContour() {
+        if (sampleWindowContour == null && recoverRatio > 0.0) {
+            sampleWindowContour = new ArrayList<>();
+            for (Point p: Sampler.getSampleWindowContour()) {
+                sampleWindowContour.add(new Point(p.x * recoverRatio, p.y * recoverRatio));
+            }
+        }
+        return sampleWindowContour;
+    }
+
     private static boolean checkTime() {
         long t = System.currentTimeMillis();
         if (t - lastProcess < Config.PROCESS_INTERVAL_MS) {
@@ -193,8 +206,8 @@ public class Tap {
         if (!Sampler.isInited()) {
             Sampler.initSampleMask(mat.height(), mat.width());
         }
-
         Sampler.sample(mat);
         return Sampler.sampleCompleted();
     }
+
 }

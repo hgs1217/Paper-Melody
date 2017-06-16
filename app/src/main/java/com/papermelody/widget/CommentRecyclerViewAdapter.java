@@ -194,8 +194,14 @@ public class CommentRecyclerViewAdapter extends RecyclerView.Adapter<CommentRecy
                     date.setTime(Long.parseLong(replyToThis.getCreateTime()));
                     textCommentTine2.setText(sDateFormat.format(date));
                     subComment.setVisibility(View.VISIBLE);
+                } else {
+                    subComment.setVisibility(View.GONE);
                 }
             }
+
+            if (textUserName2.getText().toString().equals(context.getString(R.string.__label)) ||
+                    textUserName2.getText().toString().equals(context.getString(R.string.__labelForSplit)))
+                subComment.setVisibility(View.GONE);
 
             textComment.setText(curComment);
             date.setTime(Long.parseLong(comment.getCreateTime()));

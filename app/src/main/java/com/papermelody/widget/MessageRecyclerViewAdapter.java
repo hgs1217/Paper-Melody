@@ -2,7 +2,6 @@ package com.papermelody.widget;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -80,9 +79,21 @@ public class MessageRecyclerViewAdapter extends RecyclerView.Adapter<MessageRecy
             ButterKnife.bind(this, v);
         }
 
+        private String removeAffiliatedComment(String comment) {
+            String __label = context.getString(R.string.__label);
+            String __labelForSplit = context.getString(R.string.__labelForSplit);
+            if ((!comment.contains(__label)) && (!comment.contains(__labelForSplit)))
+                return comment;
+            String[] splitString = comment.split(__labelForSplit);
+            for (int i = 0; i < splitString.length; ++i) {
+                if (splitString[i] != "") return splitString[i];
+            }
+            return "INTERNAL_ERROR_ON_FETCH_COMMENT";
+        }
+
         private void setView(Message message) {
             textMessageAuthor.setText(message.getAuthor());
-            textMessageContent.setText(message.getMessage());
+            textMessageContent.setText(removeAffiliatedComment(message.getMessage()));
             String createTime = message.getCreateTime();
             if (createTime.contains("-")) {
                 textMessageTime.setText(createTime);

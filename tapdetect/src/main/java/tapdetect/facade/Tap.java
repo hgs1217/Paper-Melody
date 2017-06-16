@@ -31,10 +31,6 @@ public class Tap {
         ImgLogger.silent();
     }
 
-    private static final HandDetector hd = new HandDetector();
-    private static final FingerDetector fd = new FingerDetector();
-    private static final TapDetector td = new TapDetector();
-
     private static double recoverRatio = 0.0;
     private static long lastProcess = 0;
     private static long processInterval;
@@ -87,13 +83,12 @@ public class Tap {
 
         // resize to the standard size
         double recover_ratio = 1.0 / Util.resize(im);
-        // Mat fgmask = fgd.getForeground(im);
 
         Imgproc.cvtColor(im, im, Imgproc.COLOR_BGR2YCrCb);
-        Mat hand = hd.getHand(im, null);
+        Mat hand = HandDetector.getHand(im);
 
-        List<Point> fingers = fd.getFingers(im, hand);
-        List<Point> taps = td.getTapping(im, fingers);
+        List<Point> fingers = FingerDetector.getFingers(im, hand);
+        List<Point> taps = TapDetector.getTapping(im, fingers);
 
         for (Point pt : taps) {
             pt.x *= recover_ratio;
@@ -135,11 +130,11 @@ public class Tap {
             // return resultCache;  // FIXME: for debug
         }
 
-        Mat hand = hd.getHand(im, null);
+        Mat hand = HandDetector.getHand(im);
 
         List<MatOfPoint> contour = new ArrayList<>();
-        List<Point> fingers = fd.getFingers(im, hand, contour);
-        List<TapDetector.TapDetectPoint> taps = td.getTappingAll(im, fingers);
+        List<Point> fingers = FingerDetector.getFingers(im, hand, contour);
+        List<TapDetector.TapDetectPoint> taps = TapDetector.getTappingAll(im, fingers);
 
         if (contoursOutput != null) {
             contoursOutput.clear();

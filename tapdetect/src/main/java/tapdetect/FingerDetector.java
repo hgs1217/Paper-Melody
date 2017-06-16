@@ -19,11 +19,11 @@ import org.opencv.core.Mat;
 import org.opencv.imgproc.Imgproc;
 
 public class FingerDetector {
-    public List<Point> getFingers(Mat im, Mat hand) {
+    public static List<Point> getFingers(Mat im, Mat hand) {
         return getFingers(im, hand, null);
     }
 
-    public List<Point> getFingers(Mat im, Mat hand, List<MatOfPoint> contourOutput) {
+    public static List<Point> getFingers(Mat im, Mat hand, List<MatOfPoint> contourOutput) {
         /**
          * @param: im: A YCrCb image with same shape as `hand`
          * @param: hand: A binary image indicating which pixel is part of hand
@@ -55,7 +55,7 @@ public class FingerDetector {
             approx.convertTo(cnt, CvType.CV_32S);
 
             // apply polygon approximation
-            fingerTips.addAll(this.findFingerTips(approx.toList(), hand));
+            fingerTips.addAll(findFingerTips(approx.toList(), hand));
         }
 
         if (contourOutput != null) {
@@ -65,7 +65,7 @@ public class FingerDetector {
         return fingerTips;
     }
 
-    private List<Point> findFingerTips(List<Point> contour, Mat hand) {
+    private static List<Point> findFingerTips(List<Point> contour, Mat hand) {
         /**
          * @param: contour: A list of the apex of the contour
          * @param: hand: A binary image indicating which pixel is part of hand
@@ -143,7 +143,7 @@ public class FingerDetector {
         return ret;
     }
 
-    private boolean isConvexPoint(Point p, Point prev, Point next, Mat hand) {
+    private static boolean isConvexPoint(Point p, Point prev, Point next, Mat hand) {
         Point center = Util.incenter(p, prev, next);
         double tan_normal = (center.y - p.y) / (center.x - p.x); // maybe infinity
 

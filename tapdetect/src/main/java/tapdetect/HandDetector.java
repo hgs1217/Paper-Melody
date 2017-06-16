@@ -6,13 +6,9 @@
 */
 package tapdetect;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Scalar;
-import org.opencv.core.Point;
 import org.opencv.core.Range;
 import org.opencv.core.CvType;
 import org.opencv.imgproc.Imgproc;
@@ -20,7 +16,7 @@ import org.opencv.imgproc.Imgproc;
 
 public class HandDetector {
 
-    public Mat getHand(Mat im, Mat fgmask) {
+    public static Mat getHand(Mat im) {
         /**
          * @param im: image in YCrCb color space
          * @param fgmask: foreground mask given by `org.opencv.video.BackgroundSubtractor`,
@@ -29,11 +25,11 @@ public class HandDetector {
          * this function will not change `im` or `fgmask`
          * @return: a binary image will white pixels are in range
          */
-        return this.colorRange(im, ColorRange.getRange());
+        return colorRange(im, ColorRange.getRange());
     }
 
 
-    private Mat colorRange(Mat im, Scalar[] colorRange) {
+    private static Mat colorRange(Mat im, Scalar[] colorRange) {
         /**
          *  Get coarse area of hand according to colorRange
          *  @param: colorRange:

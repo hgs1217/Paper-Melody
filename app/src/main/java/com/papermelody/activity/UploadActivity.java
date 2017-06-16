@@ -1,10 +1,8 @@
 package com.papermelody.activity;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -14,8 +12,7 @@ import android.widget.ImageView;
 
 import com.papermelody.R;
 import com.papermelody.model.response.HttpResponse;
-import com.papermelody.model.response.UploadImgResponse;
-import com.papermelody.model.response.UploadMusicResponse;
+import com.papermelody.model.response.UploadResponse;
 import com.papermelody.util.App;
 import com.papermelody.util.NetworkFailureHandler;
 import com.papermelody.util.RetrofitClient;
@@ -62,7 +59,6 @@ public class UploadActivity extends BaseActivity {
     private String name = null;
     private String author = null;
     private Date date = null;
-    private Bitmap bmp = null;
     private String filePath = null;
     private String imgName = "";
     private String fileName = "";
@@ -177,9 +173,8 @@ public class UploadActivity extends BaseActivity {
         if (filePath != null) {
             file = new File(filePath);
         } else {
-            String filename = "test.png";
-            filePath = Environment.getExternalStorageDirectory() + "/Download/" + filename;
-            file = StorageUtil.saveBitmap(filePath, bmp);
+            ToastUtil.showShort("文件路径为空");
+            return;
         }
         Log.d("TESTPATH", filePath);
         RequestBody requestBody = RequestBody.create(MediaType.parse("image/*"), file);
@@ -190,7 +185,7 @@ public class UploadActivity extends BaseActivity {
                 .flatMap(NetworkFailureHandler.httpFailureFilter)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .map(response -> ((UploadImgResponse) response).getImgName())
+                .map(response -> ((UploadResponse) response).getFileName())
                 .subscribe(
                         imgName -> {
                             this.imgName = imgName;
@@ -221,7 +216,7 @@ public class UploadActivity extends BaseActivity {
                 .flatMap(NetworkFailureHandler.httpFailureFilter)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .map(response -> ((UploadMusicResponse) response).getFileName())
+                .map(response -> ((UploadResponse) response).getFileName())
                 .subscribe(
                         musicName -> {
                             uploadMusicInfo(imgName, musicName);

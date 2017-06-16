@@ -138,9 +138,7 @@ public class LogInFragment extends BaseFragment {
     }
 
     private void updateUser(UserResponse.UserInfo userInfo) {
-        User user = new User();
-        user.setUserID(userInfo.getUserID());
-        user.setUsername(userInfo.getName());
+        User user = new User(userInfo, context);
         App.setUser(user);
         MainActivity mainActivity = (MainActivity) getActivity();
         mainActivity.updateFragment(MainActivity.MAIN_USER);

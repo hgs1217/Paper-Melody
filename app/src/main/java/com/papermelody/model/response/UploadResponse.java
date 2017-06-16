@@ -3,13 +3,18 @@ package com.papermelody.model.response;
 import com.google.gson.annotations.SerializedName;
 
 /**
- * Created by Nibius on 2017/5/8.
+ * Created by HgS_1217_ on 2017/5/30.
  */
 
 public class UploadResponse extends HttpResponse {
     /**
-     * 上传文件的响应
+     * 上传音乐的响应
      */
 
+    @SerializedName("fileName")
+    private String fileName;
 
+    public String getFileName() {
+        return fileName;
+    }
 }

@@ -1,6 +1,9 @@
 package com.papermelody.model;
 
-import java.util.ArrayList;
+import android.content.Context;
+
+import com.papermelody.model.response.UserResponse;
+import com.papermelody.util.UrlUtil;
 
 /**
  * Created by HgS_1217_ on 2017/4/10.
@@ -13,9 +16,25 @@ public class User {
 
     private Integer userID;
     private String username;
-    private String photoURL;
+    private String avatarUrl;
+    private String password;
+    private String nickname;
     private String userInfo;
-    private ArrayList<Music> userMusics;
+
+    public User() { }
+
+    public User(UserResponse.UserInfo info, Context context) {
+
+        username = info.getName();
+        userID = info.getUserID();
+        nickname = info.getNickname();
+        password = info.getPassword();
+        if (info.getAvatarName().length() > 0) {
+            avatarUrl = UrlUtil.getAvatarUrl(context, info.getAvatarName());
+        } else {
+            avatarUrl = null;
+        }
+    }
 
     public Integer getUserID() {
         return userID;
@@ -33,12 +52,28 @@ public class User {
         this.username = username;
     }
 
-    public String getPhotoURL() {
-        return photoURL;
+    public String getAvatarUrl() {
+        return avatarUrl;
     }
 
-    public void setPhotoURL(String photoURL) {
-        this.photoURL = photoURL;
+    public void setAvatarUrl(String avatarUrl) {
+        this.avatarUrl = avatarUrl;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getUserInfo() {
@@ -47,13 +82,5 @@ public class User {
 
     public void setUserInfo(String userInfo) {
         this.userInfo = userInfo;
-    }
-
-    public ArrayList<Music> getUserMusics() {
-        return userMusics;
-    }
-
-    public void setUserMusics(ArrayList<Music> userMusics) {
-        this.userMusics = userMusics;
     }
 }

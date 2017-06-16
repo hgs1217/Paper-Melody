@@ -6,8 +6,6 @@ import com.papermelody.model.response.CommentResponse;
 import com.papermelody.model.response.HttpResponse;
 import com.papermelody.model.response.MessageResponse;
 import com.papermelody.model.response.OnlineMusicListResponse;
-import com.papermelody.model.response.UploadImgResponse;
-import com.papermelody.model.response.UploadMusicResponse;
 import com.papermelody.model.response.UploadResponse;
 import com.papermelody.model.response.UpvoteResponse;
 import com.papermelody.model.response.UserResponse;
@@ -47,6 +45,30 @@ public interface SocialSystemAPI {
     Observable<UserResponse> register(@Field("name") String username,
                                       @Field("pw") String password);
 
+    // 修改昵称
+    @FormUrlEncoded
+    @POST("user/nickname")
+    Observable<UserResponse> updateNickname(@Field("userID") Integer userID,
+                                            @Field("nickname") String nickname);
+
+    // 修改密码
+    @FormUrlEncoded
+    @POST("user/password")
+    Observable<UserResponse> updatePassword(@Field("userID") Integer userID,
+                                            @Field("oldPassword") String oldPassword,
+                                            @Field("newPassword") String newPassword);
+
+    // 修改头像文件名称，每次上传完头像后需调用一次该接口
+    @FormUrlEncoded
+    @POST("user/avatar")
+    Observable<UserResponse> updateAvatar(@Field("userID") Integer userID,
+                                          @Field("avatarName") String avatarName);
+
+    // 上传头像
+    @Multipart
+    @POST("upload/avatar")
+    Observable<UploadResponse> uploadAvatar(@Part MultipartBody.Part avatar);
+
     // 上传作品
     @FormUrlEncoded
     @POST("upload/music")
@@ -57,15 +79,15 @@ public interface SocialSystemAPI {
                                            @Field("musicName") String musicName,
                                            @Field("imgName") String imgName);
 
-    // 上传作品图片
+    // 上传作品图片，上传作品前调用
     @Multipart
     @POST("upload/img")
-    Observable<UploadImgResponse> uploadImg(@Part MultipartBody.Part image);
+    Observable<UploadResponse> uploadImg(@Part MultipartBody.Part image);
 
-    // 上传音乐
+    // 上传音乐，上传作品前调用
     @Multipart
     @POST("upload/musicfile")
-    Observable<UploadMusicResponse> uploadMusicFile(@Part MultipartBody.Part file);
+    Observable<UploadResponse> uploadMusicFile(@Part MultipartBody.Part file);
 
     // 音乐圈作品获取
     @GET("onlinemusics")

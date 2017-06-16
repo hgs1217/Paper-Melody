@@ -26,11 +26,17 @@ public class UserResponse extends HttpResponse {
         private String name;
         @SerializedName("password")
         private String password;
+        @SerializedName("nickname")
+        private String nickname;
+        @SerializedName("avatarName")
+        private String avatarName;
 
-        public UserInfo (String name, String pw, Integer id) {
+        public UserInfo (String name, String pw, Integer id, String nickname, String avatarName) {
             userID = id;
             this.name = name;
             password = pw;
+            this.nickname = nickname;
+            this.avatarName = avatarName;
         }
 
         public Integer getUserID() {
@@ -43,6 +49,14 @@ public class UserResponse extends HttpResponse {
 
         public String getPassword() {
             return password;
+        }
+
+        public String getNickname() {
+            return nickname;
+        }
+
+        public String getAvatarName() {
+            return avatarName;
         }
     }
 }

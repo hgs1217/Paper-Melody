@@ -29,6 +29,7 @@ import com.papermelody.fragment.ModeOpernSettingsFragment;
 import com.papermelody.fragment.MusicHallFragment;
 import com.papermelody.fragment.RegisterFragment;
 import com.papermelody.fragment.SettingsFragment;
+import com.papermelody.fragment.UpdateUserInfoFragment;
 import com.papermelody.fragment.UserFragment;
 import com.papermelody.fragment.UserInfoFragment;
 import com.papermelody.widget.NoScrollViewPager;
@@ -62,6 +63,7 @@ public class MainActivity extends BaseActivity {
     public static final int USER_INFO = 7;
     public static final int REGISTER = 8;
     public static final int MESSAGE = 9;
+    public static final int UPDATE_USER_INFO = 10;
 
     private static final int REQUEST_PERMISSION = 1;
 
@@ -123,6 +125,9 @@ public class MainActivity extends BaseActivity {
             case MESSAGE:
                 toolbarTitle.setText(R.string.message);
                 break;
+            case UPDATE_USER_INFO:
+                toolbarTitle.setText(R.string.update_user_info);
+                break;
             default:
                 break;
         }
@@ -134,6 +139,7 @@ public class MainActivity extends BaseActivity {
             case LOG_IN:
             case REGISTER:
             case MESSAGE:
+            case UPDATE_USER_INFO:
                 toolbarIcon.setImageDrawable(getDrawable(R.drawable.back));
                 toolbarIcon.setOnClickListener((view) -> {
                     onBackPressed();
@@ -192,6 +198,7 @@ public class MainActivity extends BaseActivity {
             case USER_INFO:
             case LOG_IN:
             case MESSAGE:
+            case UPDATE_USER_INFO:
                 updateFragment(MAIN_USER);
                 break;
             case REGISTER:
@@ -209,7 +216,7 @@ public class MainActivity extends BaseActivity {
 
     public class TabPagerAdapter extends FragmentStatePagerAdapter {
 
-        private final int pageCount = 10;
+        private final int pageCount = 11;
 
         public TabPagerAdapter(FragmentManager fragmentManager) {
             super(fragmentManager);
@@ -239,6 +246,8 @@ public class MainActivity extends BaseActivity {
                     return RegisterFragment.newInstance();
                 case MESSAGE:
                     return MessageFragment.newInstance();
+                case UPDATE_USER_INFO:
+                    return UpdateUserInfoFragment.newInstance();
                 default:
                     return null;
             }

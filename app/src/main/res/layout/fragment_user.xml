@@ -268,4 +268,10 @@
 
     </android.support.v7.widget.CardView>
 
+    <Button
+        android:id="@+id/btn_update_user_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="修改用户信息"/>
+
 </LinearLayout>

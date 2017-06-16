@@ -57,6 +57,8 @@ public class UserFragment extends BaseFragment {
     CardView btnMessage;
     @BindView(R.id.text_msg_count)
     TextView textMsgCount;
+    @BindView(R.id.btn_update_user_info)
+    Button btnUpdateUserInfo;
 
     public static final String MESSAGE_NUM = "MESSAGE_NUM";
 
@@ -137,6 +139,14 @@ public class UserFragment extends BaseFragment {
             } else {
                 MainActivity activity = (MainActivity) getActivity();
                 activity.updateFragment(MainActivity.MESSAGE);
+            }
+        });
+        btnUpdateUserInfo.setOnClickListener((view) -> {
+            if (App.getUser() == null) {
+                ToastUtil.showShort(getString(R.string.not_logged_in));
+            } else {
+                MainActivity activity = (MainActivity) getActivity();
+                activity.updateFragment(MainActivity.UPDATE_USER_INFO);
             }
         });
     }

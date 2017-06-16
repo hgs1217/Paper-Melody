@@ -431,7 +431,6 @@ public class PlayActivity extends BaseActivity {
         startBackgroundThread();
         viewPlay.setSurfaceTextureListener(surfaceTextureListener);
 
-
         initSoundPool();
         initView();
         initMediaRecorder();
@@ -441,13 +440,14 @@ public class PlayActivity extends BaseActivity {
     public void processImage(Image image) {
         /**
          * Process image here
+         * Calibration process already ends, now we play keys according to tapping points
          */
         if (!Tap.readyForNextFrame()) {
             return;
         }
 
-        TransformResult transformResult = ImageProcessor.getKeyTransform(calibrationResult);
         Mat mat = ImageUtil.imageToBgr(image);
+        TransformResult transformResult = ImageProcessor.getKeyTransform(calibrationResult);
 
         long t1 = System.currentTimeMillis();
         List<Point> tapping = Tap.getAll(mat, canvasPlay.getHandContours(), canvasPlay.getFingerTips());
@@ -649,7 +649,7 @@ public class PlayActivity extends BaseActivity {
     private void setUpCameraOutputs(int width, int height) {
 
         cameraManager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
-        cameraID = String.valueOf(CameraCharacteristics.LENS_FACING_FRONT);  //前摄像头
+        cameraID = String.valueOf(CameraCharacteristics.LENS_FACING_BACK);  //前摄像头
         ImageProcessor.initProcessor();
 
         try {

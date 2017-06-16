@@ -22,6 +22,7 @@ import tapdetect.HandDetector;
 import tapdetect.ImgLogger;
 import tapdetect.TapDetector;
 import tapdetect.Util;
+import tapdetect.Sampler;
 
 public class Tap {
     static {
@@ -72,6 +73,16 @@ public class Tap {
 
 
     public static List<Point> getTaps(Mat im) {
+        /**
+         * @Waring! not implemented completely
+         *
+         * Searching tapping points from `im`
+         * This is the most used func in this facade
+         * @param im: one frame from a video
+         * @return : A list of `Point` indicating the points which
+         *  (1) is regarded as the finger tip
+         *  (2) is regarded as being tapping
+         */
         // TODO: add throttle
 
         // resize to the standard size
@@ -110,13 +121,21 @@ public class Tap {
          *  This function will modify `im` into YCrCb as well as a smaller size
          */
 
-        if (!checkTime()) { return resultCache; }
+        if (!checkTime()) {
+            return resultCache;
+        }
+        double recoverRatio = 1.0 / Util.resize(im);
 
+//        Imgproc.blur(im, im, new Size(20, 20));
 
-        double recover_ratio = 1.0 / Util.resize(im);
         Mat fgmask = fgd.getForeground(im);
-
         Imgproc.cvtColor(im, im, Imgproc.COLOR_BGR2YCrCb);
+
+        if (!Sampler.sampleCompleted()) {
+            sample(im);
+            // return resultCache;  // FIXME: for debug
+        }
+
         Mat hand = hd.getHand(im, fgmask);
 
         List<MatOfPoint> contour = new ArrayList<>();
@@ -127,17 +146,17 @@ public class Tap {
             contoursOutput.clear();
             for (MatOfPoint cnt : contour) {
                 List<Point> cntPt = cnt.toList();
-                for (Point pt: cntPt) {
-                    pt.x *= recover_ratio;
-                    pt.y *= recover_ratio;
+                for (Point pt : cntPt) {
+                    pt.x *= recoverRatio;
+                    pt.y *= recoverRatio;
                 }
                 contoursOutput.add(cntPt);
             }
         }
 
         for (TapDetector.TapDetectPoint pt : taps) {
-            pt.getPoint().x *= recover_ratio;
-            pt.getPoint().y *= recover_ratio;
+            pt.getPoint().x *= recoverRatio;
+            pt.getPoint().y *= recoverRatio;
         }
 
         if (contoursOutput != null) {
@@ -168,5 +187,14 @@ public class Tap {
             lastProcess = t;
             return true;
         }
+    }
+
+    private static boolean sample(Mat mat) {
+        if (!Sampler.isInited()) {
+            Sampler.initSampleMask(mat.height(), mat.width());
+        }
+
+        Sampler.sample(mat);
+        return Sampler.sampleCompleted();
     }
 }

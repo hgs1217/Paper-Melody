@@ -62,7 +62,6 @@ public class FingerDetector {
             contourOutput.clear();
             contourOutput.addAll(contours);
         }
-
         return fingerTips;
     }
 

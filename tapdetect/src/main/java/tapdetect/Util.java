@@ -52,15 +52,17 @@ public class Util {
         //         .collect(Collectors.toList());
 
         List<MatOfPoint> ret = new ArrayList<>();
-        for (MatOfPoint cnt: contours) {
-            if (Imgproc.contourArea(cnt) > area) { ret.add(cnt); }
+        for (MatOfPoint cnt : contours) {
+            if (Imgproc.contourArea(cnt) > area) {
+                ret.add(cnt);
+            }
         }
         return ret;
     }
 
     public static List<Point> contoursToPoints(List<MatOfPoint> contours) {
         List<Point> ret = new ArrayList<>();
-        for (MatOfPoint cnt: contours) {
+        for (MatOfPoint cnt : contours) {
             ret.addAll(cnt.toList());
         }
         return ret;
@@ -74,13 +76,24 @@ public class Util {
     }
 
     public static void drawContourByPoints(Mat im, List<List<Point>> contours, Scalar color) {
-        for (List<Point> contour: contours) {
+        for (List<Point> contour : contours) {
             int len = contour.size();
-            for (int i=0; i < len; ++i) {
+            for (int i = 0; i < len; ++i) {
                 int next_i = (i + 1) % len;
                 Imgproc.line(im, contour.get(i), contour.get(next_i), color, 2);
             }
         }
+    }
+
+    public static void fillContour(Mat im, List<Point> contour, Point seed) {
+        Mat mask = Mat.zeros(new Size(im.width() + 2, im.height() + 2), CvType.CV_8UC1);
+
+        int len = contour.size();
+        for (int i = 0; i < len; ++i) {
+            int next_i = (i + 1) % len;
+            Imgproc.line(im, contour.get(i), contour.get(next_i), Util.SCALAR_WHITE, 2);
+        }
+        Imgproc.floodFill(im, mask, seed, Util.SCALAR_WHITE);
     }
 
     public static Mat fillContours(Size size, List<MatOfPoint> contours, Point[] seeds) {
@@ -137,7 +150,7 @@ public class Util {
 
     public static Point averPoint(List<Point> points) {
         double x = 0.0, y = 0.0;
-        for (Point pt: points) {
+        for (Point pt : points) {
             x += pt.x;
             y += pt.y;
         }

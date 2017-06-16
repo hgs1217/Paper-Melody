@@ -4,6 +4,7 @@ import org.opencv.core.Mat;
 import org.opencv.core.Point;
 import org.opencv.core.Scalar;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -63,9 +64,9 @@ public class ColorRange {
             std[i] = Math.sqrt(std[i] / n - aver[i] * aver[i]);
         }
 
-        std[0] *= 3;
-        std[1] *= 2;
-        std[2] *= 2;  // YCrCb, Y channel has a larger range
+//        std[0] *= 3;
+//        std[1] *= 2;
+//        std[2] *= 2;  // YCrCb, Y channel has a larger range
 
         // calc new color range
         double[][] newRange = new double[2][3];
@@ -73,10 +74,10 @@ public class ColorRange {
             newRange[0][i] = Math.max(aver[i] - std[i], 0);
             newRange[1][i] = Math.min(aver[i] + std[i], 255.0);
 
-            range[0][i] += (newRange[0][i] - range[0][i]) / updatedCnt;
-            range[1][i] += (newRange[1][i] - range[1][i]) / updatedCnt;
-//            range[0][i] = newRange[0][i] * 0.3 + range[0][i] * 0.7;
-//            range[1][i] = newRange[1][i] * 0.3 + range[1][i] * 0.7;
+            // range[0][i] += (newRange[0][i] - range[0][i]) / updatedCnt;
+            // range[1][i] += (newRange[1][i] - range[1][i]) / updatedCnt;
+            range[0][i] = newRange[0][i];
+            range[1][i] = newRange[1][i];
             center[i] = (range[0][i] + range[1][i]) / 2;
         }
 

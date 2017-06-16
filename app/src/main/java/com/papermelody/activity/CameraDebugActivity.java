@@ -58,7 +58,7 @@ import tapdetect.facade.Tap;
 public class CameraDebugActivity extends BaseActivity {
     /**
      * 用于处理 Camera 获得的图片
-     *
+     * <p>
      * 图片处理放在 processImage 函数中
      */
 
@@ -139,22 +139,22 @@ public class CameraDebugActivity extends BaseActivity {
          * Process image here
          * Called on every frame of video
          */
+        if (!Tap.readyForNextFrame()) {
+            return;
+        }
+        Mat mat = ImageUtil.imageToBgr(image);
+
         long frameTime = System.currentTimeMillis();
 
-        if (Tap.readyForNextFrame()) {
-            Mat mat = ImageUtil.imageToBgr(image);
+        long t1 = System.currentTimeMillis();
+        List<Point> notUsedWhenDebug = Tap.getAll(mat,
+                canvasCameraDebug.getHandContours(), canvasCameraDebug.getFingerTips());
+        long t2 = System.currentTimeMillis();
 
-            long t1 = System.currentTimeMillis();
-            List<Point> notUsedWhenDebug = Tap.getAll(mat,
-                    canvasCameraDebug.getHandContours(), canvasCameraDebug.getFingerTips());
-            long t2 = System.currentTimeMillis();
-
-            CanvasUtil.setScreenHeight(ViewUtil.getScreenHeight(this));
-            canvasCameraDebug.updateInfo(
-                    t2 - t1, frameTime - lastFrameTime, Tap.getProcessInterval()
-            );
-        }
-
+        CanvasUtil.setScreenHeight(ViewUtil.getScreenHeight(this));
+        canvasCameraDebug.updateInfo(
+                t2 - t1, frameTime - lastFrameTime, Tap.getProcessInterval()
+        );
         lastFrameTime = frameTime;
     }
 

@@ -29,32 +29,32 @@ public class HandDetector {
          * this function will not change `im` or `fgmask`
          * @return: a binary image will white pixels are in range
          */
-        if (ColorRange.getUpdatedCnt() < 200) {
-            List<Point> movingPixels = new ArrayList<>();
-            for (int r = 0; r < fgmask.height(); r += 4) {
-                pixelLoop:
-                for (int c = 0; c < fgmask.width(); c += 4) {
-                    if (fgmask.get(r, c)[0] == 0) {
-                        continue;
-                    }
-
-                    // found a moving pixel
-                    for (int ch = 0; ch < 3; ++ch) { // channels
-                        if (Math.abs(im.get(r, c)[ch] - ColorRange.getCenter()[ch])
-                                >= Config.FINGER_COLOR_TOLERANCE[ch]) {
-                            continue pixelLoop;
-                        }
-                    }
-                    movingPixels.add(new Point(c, r));
-                    if (movingPixels.size() > 1000) {
-                        break;
-                    }
-                }
-            }
-            if (movingPixels.size() > 10 && movingPixels.size() < 1000) {
-                ColorRange.updateRange(im, movingPixels);
-            }
-        }
+//        if (ColorRange.getUpdatedCnt() < 50) {
+//            List<Point> movingPixels = new ArrayList<>();
+//            for (int r = 0; r < fgmask.height(); r += 4) {
+//                pixelLoop:
+//                for (int c = 0; c < fgmask.width(); c += 4) {
+//                    if (fgmask.get(r, c)[0] == 0) {
+//                        continue;
+//                    }
+//
+//                    // found a moving pixel
+//                    for (int ch = 0; ch < 3; ++ch) { // channels
+//                        if (Math.abs(im.get(r, c)[ch] - ColorRange.getCenter()[ch])
+//                                >= Config.FINGER_COLOR_TOLERANCE[ch]) {
+//                            continue pixelLoop;
+//                        }
+//                    }
+//                    movingPixels.add(new Point(c, r));
+//                    if (movingPixels.size() > 1000) {
+//                        break;
+//                    }
+//                }
+//            }
+//            if (movingPixels.size() > 10) {
+//                ColorRange.updateRange(im, movingPixels);
+//            }
+//        }
         return this.colorRange(im.clone(), ColorRange.getRange()); // will color range change im?
     }
 

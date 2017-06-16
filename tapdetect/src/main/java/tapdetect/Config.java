@@ -27,12 +27,12 @@ public class Config {
     public static int FINGER_TIP_LINGER_DIST_MAX = 4;
 
     // min interval between 2 frame to avoid to slow the moving speed
-    public static int PROCESS_INTERVAL_MS = 100;
+    public static int PROCESS_INTERVAL_MS = 50;
 
     // 0-255, pixels from background substractor with intensity larger than this are regarded as moving
     public static int FINGER_FG_THRESHOLD = 60;
 
-    public static double[][] FINGER_COLOR_RANGE = {{0, 150, 100}, {255, 160, 130}};
+    public static double[][] FINGER_COLOR_RANGE = {{0, 135, 100}, {255, 142, 130}};
     public static double[] FINGER_COLOR = {128, 150, 115};
     public static double[] FINGER_COLOR_TOLERANCE = {128, 5, 10};
 }

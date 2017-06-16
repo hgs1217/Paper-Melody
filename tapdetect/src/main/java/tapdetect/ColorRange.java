@@ -15,7 +15,6 @@ public class ColorRange {
     private static double[][] range =
             {Config.FINGER_COLOR_RANGE[0].clone(), Config.FINGER_COLOR_RANGE[1].clone()};
     private static Queue<double[]> history = new LinkedList<>();
-    private static int historyCnt = 10;
 
     public static void reset() {
         range[0] = Config.FINGER_COLOR_RANGE[0].clone();
@@ -24,7 +23,7 @@ public class ColorRange {
     }
 
     public static boolean isStable() {
-        if (history.size() < historyCnt) {
+        if (history.size() < Config.SAMPLE_STABLE_CNT) {
             return false;
         }
 
@@ -85,9 +84,9 @@ public class ColorRange {
             std[i] = Math.sqrt(std[i] / n - aver[i] * aver[i]);
         }
 
-         std[0] *= 2;
-         std[1] *= 1.4;
-         std[2] *= 1.4;  // YCrCb, Y channel has a larger range
+         std[0] *= Config.COLOR_RANGE_EXPAND[0];
+         std[1] *= Config.COLOR_RANGE_EXPAND[1];
+         std[2] *= Config.COLOR_RANGE_EXPAND[2];  // YCrCb, Y channel has a larger range
 
         // calc new color range
         double[][] newRange = new double[2][3];
@@ -102,7 +101,7 @@ public class ColorRange {
             range[1][i] = newRange[1][i];
         }
 
-        if (history.size() == historyCnt) {
+        if (history.size() == Config.SAMPLE_STABLE_CNT) {
             history.remove();
         }
         history.add(aver);

@@ -126,7 +126,7 @@ public class Sampler {
         }
 
         // Log.w("near ratio", "" + Math.round(pixelsToUpdate.size() / (double) samplePixels.size() * 100));
-        if (pixelsToUpdate.size() < samplePixels.size() * 0.75) {
+        if (pixelsToUpdate.size() < samplePixels.size() * Config.SAMPLE_PASS_THRESHOLD) {
             ColorRange.reset();
         } else {
             ColorRange.updateRange(im, pixelsToUpdate);

@@ -26,4 +26,8 @@ public class Config {
     public static double[][] FINGER_COLOR_RANGE = {{0, 135, 100}, {255, 142, 130}};
     public static double[] FINGER_COLOR = {128, 145, 115};
     public static double[] FINGER_COLOR_TOLERANCE = {128, 15, 15};
+
+    public static double SAMPLE_PASS_THRESHOLD = 0.75;
+    public static double[] COLOR_RANGE_EXPAND = {2, 1.4, 1.4};
+    public static int SAMPLE_STABLE_CNT = 5;
 }

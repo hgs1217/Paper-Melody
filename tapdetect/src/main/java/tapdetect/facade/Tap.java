@@ -172,6 +172,11 @@ public class Tap {
     }
 
     public static boolean sampleCompleted() {
+        /**
+         * Once this returns `True`, sampling process should be completed,
+         * sampling function will not be called anymore.
+         * However you can call `Tap.sample` manually if you really want
+         */
         return Sampler.sampleCompleted();
     }
 
@@ -198,6 +203,10 @@ public class Tap {
     }
 
     private static boolean sample(Mat mat) {
+        /**
+         * Sampling pixels from mat to get a appropriate hand color
+         * This will be called automatically before tapping detection being carried out
+         */
         if (!Sampler.isInited()) {
             Sampler.initSampleMask(mat.height(), mat.width());
         }

@@ -5,10 +5,14 @@ import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 
 import com.papermelody.R;
 import com.papermelody.activity.MainActivity;
@@ -45,8 +49,10 @@ public class LogInFragment extends BaseFragment {
     EditText editPassword;
     @BindView(R.id.btn_register)
     Button btnRegister;
-    @BindView(R.id.bt_go)
+    @BindView(R.id.btn_go)
     Button btnLogIn;
+    @BindView(R.id.main_layout)
+    LinearLayout mainlayout;
 
     private Context context;
 
@@ -135,6 +141,14 @@ public class LogInFragment extends BaseFragment {
                     mainActivity.updateFragment(MainActivity.REGISTER);
                 }
         );
+        mainlayout.setOnTouchListener(new OnTouchListener() {
+
+            public boolean onTouch(View arg0, MotionEvent arg1)
+            {
+                InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+                return imm.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
+            }
+        });
     }
 
     private void updateUser(UserResponse.UserInfo userInfo) {

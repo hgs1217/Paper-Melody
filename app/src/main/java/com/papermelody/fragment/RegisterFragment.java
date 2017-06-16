@@ -4,10 +4,14 @@ import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 
 import com.papermelody.R;
 import com.papermelody.activity.MainActivity;
@@ -24,22 +28,26 @@ import butterknife.ButterKnife;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
+import static android.content.Context.INPUT_METHOD_SERVICE;
+
 public class RegisterFragment extends BaseFragment {
 
     @BindView(R.id.ttl_username)
     TextInputLayout userTextInputLayoutUser;
     @BindView(R.id.ttl_password)
     TextInputLayout pwTextInputLayoutUser;
-    @BindView(R.id.ttl_mail)
+    //@BindView(R.id.ttl_mail)
     TextInputLayout emTextInputLayoutUser;
     @BindView(R.id.et_username)
     EditText editUsername;
-    @BindView(R.id.et_email)
+   // @BindView(R.id.et_email)
     EditText editemail;
     @BindView(R.id.et_password)
     EditText editPassword;
     @BindView(R.id.btn_register)
     Button btnRegister;
+    @BindView(R.id.main_layout)
+    LinearLayout mainlayout;
 
     public static RegisterFragment newInstance() {
         RegisterFragment fragment = new RegisterFragment();
@@ -72,7 +80,7 @@ public class RegisterFragment extends BaseFragment {
         btnRegister.setOnClickListener((View v) -> {
                     String name = editUsername.getText().toString();
                     String pw = editPassword.getText().toString();
-                    String em = editemail.getText().toString();
+
 
                     pwTextInputLayoutUser.setErrorEnabled(false);  // FIXME: 存在某些情况下点击用户名editText不会弹出输入框的bug
                     if (TextUtils.isEmpty(pw) || pw.length() < 6) {
@@ -94,6 +102,17 @@ public class RegisterFragment extends BaseFragment {
                     }
                 }
         );
+
+
+        mainlayout.setOnTouchListener(new OnTouchListener() {
+
+            public boolean onTouch(View arg0, MotionEvent arg1)
+            {
+                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(INPUT_METHOD_SERVICE);
+                return imm.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
+            }
+        });
+
     }
 
     private void updateUser(UserResponse.UserInfo userInfo) {
@@ -104,4 +123,5 @@ public class RegisterFragment extends BaseFragment {
         MainActivity mainActivity = (MainActivity) getActivity();
         mainActivity.updateFragment(MainActivity.MAIN_USER);
     }
+
 }

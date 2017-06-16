@@ -90,6 +90,7 @@ public class MainActivity extends BaseActivity {
         TabPagerAdapter tabPagerAdapter = new TabPagerAdapter(fragmentManager);
         container.setAdapter(tabPagerAdapter);
         container.setCurrentItem(currentPage);
+
     }
 
     private void updateToolbar(int position) {

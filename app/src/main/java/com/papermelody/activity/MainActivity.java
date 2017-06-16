@@ -263,7 +263,7 @@ public class MainActivity extends BaseActivity {
     private void requestPermissions() {
         if (Build.VERSION.SDK_INT >= 23) {
             // 检查该权限是否已经获取
-            // 权限是否已经 授权 GRANTED---授权  DINIED---拒绝
+            // 权限是否已经 授权 GRANTED---授权  DENIED---拒绝
             for (int i = 0; i < permissions.length; ++i) {
                 if (ContextCompat.checkSelfPermission(this, permissions[i]) != PackageManager.PERMISSION_GRANTED) {
                     // 如果没有授予该权限，就去提示用户请求

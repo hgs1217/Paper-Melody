@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -8,15 +8,16 @@
     android:orientation="vertical">
 
     <android.support.v7.widget.CardView
+        android:id="@+id/card_update_info"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
         android:layout_marginTop="20dp"
         android:clickable="true"
         android:foreground="?attr/selectableItemBackground"
-        card_view:cardBackgroundColor="@color/card_view_background"
-        card_view:cardCornerRadius="0dp"
-        card_view:cardElevation="@dimen/card_elevation">
+        app:cardBackgroundColor="@color/card_view_background"
+        app:cardCornerRadius="0dp"
+        app:cardElevation="@dimen/card_elevation">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -70,9 +71,9 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
         android:foreground="?attr/selectableItemBackground"
-        card_view:cardBackgroundColor="@color/card_view_background"
-        card_view:cardCornerRadius="0dp"
-        card_view:cardElevation="@dimen/card_elevation">
+        app:cardBackgroundColor="@color/card_view_background"
+        app:cardCornerRadius="0dp"
+        app:cardElevation="@dimen/card_elevation">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -108,9 +109,9 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
         android:foreground="?attr/selectableItemBackground"
-        card_view:cardBackgroundColor="@color/card_view_background"
-        card_view:cardCornerRadius="0dp"
-        card_view:cardElevation="@dimen/card_elevation">
+        app:cardBackgroundColor="@color/card_view_background"
+        app:cardCornerRadius="0dp"
+        app:cardElevation="@dimen/card_elevation">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -140,16 +141,15 @@
             <TextView
                 android:id="@+id/text_msg_count"
                 android:layout_width="wrap_content"
-                android:minWidth="20dp"
-                android:visibility="invisible"
-                android:textAlignment="center"
                 android:layout_height="20dp"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="20dp"
                 android:background="@drawable/text_badge"
-                android:text="99+"
-                android:textColor="@color/white" />
+                android:minWidth="20dp"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:visibility="invisible" />
         </RelativeLayout>
 
     </android.support.v7.widget.CardView>
@@ -160,9 +160,9 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="1dp"
         android:foreground="?attr/selectableItemBackground"
-        card_view:cardBackgroundColor="@color/card_view_background"
-        card_view:cardCornerRadius="0dp"
-        card_view:cardElevation="@dimen/card_elevation">
+        app:cardBackgroundColor="@color/card_view_background"
+        app:cardCornerRadius="0dp"
+        app:cardElevation="@dimen/card_elevation">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -198,9 +198,9 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="1dp"
         android:foreground="?attr/selectableItemBackground"
-        card_view:cardBackgroundColor="@color/card_view_background"
-        card_view:cardCornerRadius="0dp"
-        card_view:cardElevation="@dimen/card_elevation">
+        app:cardBackgroundColor="@color/card_view_background"
+        app:cardCornerRadius="0dp"
+        app:cardElevation="@dimen/card_elevation">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -236,9 +236,9 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="1dp"
         android:foreground="?attr/selectableItemBackground"
-        card_view:cardBackgroundColor="@color/card_view_background"
-        card_view:cardCornerRadius="0dp"
-        card_view:cardElevation="@dimen/card_elevation">
+        app:cardBackgroundColor="@color/card_view_background"
+        app:cardCornerRadius="0dp"
+        app:cardElevation="@dimen/card_elevation">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -267,11 +267,5 @@
         </RelativeLayout>
 
     </android.support.v7.widget.CardView>
-
-    <Button
-        android:id="@+id/btn_update_user_info"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="修改用户信息"/>
 
 </LinearLayout>

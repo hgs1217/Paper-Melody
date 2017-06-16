@@ -41,9 +41,7 @@
     <string name="server_ip">http://123.207.249.92/</string>
     <!--<string name="server_ip">http://192.168.0.102/</string>-->
     <!--<string name="server_ip">http://192.168.137.183/</string>-->
-
     <!--<string name="server_ip">http://10.185.245.166:8080/</string>-->
-
 
     <string name="tab_mode">开始演奏</string>
     <string name="tab_settings">设置</string>
@@ -59,6 +57,9 @@
     <string name="user_msg">消息通知</string>
     <string name="over99">99+</string>
     <string name="jackMa">马云</string>
+    <string name="avatar">头像</string>
+    <string name="select_avatar">选择头像</string>
+    <string name="user_name">用户名</string>
     <string name="reply_to_you">回复了你：</string>
     <string name="message_sample">小伙子很有前途！</string>
     <string name="history_musics">历史作品</string>
@@ -70,6 +71,7 @@
     <string name="log_in">登录</string>
     <string name="register">注册</string>
     <string name="confirm">确定</string>
+    <string name="cancel">取消</string>
     <string name="mode">模式：</string>
     <string name="instrument">乐器：</string>
     <string name="piano_with_21_keys">21键钢琴</string>
@@ -112,6 +114,7 @@
     <string name="register_english">注册</string>
     <string name="Username">用户名</string>
     <string name="Password">密码</string>
+    <string name="password_sample">******</string>
     <string name="forgot_your_password">忘记密码</string>
     <string name="go">登录</string>
     <string name="email">邮箱</string>

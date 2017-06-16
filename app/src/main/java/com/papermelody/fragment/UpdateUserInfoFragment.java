@@ -1,9 +1,12 @@
 package com.papermelody.fragment;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,6 +32,8 @@ import java.io.File;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import de.hdodenhof.circleimageview.CircleImageView;
+import me.shaohui.bottomdialog.BottomDialog;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -46,32 +51,25 @@ public class UpdateUserInfoFragment extends BaseFragment {
 
     // TODO: 暂时把修改密码，修改用户名和上传头像放一起了，到时候你们决定把它放在一个Frag还是多个Frag
 
-    @BindView(R.id.text_nickname)
-    TextView textNickname;
-    @BindView(R.id.edit_nickname)
-    EditText editNickname;
-    @BindView(R.id.btn_update_nickname)
-    Button btnNickname;
-    @BindView(R.id.edit_old_password)
-    EditText editOldPassword;
-    @BindView(R.id.edit_new_password)
-    EditText editNewPassword;
-    @BindView(R.id.btn_update_password)
-    Button btnPassword;
+    @BindView(R.id.card_user_avatar)
+    CardView cardUserAvatar;
+    @BindView(R.id.card_user_nickname)
+    CardView cardUserNickname;
+    @BindView(R.id.card_user_password)
+    CardView getCardUserPassword;
     @BindView(R.id.img_user_avatar)
-    ImageView imgUserAvatar;
-    @BindView(R.id.img_avatar_chosen)
-    ImageView imgAvatarChosen;
-    @BindView(R.id.btn_browse_avatar)
-    Button btnBrowseAvatar;
-    @BindView(R.id.btn_update_avatar)
-    Button btnUpdateAvatar;
+    CircleImageView imgUserAvatar;
+    @BindView(R.id.text_user_nickname)
+    TextView textUserNickname;
 
     public static final int LOAD_PIC = 0;
 
     private SocialSystemAPI api;
     private Context context;
     private String filePath = null;
+    private CircleImageView imgSelectAvatar;
+    private Button btnDialogCancel, btnDialogConfirm;
+    private BottomDialog bottomDialog;
 
     public static UpdateUserInfoFragment newInstance() {
         UpdateUserInfoFragment fragment = new UpdateUserInfoFragment();
@@ -95,19 +93,36 @@ public class UpdateUserInfoFragment extends BaseFragment {
     }
 
     private void initView() {
-        textNickname.setText(App.getUser().getNickname());
-        btnNickname.setOnClickListener((view) -> {
-            updateNickname(editNickname.getText().toString());
-        });
-        btnBrowseAvatar.setOnClickListener((view) -> {
+        textUserNickname.setText(App.getUser().getNickname());
+        Picasso.with(context).load(App.getUser().getAvatarUrl()).into(imgUserAvatar);
+        cardUserAvatar.setOnClickListener((view) -> {
             chooseImg();
+            bottomDialog = BottomDialog.create(getFragmentManager())
+                    .setLayoutRes(R.layout.dialog_avatar)
+                    .setCancelOutside(false);
+            bottomDialog.setViewListener(new BottomDialog.ViewListener() {
+                @Override
+                public void bindView(View v) {
+                    imgSelectAvatar = (CircleImageView) v.findViewById(R.id.img_select_avatar);
+                    btnDialogConfirm = (Button) v.findViewById(R.id.btn_avatar_confirm);
+                    btnDialogCancel = (Button) v.findViewById(R.id.btn_avatar_cancel);
+                    btnDialogCancel.setOnClickListener((view) -> {
+                        bottomDialog.dismiss();
+                    });
+                    btnDialogConfirm.setOnClickListener((view) -> {
+                        uploadAvatar();
+                        bottomDialog.dismiss();
+                    });
+                }
+            });
+            bottomDialog.show();
         });
-        btnPassword.setOnClickListener((view) -> {
-            updatePassword(editOldPassword.getText().toString(), editNewPassword.getText().toString());
-        });
-        btnUpdateAvatar.setOnClickListener((view) -> {
-            uploadAvatar();
-        });
+//        btnNickname.setOnClickListener((view) -> {
+//            updateNickname(editNickname.getText().toString());
+//        });
+//        btnPassword.setOnClickListener((view) -> {
+//            updatePassword(editOldPassword.getText().toString(), editNewPassword.getText().toString());
+//        });
     }
 
     private void updateNickname(String nickname) {
@@ -121,7 +136,7 @@ public class UpdateUserInfoFragment extends BaseFragment {
                         result -> {
                             User user = new User(result, context);
                             App.setUser(user);
-                            textNickname.setText(App.getUser().getNickname());
+                            textUserNickname.setText(App.getUser().getNickname());
                         }, NetworkFailureHandler.basicErrorHandler
                 ));
     }
@@ -137,7 +152,7 @@ public class UpdateUserInfoFragment extends BaseFragment {
                         result -> {
                             User user = new User(result, context);
                             App.setUser(user);
-                            ToastUtil.showShort("密码修改为"+App.getUser().getPassword());
+                            ToastUtil.showShort("密码修改为" + App.getUser().getPassword());
                         }, NetworkFailureHandler.loginErrorHandler
                 ));
     }
@@ -207,8 +222,7 @@ public class UpdateUserInfoFragment extends BaseFragment {
                     Uri selectedImage = data.getData();
                     String imgPath = StorageUtil.imageGetPath(getActivity(), selectedImage);
                     Log.d("TESTPATH", String.valueOf(imgPath));
-                    Picasso.with(context).load(selectedImage).into(imgAvatarChosen);
-                    imgAvatarChosen.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                    Picasso.with(context).load(selectedImage).into(imgSelectAvatar);
                     filePath = imgPath;
                 }
                 break;

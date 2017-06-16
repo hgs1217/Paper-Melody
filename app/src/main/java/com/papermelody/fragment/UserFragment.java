@@ -23,11 +23,13 @@ import com.papermelody.util.NetworkFailureHandler;
 import com.papermelody.util.RetrofitClient;
 import com.papermelody.util.SocialSystemAPI;
 import com.papermelody.util.ToastUtil;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import de.hdodenhof.circleimageview.CircleImageView;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -41,6 +43,8 @@ public class UserFragment extends BaseFragment {
      * 用户页面，包括个人信息，已上传作品，收藏作品等等
      */
 
+    @BindView(R.id.img_user_avatar)
+    CircleImageView imgUserAvatar;
     @BindView(R.id.text_username)
     TextView textUsername;
     @BindView(R.id.btn_login)
@@ -57,8 +61,8 @@ public class UserFragment extends BaseFragment {
     CardView btnMessage;
     @BindView(R.id.text_msg_count)
     TextView textMsgCount;
-    @BindView(R.id.btn_update_user_info)
-    Button btnUpdateUserInfo;
+    @BindView(R.id.card_update_info)
+    CardView cardUpdateInfo;
 
     public static final String MESSAGE_NUM = "MESSAGE_NUM";
 
@@ -141,9 +145,9 @@ public class UserFragment extends BaseFragment {
                 activity.updateFragment(MainActivity.MESSAGE);
             }
         });
-        btnUpdateUserInfo.setOnClickListener((view) -> {
+        cardUpdateInfo.setOnClickListener((view) -> {
             if (App.getUser() == null) {
-                ToastUtil.showShort(getString(R.string.not_logged_in));
+                ToastUtil.showShort(R.string.not_logged_in);
             } else {
                 MainActivity activity = (MainActivity) getActivity();
                 activity.updateFragment(MainActivity.UPDATE_USER_INFO);
@@ -191,6 +195,7 @@ public class UserFragment extends BaseFragment {
             textUsername.setText(user.getUsername());
             btnLogIn.setText(R.string.user_log_out);
             btnLogIn.setBackground(getResources().getDrawable(R.drawable.btn_log_out));
+            Picasso.with(context).load(App.getUser().getAvatarUrl()).into(imgUserAvatar);
             getMessage();
         }
     }

@@ -77,7 +77,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import butterknife.BindView;
-import retrofit2.http.HEAD;
 import tapdetect.facade.Tap;
 
 /**
@@ -178,10 +177,15 @@ public class PlayActivity extends BaseActivity {
     LinearLayout keyA5M;
     @BindView(R.id.dot_view)
     PlayView playView;
-    @BindView(R.id.img_opern)
-    ImageView imgOpern;
+    @BindView(R.id.new_img_opern)
+    ImageView newImgOpern;
+    @BindView(R.id.old_img_opern)
+    ImageView oldImgOpern;
+
     @BindView(R.id.text_time)
     TextView textTime;
+    @BindView(R.id.text_calibration)
+    TextView calibrationtext;
 
     public static final int KEY_C3 = 0;
     public static final int KEY_D3 = 1;
@@ -227,7 +231,8 @@ public class PlayActivity extends BaseActivity {
     public static final String FILENAME = "FILENAME";
     public static final String EXTRA_RESULT = "EXTRA_RESULT";
 
-    public static final int OPERN_PUGONGYINGDEYUEDING = R.raw.opern_pugongyingdeyueding;
+//    public static final int OPERN_PUGONGYINGDEYUEDING = R.raw.opern_pugongyingdeyueding;
+    public static final int OPERN_PUGONGYINGDEYUEDING = R.raw.opern_p;
 
     public static final int MODE_FREE = 0;
     public static final int MODE_OPERN = 1;
@@ -348,8 +353,10 @@ public class PlayActivity extends BaseActivity {
                         if (currentLine >= listTime.size()) {
                             Log.d("TESTT", "finish");
                             playOver();
+                        } else {
+                            remainTime = listTime.get(currentLine) + OPERN_SECOND_DELAYED - currentSecond;
                         }
-                        remainTime = listTime.get(currentLine) + OPERN_SECOND_DELAYED - currentSecond;
+
                     }
                     textTime.setText(String.valueOf(remainTime));
                     currentSecond++;
@@ -435,9 +442,12 @@ public class PlayActivity extends BaseActivity {
         initView();
         initMediaRecorder();
         Tap.reset();
+
+
     }
 
     public void processImage(Image image) {
+
         /**
          * Process image here
          * Calibration process already ends, now we play keys according to tapping points
@@ -445,6 +455,7 @@ public class PlayActivity extends BaseActivity {
         if (!Tap.readyForNextFrame()) {
             return;
         }
+        calibrationtext.setVisibility(View.INVISIBLE);
 
         Mat mat = ImageUtil.imageToBgr(image);
         TransformResult transformResult = ImageProcessor.getKeyTransform(calibrationResult);
@@ -476,12 +487,16 @@ public class PlayActivity extends BaseActivity {
         switch (mode) {
             case 0:
                 textViewModeName.setText(R.string.mode_free);
+                calibrationtext.setVisibility(View.VISIBLE);
                 //textViewOpern.setText("");
                 break;
             case 1:
                 textViewModeName.setText(R.string.mode_opern);
                 //textViewOpern.setText("曲谱：" + getResources().getStringArray(R.array.spinner_opern)[opern]);
-                imgOpern.setVisibility(View.VISIBLE);
+                newImgOpern.setVisibility(View.VISIBLE);
+                oldImgOpern.setVisibility(View.VISIBLE);
+                calibrationtext.setVisibility(View.VISIBLE);
+                //calibrationtext.setText(String.valueOf("dfdfdfd"));
                 textTime.setVisibility(View.VISIBLE);
                 initOpernTimer();
                 break;
@@ -530,7 +545,9 @@ public class PlayActivity extends BaseActivity {
      */
     private void initOpernTimer() {
 
+
         secondTimer = new Timer();
+
         secondTimer.schedule(secondTask, 0, 1000);
 
         Opern opern = new Opern(this, OPERN_PUGONGYINGDEYUEDING); // FIXME: 暂时只有一首谱子
@@ -545,19 +562,90 @@ public class PlayActivity extends BaseActivity {
         tasks = new TimerTask [listTime.size()];
         for (int i=0; i<listTime.size()-1; ++i) {
             final int fi = i;
+            final int ofi = i-1;
+
             tasks[i] = new TimerTask() {
                 @Override
                 public void run() {
                     runOnUiThread(new Runnable() {      // UI thread
+                        int image_alpha = 255;
+                        boolean isrung = false;
+                        Handler mHandler;
+
                         @Override
                         public void run() {
+
+//                            if (fi!=0){
+//                                newImgOpern.setDrawingCacheEnabled(true);
+//                               // Bitmap old = ((BitmapDrawable)newImgOpern.getDrawable()).getBitmap();
+//
+//                                Bitmap old=newImgOpern.getDrawingCache();
+//                               newImgOpern.setDrawingCacheEnabled(false);
+//                                oldImgOpern.setImageBitmap(old);
+//                            }
+
                             timers[fi].cancel();
                             int x = (int) (listX.get(fi) * widthScalar);
                             int y = (int) (listY.get(fi) * heightScalar);
                             int width = (int) (listWidth.get(fi) * widthScalar);
                             int height = (int) (listHeight.get(fi) * heightScalar);
+                            if (fi!=0){
+                            int ox = (int) (listX.get(ofi) * widthScalar);
+                            int oy = (int) (listY.get(ofi) * heightScalar);
+                            int owidth = (int) (listWidth.get(ofi) * widthScalar);
+                            int oheight = (int) (listHeight.get(ofi) * heightScalar);
+                                Bitmap osmallBitmap = Bitmap.createBitmap(sourceBitmap, ox, oy, owidth, oheight);
+                                oldImgOpern.setImageBitmap(osmallBitmap);
+                                oldImgOpern.setImageAlpha(image_alpha);
+                            }
                             Bitmap smallBitmap = Bitmap.createBitmap(sourceBitmap, x, y, width, height);
-                            imgOpern.setImageBitmap(smallBitmap);
+
+                            newImgOpern.setImageBitmap(smallBitmap);
+
+                            newImgOpern.setImageAlpha(0);
+
+
+
+                            isrung = true;
+
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    while (isrung) {
+                                        try {
+                                            Thread.sleep(50);
+                                            // 更新Alpha值
+                                            updateAlpha();
+                                        } catch (InterruptedException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                }
+                            }).start();
+                            mHandler = new Handler() {
+                                @Override
+                                public void handleMessage(Message msg) {
+                                    super.handleMessage(msg);
+                                    oldImgOpern.setImageAlpha(image_alpha);
+                                    newImgOpern.setImageAlpha(255-image_alpha);
+                                    // 设置textview显示当前的Alpha值
+                                    //textView.setText("现在的alpha值是:" + Integer.toString(image_alpha));
+                                    // 刷新视图
+                                    oldImgOpern.invalidate();
+                                    newImgOpern.invalidate();
+                                }
+                            };
+
+                        }
+                        public void updateAlpha() {
+                            if (image_alpha - 7 >= 0) {
+                                image_alpha -= 7;
+                            } else {
+                                image_alpha = 0;
+                                isrung = false;
+                            }
+                            // 发送需要更新imageview视图的消息-->这里是发给主线程
+                            mHandler.sendMessage(mHandler.obtainMessage());
                         }
                     });
                 }
@@ -647,6 +735,7 @@ public class PlayActivity extends BaseActivity {
      * @param height TextureView的高度
      */
     private void setUpCameraOutputs(int width, int height) {
+
 
         cameraManager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
         cameraID = String.valueOf(CameraCharacteristics.LENS_FACING_BACK);  //前摄像头

@@ -13,7 +13,9 @@ import com.papermelody.model.Message;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -81,8 +83,15 @@ public class MessageRecyclerViewAdapter extends RecyclerView.Adapter<MessageRecy
         private void setView(Message message) {
             textMessageAuthor.setText(message.getAuthor());
             textMessageContent.setText(message.getMessage());
-            textMessageTime.setText(
-                    new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(message.getCreateTime()));
+            String createTime = message.getCreateTime();
+            if (createTime.contains("-")) {
+                textMessageTime.setText(createTime);
+            } else {
+                textMessageTime.setText(
+                        new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA)
+                                .format(new Date(Long.parseLong(createTime)))
+                );
+            }
         }
     }
 

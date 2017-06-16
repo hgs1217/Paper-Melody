@@ -16,7 +16,7 @@ public class MessageInfo {
     @SerializedName("author")
     private String author;
     @SerializedName("createTime")
-    private Date createTime;
+    private String createTime;
     @SerializedName("message")
     private String message;
     @SerializedName("isNew")
@@ -26,7 +26,7 @@ public class MessageInfo {
         return author;
     }
 
-    public Date getCreateTime() {
+    public String getCreateTime() {
         return createTime;
     }
 

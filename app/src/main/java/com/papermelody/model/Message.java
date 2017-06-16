@@ -17,7 +17,7 @@ public class Message implements Serializable {
     public static final String SERIAL_MESSAGE = "SERIAL_MESSAGE";
 
     private String author;
-    private Date createTime;
+    private String createTime;
     private String message;
 
     public Message() { }
@@ -32,7 +32,7 @@ public class Message implements Serializable {
         return author;
     }
 
-    public Date getCreateTime() {
+    public String getCreateTime() {
         return createTime;
     }
 

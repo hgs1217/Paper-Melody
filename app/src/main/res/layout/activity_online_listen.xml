@@ -202,11 +202,17 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:background="@color/white"
+        android:paddingTop="1dp"
         android:gravity="center"
         android:orientation="horizontal">
 
 
         <EditText
+            android:layout_marginLeft="6dp"
+            android:layout_marginRight="3dp"
+            android:layout_marginBottom="4dp"
+            android:background="@drawable/comment_edit"
+            android:padding="6dp"
             android:id="@+id/add_new_comment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -221,14 +227,17 @@
             android:maxLines="14"
             android:minLines="1"
             android:scrollbars="vertical"
-            android:textSize="18sp" />
+            android:textSize="16sp" />
 
         <Button
             android:id="@+id/upload_comment_btn"
+            android:layout_marginLeft="1dp"
+            android:layout_marginBottom="2dp"
             android:layout_width="35dp"
             android:layout_height="35dp"
             android:layout_gravity="center_vertical"
             android:layout_weight="1"
+            android:layout_marginRight="4dp"
             android:background="@drawable/ic_send_white_48dp"
             android:backgroundTint="@color/colorAccent"
             android:textColor="@color/textPrimary"

@@ -123,7 +123,7 @@
     <string name="signature">这个人很懒，什么都没留下(╯°口°)╯(┴—┴</string>
     <string name="repeat_password">确认密码</string>
     <string name="next">NEXT</string>
-    <string name="add_new_comment_here">点击此处写下你的评论！</string>
+    <string name="add_new_comment_here">点击此处写下评论</string>
     <string name="user_comment_title">我的最新评论</string>
     <string name="all_comment_title">所有评论</string>
     <string name="user_comment_not_exist">你还没有评论过哦</string>

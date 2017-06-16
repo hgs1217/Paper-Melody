@@ -262,9 +262,9 @@ public class Calibration {
         Log.d("TESThistres",out.getRightUpY()+"");
         Log.d("TESThistres",out.isFlag()+"");
 
-        if (Math.abs(leftlow_y - leftup_y) > 5
+        if (Math.abs(leftlow_y - leftup_y) > 10
                 &&
-                Math.abs(rightlow_y - rightup_y) > 5 &&
+                Math.abs(rightlow_y - rightup_y) > 10 &&
                 Math.abs(rightlow_x - leftlow_x) > srcImage.width() / 2 &&
                 Math.abs(rightup_x - leftup_x) > srcImage.width() / 2 &&
                 temp1>12&&temp1<=16&&
@@ -276,9 +276,9 @@ public class Calibration {
                 &&leftlow_x>0
                 &&rightlow_x<srcImage.width()
                 &&leftlow_x<leftup_x
-                && leftlow_y > leftup_y
+                && leftlow_y -leftup_y>10
                 &&rightlow_x>rightup_x
-                && rightlow_y > rightup_y
+                && rightlow_y - rightup_y>10
                 )
             out.setFlag(true);
 

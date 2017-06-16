@@ -38,8 +38,7 @@ public class ModeFreeSettingsFragment extends BaseFragment {
     private ArrayAdapter<CharSequence> arrayAdapterInstrument, arrayAdapterCategory;
 
     public static ModeFreeSettingsFragment newInstance() {
-        ModeFreeSettingsFragment fragment = new ModeFreeSettingsFragment();
-        return fragment;
+        return new ModeFreeSettingsFragment();
     }
 
     @Override
@@ -54,6 +53,7 @@ public class ModeFreeSettingsFragment extends BaseFragment {
         ButterKnife.bind(this, view);
         initView();
         return view;
+
     }
 
     private void initView() {

@@ -13,6 +13,7 @@ import android.widget.Spinner;
 import com.papermelody.R;
 import com.papermelody.activity.CalibrationActivity;
 import com.papermelody.activity.MainActivity;
+import com.papermelody.activity.PlayActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -93,9 +94,9 @@ public class ModeFreeSettingsFragment extends BaseFragment {
         });
         btnFreeConfirm.setOnClickListener((View v) -> {
             Intent intent = new Intent(getContext(), CalibrationActivity.class);
-            intent.putExtra("mode", 0);
-            intent.putExtra("instrument", instrument);
-            intent.putExtra("category", category);
+            intent.putExtra(PlayActivity.EXTRA_MODE, PlayActivity.MODE_FREE);
+            intent.putExtra(PlayActivity.EXTRA_INSTRUMENT, instrument);
+            intent.putExtra(PlayActivity.EXTRA_CATIGORY, category);
             startActivity(intent);
             MainActivity activity = (MainActivity) getActivity();
             activity.updateFragment(MainActivity.MAIN_HOME);

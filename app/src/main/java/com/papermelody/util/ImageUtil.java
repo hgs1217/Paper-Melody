@@ -2,6 +2,10 @@ package com.papermelody.util;
 
 import android.graphics.Bitmap;
 import android.graphics.ImageFormat;
+import android.graphics.PixelFormat;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.NinePatchDrawable;
 import android.media.Image;
 import android.util.Log;
 import android.util.Size;
@@ -37,6 +41,22 @@ public class ImageUtil {
      * 预设的图片长宽比
      */
     public static final double HEIGHT_WIDTH_RATIO = 1.7777777;
+
+    public static Bitmap drawableToBitmap(Drawable drawable) {
+        if (drawable instanceof BitmapDrawable) {
+            return ((BitmapDrawable) drawable).getBitmap();
+        } else if (drawable instanceof NinePatchDrawable) {
+            Bitmap bitmap = Bitmap
+                    .createBitmap(
+                            drawable.getIntrinsicWidth(),
+                            drawable.getIntrinsicHeight(),
+                            drawable.getOpacity() != PixelFormat.OPAQUE ? Bitmap.Config.ARGB_8888
+                                    : Bitmap.Config.RGB_565);
+            return bitmap;
+        } else {
+            return null;
+        }
+    }
 
     public static Bitmap imageToBitmap(Mat bgr) {
         Log.d("TESTB", bgr.rows() + " " + bgr.cols());

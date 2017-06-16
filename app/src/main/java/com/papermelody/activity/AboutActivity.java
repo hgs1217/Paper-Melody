@@ -2,7 +2,6 @@ package com.papermelody.activity;
 
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.view.Window;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 
@@ -21,8 +20,9 @@ public class AboutActivity extends BaseActivity {
      */
     @BindView(R.id.webview)
     WebView webView;
-@BindView(R.id.toolbar2)
+    @BindView(R.id.toolbar2)
     Toolbar xx;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,7 +33,6 @@ public class AboutActivity extends BaseActivity {
         settings.setBuiltInZoomControls(true);  //启用内置缩放装置
         settings.setJavaScriptEnabled(true);    //启用JS脚本
     }
-
 
     @Override
     protected int getContentViewId() {

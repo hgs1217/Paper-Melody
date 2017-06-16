@@ -107,10 +107,6 @@ public class CalibrationActivity extends BaseActivity {
     @BindView(R.id.layout_legal)
     LinearLayout layoutLegal;
 
-
-
-    public static final String EXTRA_RESULT = "EXTRA_RESULT";
-
     private static final String TAG = "CalibrationAct";
 
     private static final int MAX_PREVIEW_WIDTH = 1920;
@@ -169,6 +165,14 @@ public class CalibrationActivity extends BaseActivity {
     private int cnt = 0;
 
     /**
+     * 用来传递模式的参数
+     */
+    private int mode;
+    private int instrument;
+    private int category;
+    private int opern;
+
+    /**
      * previewSize: 预览区域的尺寸
      */
     private Size previewSize;
@@ -200,15 +204,13 @@ public class CalibrationActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        /*Window window = getWindow();
-        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-        window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.setStatusBarColor(Color.TRANSPARENT);
-        window.setNavigationBarColor(Color.TRANSPARENT);*/
-
         super.onCreate(savedInstanceState);
+
+        Intent intent = getIntent();
+        mode = intent.getIntExtra(PlayActivity.EXTRA_MODE, 0);
+        instrument = intent.getIntExtra(PlayActivity.EXTRA_INSTRUMENT, 0);
+        category = intent.getIntExtra(PlayActivity.EXTRA_CATIGORY, 0);
+        opern = intent.getIntExtra(PlayActivity.EXTRA_OPERN, 0);
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,  WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON, WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -230,8 +232,12 @@ public class CalibrationActivity extends BaseActivity {
         btnCalibrationComplete.setOnClickListener((View v) -> {
             Intent intent = new Intent(this, PlayActivity.class);
             Bundle bundle = new Bundle();
-            bundle.putSerializable(EXTRA_RESULT, calibrationResult);
+            bundle.putSerializable(PlayActivity.EXTRA_RESULT, calibrationResult);
             intent.putExtras(bundle);
+            intent.putExtra(PlayActivity.EXTRA_MODE, mode);
+            intent.putExtra(PlayActivity.EXTRA_OPERN, opern);
+            intent.putExtra(PlayActivity.EXTRA_INSTRUMENT, instrument);
+            intent.putExtra(PlayActivity.EXTRA_CATIGORY, category);
             startActivity(intent);
             finish();
         });
@@ -341,7 +347,7 @@ public class CalibrationActivity extends BaseActivity {
             canvasCalibration.setPhotoSize(relativeMin.getWidth(), relativeMin.getHeight());
 
             imageReader = ImageReader.newInstance(relativeMin.getWidth(), relativeMin.getHeight(),
-                                            ImageFormat.YUV_420_888, 5);
+                                            ImageFormat.YUV_420_888, 1);
             imageReader.setOnImageAvailableListener((reader) -> {
                 /* 当获取到图片后，对图片进行操作 */
 

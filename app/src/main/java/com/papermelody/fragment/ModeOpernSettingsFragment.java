@@ -13,6 +13,7 @@ import android.widget.Spinner;
 import com.papermelody.R;
 import com.papermelody.activity.CalibrationActivity;
 import com.papermelody.activity.MainActivity;
+import com.papermelody.activity.PlayActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -109,10 +110,10 @@ public class ModeOpernSettingsFragment extends BaseFragment {
         });
         btnOpernConfirm.setOnClickListener((View v) -> {
             Intent intent = new Intent(getContext(), CalibrationActivity.class);
-            intent.putExtra("mode", 1);
-            intent.putExtra("opern", opern);
-            intent.putExtra("instrument", instrument);
-            intent.putExtra("category", category);
+            intent.putExtra(PlayActivity.EXTRA_MODE, PlayActivity.MODE_OPERN);
+            intent.putExtra(PlayActivity.EXTRA_OPERN, opern);
+            intent.putExtra(PlayActivity.EXTRA_INSTRUMENT, instrument);
+            intent.putExtra(PlayActivity.EXTRA_CATIGORY, category);
             startActivity(intent);
             MainActivity activity = (MainActivity) getActivity();
             activity.updateFragment(MainActivity.MAIN_HOME);

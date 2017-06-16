@@ -4,12 +4,14 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.ImageFormat;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
 import android.graphics.SurfaceTexture;
+import android.graphics.drawable.Drawable;
 import android.hardware.camera2.CameraAccessException;
 import android.hardware.camera2.CameraCaptureSession;
 import android.hardware.camera2.CameraCharacteristics;
@@ -41,12 +43,14 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.papermelody.R;
 import com.papermelody.core.calibration.CalibrationResult;
 import com.papermelody.core.calibration.TransformResult;
+import com.papermelody.model.Opern;
 import com.papermelody.util.CanvasUtil;
 import com.papermelody.util.ImageProcessor;
 import com.papermelody.util.ImageUtil;
@@ -69,8 +73,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import butterknife.BindView;
+import retrofit2.http.HEAD;
 import tapdetect.facade.Tap;
 
 /**
@@ -171,6 +178,10 @@ public class PlayActivity extends BaseActivity {
     LinearLayout keyA5M;
     @BindView(R.id.dot_view)
     PlayView playView;
+    @BindView(R.id.img_opern)
+    ImageView imgOpern;
+    @BindView(R.id.text_time)
+    TextView textTime;
 
     public static final int KEY_C3 = 0;
     public static final int KEY_D3 = 1;
@@ -214,11 +225,22 @@ public class PlayActivity extends BaseActivity {
     public static final String EXTRA_CATIGORY = "EXTRA_CATIGORY";
     public static final String EXTRA_OPERN = "EXTRA_OPERN";
     public static final String FILENAME = "FILENAME";
+    public static final String EXTRA_RESULT = "EXTRA_RESULT";
+
+    public static final int OPERN_PUGONGYINGDEYUEDING = R.raw.opern_pugongyingdeyueding;
+
+    public static final int MODE_FREE = 0;
+    public static final int MODE_OPERN = 1;
 
     private static final String TAG = "PlayAct";
 
     private static final int MAX_PREVIEW_WIDTH = 1920;
     private static final int MAX_PREVIEW_HEIGHT = 1080;
+
+    /**
+     * 谱子在进入界面后，延迟播放的时间，即准备时间
+     */
+    private static final int OPERN_SECOND_DELAYED = 4;
 
     private static final SparseIntArray ORIENTATIONS = new SparseIntArray();
 
@@ -273,6 +295,68 @@ public class PlayActivity extends BaseActivity {
     private MediaRecorder mediaRecorder;
 
     private String fileName = "";
+
+    /**
+     * 跟谱模式的点、坐标、时间节点等数据
+     */
+    private ArrayList<Integer> listX;
+    private ArrayList<Integer> listY;
+    private ArrayList<Integer> listWidth;
+    private ArrayList<Integer> listHeight;
+    private ArrayList<Integer> listTime;
+
+    /**
+     * 每一行谱子的计时器与任务
+     */
+    private Timer[] timers;
+    private TimerTask[] tasks;
+
+    /**
+     * sourceBitmap: 源谱子
+     */
+    private Bitmap sourceBitmap;
+
+    /**
+     * drawable读入之后与原来的像素情况会有一定程度的放大，用长宽两个scalar记录放大比例
+     */
+    private double widthScalar;
+    private double heightScalar;
+
+    /**
+     * 用于统计当前谱子的行数和当前时间
+     */
+    private int currentLine = 0;
+    private int currentSecond = 0;
+
+    /**
+     * 秒钟计时器
+     */
+    private Timer secondTimer;
+
+    /**
+     * 秒钟的计时任务
+     */
+    private TimerTask secondTask = new TimerTask() {
+        @Override
+        public void run() {
+            runOnUiThread(new Runnable() {      // UI thread
+                @Override
+                public void run() {
+                    int remainTime = listTime.get(currentLine) + OPERN_SECOND_DELAYED - currentSecond;
+                    if (remainTime == 0) {
+                        currentLine++;
+                        if (currentLine >= listTime.size()) {
+                            Log.d("TESTT", "finish");
+                            playOver();
+                        }
+                        remainTime = listTime.get(currentLine) + OPERN_SECOND_DELAYED - currentSecond;
+                    }
+                    textTime.setText(String.valueOf(remainTime));
+                    currentSecond++;
+                }
+            });
+        }
+    };
 
     private final TextureView.SurfaceTextureListener surfaceTextureListener =
             new TextureView.SurfaceTextureListener() {
@@ -340,8 +424,8 @@ public class PlayActivity extends BaseActivity {
         mode = intent.getIntExtra(EXTRA_MODE, 0);
         instrument = intent.getIntExtra(EXTRA_INSTRUMENT, 0);
         category = intent.getIntExtra(EXTRA_CATIGORY, 0);
-        //opern = intent.getIntExtra(EXTRA_OPERN, 0);
-        calibrationResult = (CalibrationResult) intent.getSerializableExtra(CalibrationActivity.EXTRA_RESULT);
+        opern = intent.getIntExtra(EXTRA_OPERN, 0);
+        calibrationResult = (CalibrationResult) intent.getSerializableExtra(EXTRA_RESULT);
 
         // 开启子线程，绑定TextureView的响应事件
         startBackgroundThread();
@@ -384,6 +468,53 @@ public class PlayActivity extends BaseActivity {
         lastKeys = new ArrayList<>(keys);
     }
 
+    private void initView() {
+        /**
+         * 初始化界面上的文字标签、按键响应等等
+         */
+
+        switch (mode) {
+            case 0:
+                textViewModeName.setText(R.string.mode_free);
+                //textViewOpern.setText("");
+                break;
+            case 1:
+                textViewModeName.setText(R.string.mode_opern);
+                //textViewOpern.setText("曲谱：" + getResources().getStringArray(R.array.spinner_opern)[opern]);
+                imgOpern.setVisibility(View.VISIBLE);
+                textTime.setVisibility(View.VISIBLE);
+                initOpernTimer();
+                break;
+        }
+
+        if (instrument == 0 && category == 0) {
+            textViewInstrumentName.setText(R.string.piano_with_21_keys);
+        } else if (instrument == 0 && category == 1) {
+            textViewInstrumentName.setText("乐器：15键钢琴");
+        } else {
+            textViewInstrumentName.setText("乐器：7孔笛");
+        }
+
+        btnPlayOver.setOnClickListener((View v) -> {
+            playOver();
+        });
+
+        keys = new LinearLayout[]{keyC3, keyD3, keyE3, keyF3, keyG3, keyA3, keyB3, keyC4, keyD4,
+                keyE4, keyF4, keyG4, keyA4, keyB4, keyC5, keyD5, keyE5, keyF5, keyG5, keyA5, keyB5,
+                keyC3M, keyD3M, keyF3M, keyG3M, keyA3M, keyC4M, keyD4M, keyF4M, keyG4M, keyA4M,
+                keyC5M, keyD5M, keyF5M, keyG5M, keyA5M};
+
+        for (int i = 0; i < keys.length; ++i) {
+            voiceId[i] = soundPool.load(this, voiceResId[i], 1);
+
+            // FIXME: 动画暂时被关闭
+//            final int fi = i;
+//            keys[i].setOnClickListener((View v) -> {
+//                playSound(fi);
+//            });
+        }
+    }
+
     private void initSoundPool() {
         SoundPool.Builder spb = new SoundPool.Builder();
         spb.setMaxStreams(10);
@@ -391,6 +522,55 @@ public class PlayActivity extends BaseActivity {
         attrBuilder.setLegacyStreamType(AudioManager.STREAM_MUSIC);
         spb.setAudioAttributes(attrBuilder.build());
         soundPool = spb.build();
+    }
+
+    /**
+     * 在跟谱模式中，需要从原始txt格式谱子中设置所有行谱子的截取坐标与跳转时间，因此每行都需要一个计时器来跳转，
+     * 同时还需要设置一个全局的秒钟计时器，来统计下一次跳转的剩余时间
+     */
+    private void initOpernTimer() {
+
+        secondTimer = new Timer();
+        secondTimer.schedule(secondTask, 0, 1000);
+
+        Opern opern = new Opern(this, OPERN_PUGONGYINGDEYUEDING); // FIXME: 暂时只有一首谱子
+
+        listX = opern.getListX();
+        listY = opern.getListY();
+        listWidth = opern.getListWidth();
+        listHeight = opern.getListHeight();
+        listTime = opern.getListTime();
+
+        timers = new Timer [listTime.size()];
+        tasks = new TimerTask [listTime.size()];
+        for (int i=0; i<listTime.size()-1; ++i) {
+            final int fi = i;
+            tasks[i] = new TimerTask() {
+                @Override
+                public void run() {
+                    runOnUiThread(new Runnable() {      // UI thread
+                        @Override
+                        public void run() {
+                            timers[fi].cancel();
+                            int x = (int) (listX.get(fi) * widthScalar);
+                            int y = (int) (listY.get(fi) * heightScalar);
+                            int width = (int) (listWidth.get(fi) * widthScalar);
+                            int height = (int) (listHeight.get(fi) * heightScalar);
+                            Bitmap smallBitmap = Bitmap.createBitmap(sourceBitmap, x, y, width, height);
+                            imgOpern.setImageBitmap(smallBitmap);
+                        }
+                    });
+                }
+            };
+            timers[i] = new Timer();
+            timers[i].schedule(tasks[i], (listTime.get(i) + OPERN_SECOND_DELAYED) * 1000, 10000);
+        }
+
+        Drawable drawable = getDrawable(R.drawable.opern_pugongyingdeyueding);
+        sourceBitmap = ImageUtil.drawableToBitmap(drawable);
+//        sourceBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.opern_pugongyingdeyueding);
+        widthScalar = (double) drawable.getIntrinsicWidth() / opern.getWidth();
+        heightScalar = (double) drawable.getIntrinsicHeight() / opern.getHeight();
     }
 
     private void initMediaRecorder() {
@@ -408,55 +588,33 @@ public class PlayActivity extends BaseActivity {
             Log.i("nib", audioFile.getAbsolutePath());
             mediaRecorder.setOutputFile(audioFile.getAbsolutePath());
             mediaRecorder.prepare();
-            //mediaRecorder.start();
+            mediaRecorder.start();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private void initView() {
-        /**
-         * 初始化界面上的文字标签、按键响应等等
-         */
+    private void playOver() {
+        mediaRecorder.stop();
+        Intent intent = new Intent(this, PlayListenActivity.class);
+        intent.putExtra(FILENAME, fileName);
+        startActivity(intent);
+        finish();
+    }
 
-        switch (mode) {
-            case 0:
-                textViewModeName.setText(R.string.mode_free);
-                //textViewOpern.setText("");
-            case 1:
-                textViewModeName.setText(R.string.mode_opern);
-                //textViewOpern.setText("曲谱：" + getResources().getStringArray(R.array.spinner_opern)[opern]);
-        }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
 
-        if (instrument == 0 && category == 0) {
-            textViewInstrumentName.setText(R.string.piano_with_21_keys);
-        } else if (instrument == 0 && category == 1) {
-            textViewInstrumentName.setText("乐器：15键钢琴");
-        } else {
-            textViewInstrumentName.setText("乐器：7孔笛");
-        }
-
-        btnPlayOver.setOnClickListener((View v) -> {
-//            mediaRecorder.stop();
-            Intent intent = new Intent(this, PlayListenActivity.class);
-            intent.putExtra(FILENAME, fileName);
-            startActivity(intent);
-            finish();
-        });
-
-        keys = new LinearLayout[]{keyC3, keyD3, keyE3, keyF3, keyG3, keyA3, keyB3, keyC4, keyD4,
-                keyE4, keyF4, keyG4, keyA4, keyB4, keyC5, keyD5, keyE5, keyF5, keyG5, keyA5, keyB5,
-                keyC3M, keyD3M, keyF3M, keyG3M, keyA3M, keyC4M, keyD4M, keyF4M, keyG4M, keyA4M,
-                keyC5M, keyD5M, keyF5M, keyG5M, keyA5M};
-
-        for (int i = 0; i < keys.length; ++i) {
-            voiceId[i] = soundPool.load(this, voiceResId[i], 1);
-
-            // FIXME: 动画暂时被关闭
-//            final int fi = i;
-//            keys[i].setOnClickListener((View v) -> {
-//                playSound(fi);
-//            });
+        if (mode == MODE_OPERN) {
+            secondTimer.cancel();
+            for (int i=0; i<timers.length; ++i) {
+                try {
+                    timers[i].cancel();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
@@ -506,7 +664,7 @@ public class PlayActivity extends BaseActivity {
             Log.d(TAG, relativeMin.getWidth() + " " + relativeMin.getHeight());
 
             imageReader = ImageReader.newInstance(relativeMin.getWidth(), relativeMin.getHeight(),
-                    ImageFormat.YUV_420_888, 5);
+                    ImageFormat.YUV_420_888, 1);
 
             CanvasUtil.setPhotoSize(relativeMin.getWidth(), relativeMin.getHeight());
 

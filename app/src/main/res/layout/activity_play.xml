@@ -26,6 +26,11 @@
         android:layout_height="match_parent" />
 
     <!--FIXME: 先设置背景为空，用镜头内容代替-->
+    <com.papermelody.widget.PlayView
+        android:id="@+id/dot_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"></com.papermelody.widget.PlayView>
+
     <ImageView
         android:id="@+id/img_instrument_background"
         android:layout_width="match_parent"

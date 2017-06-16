@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.ImageFormat;
 import android.graphics.Matrix;
+import android.graphics.Paint;
+import android.graphics.Path;
 import android.graphics.RectF;
 import android.graphics.SurfaceTexture;
 import android.hardware.camera2.CameraAccessException;
@@ -51,7 +53,9 @@ import com.papermelody.util.ImageUtil;
 import com.papermelody.util.ToastUtil;
 import com.papermelody.util.ViewUtil;
 import com.papermelody.widget.AutoFitTextureView;
+import com.papermelody.widget.Bean;
 import com.papermelody.widget.CameraDebugView;
+import com.papermelody.widget.PlayView;
 
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
@@ -165,6 +169,8 @@ public class PlayActivity extends BaseActivity {
     LinearLayout keyG5M;
     @BindView(R.id.key_effect_a5m)
     LinearLayout keyA5M;
+    @BindView(R.id.dot_view)
+    PlayView playView;
 
     public static final int KEY_C3 = 0;
     public static final int KEY_D3 = 1;
@@ -237,10 +243,12 @@ public class PlayActivity extends BaseActivity {
 
     private CameraManager cameraManager;
     private CameraDevice cameraDevice;
-
-    /**
-     * 获取照片图像数据用到的子线程
-     */
+    Paint paint;
+    private List<Bean> list = new ArrayList<Bean>();
+    ;
+    private int MaxAlpha = 255;///**
+    private boolean START = true;// * 获取照片图像数据用到的子线程
+    private Path path; // */
     private HandlerThread backgroundThread;
     private Handler backgroundHandler;
 
@@ -248,6 +256,7 @@ public class PlayActivity extends BaseActivity {
      * Activity主线程
      */
     private Handler mainHandler;
+
 
     private String cameraID;
     private CameraCaptureSession cameraCaptureSession;
@@ -284,7 +293,8 @@ public class PlayActivity extends BaseActivity {
                 }
 
                 @Override
-                public void onSurfaceTextureUpdated(SurfaceTexture texture) { }
+                public void onSurfaceTextureUpdated(SurfaceTexture texture) {
+                }
             };
 
     private ArrayList<Integer> lastKeys = new ArrayList<>();
@@ -336,7 +346,8 @@ public class PlayActivity extends BaseActivity {
         // 开启子线程，绑定TextureView的响应事件
         startBackgroundThread();
         viewPlay.setSurfaceTextureListener(surfaceTextureListener);
-        
+
+
         initSoundPool();
         initView();
         initMediaRecorder();
@@ -347,13 +358,18 @@ public class PlayActivity extends BaseActivity {
         /**
          * Process image here
          */
-        if (!Tap.readyForNextFrame()) { return; }
+        if (!Tap.readyForNextFrame()) {
+            return;
+        }
 
         TransformResult transformResult = ImageProcessor.getKeyTransform(calibrationResult);
         Mat mat = ImageUtil.imageToBgr(image);
 
         long t1 = System.currentTimeMillis();
         List<Point> tapping = Tap.getAll(mat, canvasPlay.getHandContours(), canvasPlay.getFingerTips());
+
+        playView.addBean(tapping);
+
         long t2 = System.currentTimeMillis();
 
         CanvasUtil.setScreenHeight(ViewUtil.getScreenHeight(this));
@@ -361,7 +377,7 @@ public class PlayActivity extends BaseActivity {
 
         List<Integer> keys = ImageProcessor.getPlaySoundKey(mat.clone(), transformResult, tapping);
         for (Integer key : keys) {
-            if (!lastKeys.contains(key)){
+            if (!lastKeys.contains(key)) {
                 playSound(key);
             }
         }
@@ -392,7 +408,7 @@ public class PlayActivity extends BaseActivity {
             Log.i("nib", audioFile.getAbsolutePath());
             mediaRecorder.setOutputFile(audioFile.getAbsolutePath());
             mediaRecorder.prepare();
-            mediaRecorder.start();
+            //mediaRecorder.start();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -421,14 +437,14 @@ public class PlayActivity extends BaseActivity {
         }
 
         btnPlayOver.setOnClickListener((View v) -> {
-            mediaRecorder.stop();
+//            mediaRecorder.stop();
             Intent intent = new Intent(this, PlayListenActivity.class);
             intent.putExtra(FILENAME, fileName);
             startActivity(intent);
             finish();
         });
 
-        keys = new LinearLayout[] {keyC3, keyD3, keyE3, keyF3, keyG3, keyA3, keyB3, keyC4, keyD4,
+        keys = new LinearLayout[]{keyC3, keyD3, keyE3, keyF3, keyG3, keyA3, keyB3, keyC4, keyD4,
                 keyE4, keyF4, keyG4, keyA4, keyB4, keyC5, keyD5, keyE5, keyF5, keyG5, keyA5, keyB5,
                 keyC3M, keyD3M, keyF3M, keyG3M, keyA3M, keyC4M, keyD4M, keyF4M, keyG4M, keyA4M,
                 keyC5M, keyD5M, keyF5M, keyG5M, keyA5M};
@@ -446,8 +462,9 @@ public class PlayActivity extends BaseActivity {
 
     /**
      * 相机开启
-     * @param width     TextureView的宽度
-     * @param height    TextureView的高度
+     *
+     * @param width  TextureView的宽度
+     * @param height TextureView的高度
      */
     private void openCamera(int width, int height) {
 
@@ -467,13 +484,14 @@ public class PlayActivity extends BaseActivity {
 
     /**
      * 用来设置相机的输出选项，包括图像尺寸，图像获取，图像的标定操作等等
-     * @param width     TextureView的宽度
-     * @param height    TextureView的高度
+     *
+     * @param width  TextureView的宽度
+     * @param height TextureView的高度
      */
     private void setUpCameraOutputs(int width, int height) {
 
         cameraManager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
-        cameraID = String.valueOf(CameraCharacteristics.LENS_FACING_BACK);  //前摄像头
+        cameraID = String.valueOf(CameraCharacteristics.LENS_FACING_FRONT);  //前摄像头
         ImageProcessor.initProcessor();
 
         try {
@@ -485,7 +503,7 @@ public class PlayActivity extends BaseActivity {
             Size relativeMin = ImageUtil.getRelativeMinSize(Arrays.asList(map.getOutputSizes(ImageFormat.YUV_420_888)),
                     viewPlay.getWidth(), viewPlay.getHeight());
 
-            Log.d(TAG, relativeMin.getWidth()+" "+relativeMin.getHeight());
+            Log.d(TAG, relativeMin.getWidth() + " " + relativeMin.getHeight());
 
             imageReader = ImageReader.newInstance(relativeMin.getWidth(), relativeMin.getHeight(),
                     ImageFormat.YUV_420_888, 5);
@@ -501,7 +519,9 @@ public class PlayActivity extends BaseActivity {
                     }
                     processImage(image);
                 } finally {
-                    if (image != null) { image.close(); }
+                    if (image != null) {
+                        image.close();
+                    }
                 }
             }, mainHandler);
 
@@ -553,7 +573,7 @@ public class PlayActivity extends BaseActivity {
             previewSize = ImageUtil.chooseOptimalSize(map.getOutputSizes(SurfaceTexture.class),
                     rotatedPreviewWidth, rotatedPreviewHeight, maxPreviewWidth, maxPreviewHeight, relativeMin);
 
-            Log.d(TAG, previewSize.getWidth()+" "+previewSize.getHeight());
+            Log.d(TAG, previewSize.getWidth() + " " + previewSize.getHeight());
             viewPlay.setAspectRatio(previewSize.getWidth(), previewSize.getHeight());
 
             FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(viewPlay.getWidth(), viewPlay.getHeight());
@@ -567,8 +587,9 @@ public class PlayActivity extends BaseActivity {
 
     /**
      * 当手机屏幕的朝向改变时，要对获取到的视频流进行方向上的调整
-     * @param viewWidth     TextureView的宽度
-     * @param viewHeight    TextureView的高度
+     *
+     * @param viewWidth  TextureView的宽度
+     * @param viewHeight TextureView的高度
      */
     private void configureTransform(int viewWidth, int viewHeight) {
 
@@ -763,4 +784,5 @@ public class PlayActivity extends BaseActivity {
         }
         ToastUtil.showShort("文件已保存至data/data/com.papermelody/下");
     }
+
 }

@@ -713,7 +713,11 @@ public class PlayActivity extends BaseActivity {
         super.onDestroy();
 
         if (mode == MODE_OPERN) {
-            secondTimer.cancel();
+            try {
+                secondTimer.cancel();
+            }  catch (Exception e) {
+                e.printStackTrace();
+            }
             for (int i = 0; i < timers.length; ++i) {
                 try {
                     timers[i].cancel();
@@ -975,7 +979,12 @@ public class PlayActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         // TODO: @tth 做一个确认提示框，返回到首页
-        mediaRecorder.stop();
+        try {
+            mediaRecorder.stop();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
         finish();
     }
 

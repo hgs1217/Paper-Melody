@@ -55,6 +55,28 @@
             android:layout_marginTop="20dp"
             android:text="上传界面"/>
 
+
+        <TextView
+            android:id="@+id/seekbar_captionY"
+            style="@style/SeekBarCaption" />
+        <SeekBar
+            android:id="@+id/seekbarY"
+            style="@style/SeekBar" />
+
+        <TextView
+            android:id="@+id/seekbar_captionCr"
+            style="@style/SeekBarCaption" />
+        <SeekBar
+            android:id="@+id/seekbarCr"
+            style="@style/SeekBar" />
+
+        <TextView
+            android:id="@+id/seekbar_captionCb"
+            style="@style/SeekBarCaption" />
+        <SeekBar
+            android:id="@+id/seekbarCb"
+            style="@style/SeekBar" />
+
         <TextView
             android:id="@+id/seekbar_caption1"
             style="@style/SeekBarCaption" />

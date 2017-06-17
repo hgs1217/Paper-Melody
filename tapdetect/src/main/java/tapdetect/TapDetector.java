@@ -7,6 +7,8 @@
 
 package tapdetect;
 
+import android.util.Log;
+
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedList;
@@ -15,6 +17,8 @@ import java.util.ArrayList;
 
 import org.opencv.core.Point;
 import org.opencv.core.Mat;
+
+import tapdetect.facade.Tap;
 
 public class TapDetector {
     enum FingerTipStatus {
@@ -25,9 +29,13 @@ public class TapDetector {
         FingerTipStatus status;
 
         TapDetectPoint(Point point, FingerTipStatus status) {
-            this.x = point.x;
-            this.y = point.y;
+            super(point.x, point.y);
             this.status = status;
+        }
+
+        TapDetectPoint(TapDetectPoint other) {
+            super(other.x, other.y);
+            status = other.status;
         }
 
         int distanceFrom(Point pt) {
@@ -81,7 +89,7 @@ public class TapDetector {
          * @return:
          *  A list of `TapDetectPoint` whose `status` indicating the status of each finger tip point
          */
-        ArrayList<FingerTipStatus> fingerTipsStatus = new ArrayList<>();
+        List<TapDetectPoint> nextFingers = new ArrayList<>();
 
         TapDetectPoint nearestPt;
         int nearest_dist;
@@ -109,7 +117,7 @@ public class TapDetector {
 
             if (nearestPt == null || nearest_dist > Config.FINGER_TIP_MOVE_DIST_MAX) {
                 // has no relevant point at last frame
-                fingerTipsStatus.add(FingerTipStatus.NOT_CARE);
+                nextFingers.add(new TapDetectPoint(p, FingerTipStatus.NOT_CARE));
 
             } else if (nearest_dist < Config.FINGER_TIP_LINGER_DIST_MAX) {
                 // has a point at last frame with almost a same position
@@ -117,31 +125,47 @@ public class TapDetector {
                 if (nearestPt.isFalling() && p.y > Config.TAP_THRESHOLD_ROW) {
                     // last frame this is falling, and this frame it lingers
                     // Tap detected !
-                    fingerTipsStatus.add(FingerTipStatus.TAPPING);
+                    if (!noNeighborAdd(nextFingers, new TapDetectPoint(p, FingerTipStatus.TAPPING))) {
+                        nextFingers.add(new TapDetectPoint(p, FingerTipStatus.PRESSING));
+                    }
+                    // nextFingers.add(new TapDetectPoint(p, FingerTipStatus.TAPPING));
                 } else if (nearestPt.isPressing() || nearestPt.isTapping()) {
-                    fingerTipsStatus.add(FingerTipStatus.PRESSING);
+                    nextFingers.add(new TapDetectPoint(p, FingerTipStatus.PRESSING));
                 } else {
-                    fingerTipsStatus.add(FingerTipStatus.LINGER);
+                    nextFingers.add(new TapDetectPoint(p, FingerTipStatus.LINGER));
                 }
             } else if (Math.abs(p.x - nearestPt.x) < p.y - nearestPt.y) {
                 // has a point at last frame which is above this point and not too far
-                fingerTipsStatus.add(FingerTipStatus.FALLING);
+                nextFingers.add(new TapDetectPoint(p, FingerTipStatus.FALLING));
                 lastFingerTips.remove(nearestPt); // can not be matched by other points
             } else {
-                fingerTipsStatus.add(FingerTipStatus.NOT_CARE);
+                nextFingers.add(new TapDetectPoint(p, FingerTipStatus.NOT_CARE));
             }
 
         }
 
         // update lastFingerTips
-        List<TapDetectPoint> result = new ArrayList<>();
         lastFingerTips.clear();
-        for (int i=0; i<fingers.size(); ++i) {
-            lastFingerTips.add(new TapDetectPoint(fingers.get(i), fingerTipsStatus.get(i)));
-            result.add(new TapDetectPoint(fingers.get(i), fingerTipsStatus.get(i)));
+        for (TapDetectPoint p: nextFingers) {
+            lastFingerTips.add(new TapDetectPoint(p));
         }
+        return nextFingers;
+    }
 
-        return result;
+    private static boolean noNeighborAdd (List<TapDetectPoint> points, TapDetectPoint toAdd) {
+        for (TapDetectPoint p: points) {
+            if (p.distanceFrom(toAdd) < 15) {
+                if (p.y < toAdd.y) {
+                    p.x = toAdd.x;
+                    p.y = toAdd.y;
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        }
+        points.add(toAdd);
+        return true;
     }
 
     private static LinkedList<TapDetectPoint> lastFingerTips = new LinkedList<>();  // finger tips of last frame

@@ -12,9 +12,12 @@ import com.papermelody.util.CanvasUtil;
 import org.opencv.core.Point;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import tapdetect.ColorRange;
+import tapdetect.Config;
+import tapdetect.Sampler;
 import tapdetect.TapDetector.TapDetectPoint;
 import tapdetect.facade.Tap;
 
@@ -73,6 +76,8 @@ public class CameraDebugView extends View {
             } else if (p.isTapping()) {
                 color = Color.GREEN;
                 cnt[1] += 1;
+            } else if (p.isPressing()) {
+                color = Color.rgb(255, 170, 50);
             } else if (p.isLingering()) {
                 color = Color.BLUE;
                 cnt[2] += 1;
@@ -87,13 +92,15 @@ public class CameraDebugView extends View {
                 "Camera interval: " + cameraInterval + " ms",
                 "Process interval: " + processInterval + " ms",
                 "Time consumed: " + processDelay + " ms",
-                "Hand contour: " + handContours.size() + " pts",
-                "Finger tip: " + fingerTips.size() + " pts",
-                "Falling: " + cnt[0] + " pts",
-                "Tapping: " + cnt[1] + " pts",
-                "Lingering: " + cnt[2] + " pts",
+                // "Hand contour: " + handContours.size() + " pts",
+                // "Finger tip: " + fingerTips.size() + " pts",
+                // "Falling: " + cnt[0] + " pts",
+                // "Tapping: " + cnt[1] + " pts",
+                // "Lingering: " + cnt[2] + " pts",
                 "ColorRange: " + ColorRange.getRange()[0],
                 "ColorRange: " + ColorRange.getRange()[1],
+                "Aver: " + Arrays.toString(Sampler.aver),
+                "ratio: " + Sampler.ratio
         };
         CanvasUtil.writeText(canvas, to_be_write);
     }

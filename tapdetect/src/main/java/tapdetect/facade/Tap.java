@@ -166,7 +166,7 @@ public class Tap {
         List<Point> ret = new ArrayList<>();
 
         for (TapDetectPoint pt : taps) {
-            if (pt.isFalling()) {
+            if (pt.isTapping()) {
                 ret.add(pt);
             }
         }

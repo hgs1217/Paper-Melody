@@ -43,6 +43,20 @@ public class SettingsDevActivity extends BaseActivity {
     @BindView(R.id.btn_to_upload)
     Button btnUpload;
 
+    @BindView(R.id.seekbarY)
+    SeekBar seekBarY;
+    @BindView(R.id.seekbarCr)
+    SeekBar seekBarCr;
+    @BindView(R.id.seekbarCb)
+    SeekBar seekBarCb;
+
+    @BindView(R.id.seekbar_captionY)
+    TextView seekBarCaptionY;
+    @BindView(R.id.seekbar_captionCr)
+    TextView seekBarCaptionCr;
+    @BindView(R.id.seekbar_captionCb)
+    TextView seekBarCaptionCb;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,6 +99,35 @@ public class SettingsDevActivity extends BaseActivity {
             intent.putExtra(PlayActivity.FILENAME, "Kissbye.mid");
             startActivity(intent);
         });
+
+
+        TextView[] colorRangeCaption = { seekBarCaptionY, seekBarCaptionCr, seekBarCaptionCb};
+        SeekBar[] colorRangeSeekBar = { seekBarY, seekBarCr, seekBarCb};
+        String[] caption = {"Y", "Cr", "Cb"};
+
+        for (int i=0; i<3; ++i) {
+            final int index = i;
+            double paraValue = Config.FINGER_COLOR[i];
+            colorRangeCaption[i].setText(caption[i] + ": " + paraValue);
+            colorRangeSeekBar[i].setMax(255);
+            colorRangeSeekBar[i].setProgress((int) paraValue);
+
+            colorRangeSeekBar[i].setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                @Override
+                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                    Config.FINGER_COLOR[index] = (double) progress;
+                    colorRangeCaption[index].setText(caption[index] + ": " + Config.FINGER_COLOR[index]);
+                }
+
+                @Override
+                public void onStartTrackingTouch(SeekBar seekBar) {
+                }
+
+                @Override
+                public void onStopTrackingTouch(SeekBar seekBar) {
+                }
+            });
+        }
 
         // Use reflect to dynamically set the value of seek bars
         // according to values in `tapdetect.Config`

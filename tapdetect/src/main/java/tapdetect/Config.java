@@ -7,8 +7,6 @@
 
 package tapdetect;
 
-import org.opencv.core.Scalar;
-
 public class Config {
     public static int IM_HEIGHT = 250;
     public static int TAP_THRESHOLD_ROW = 160;
@@ -26,10 +24,10 @@ public class Config {
     public static int PROCESS_INTERVAL_MS = 50;
 
     public static double[][] FINGER_COLOR_RANGE = {{0, 135, 100}, {255, 142, 130}};
-    public static double[] FINGER_COLOR = {128, 145, 115};
-    public static double[] FINGER_COLOR_TOLERANCE = {128, 15, 15};
+    public static double[] FINGER_COLOR = {128, 147, 110};
+    public static double[] FINGER_COLOR_TOLERANCE = {128, 17, 30};
 
-    public static double SAMPLE_PASS_THRESHOLD = 0.75;
+    public static double SAMPLE_PASS_THRESHOLD = 0.85;
     public static double[] COLOR_RANGE_EXPAND = {2, 1.4, 1.4};
     public static int SAMPLE_STABLE_CNT = 5;
 }

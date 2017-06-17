@@ -409,15 +409,15 @@ public class PlayActivity extends BaseActivity {
             judge_in_area[i] = false;
         }
         List<Integer> keys = ImageProcessor.getPlaySoundKey(mat.clone(), transformResult, tapping);
-        for (int i = 0; i < keys.size(); i++) {
-            if (!lastKeys.contains(keys.get(i))) {
-                judge_in_area[i] = true;
+        for (int i=0; i < keys.size(); i++) {
+            // if (!lastKeys.contains(keys.get(i))) {
+                judge_in_area[i]=true;
                 playSound(keys.get(i));
-            }
+            // }
 
         }
         playView.addBean(tapping, judge_in_area);
-        lastKeys = new ArrayList<>(keys);
+        // lastKeys = new ArrayList<>(keys);
     }
 
     private void initView() {

@@ -15,6 +15,7 @@ import org.opencv.core.Point;
 import org.opencv.core.Size;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Sampler {
@@ -39,7 +40,8 @@ public class Sampler {
     // mask used to saved the mask, this Mat will have same size will the image will process
     // in tap detection
     private static Mat sampleMask;
-    private static boolean isStable = false;
+    public static double[] aver = {0, 0, 0};
+    public static double ratio = 0.0;
 
     // contain same points with sampleWindowApex except for
     // they have offsets added so that it shares a same coordinate with
@@ -114,9 +116,11 @@ public class Sampler {
         }
         List<Point> pixelsToUpdate = new ArrayList<>();
 
+        aver[0] = aver[1] = aver[2] = 0;
         pixelLoop:
         for (Point p : samplePixels) {
             for (int ch = 0; ch < 3; ++ch) { // channels
+                aver[ch] += im.get((int) p.y, (int) p.x)[ch];
                 if (Math.abs(im.get((int) p.y, (int) p.x)[ch] - Config.FINGER_COLOR[ch])
                         >= Config.FINGER_COLOR_TOLERANCE[ch]) {
                     continue pixelLoop;
@@ -124,8 +128,12 @@ public class Sampler {
             }
             pixelsToUpdate.add(p);
         }
+        // FIXME: aver and ratio is only for debug, remove them for performance
+        aver[0] = (int) (aver[0] / samplePixels.size() * 100) / 100;
+        aver[1] = (int) (aver[1] / samplePixels.size() * 100) / 100;
+        aver[2] = (int) (aver[2] / samplePixels.size() * 100) / 100;
+        ratio = (int) (((double) pixelsToUpdate.size() * 100) / (double) samplePixels.size()) / 100.0;
 
-        // Log.w("near ratio", "" + Math.round(pixelsToUpdate.size() / (double) samplePixels.size() * 100));
         if (pixelsToUpdate.size() < samplePixels.size() * Config.SAMPLE_PASS_THRESHOLD) {
             ColorRange.reset();
         } else {

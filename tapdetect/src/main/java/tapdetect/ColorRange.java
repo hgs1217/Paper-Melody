@@ -84,9 +84,10 @@ public class ColorRange {
             std[i] = Math.sqrt(std[i] / n - aver[i] * aver[i]);
         }
 
-         std[0] *= Config.COLOR_RANGE_EXPAND[0];
-         std[1] *= Config.COLOR_RANGE_EXPAND[1];
-         std[2] *= Config.COLOR_RANGE_EXPAND[2];  // YCrCb, Y channel has a larger range
+//        Log.w("std", Arrays.toString(std));
+        std[0] *= Config.COLOR_RANGE_EXPAND[0];
+        std[1] *= Config.COLOR_RANGE_EXPAND[1];
+        std[2] *= Config.COLOR_RANGE_EXPAND[2];  // YCrCb, Y channel has a larger range
 
         // calc new color range
         double[][] newRange = new double[2][3];

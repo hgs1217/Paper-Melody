@@ -26,14 +26,14 @@ public class Sampler {
     static int sampleWindowHeight = 147;
     // We need guarantee the center of the canvas lies inside the contour
     // otherwise, opencv flood-fill algorithm will fail to convert the apexes to a bi-image
-    private static int sampleWindowApex[][] = { // [col, row]
-            {32, 81}, {32, 95}, {57, 102}, {60, 111}, {94, 111},
-            {96, 95}, {103, 103}, {105, 94}, {102, 111}, {110, 115},
-            {104, 116}, {113, 113}, {120, 121}, {142, 111}, {139, 98},
-            {152, 113}, {168, 105}, {174, 111}, {180, 100}, {207, 102},
-            {207, 89}, {193, 88}, {187, 72}, {184, 81}, {178, 65},
-            {168, 65}, {175, 57}, {162, 54}, {151, 32}, {99, 34},
-            {89, 52}, {75, 49}, {77, 62}, {72, 55}, {67, 72}
+    private static int sampleWindowApex[][] = {  // {col, row}
+            {41, 82}, {38, 85}, {39, 96}, {68, 96}, {68, 109},
+            {69, 110}, {72, 111}, {86, 111}, {89, 110}, {106, 81},
+            {106, 109}, {113, 115}, {128, 115}, {132, 111}, {136, 83},
+            {145, 109}, {148, 112}, {165, 112}, {168, 109}, {169, 92},
+            {184, 104}, {185, 105}, {197, 105}, {198, 103}, {198, 96},
+            {188, 82}, {179, 73}, {165, 62}, {152, 38}, {149, 35},
+            {108, 35}, {103, 38}, {69, 72}
     };
 
     // mask used to saved the mask, this Mat will have same size will the image will process

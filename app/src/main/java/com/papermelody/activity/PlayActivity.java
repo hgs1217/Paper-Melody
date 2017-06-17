@@ -107,78 +107,78 @@ public class PlayActivity extends BaseActivity {
     TextView textViewInstrumentName;
     @BindView(R.id.btn_play_over)
     Button btnPlayOver;
-    @BindView(R.id.key_effect_c3)
-    LinearLayout keyC3;
-    @BindView(R.id.key_effect_d3)
-    LinearLayout keyD3;
-    @BindView(R.id.key_effect_e3)
-    LinearLayout keyE3;
-    @BindView(R.id.key_effect_f3)
-    LinearLayout keyF3;
-    @BindView(R.id.key_effect_g3)
-    LinearLayout keyG3;
-    @BindView(R.id.key_effect_a3)
-    LinearLayout keyA3;
-    @BindView(R.id.key_effect_b3)
-    LinearLayout keyB3;
-    @BindView(R.id.key_effect_c4)
-    LinearLayout keyC4;
-    @BindView(R.id.key_effect_d4)
-    LinearLayout keyD4;
-    @BindView(R.id.key_effect_e4)
-    LinearLayout keyE4;
-    @BindView(R.id.key_effect_f4)
-    LinearLayout keyF4;
-    @BindView(R.id.key_effect_g4)
-    LinearLayout keyG4;
-    @BindView(R.id.key_effect_a4)
-    LinearLayout keyA4;
-    @BindView(R.id.key_effect_b4)
-    LinearLayout keyB4;
-    @BindView(R.id.key_effect_c5)
-    LinearLayout keyC5;
-    @BindView(R.id.key_effect_d5)
-    LinearLayout keyD5;
-    @BindView(R.id.key_effect_e5)
-    LinearLayout keyE5;
-    @BindView(R.id.key_effect_f5)
-    LinearLayout keyF5;
-    @BindView(R.id.key_effect_g5)
-    LinearLayout keyG5;
-    @BindView(R.id.key_effect_a5)
-    LinearLayout keyA5;
-    @BindView(R.id.key_effect_b5)
-    LinearLayout keyB5;
-    @BindView(R.id.key_effect_c3m)
-    LinearLayout keyC3M;
-    @BindView(R.id.key_effect_d3m)
-    LinearLayout keyD3M;
-    @BindView(R.id.key_effect_f3m)
-    LinearLayout keyF3M;
-    @BindView(R.id.key_effect_g3m)
-    LinearLayout keyG3M;
-    @BindView(R.id.key_effect_a3m)
-    LinearLayout keyA3M;
-    @BindView(R.id.key_effect_c4m)
-    LinearLayout keyC4M;
-    @BindView(R.id.key_effect_d4m)
-    LinearLayout keyD4M;
-    @BindView(R.id.key_effect_f4m)
-    LinearLayout keyF4M;
-    @BindView(R.id.key_effect_g4m)
-    LinearLayout keyG4M;
-    @BindView(R.id.key_effect_a4m)
-    LinearLayout keyA4M;
-    @BindView(R.id.key_effect_c5m)
-    LinearLayout keyC5M;
-    @BindView(R.id.key_effect_d5m)
-    LinearLayout keyD5M;
-    @BindView(R.id.key_effect_f5m)
-    LinearLayout keyF5M;
-    @BindView(R.id.key_effect_g5m)
-    LinearLayout keyG5M;
-    @BindView(R.id.key_effect_a5m)
-    LinearLayout keyA5M;
+//    @BindView(R.id.key_effect_c3)
+//    LinearLayout keyC3;
+//    @BindView(R.id.key_effect_d3)
+//    LinearLayout keyD3;
+//    @BindView(R.id.key_effect_e3)
+//    LinearLayout keyE3;
+//    @BindView(R.id.key_effect_f3)
+//    LinearLayout keyF3;
+//    @BindView(R.id.key_effect_g3)
+//    LinearLayout keyG3;
+//    @BindView(R.id.key_effect_a3)
+//    LinearLayout keyA3;
+//    @BindView(R.id.key_effect_b3)
+//    LinearLayout keyB3;
+//    @BindView(R.id.key_effect_c4)
+//    LinearLayout keyC4;
+//    @BindView(R.id.key_effect_d4)
+//    LinearLayout keyD4;
+//    @BindView(R.id.key_effect_e4)
+//    LinearLayout keyE4;
+//    @BindView(R.id.key_effect_f4)
+//    LinearLayout keyF4;
+//    @BindView(R.id.key_effect_g4)
+//    LinearLayout keyG4;
+//    @BindView(R.id.key_effect_a4)
+//    LinearLayout keyA4;
+//    @BindView(R.id.key_effect_b4)
+//    LinearLayout keyB4;
+//    @BindView(R.id.key_effect_c5)
+//    LinearLayout keyC5;
+//    @BindView(R.id.key_effect_d5)
+//    LinearLayout keyD5;
+//    @BindView(R.id.key_effect_e5)
+//    LinearLayout keyE5;
+//    @BindView(R.id.key_effect_f5)
+//    LinearLayout keyF5;
+//    @BindView(R.id.key_effect_g5)
+//    LinearLayout keyG5;
+//    @BindView(R.id.key_effect_a5)
+//    LinearLayout keyA5;
+//    @BindView(R.id.key_effect_b5)
+//    LinearLayout keyB5;
+//    @BindView(R.id.key_effect_c3m)
+//    LinearLayout keyC3M;
+//    @BindView(R.id.key_effect_d3m)
+//    LinearLayout keyD3M;
+//    @BindView(R.id.key_effect_f3m)
+//    LinearLayout keyF3M;
+//    @BindView(R.id.key_effect_g3m)
+//    LinearLayout keyG3M;
+//    @BindView(R.id.key_effect_a3m)
+//    LinearLayout keyA3M;
+//    @BindView(R.id.key_effect_c4m)
+//    LinearLayout keyC4M;
+//    @BindView(R.id.key_effect_d4m)
+//    LinearLayout keyD4M;
+//    @BindView(R.id.key_effect_f4m)
+//    LinearLayout keyF4M;
+//    @BindView(R.id.key_effect_g4m)
+//    LinearLayout keyG4M;
+//    @BindView(R.id.key_effect_a4m)
+//    LinearLayout keyA4M;
+//    @BindView(R.id.key_effect_c5m)
+//    LinearLayout keyC5M;
+//    @BindView(R.id.key_effect_d5m)
+//    LinearLayout keyD5M;
+//    @BindView(R.id.key_effect_f5m)
+//    LinearLayout keyF5M;
+//    @BindView(R.id.key_effect_g5m)
+//    LinearLayout keyG5M;
+//    @BindView(R.id.key_effect_a5m)
+//    LinearLayout keyA5M;
     @BindView(R.id.dot_view)
     PlayView playView;
     @BindView(R.id.new_img_opern)
@@ -191,9 +191,12 @@ public class PlayActivity extends BaseActivity {
     TextView noticetime;
     @BindView(R.id.start_notice)
     TextView startnotice;
+    @BindView(R.id.notice_layout)
+    LinearLayout noticelayout;
 
     @BindView(R.id.text_time)
     TextView textTime;
+
     @BindView(R.id.text_calibration)
     TextView calibrationtext;
 
@@ -446,7 +449,13 @@ public class PlayActivity extends BaseActivity {
          * Process image here
          * Calibration process already ends, now we play keys according to tapping points
          */
+        if (!Tap.sampleCompleted()) {
+            //canvasPlay.setVisibility(View.INVISIBLE);
+            calibrationtext.setVisibility(View.VISIBLE);
+            noticelayout.setVisibility(View.VISIBLE);
+        }
         if (Tap.sampleCompleted()&&!hand_calibration_flag){
+            noticelayout.setVisibility(View.INVISIBLE);
             calibrationtext.setVisibility(View.INVISIBLE);
             canvasPlay.setVisibility(View.INVISIBLE);
             screencover.setVisibility(View.VISIBLE);
@@ -460,17 +469,28 @@ public class PlayActivity extends BaseActivity {
 
 
         }
-        if(Tap.sampleCompleted()&&number_count<=3&&!start_flag){
+        if (Tap.sampleCompleted() && number_count <= 4 && !start_flag) {
             switch(number_count){
                 case 0:break;
-                case 1:{noticetime.setText(String.valueOf("2"));break;}
-                case 2:{noticetime.setText(String.valueOf("1"));break;}
-                case 3:{screencover.setVisibility(View.VISIBLE);
-                    noticetime.setVisibility(View.VISIBLE);
-                    startnotice.setVisibility(View.VISIBLE);
+                case 1:
+                    break;
+
+                case 2: {
+                    noticetime.setText(String.valueOf("2"));
+                    break;
+                }
+                case 3: {
+                    noticetime.setText(String.valueOf("1"));
+                    break;
+                }
+                case 4: {
+                    screencover.setVisibility(View.INVISIBLE);
+                    noticetime.setVisibility(View.INVISIBLE);
+                    startnotice.setVisibility(View.INVISIBLE);
                     canvasPlay.setVisibility(View.VISIBLE);
                 initMediaRecorder();
-                initSoundPool();initView();
+                    initSoundPool();
+                    initView();
                     start_flag=true;
                 break;
                 }
@@ -518,7 +538,9 @@ public class PlayActivity extends BaseActivity {
         switch (mode) {
             case MODE_FREE:
                 textViewModeName.setText(R.string.mode_free);
-                calibrationtext.setVisibility(View.VISIBLE);
+                btnPlayOver.setVisibility(View.VISIBLE);
+
+                // calibrationtext.setVisibility(View.VISIBLE);
                 //textViewOpern.setText("");
                 break;
             case MODE_OPERN:
@@ -526,7 +548,8 @@ public class PlayActivity extends BaseActivity {
                 //textViewOpern.setText("曲谱：" + getResources().getStringArray(R.array.spinner_opern)[opern]);
                 newImgOpern.setVisibility(View.VISIBLE);
                 oldImgOpern.setVisibility(View.VISIBLE);
-                calibrationtext.setVisibility(View.VISIBLE);
+                btnPlayOver.setVisibility(View.VISIBLE);
+                // calibrationtext.setVisibility(View.VISIBLE);
                 //calibrationtext.setText(String.valueOf("dfdfdfd"));
                 textTime.setVisibility(View.VISIBLE);
                 initOpernTimer();
@@ -713,14 +736,14 @@ public class PlayActivity extends BaseActivity {
             Log.i("nib", audioFile.getAbsolutePath());
             mediaRecorder.setOutputFile(audioFile.getAbsolutePath());
             mediaRecorder.prepare();
-            mediaRecorder.start();
+            //mediaRecorder.start();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     private void playOver() {
-        mediaRecorder.stop();
+        //mediaRecorder.stop();
         Intent intent = new Intent(this, PlayListenActivity.class);
         intent.putExtra(FILENAME, fileName);
         startActivity(intent);
@@ -775,7 +798,7 @@ public class PlayActivity extends BaseActivity {
 
 
         cameraManager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
-        cameraID = String.valueOf(CameraCharacteristics.LENS_FACING_BACK);  //前摄像头
+        cameraID = String.valueOf(CameraCharacteristics.LENS_FACING_FRONT);  //前摄像头
         ImageProcessor.initProcessor();
 
         try {
@@ -1020,7 +1043,7 @@ public class PlayActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         // TODO: @tth 做一个确认提示框，返回到首页
-        mediaRecorder.stop();
+        //mediaRecorder.stop();
         finish();
     }
 

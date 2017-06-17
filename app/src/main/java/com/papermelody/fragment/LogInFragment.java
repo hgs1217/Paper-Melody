@@ -94,6 +94,15 @@ public class LogInFragment extends BaseFragment {
         btnLogIn.setOnClickListener((View v) -> {
             String name = editUsername.getText().toString();
             userTextInputLayoutUser.setErrorEnabled(false);
+            MainActivity activity = (MainActivity) getActivity();
+            if (TextUtils.isEmpty(name)) userTextInputLayoutUser.setError("用户名不能为空");
+            if ( activity.isContainChinese(name)) {  // FIXME: 此处需和register统一
+
+
+                userTextInputLayoutUser.setError("不能包含中文");
+
+            }
+
             if (TextUtils.isEmpty(name) || name.length() < 2) {  // FIXME: 此处需和register统一
 
                 userTextInputLayoutUser.setError("用户名过短");

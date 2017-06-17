@@ -80,26 +80,42 @@ public class RegisterFragment extends BaseFragment {
         btnRegister.setOnClickListener((View v) -> {
                     String name = editUsername.getText().toString();
                     String pw = editPassword.getText().toString();
+            userTextInputLayoutUser.setErrorEnabled(false);
+            MainActivity activity = (MainActivity) getActivity();
+            if (TextUtils.isEmpty(name)) userTextInputLayoutUser.setError("用户名不能为空");
+            if (activity.isContainChinese(name)) {  // FIXME: 此处需和register统一
 
 
-                    pwTextInputLayoutUser.setErrorEnabled(false);  // FIXME: 存在某些情况下点击用户名editText不会弹出输入框的bug
-                    if (TextUtils.isEmpty(pw) || pw.length() < 6) {
-                        pwTextInputLayoutUser.setError("密码错误不能少于6个字符");
-                    } else {
-                        SocialSystemAPI api = RetrofitClient.getSocialSystemAPI();
-                        addSubscription(api.register(name, pw)
-                                .flatMap(NetworkFailureHandler.httpFailureFilter)
-                                .subscribeOn(Schedulers.io())
-                                .observeOn(AndroidSchedulers.mainThread())
-                                .map(response -> ((UserResponse) response).getResult())
-                                .subscribe(
-                                        userInfo -> {
-                                            ToastUtil.showShort(R.string.register_success);
-                                            updateUser(userInfo);
-                                        },
-                                        NetworkFailureHandler.loginErrorHandler
-                                ));
-                    }
+                userTextInputLayoutUser.setError("不能包含中文");
+
+            }
+            if (TextUtils.isEmpty(name) || name.length() < 2) {  // FIXME: 此处需和register统一
+
+                userTextInputLayoutUser.setError("用户名过短");
+
+            }
+            else {
+
+
+                pwTextInputLayoutUser.setErrorEnabled(false);  // FIXME: 存在某些情况下点击用户名editText不会弹出输入框的bug
+                if (TextUtils.isEmpty(pw) || pw.length() < 6) {
+                    pwTextInputLayoutUser.setError("密码错误不能少于6个字符");
+                } else {
+                    SocialSystemAPI api = RetrofitClient.getSocialSystemAPI();
+                    addSubscription(api.register(name, pw)
+                            .flatMap(NetworkFailureHandler.httpFailureFilter)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .map(response -> ((UserResponse) response).getResult())
+                            .subscribe(
+                                    userInfo -> {
+                                        ToastUtil.showShort(R.string.register_success);
+                                        updateUser(userInfo);
+                                    },
+                                    NetworkFailureHandler.loginErrorHandler
+                            ));
+                }
+            }
                 }
         );
 

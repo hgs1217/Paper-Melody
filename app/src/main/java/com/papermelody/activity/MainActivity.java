@@ -35,6 +35,9 @@ import com.papermelody.fragment.UserInfoFragment;
 import com.papermelody.widget.NoScrollViewPager;
 import com.roughike.bottombar.BottomBar;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import butterknife.BindView;
 
 public class MainActivity extends BaseActivity {
@@ -355,5 +358,15 @@ public class MainActivity extends BaseActivity {
                 }
             }
         }
+    }
+    public boolean isContainChinese(String str) {
+
+
+        Pattern p = Pattern.compile("[\u4e00-\u9fa5]");
+        Matcher m = p.matcher(str);
+        if (m.find()) {
+            return true;
+        }
+        return false;
     }
 }

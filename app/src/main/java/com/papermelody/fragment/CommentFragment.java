@@ -147,7 +147,11 @@ public class CommentFragment extends BaseFragment {
                             });
                             //System.out.print("sorted!");
                             SimpleDateFormat sDateFormat2 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-                            Log.d("TAG", "before init View: " + comments.get(0).getCreateTime());
+                            try {
+                                Log.d("TAG", "before init View: " + comments.get(0).getCreateTime());
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
                             Log.d("TAG2", "!!!!!");
                             initRecyclerView(comments);
                             refreshMyComment(comments);
@@ -162,7 +166,6 @@ public class CommentFragment extends BaseFragment {
             userNoComment.setText(R.string.not_logged_in);
             my_comment_overall.setVisibility(View.GONE);
             userNoComment.setVisibility(View.VISIBLE);
-
         } else {
             boolean hasCommented = false;
             for (Comment singleComment : list) {
@@ -183,7 +186,6 @@ public class CommentFragment extends BaseFragment {
                 userNoComment.setVisibility(View.VISIBLE);
             }
         }
-
     }
 
     private void initRecyclerView(List<Comment> comments) {

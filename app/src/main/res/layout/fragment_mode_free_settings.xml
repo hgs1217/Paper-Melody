@@ -5,49 +5,43 @@
     android:gravity="center"
     android:orientation="vertical">
 
-    <LinearLayout
-        android:id="@+id/lay22"
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:animateLayoutChanges="true">
-
-        <Spinner
-            android:id="@+id/spinner_free_instrument"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/lay11"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:animateLayoutChanges="true">
-
-        <Spinner
-            android:id="@+id/spinner_free_category"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center" />
-
-    </LinearLayout>
-
+        android:layout_marginTop="55dp"
+        android:gravity="center_horizontal"
+        android:text="@string/please_choose_instrument"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="15sp" />
 
     <com.idunnololz.widgets.AnimatedExpandableListView
         android:id="@+id/listView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="33dp"
+        android:layout_marginRight="33dp"
+        android:layout_marginTop="20dp"
         android:layout_weight="1"
-        android:childDivider="@color/green"
-        android:minHeight="200dp" />
+        android:childDivider="@color/white"
+        android:divider="@color/white"
+        android:dividerHeight="0dp"
+        android:minHeight="400dp"
+        android:scrollbarAlwaysDrawHorizontalTrack="false"
+        android:scrollbarAlwaysDrawVerticalTrack="false"
+        android:scrollbarSize="0dp"
+        android:scrollbars="none" />
 
     <Button
         android:id="@+id/btn_free_cfm"
-        android:layout_width="wrap_content"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:text="@string/confirm" />
+        android:text="@string/confirm"
+        android:textColor="@color/bb_inActiveBottomBarItemColor" />
+
+    <View
+        android:layout_width="wrap_content"
+        android:layout_height="30dp" />
 
 
 </LinearLayout>

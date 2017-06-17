@@ -55,6 +55,8 @@ dependencies {
     compile 'com.roughike:bottom-bar:2.3.1'
     compile 'me.shaohui:bottomdialog:1.1.9'
     compile 'com.bartoszlipinski:recyclerviewheader2:2.0.1'
+    compile 'com.github.traex.expandablelayout:library:1.2.2'
+
 
     //compile 'com.android.support.constraint:constraint-layout:1.0.2'
 

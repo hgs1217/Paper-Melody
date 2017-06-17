@@ -167,4 +167,10 @@
     <string name="update_user_info">修改用户信息</string>
     <string name="__label">$REPLY2THIS$</string>
     <string name="__labelForSplit">\\$REPLY2THIS\\$</string>
+    <string name="please_choose_instrument">请选择一种乐器开始：</string>
+    <string name="piano">钢琴</string>
+    <string name="recorder">笛子</string>
+    <string name="flute">笛子</string>
+    <string name="error">额，请先选择乐器~</string>
+    <string name="use_xx_to_play">使用 xx 开始演奏</string>
 </resources>

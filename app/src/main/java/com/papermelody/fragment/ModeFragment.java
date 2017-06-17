@@ -2,6 +2,7 @@ package com.papermelody.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,7 +62,12 @@ public class ModeFragment extends BaseFragment {
     public void initView() {
         btnModeFree.setOnClickListener((View v) -> {
             // TODO: 当设置完成后需修改
+            FragmentTransaction trans = getFragmentManager().beginTransaction();
+            trans.setCustomAnimations(R.anim.comment_show, R.anim.comment_gone);
+            trans.show(new ModeFreeSettingsFragment()).commit();
+
             MainActivity mainActivity = (MainActivity) getActivity();
+
             mainActivity.updateFragment(MainActivity.MODE_FREE);
 //            Intent intent = new Intent(getActivity(), CalibrationActivity.class);
 //            startActivity(intent);

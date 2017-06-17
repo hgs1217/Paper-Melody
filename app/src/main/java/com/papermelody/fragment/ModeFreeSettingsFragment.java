@@ -1,25 +1,23 @@
 package com.papermelody.fragment;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ExpandableListView;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.Spinner;
-import android.widget.TextView;
 
 import com.idunnololz.widgets.AnimatedExpandableListView;
 import com.papermelody.R;
 import com.papermelody.activity.CalibrationActivity;
 import com.papermelody.activity.MainActivity;
 import com.papermelody.activity.PlayActivity;
+import com.papermelody.model.instrument.Instrument;
+import com.papermelody.util.ToastUtil;
+import com.papermelody.widget.ModeSettingsAdapter;
+import com.papermelody.widget.ModeSettingsAdapter.ChildItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,24 +35,15 @@ public class ModeFreeSettingsFragment extends BaseFragment {
      * 自由模式演奏前设置页面
      */
 
-    @BindView(R.id.spinner_free_instrument)
-    Spinner spinnerInstrument;
-    @BindView(R.id.spinner_free_category)
-    Spinner spinnerCategory;
     @BindView(R.id.btn_free_cfm)
     Button btnFreeConfirm;
-    @BindView(R.id.lay11)
-    LinearLayout ll_first;
-    @BindView(R.id.lay22)
-    LinearLayout ll_second;
-
     @BindView(R.id.listView)
     AnimatedExpandableListView listView;
 
-    private ModeFreeSettingsFragment.ExampleAdapter adapter;
+    private ModeSettingsAdapter adapter;
 
-    private int instrument, category;
-    private ArrayAdapter<CharSequence> arrayAdapterInstrument, arrayAdapterCategory;
+    private int instrument;
+    private int category;
 
     public static ModeFreeSettingsFragment newInstance() {
         return new ModeFreeSettingsFragment();
@@ -70,49 +59,22 @@ public class ModeFreeSettingsFragment extends BaseFragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_mode_free_settings, container, false);
         ButterKnife.bind(this, view);
-        initView();
-        test();
+
+        initButton();
+        initExpandableList();
         return view;
 
     }
 
-    private void initView() {
-        arrayAdapterInstrument = ArrayAdapter.createFromResource(getContext(), R.array.spinner_instrument, android.R.layout.simple_spinner_item);
-        arrayAdapterInstrument.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerInstrument.setAdapter(arrayAdapterInstrument);
-        spinnerInstrument.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (position == 0) {
-                    arrayAdapterCategory = ArrayAdapter.createFromResource(getContext(), R.array.spinner_category_piano, android.R.layout.simple_spinner_item);
-                } else {
-                    arrayAdapterCategory = ArrayAdapter.createFromResource(getContext(), R.array.spinner_category_flute, android.R.layout.simple_spinner_item);
-                }
-                instrument = position;
-                arrayAdapterCategory.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                spinnerCategory.setAdapter(arrayAdapterCategory);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-        spinnerCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (position == 0) {
-                    category = 0;
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
+    private void initButton() {
+        instrument = -1;
+        category = -1;
         btnFreeConfirm.setOnClickListener((View v) -> {
             //__TEST();
+            if (instrument < 0 || category < 0) {
+                ToastUtil.showShort(getString(R.string.error));
+                return;
+            }
             Intent intent = new Intent(getContext(), CalibrationActivity.class);
             intent.putExtra(PlayActivity.EXTRA_MODE, PlayActivity.MODE_FREE);
             intent.putExtra(PlayActivity.EXTRA_INSTRUMENT, instrument);
@@ -124,176 +86,104 @@ public class ModeFreeSettingsFragment extends BaseFragment {
     }
 
 
-    public void test() {
-        List<GroupItem> items = new ArrayList<GroupItem>();
+    private void initExpandableList() {
+        String[][] menu = {
+                {
+                        getString(R.string.flute),
+                        getString(R.string.flute_with_7_holes)
+                },
+                {
+                        getString(R.string.piano),
+                        getString(R.string.piano_with_14_keys_c3_to_b4),
+                        getString(R.string.piano_with_14_keys_c4_to_b5),
+                        getString(R.string.piano_with_21_keys_c3_to_b5),
+                        getString(R.string.piano_with_21_keys_c4_to_b6)
+                }
+        };
 
-        // Populate our list with groups and it's children
-        for (int i = 2; i > 0; i--) {
-            GroupItem item = new GroupItem();
+        List<ModeSettingsAdapter.GroupItem> items = new ArrayList<ModeSettingsAdapter.GroupItem>();
 
-            item.title = "Group " + i;
-
-            for (int j = 0; j < i; j++) {
-                ChildItem child = new ChildItem();
-                child.title = "Awesome item " + j;
-                child.hint = "Too awesome";
+        for (int i = 0; i < 2; ++i) {
+            ModeSettingsAdapter.GroupItem item = new ModeSettingsAdapter.GroupItem();
+            item.title = menu[i][0];
+            for (int j = 1; j < menu[i].length; ++j) {
+                ModeSettingsAdapter.ChildItem child = new ChildItem();
+                child.title = menu[i][j];
+                child.hint = "AWESOME!";
                 item.items.add(child);
             }
-
             items.add(item);
         }
-        // items.add(new GroupItem());
+        //这个第三方组件有bug，因此需要有一个辅助的空group，否则动画显示有问题
+        items.add(new ModeSettingsAdapter.GroupItem());
 
-        adapter = new ExampleAdapter(this.getContext());
+        adapter = new ModeSettingsAdapter(this.getContext());
         adapter.setData(items);
-
-
         listView.setAdapter(adapter);
         listView.setGroupIndicator(null);
+        listView.setOverScrollMode(View.OVER_SCROLL_NEVER);
 
-        // In order to show animations, we need to use a custom click handler
-        // for our ExpandableListView.
+
         listView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
-
             @Override
             public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
-                // We call collapseGroupWithAnimation(int) and
-                // expandGroupWithAnimation(int) to animate group
-                // expansion/collapse.
+                Log.d("PYJ", Integer.toString(groupPosition));
+                btnFreeConfirm.setText(getString(R.string.confirm));
+                btnFreeConfirm.setTextColor(getResources().getColor(R.color.bb_inActiveBottomBarItemColor));
+                instrument = -1;
+                category = -1;
                 if (listView.isGroupExpanded(groupPosition)) {
+                    Log.d("PYJ", "is Expanded!");
                     listView.collapseGroupWithAnimation(groupPosition);
                 } else {
+                    Log.d("PYJ", "start to expand!");
                     listView.expandGroupWithAnimation(groupPosition);
+                    for (int i = 0; i < menu.length; ++i) {
+                        if (i != groupPosition) listView.collapseGroupWithAnimation(i);
+                    }
                 }
                 return true;
             }
         });
-    }
 
-    private static class GroupItem {
-        String title;
-        List<ChildItem> items = new ArrayList<ChildItem>();
-    }
+        listView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+            @Override
+            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition,
+                                        int childPosition, long id) {
 
-    private static class ChildItem {
-        String title;
-        String hint;
-    }
-
-    private static class ChildHolder {
-        TextView title;
-        TextView hint;
-    }
-
-    private static class GroupHolder {
-        TextView title;
-        ImageView arrow;
-    }
-
-    /**
-     * Adapter for our list of {@link GroupItem}s.
-     */
-    private class ExampleAdapter extends AnimatedExpandableListView.AnimatedExpandableListAdapter {
-        private LayoutInflater inflater;
-
-        private List<GroupItem> items;
-
-        public ExampleAdapter(Context context) {
-            inflater = LayoutInflater.from(context);
-        }
-
-        public void setData(List<GroupItem> items) {
-            this.items = items;
-        }
-
-        @Override
-        public ChildItem getChild(int groupPosition, int childPosition) {
-            return items.get(groupPosition).items.get(childPosition);
-        }
-
-        @Override
-        public long getChildId(int groupPosition, int childPosition) {
-            return childPosition;
-        }
-
-        @Override
-        public View getRealChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-            ChildHolder holder;
-            ChildItem item = getChild(groupPosition, childPosition);
-            if (convertView == null) {
-                holder = new ChildHolder();
-                convertView = inflater.inflate(R.layout.list_item, parent, false);
-                holder.title = (TextView) convertView.findViewById(R.id.textTitle);
-                holder.hint = (TextView) convertView.findViewById(R.id.textHint);
-
-                convertView.setTag(holder);
-            } else {
-                holder = (ChildHolder) convertView.getTag();
+                if (groupPosition == 1) {
+                    instrument = Instrument.INSTRUMENT_PIANO;
+                    switch (childPosition) {
+                        case 0: {
+                            category = Instrument.INSTRUMENT_PIANO14C3TOB4;
+                            break;
+                        }
+                        case 1: {
+                            category = Instrument.INSTRUMENT_PIANO14C4TOB5;
+                            break;
+                        }
+                        case 2: {
+                            category = Instrument.INSTRUMENT_PIANO21C3TOB5;
+                            break;
+                        }
+                        case 3: {
+                            category = Instrument.INSTRUMENT_PIANO21C4TOB6;
+                            break;
+                        }
+                    }
+                }
+                if (groupPosition == 0) {
+                    instrument = Instrument.INSTRUMENT_FLUTE;
+                    if (childPosition == 0)
+                        category = Instrument.INSTRUMENT_FLUTE7;
+                }
+                btnFreeConfirm.setText(getString(R.string.use_xx_to_play).replace(
+                        "xx", menu[groupPosition][childPosition + 1]));
+                btnFreeConfirm.setTextColor(getResources().getColor(R.color.black));
+                Log.d("PYJ", "CHOOSE: " + menu[groupPosition][childPosition + 1]);
+                Log.d("PYJ", Integer.toString(instrument * 100 + category));
+                return true;
             }
-
-            holder.title.setText(item.title);
-            holder.hint.setText(item.hint);
-
-            return convertView;
-        }
-
-        @Override
-        public int getRealChildrenCount(int groupPosition) {
-            return items.get(groupPosition).items.size();
-        }
-
-        @Override
-        public GroupItem getGroup(int groupPosition) {
-            return items.get(groupPosition);
-        }
-
-        @Override
-        public int getGroupCount() {
-            return items.size();
-        }
-
-        @Override
-        public long getGroupId(int groupPosition) {
-            return groupPosition;
-        }
-
-        @Override
-        public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
-            GroupHolder holder;
-            GroupItem item = getGroup(groupPosition);
-
-            if (convertView == null) {
-                holder = new GroupHolder();
-                convertView = inflater.inflate(R.layout.group_item, parent, false);
-                holder.title = (TextView) convertView.findViewById(R.id.textTitle);
-                convertView.setTag(holder);
-            } else {
-                holder = (GroupHolder) convertView.getTag();
-            }
-
-            holder.title.setText(item.title);
-            holder.arrow = (ImageView) convertView.findViewById(R.id.question_arrow_iv);
-
-            if (isExpanded) {
-                holder.arrow.setBackgroundResource(R.drawable.ic_thumb_up_black_18dp);
-            } else {
-                holder.arrow.setBackgroundResource(R.drawable.ic_favorite_border_white_48dp);
-            }
-            if (item.title == "") return null;
-
-            return convertView;
-        }
-
-        @Override
-        public boolean hasStableIds() {
-            return true;
-        }
-
-        @Override
-        public boolean isChildSelectable(int arg0, int arg1) {
-            return true;
-        }
+        });
     }
-
-
 }

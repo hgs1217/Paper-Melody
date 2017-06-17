@@ -122,12 +122,10 @@ public class TapDetector {
             } else if (nearest_dist < Config.FINGER_TIP_LINGER_DIST_MAX) {
                 // has a point at last frame with almost a same position
                 lastFingerTips.remove(nearestPt); // can not be matched by other points
-                if (nearestPt.isFalling() && p.y > Config.TAP_THRESHOLD_ROW) {
+                if (nearestPt.isFalling()) {
                     // last frame this is falling, and this frame it lingers
                     // Tap detected !
-                    if (!noNeighborAdd(nextFingers, new TapDetectPoint(p, FingerTipStatus.TAPPING))) {
-                        nextFingers.add(new TapDetectPoint(p, FingerTipStatus.PRESSING));
-                    }
+                    noNeighborAdd(nextFingers, new TapDetectPoint(p, FingerTipStatus.TAPPING));
                     // nextFingers.add(new TapDetectPoint(p, FingerTipStatus.TAPPING));
                 } else if (nearestPt.isPressing() || nearestPt.isTapping()) {
                     nextFingers.add(new TapDetectPoint(p, FingerTipStatus.PRESSING));
@@ -152,20 +150,15 @@ public class TapDetector {
         return nextFingers;
     }
 
-    private static boolean noNeighborAdd (List<TapDetectPoint> points, TapDetectPoint toAdd) {
+    private static void noNeighborAdd (List<TapDetectPoint> points, TapDetectPoint toAdd) {
         for (TapDetectPoint p: points) {
-            if (p.distanceFrom(toAdd) < 15) {
-                if (p.y < toAdd.y) {
-                    p.x = toAdd.x;
-                    p.y = toAdd.y;
-                    return true;
-                } else {
-                    return false;
-                }
+            if (p.isTapping() && p.distanceFrom(toAdd) < 7) {
+                p.x = (p.x + toAdd.x) * 0.5;
+                p.y = (p.y + toAdd.y) * 0.5;
+                return;
             }
         }
         points.add(toAdd);
-        return true;
     }
 
     private static LinkedList<TapDetectPoint> lastFingerTips = new LinkedList<>();  // finger tips of last frame

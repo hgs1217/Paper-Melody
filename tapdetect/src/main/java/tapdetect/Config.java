@@ -24,7 +24,7 @@ public class Config {
     public static int PROCESS_INTERVAL_MS = 50;
 
     public static double[][] FINGER_COLOR_RANGE = {{0, 135, 100}, {255, 142, 130}};
-    public static double[] FINGER_COLOR = {128, 147, 100};
+    public static double[] FINGER_COLOR = {128, 150, 100};
     public static double[] FINGER_COLOR_TOLERANCE = {128, 17, 20};
 
     public static double SAMPLE_PASS_THRESHOLD = 0.85;

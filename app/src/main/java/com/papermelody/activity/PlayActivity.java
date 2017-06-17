@@ -402,7 +402,7 @@ public class PlayActivity extends BaseActivity {
         if (instrument == Instrument.INSTRUMENT_FLUTE) {
             tapping = Tap.getFluteAll(mat, canvasPlay.getHandContours(), canvasPlay.getFingerTips());
         } else {
-            tapping = Tap.getFluteAll(mat, canvasPlay.getHandContours(), canvasPlay.getFingerTips());
+            tapping = Tap.getAll(mat, canvasPlay.getHandContours(), canvasPlay.getFingerTips());
         }
 
 

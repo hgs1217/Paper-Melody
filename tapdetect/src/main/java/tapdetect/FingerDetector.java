@@ -16,6 +16,7 @@ import org.opencv.core.MatOfPoint;
 import org.opencv.core.MatOfPoint2f;
 import org.opencv.core.Point;
 import org.opencv.core.Mat;
+import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 
 public class FingerDetector {
@@ -37,6 +38,8 @@ public class FingerDetector {
         // assert im.size().height == hand.size().height
 
         List<MatOfPoint> contours = Util.largeContours(hand, Config.HAND_AREA_MIN);
+        Imgproc.dilate(hand, hand, Mat.ones(new Size(5, 5), CvType.CV_8UC1));
+
         if (contours.isEmpty()) {
             return new ArrayList<>();
         }
@@ -106,7 +109,7 @@ public class FingerDetector {
 
             if (isConvex[i]) {
                 tan[i] = diff_n[i].y / diff_n[i].x; // maybe infinity
-                cos[i] = Util.intersectCos(p, prev, next);
+                // cos[i] = Util.intersectCos(p, prev, next);
             } // otherwise skip the calculation
         }
 
@@ -119,7 +122,7 @@ public class FingerDetector {
             int next_i = (i == len - 1) ? 0 : (i + 1);
 
             boolean isLowestLocal = diff_p[i].y < 0 && diff_n[i].y < 0;
-            boolean goodAngle = cos[i] < 0.8;
+            // boolean goodAngle = cos[i] < 0.8;
 
             boolean isLowestPair = diff_p[i].y <= 0 && diff_n[next_i].y <= 0;
 
@@ -127,7 +130,7 @@ public class FingerDetector {
             double distRatio = dist[i] / (double) Config.FINGER_TIP_WIDTH;
             boolean goodDist = distRatio < 2 && distRatio > 0.5;
             boolean isColumn = isConvex[i] && isConvex[next_i] && isLowestPair && isFlat && goodDist;
-            boolean isCorner = isConvex[i] && isLowestLocal && goodAngle;
+            boolean isCorner = isConvex[i] && isLowestLocal;
 
             Point p = contour.get(i);
             if (isCorner) {
@@ -148,8 +151,8 @@ public class FingerDetector {
         double tan_normal = (center.y - p.y) / (center.x - p.x); // maybe infinity
 
         // 2.414 = tan(67.5), 0.414 = tan(22.5), one-eighth of 360
-        int dx = (Math.abs(tan_normal) > 2.414) ? 0 : (center.x > p.x ? 1 : -1);
-        int dy = (Math.abs(tan_normal) < 0.414) ? 0 : (center.y > p.y ? 1 : -1);
+        int dx = (Math.abs(tan_normal) > 2.414) ? 0 : (center.x > p.x ? 5 : -5);
+        int dy = (Math.abs(tan_normal) < 0.414) ? 0 : (center.y > p.y ? 5 : -5);
 
         return center.y < p.y && hand.get((int) p.y + dy, (int) p.x + dx)[0] > 0;
         // hard to have 100% precision since of the holes in `hand`

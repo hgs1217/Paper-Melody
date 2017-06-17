@@ -185,6 +185,12 @@ public class PlayActivity extends BaseActivity {
     ImageView newImgOpern;
     @BindView(R.id.old_img_opern)
     ImageView oldImgOpern;
+    @BindView(R.id.screen_cover)
+    LinearLayout screencover;
+    @BindView(R.id.notice_time)
+    TextView noticetime;
+    @BindView(R.id.start_notice)
+    TextView startnotice;
 
     @BindView(R.id.text_time)
     TextView textTime;
@@ -244,11 +250,21 @@ public class PlayActivity extends BaseActivity {
     Paint paint;
     private List<Bean> list = new ArrayList<Bean>();
     ;
+    /**
+     * 跟谱模式动画
+     */
     private int MaxAlpha = 255;///**
     private boolean START = true;// * 获取照片图像数据用到的子线程
     private Path path; // */
     private HandlerThread backgroundThread;
     private Handler backgroundHandler;
+    /**
+     * 手标定完成判定
+     */
+    private boolean hand_calibration_flag=false;
+    private  boolean start_flag=false;
+    private int  number_count=0;
+    Timer pause_timer = new Timer();
 
     /**
      * Activity主线程
@@ -312,6 +328,13 @@ public class PlayActivity extends BaseActivity {
     /**
      * 秒钟的计时任务
      */
+    private TimerTask  nextTask =new TimerTask() {
+        @Override
+        public void run() {
+            number_count++;
+
+        }
+    };
     private TimerTask secondTask = new TimerTask() {
         @Override
         public void run() {
@@ -411,9 +434,7 @@ public class PlayActivity extends BaseActivity {
         startBackgroundThread();
         viewPlay.setSurfaceTextureListener(surfaceTextureListener);
 
-        initSoundPool();
-        initView();
-        initMediaRecorder();
+
         Tap.reset();
 
 
@@ -425,10 +446,47 @@ public class PlayActivity extends BaseActivity {
          * Process image here
          * Calibration process already ends, now we play keys according to tapping points
          */
+        if (Tap.sampleCompleted()&&!hand_calibration_flag){
+            calibrationtext.setVisibility(View.INVISIBLE);
+            canvasPlay.setVisibility(View.INVISIBLE);
+            screencover.setVisibility(View.VISIBLE);
+            noticetime.setVisibility(View.VISIBLE);
+            startnotice.setVisibility(View.VISIBLE);
+            noticetime.setText(String.valueOf("3"));
+            hand_calibration_flag=true;
+            pause_timer.schedule(nextTask,0,1000);
+
+            return ;
+
+
+        }
+        if(Tap.sampleCompleted()&&number_count<=3&&!start_flag){
+            switch(number_count){
+                case 0:break;
+                case 1:{noticetime.setText(String.valueOf("2"));break;}
+                case 2:{noticetime.setText(String.valueOf("1"));break;}
+                case 3:{screencover.setVisibility(View.VISIBLE);
+                    noticetime.setVisibility(View.VISIBLE);
+                    startnotice.setVisibility(View.VISIBLE);
+                    canvasPlay.setVisibility(View.VISIBLE);
+                initMediaRecorder();
+                initSoundPool();initView();
+                    start_flag=true;
+                break;
+                }
+                default:break;
+            }
+
+
+
+            return ;
+        }
+
         if (!Tap.readyForNextFrame()) {
             return;
         }
-        calibrationtext.setVisibility(View.INVISIBLE);
+
+
 
         Mat mat = ImageUtil.imageToBgr(image);
         TransformResult transformResult = ImageProcessor.getKeyTransform(calibrationResult);

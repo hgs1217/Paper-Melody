@@ -53,6 +53,7 @@ public class FluteWith7Holes extends Flute {
                 status += "0";
             }
         }
+        Log.d("TESTKEYY", status);
         switch (status) {
             case "0000000":
                 return LOW_G;

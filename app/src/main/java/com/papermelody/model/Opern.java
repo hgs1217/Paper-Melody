@@ -3,6 +3,7 @@ package com.papermelody.model;
 import android.content.Context;
 import android.support.annotation.RawRes;
 
+import com.papermelody.R;
 import com.papermelody.util.StorageUtil;
 
 import java.io.InputStream;
@@ -18,6 +19,15 @@ public class Opern {
     /**
      * 乐谱类
      */
+
+    public static final int OPERN_PUGONGYINGDEYUEDING = 0;
+    public static final int OPERN_SHUOHAODEXINGFUNE = 1;
+    public static final int OPERN_TEST = 2;
+
+    private static int[] OPERN_RAWS = new int[] {R.raw.opern_pugongyingdeyueding, R.raw.opern_shuohaodexingfune,
+                                    R.raw.opern_p};
+    private static int[] OPERN_DRAWABLES = new int[] {R.drawable.opern_pugongyingdeyueding, R.drawable.opern_shuohaodexingfune,
+                                    R.drawable.opern_pugongyingdeyueding};
 
     private int width = 0;
     private int height = 0;
@@ -69,6 +79,14 @@ public class Opern {
         Integer min = parseInt(nums[0]);
         Integer sec = parseInt(nums[1]);
         return min * 60 + sec;
+    }
+
+    public static int getOpernRaw(int opern) {
+        return OPERN_RAWS[opern];
+    }
+
+    public static int getOpernDrawable(int opern) {
+        return OPERN_DRAWABLES[opern];
     }
 
     public int getWidth() {

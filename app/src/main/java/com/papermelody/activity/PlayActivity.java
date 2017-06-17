@@ -39,8 +39,6 @@ import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
 import android.view.WindowManager;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -137,9 +135,6 @@ public class PlayActivity extends BaseActivity {
     public static final String FILENAME = "FILENAME";
     public static final String EXTRA_RESULT = "EXTRA_RESULT";
 
-//    public static final int OPERN_PUGONGYINGDEYUEDING = R.raw.opern_pugongyingdeyueding;
-    public static final int OPERN_PUGONGYINGDEYUEDING = R.raw.opern_p;
-
     public static final int MODE_FREE = 0;
     public static final int MODE_OPERN = 1;
 
@@ -167,14 +162,8 @@ public class PlayActivity extends BaseActivity {
     private int mode;
     private int instrument;
     private int category;
-    private int opern;
+    private int opernNum;
     private CalibrationResult calibrationResult;
-    private LinearLayout[] keys = new LinearLayout[36];
-//    private int[] voiceResId = new int[]{R.raw.c3, R.raw.d3, R.raw.e3, R.raw.f3, R.raw.g3, R.raw.a3, R.raw.b3,
-//            R.raw.c4, R.raw.d4, R.raw.e4, R.raw.f4, R.raw.g4, R.raw.a4, R.raw.b4, R.raw.c5, R.raw.d5, R.raw.e5,
-//            R.raw.f5, R.raw.g5, R.raw.a5, R.raw.b5, R.raw.c3m, R.raw.d3m, R.raw.f3m, R.raw.g3m, R.raw.a3m,
-//            R.raw.c4m, R.raw.d4m, R.raw.f4m, R.raw.g4m, R.raw.a4m, R.raw.c5m, R.raw.d5m, R.raw.f5m, R.raw.g5m,
-//            R.raw.a5m};
     private int[] voiceId;
     private SoundPool soundPool;
     private int soundPoolStreamId = 0;
@@ -195,9 +184,9 @@ public class PlayActivity extends BaseActivity {
     /**
      * 手标定完成判定
      */
-    private boolean hand_calibration_flag=false;
-    private  boolean start_flag=false;
-    private int  number_count=0;
+    private boolean hand_calibration_flag = false;
+    private boolean start_flag = false;
+    private int number_count = 0;
     Timer pause_timer = new Timer();
 
     /**
@@ -262,7 +251,7 @@ public class PlayActivity extends BaseActivity {
     /**
      * 秒钟的计时任务
      */
-    private TimerTask  nextTask =new TimerTask() {
+    private TimerTask nextTask = new TimerTask() {
         @Override
         public void run() {
             number_count++;
@@ -321,32 +310,6 @@ public class PlayActivity extends BaseActivity {
     // FIXME: this vairable should be put into the class in responsible for playing sound, not here
     //    by gigaflw
 
-    private final Handler viewStartHandler = new Handler() {
-        public void handleMessage(Message msg) {
-            int i = msg.what;
-            keys[i].clearAnimation();
-            Animation animation = AnimationUtils.loadAnimation(PlayActivity.this, R.anim.alpha_key_show);
-            keys[i].setAlpha(1);
-            keys[i].startAnimation(animation);
-        }
-    };
-
-    private final Handler viewGoneHandler = new Handler() {
-        public void handleMessage(Message msg) {
-            int i = msg.what;
-            keys[i].clearAnimation();
-            Animation animation = AnimationUtils.loadAnimation(PlayActivity.this, R.anim.alpha_key_gone);
-            keys[i].startAnimation(animation);
-        }
-    };
-
-    private final Handler viewEndHandler = new Handler() {
-        public void handleMessage(Message msg) {
-            int i = msg.what;
-            keys[i].setAlpha(0);
-        }
-    };
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -358,7 +321,8 @@ public class PlayActivity extends BaseActivity {
         mode = intent.getIntExtra(EXTRA_MODE, 0);
         instrument = intent.getIntExtra(EXTRA_INSTRUMENT, 0);
         category = intent.getIntExtra(EXTRA_CATIGORY, 0);
-        opern = intent.getIntExtra(EXTRA_OPERN, 0);
+        opernNum = intent.getIntExtra(EXTRA_OPERN, 0);
+        opernNum = 1; // FIXME: opern默认
         calibrationResult = (CalibrationResult) intent.getSerializableExtra(EXTRA_RESULT);
 
         // 给ImageProcessor绑定乐器种类
@@ -368,10 +332,7 @@ public class PlayActivity extends BaseActivity {
         startBackgroundThread();
         viewPlay.setSurfaceTextureListener(surfaceTextureListener);
 
-
         Tap.reset();
-
-
     }
 
     public void processImage(Image image) {
@@ -385,7 +346,7 @@ public class PlayActivity extends BaseActivity {
             calibrationtext.setVisibility(View.VISIBLE);
             noticelayout.setVisibility(View.VISIBLE);
         }
-        if (Tap.sampleCompleted()&&!hand_calibration_flag){
+        if (Tap.sampleCompleted() && !hand_calibration_flag) {
             noticelayout.setVisibility(View.INVISIBLE);
             calibrationtext.setVisibility(View.INVISIBLE);
             canvasPlay.setVisibility(View.INVISIBLE);
@@ -393,19 +354,17 @@ public class PlayActivity extends BaseActivity {
             noticetime.setVisibility(View.VISIBLE);
             startnotice.setVisibility(View.VISIBLE);
             noticetime.setText(String.valueOf("3"));
-            hand_calibration_flag=true;
-            pause_timer.schedule(nextTask,0,1000);
+            hand_calibration_flag = true;
+            pause_timer.schedule(nextTask, 0, 1000);
 
-            return ;
-
-
+            return;
         }
         if (Tap.sampleCompleted() && number_count <= 4 && !start_flag) {
-            switch(number_count){
-                case 0:break;
+            switch (number_count) {
+                case 0:
+                    break;
                 case 1:
                     break;
-
                 case 2: {
                     noticetime.setText(String.valueOf("2"));
                     break;
@@ -422,23 +381,18 @@ public class PlayActivity extends BaseActivity {
                     initMediaRecorder();
                     initSoundPool();
                     initView();
-                    start_flag=true;
-                break;
+                    start_flag = true;
+                    break;
                 }
-                default:break;
+                default:
+                    break;
             }
-
-
-
-            return ;
+            return;
         }
 
         if (!Tap.readyForNextFrame()) {
             return;
         }
-
-
-
         Mat mat = ImageUtil.imageToBgr(image);
         TransformResult transformResult = ImageProcessor.getKeyTransform(calibrationResult);
 
@@ -448,20 +402,21 @@ public class PlayActivity extends BaseActivity {
 
         //playView.addBean(tapping);
 
-
         CanvasUtil.setScreenHeight(ViewUtil.getScreenHeight(this));
         canvasPlay.updateInfo(t2 - t1, 0, Tap.getProcessInterval());
-          Boolean []judge_in_area=new Boolean [tapping.size()];
-        for (int i=0;i<tapping.size();i++){judge_in_area[i]=false;}
+        Boolean[] judge_in_area = new Boolean[tapping.size()];
+        for (int i = 0; i < tapping.size(); i++) {
+            judge_in_area[i] = false;
+        }
         List<Integer> keys = ImageProcessor.getPlaySoundKey(mat.clone(), transformResult, tapping);
-        for (int i=0;i<keys.size();i++) {
+        for (int i = 0; i < keys.size(); i++) {
             if (!lastKeys.contains(keys.get(i))) {
-                judge_in_area[i]=true;
+                judge_in_area[i] = true;
                 playSound(keys.get(i));
             }
 
         }
-        playView.addBean(tapping,judge_in_area);
+        playView.addBean(tapping, judge_in_area);
         lastKeys = new ArrayList<>(keys);
     }
 
@@ -494,35 +449,35 @@ public class PlayActivity extends BaseActivity {
         switch (category) {
             case Instrument.INSTRUMENT_PIANO21C3TOB5:
                 textViewInstrumentName.setText(R.string.piano_with_21_keys_c3_to_b5);
-                voiceId = new int [PianoWith21KeysC3ToB5.KEY_NUM];
+                voiceId = new int[PianoWith21KeysC3ToB5.KEY_NUM];
                 for (int i = 0; i < voiceId.length; ++i) {
                     voiceId[i] = soundPool.load(this, PianoWith21KeysC3ToB5.getVoiceResId(i), 1);
                 }
                 break;
             case Instrument.INSTRUMENT_PIANO21C4TOB6:
                 textViewInstrumentName.setText(R.string.piano_with_21_keys_c4_to_b6);
-                voiceId = new int [PianoWith21KeysC4ToB6.KEY_NUM];
+                voiceId = new int[PianoWith21KeysC4ToB6.KEY_NUM];
                 for (int i = 0; i < voiceId.length; ++i) {
                     voiceId[i] = soundPool.load(this, PianoWith21KeysC4ToB6.getVoiceResId(i), 1);
                 }
                 break;
             case Instrument.INSTRUMENT_PIANO14C3TOB4:
                 textViewInstrumentName.setText(R.string.piano_with_14_keys_c3_to_b4);
-                voiceId = new int [PianoWith14KeysC3ToB4.KEY_NUM];
+                voiceId = new int[PianoWith14KeysC3ToB4.KEY_NUM];
                 for (int i = 0; i < voiceId.length; ++i) {
                     voiceId[i] = soundPool.load(this, PianoWith14KeysC3ToB4.getVoiceResId(i), 1);
                 }
                 break;
             case Instrument.INSTRUMENT_PIANO14C4TOB5:
                 textViewInstrumentName.setText(R.string.piano_with_14_keys_c4_to_b5);
-                voiceId = new int [PianoWith14KeysC4ToB5.KEY_NUM];
+                voiceId = new int[PianoWith14KeysC4ToB5.KEY_NUM];
                 for (int i = 0; i < voiceId.length; ++i) {
                     voiceId[i] = soundPool.load(this, PianoWith14KeysC4ToB5.getVoiceResId(i), 1);
                 }
                 break;
             case Instrument.INSTRUMENT_FLUTE7:
                 textViewInstrumentName.setText(R.string.flute_with_7_holes);
-                voiceId = new int [FluteWith7Holes.KEY_NUM];
+                voiceId = new int[FluteWith7Holes.KEY_NUM];
                 for (int i = 0; i < voiceId.length; ++i) {
                     voiceId[i] = soundPool.load(this, FluteWith7Holes.getVoiceResId(i), 1);
                 }
@@ -532,8 +487,6 @@ public class PlayActivity extends BaseActivity {
         btnPlayOver.setOnClickListener((View v) -> {
             playOver();
         });
-
-
     }
 
     private void initSoundPool() {
@@ -551,12 +504,10 @@ public class PlayActivity extends BaseActivity {
      */
     private void initOpernTimer() {
 
-
         secondTimer = new Timer();
-
         secondTimer.schedule(secondTask, 0, 1000);
 
-        Opern opern = new Opern(this, OPERN_PUGONGYINGDEYUEDING); // FIXME: 暂时只有一首谱子
+        Opern opern = new Opern(this, Opern.getOpernRaw(opernNum)); // FIXME: 暂时只有一首谱子
 
         listX = opern.getListX();
         listY = opern.getListY();
@@ -564,11 +515,11 @@ public class PlayActivity extends BaseActivity {
         listHeight = opern.getListHeight();
         listTime = opern.getListTime();
 
-        timers = new Timer [listTime.size()];
-        tasks = new TimerTask [listTime.size()];
-        for (int i=0; i<listTime.size()-1; ++i) {
+        timers = new Timer[listTime.size()];
+        tasks = new TimerTask[listTime.size()];
+        for (int i = 0; i < listTime.size() - 1; ++i) {
             final int fi = i;
-            final int ofi = i-1;
+            final int ofi = i - 1;
 
             tasks[i] = new TimerTask() {
                 @Override
@@ -595,11 +546,11 @@ public class PlayActivity extends BaseActivity {
                             int y = (int) (listY.get(fi) * heightScalar);
                             int width = (int) (listWidth.get(fi) * widthScalar);
                             int height = (int) (listHeight.get(fi) * heightScalar);
-                            if (fi!=0){
-                            int ox = (int) (listX.get(ofi) * widthScalar);
-                            int oy = (int) (listY.get(ofi) * heightScalar);
-                            int owidth = (int) (listWidth.get(ofi) * widthScalar);
-                            int oheight = (int) (listHeight.get(ofi) * heightScalar);
+                            if (fi != 0) {
+                                int ox = (int) (listX.get(ofi) * widthScalar);
+                                int oy = (int) (listY.get(ofi) * heightScalar);
+                                int owidth = (int) (listWidth.get(ofi) * widthScalar);
+                                int oheight = (int) (listHeight.get(ofi) * heightScalar);
                                 Bitmap osmallBitmap = Bitmap.createBitmap(sourceBitmap, ox, oy, owidth, oheight);
                                 oldImgOpern.setImageBitmap(osmallBitmap);
                                 oldImgOpern.setImageAlpha(image_alpha);
@@ -630,7 +581,7 @@ public class PlayActivity extends BaseActivity {
                                 public void handleMessage(Message msg) {
                                     super.handleMessage(msg);
                                     oldImgOpern.setImageAlpha(image_alpha);
-                                    newImgOpern.setImageAlpha(255-image_alpha);
+                                    newImgOpern.setImageAlpha(255 - image_alpha);
                                     // 设置textview显示当前的Alpha值
                                     //textView.setText("现在的alpha值是:" + Integer.toString(image_alpha));
                                     // 刷新视图
@@ -638,8 +589,8 @@ public class PlayActivity extends BaseActivity {
                                     newImgOpern.invalidate();
                                 }
                             };
-
                         }
+
                         public void updateAlpha() {
                             if (image_alpha - 7 >= 0) {
                                 image_alpha -= 7;
@@ -657,7 +608,7 @@ public class PlayActivity extends BaseActivity {
             timers[i].schedule(tasks[i], (listTime.get(i) + OPERN_SECOND_DELAYED) * 1000, 10000);
         }
 
-        Drawable drawable = getDrawable(R.drawable.opern_pugongyingdeyueding);
+        Drawable drawable = getDrawable(Opern.getOpernDrawable(opernNum));
         sourceBitmap = ImageUtil.drawableToBitmap(drawable);
 //        sourceBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.opern_pugongyingdeyueding);
         widthScalar = (double) drawable.getIntrinsicWidth() / opern.getWidth();
@@ -686,21 +637,17 @@ public class PlayActivity extends BaseActivity {
     }
 
     public void playSound(int keyID) {
-        if (keyID >= voiceId.length) {
-            return;
+        if (keyID < voiceId.length && keyID >= 0) {
+            switch (instrument) {
+                case Instrument.INSTRUMENT_PIANO:
+                    soundPool.play(voiceId[keyID], 1, 1, 0, 0, 1);
+                    break;
+                case Instrument.INSTRUMENT_FLUTE:
+                    soundPool.stop(soundPoolStreamId);
+                    soundPoolStreamId = soundPool.play(voiceId[keyID], 1, 1, 0, 0, 1);
+                    break;
+            }
         }
-        switch (instrument) {
-            case Instrument.INSTRUMENT_PIANO:
-                soundPool.play(voiceId[keyID], 1, 1, 0, 0, 1);
-                break;
-            case Instrument.INSTRUMENT_FLUTE:
-                soundPool.stop(soundPoolStreamId);
-                soundPoolStreamId = soundPool.play(voiceId[keyID], 1, 1, 0, 0, 1);
-                break;
-        }
-
-
-
     }
 
     private void playOver() {
@@ -717,7 +664,7 @@ public class PlayActivity extends BaseActivity {
 
         if (mode == MODE_OPERN) {
             secondTimer.cancel();
-            for (int i=0; i<timers.length; ++i) {
+            for (int i = 0; i < timers.length; ++i) {
                 try {
                     timers[i].cancel();
                 } catch (Exception e) {

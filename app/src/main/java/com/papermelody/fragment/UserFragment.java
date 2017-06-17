@@ -189,14 +189,16 @@ public class UserFragment extends BaseFragment {
             textUsername.setText(R.string.un_log_in);
             btnLogIn.setText(R.string.user_log_in);
             btnLogIn.setBackground(getResources().getDrawable(R.drawable.btn_log_in));
+            imgUserAvatar.setImageDrawable(getResources().getDrawable(R.drawable.ic_tag_faces_black_48dp));
             newsNum = 0;
             updateMsgCount();
         } else {
-            textUsername.setText(user.getUsername());
+            textUsername.setText(user.getNickname());
             btnLogIn.setText(R.string.user_log_out);
             btnLogIn.setBackground(getResources().getDrawable(R.drawable.btn_log_out));
             Picasso.with(context).load(App.getUser().getAvatarUrl()).into(imgUserAvatar);
             getMessage();
         }
     }
+
 }

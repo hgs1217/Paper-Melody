@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -29,6 +30,8 @@ import com.papermelody.util.ToastUtil;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -49,18 +52,21 @@ public class UpdateUserInfoFragment extends BaseFragment {
      * 修改用户信息
      */
 
-    // TODO: 暂时把修改密码，修改用户名和上传头像放一起了，到时候你们决定把它放在一个Frag还是多个Frag
 
     @BindView(R.id.card_user_avatar)
     CardView cardUserAvatar;
     @BindView(R.id.card_user_nickname)
     CardView cardUserNickname;
     @BindView(R.id.card_user_password)
-    CardView getCardUserPassword;
+    CardView cardUserPassword;
+    @BindView(R.id.card_user_username)
+    CardView cardUserUsername;
     @BindView(R.id.img_user_avatar)
     CircleImageView imgUserAvatar;
     @BindView(R.id.text_user_nickname)
     TextView textUserNickname;
+    @BindView(R.id.text_user_username)
+    TextView textUserUsername;
 
     public static final int LOAD_PIC = 0;
 
@@ -70,6 +76,7 @@ public class UpdateUserInfoFragment extends BaseFragment {
     private CircleImageView imgSelectAvatar;
     private Button btnDialogCancel, btnDialogConfirm;
     private BottomDialog bottomDialog;
+    private EditText editText, editText2;
 
     public static UpdateUserInfoFragment newInstance() {
         UpdateUserInfoFragment fragment = new UpdateUserInfoFragment();
@@ -93,36 +100,80 @@ public class UpdateUserInfoFragment extends BaseFragment {
     }
 
     private void initView() {
+        textUserUsername.setText(App.getUser().getUsername());
         textUserNickname.setText(App.getUser().getNickname());
         Picasso.with(context).load(App.getUser().getAvatarUrl()).into(imgUserAvatar);
         cardUserAvatar.setOnClickListener((view) -> {
             chooseImg();
             bottomDialog = BottomDialog.create(getFragmentManager())
                     .setLayoutRes(R.layout.dialog_avatar)
-                    .setCancelOutside(false);
-            bottomDialog.setViewListener(new BottomDialog.ViewListener() {
-                @Override
-                public void bindView(View v) {
-                    imgSelectAvatar = (CircleImageView) v.findViewById(R.id.img_select_avatar);
-                    btnDialogConfirm = (Button) v.findViewById(R.id.btn_avatar_confirm);
-                    btnDialogCancel = (Button) v.findViewById(R.id.btn_avatar_cancel);
-                    btnDialogCancel.setOnClickListener((view) -> {
-                        bottomDialog.dismiss();
-                    });
-                    btnDialogConfirm.setOnClickListener((view) -> {
-                        uploadAvatar();
-                        bottomDialog.dismiss();
-                    });
-                }
+                    .setCancelOutside(true);    // 点击外部是否可以关闭对话框
+            bottomDialog.setViewListener((v) -> {
+                imgSelectAvatar = (CircleImageView) v.findViewById(R.id.img_select_avatar);
+                btnDialogConfirm = (Button) v.findViewById(R.id.btn_avatar_confirm);
+                btnDialogCancel = (Button) v.findViewById(R.id.btn_avatar_cancel);
+                btnDialogCancel.setOnClickListener((view1) ->
+                        bottomDialog.dismiss()
+                );
+                btnDialogConfirm.setOnClickListener((view2) ->
+                        uploadAvatar()
+                );
+            });
+            bottomDialog.show();
+
+        });
+        cardUserNickname.setOnClickListener((view) -> {
+            bottomDialog = BottomDialog.create(getFragmentManager())
+                    .setLayoutRes(R.layout.dialog_nickname)
+                    .setCancelOutside(true);
+            bottomDialog.setViewListener((v) -> {
+                editText = (EditText) v.findViewById(R.id.edit_user_nickname);
+                btnDialogConfirm = (Button) v.findViewById(R.id.btn_nickname_confirm);
+                btnDialogCancel = (Button) v.findViewById(R.id.btn_nickname_cancel);
+                btnDialogCancel.setOnClickListener((view1) ->
+                        bottomDialog.dismiss()
+                );
+                btnDialogConfirm.setOnClickListener((view2) -> {
+                    String newNickname = editText.getText().toString();
+                    Log.i("nib", newNickname);
+//                        if (newNickname.length() <= 6) {
+//                            ToastUtil.showShort(R.string.less_than_6_chars);
+//                        } else
+                    if (newNickname.length() > 20) {
+                        ToastUtil.showShort(R.string.more_than_20_chars);
+                    } else {
+                        updateNickname(newNickname);
+                    }
+                });
             });
             bottomDialog.show();
         });
-//        btnNickname.setOnClickListener((view) -> {
-//            updateNickname(editNickname.getText().toString());
-//        });
-//        btnPassword.setOnClickListener((view) -> {
-//            updatePassword(editOldPassword.getText().toString(), editNewPassword.getText().toString());
-//        });
+        cardUserPassword.setOnClickListener((view) -> {
+            bottomDialog = BottomDialog.create(getFragmentManager())
+                    .setLayoutRes(R.layout.dialog_password)
+                    .setCancelOutside(true);
+            bottomDialog.setViewListener((v) -> {
+                editText = (EditText) v.findViewById(R.id.edit_old_password);
+                editText2 = (EditText) v.findViewById(R.id.edit_new_password);
+                btnDialogConfirm = (Button) v.findViewById(R.id.btn_password_confirm);
+                btnDialogCancel = (Button) v.findViewById(R.id.btn_password_cancel);
+                btnDialogCancel.setOnClickListener((view1) ->
+                        bottomDialog.dismiss()
+                );
+                btnDialogConfirm.setOnClickListener((view2) -> {
+                    String oldPassword = editText.getText().toString();
+                    if (!oldPassword.equals(App.getUser().getPassword())) {
+                        ToastUtil.showShort(R.string.old_password_wrong);
+                    } else {
+                        updatePassword(editText.getText().toString(), editText2.getText().toString());
+                    }
+                });
+            });
+            bottomDialog.show();
+        });
+        cardUserUsername.setOnClickListener((v) ->
+                ToastUtil.showShort("你的名字是——" + App.getUser().getUsername())
+        );
     }
 
     private void updateNickname(String nickname) {
@@ -137,6 +188,8 @@ public class UpdateUserInfoFragment extends BaseFragment {
                             User user = new User(result, context);
                             App.setUser(user);
                             textUserNickname.setText(App.getUser().getNickname());
+                            bottomDialog.dismiss();
+                            ToastUtil.showShort(R.string.edit_success);
                         }, NetworkFailureHandler.basicErrorHandler
                 ));
     }
@@ -153,6 +206,7 @@ public class UpdateUserInfoFragment extends BaseFragment {
                             User user = new User(result, context);
                             App.setUser(user);
                             ToastUtil.showShort("密码修改为" + App.getUser().getPassword());
+                            bottomDialog.dismiss();
                         }, NetworkFailureHandler.loginErrorHandler
                 ));
     }
@@ -170,6 +224,7 @@ public class UpdateUserInfoFragment extends BaseFragment {
                             App.setUser(user);
                             Picasso.with(context).load(App.getUser().getAvatarUrl()).into(imgUserAvatar);
                             ToastUtil.showShort("上传成功");
+                            bottomDialog.dismiss();
                         }, NetworkFailureHandler.loginErrorHandler
                 ));
     }

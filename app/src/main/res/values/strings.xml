@@ -59,6 +59,11 @@
     <string name="jackMa">马云</string>
     <string name="avatar">头像</string>
     <string name="select_avatar">选择头像</string>
+    <string name="edit_nickname">修改昵称</string>
+    <string name="old_password">旧密码</string>
+    <string name="old_password_wrong">请正确输入旧密码</string>
+    <string name="new_password">新密码</string>
+    <string name="nickname">昵称</string>
     <string name="user_name">用户名</string>
     <string name="reply_to_you">回复了你：</string>
     <string name="message_sample">小伙子很有前途！</string>
@@ -117,6 +122,9 @@
     <string name="login">登录</string>
     <string name="register_english">注册</string>
     <string name="Username">用户名</string>
+    <string name="less_than_6_chars">不得少于6个字符</string>
+    <string name="more_than_20_chars">不得多于20个字符</string>
+    <string name="edit_success">修改成功</string>
     <string name="Password">密码</string>
     <string name="password_sample">******</string>
     <string name="forgot_your_password">忘记密码</string>

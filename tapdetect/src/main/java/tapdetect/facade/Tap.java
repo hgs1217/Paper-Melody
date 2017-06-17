@@ -20,36 +20,11 @@ import tapdetect.FingerDetector;
 import tapdetect.HandDetector;
 import tapdetect.ImgLogger;
 import tapdetect.TapDetector;
+import tapdetect.TapDetector.TapDetectPoint;
 import tapdetect.Util;
 import tapdetect.Sampler;
 
 public class Tap {
-    static {
-        // with opencv java, use Core.NATIVE_LIBRARY_NAME,
-        // with opencv android, use "opencv_java3"
-        System.loadLibrary("opencv_java3");  // this line only need to be carried out once
-        ImgLogger.silent();
-    }
-
-    private static double recoverRatio = 0.0;
-    private static long lastProcess = 0;
-    private static long processInterval;
-    private static List<Point> resultCache = new ArrayList<>();
-    private static List<Point> sampleWindowContour = null;
-
-    public static long getProcessInterval() {
-        return processInterval;
-    }
-
-    public static boolean readyForNextFrame() {
-        return System.currentTimeMillis() - lastProcess > Config.PROCESS_INTERVAL_MS;
-    }
-
-    public static void reset() {
-        ColorRange.reset();
-    }
-
-
     /**
      * Facade for outside to use the tap detector
      *
@@ -67,11 +42,37 @@ public class Tap {
      * </code>
      */
 
+    static {
+        // with opencv java, use Core.NATIVE_LIBRARY_NAME,
+        // with opencv android, use "opencv_java3"
+        System.loadLibrary("opencv_java3");  // this line only need to be carried out once
+        ImgLogger.silent();
+    }
+
+    public static long getProcessInterval() {
+        return processInterval;
+    }
+
+    public static boolean readyForNextFrame() {
+        return System.currentTimeMillis() - lastProcess > Config.PROCESS_INTERVAL_MS;
+    }
+
+    public static void reset() {
+        ColorRange.reset();
+    }
+
+    public static boolean sampleCompleted() {
+        /**
+         * Once this returns `True`, sampling process should be completed,
+         * sampling function will not be called anymore.
+         * However you can call `Tap.sample` manually if you really want
+         */
+        return Sampler.sampleCompleted();
+    }
+
 
     public static List<Point> getTaps(Mat im) {
         /**
-         * @Waring! not implemented completely
-         *
          * Searching tapping points from `im`
          * This is the most used func in this facade
          * @param im: one frame from a video
@@ -79,30 +80,48 @@ public class Tap {
          *  (1) is regarded as the finger tip
          *  (2) is regarded as being tapping
          */
-        // TODO: add throttle
+        if (!preprocess(im)) {
+            return resultCache;
+        }
 
-        // resize to the standard size
-        double recover_ratio = 1.0 / Util.resize(im);
-
-        Imgproc.cvtColor(im, im, Imgproc.COLOR_BGR2YCrCb);
         Mat hand = HandDetector.getHand(im);
-
         List<Point> fingers = FingerDetector.getFingers(im, hand);
         List<Point> taps = TapDetector.getTapping(im, fingers);
 
-        for (Point pt : taps) {
-            pt.x *= recover_ratio;
-            pt.y *= recover_ratio;
-        }
+        scaleResult(taps);
+        updateResultCache(taps);
 
         return taps;
-        // return taps.stream().map(pt -> new Point((int) (pt.x / recover_ratio), (int) (pt.y / recover_ratio)))
-        //         .collect(Collectors.toList());
+    }
+
+    public static List<Point> getPress(Mat im) {
+        /**
+         * Searching pressing finger tips from `im`
+         * @param im: one frame from a video
+         * @return : A list of `Point` indicating the points which
+         *  (1) is regarded as the finger tip
+         *  (2) is regarded as being pressing
+         *
+         *  @warning: do not use getPress and getTaps in a row for the sake of performance.
+         *      Use `getAll` to get every finger tips instead
+         */
+        if (!preprocess(im)) {
+            return resultCache;
+        }
+
+        Mat hand = HandDetector.getHand(im);
+        List<Point> fingers = FingerDetector.getFingers(im, hand);
+        List<Point> press = TapDetector.getPressing(im, fingers);
+
+        scaleResult(press);
+        updateResultCache(press);
+
+        return press;
     }
 
     public static List<Point> getAll(Mat im,
                                      List<List<Point>> contoursOutput,
-                                     List<TapDetector.TapDetectPoint> tapDetectPointsOutput
+                                     List<TapDetectPoint> tapDetectPointsOutput
     ) {
         /**
          * @param: im: A image in color space BGR
@@ -116,41 +135,27 @@ public class Tap {
          *  This function will modify `im` into YCrCb as well as a smaller size
          */
 
-        if (!checkTime()) {
+        if (!preprocess(im)) {
             return resultCache;
         }
-        recoverRatio = 1.0 / Util.resize(im);
-
-
-        Imgproc.cvtColor(im, im, Imgproc.COLOR_BGR2YCrCb);
-        Imgproc.blur(im, im, new Size(10, 10));
-
-        if (!Sampler.sampleCompleted()) {
-            sample(im);
-            // return resultCache;  // FIXME: for debug
-        }
-
         Mat hand = HandDetector.getHand(im);
 
         List<MatOfPoint> contour = new ArrayList<>();
         List<Point> fingers = FingerDetector.getFingers(im, hand, contour);
-        List<TapDetector.TapDetectPoint> taps = TapDetector.getTappingAll(im, fingers);
+        List<TapDetectPoint> taps = TapDetector.getTappingAll(im, fingers);
 
         if (contoursOutput != null) {
             contoursOutput.clear();
             for (MatOfPoint cnt : contour) {
                 List<Point> cntPt = cnt.toList();
-                for (Point pt : cntPt) {
-                    pt.x *= recoverRatio;
-                    pt.y *= recoverRatio;
-                }
+                scaleResult(cntPt);
                 contoursOutput.add(cntPt);
             }
         }
 
-        for (TapDetector.TapDetectPoint pt : taps) {
-            pt.getPoint().x *= recoverRatio;
-            pt.getPoint().y *= recoverRatio;
+        for (TapDetectPoint pt : taps) {
+            pt.x *= recoverRatio;
+            pt.y *= recoverRatio;
         }
 
         if (contoursOutput != null) {
@@ -159,31 +164,22 @@ public class Tap {
         }
 
         List<Point> ret = new ArrayList<>();
-        resultCache.clear();
 
-        for (TapDetector.TapDetectPoint pt : taps) {
+        for (TapDetectPoint pt : taps) {
             if (pt.isFalling()) {
-                ret.add(pt.getPoint());
-                resultCache.add(pt.getPoint());
+                ret.add(pt);
             }
         }
+        updateResultCache(ret);
 
         return ret;
     }
 
-    public static boolean sampleCompleted() {
-        /**
-         * Once this returns `True`, sampling process should be completed,
-         * sampling function will not be called anymore.
-         * However you can call `Tap.sample` manually if you really want
-         */
-        return Sampler.sampleCompleted();
-    }
 
     public static List<Point> getSampleWindowContour() {
         if (sampleWindowContour == null && recoverRatio > 0.0) {
             sampleWindowContour = new ArrayList<>();
-            for (Point p: Sampler.getSampleWindowContour()) {
+            for (Point p : Sampler.getSampleWindowContour()) {
                 sampleWindowContour.add(new Point(p.x * recoverRatio, p.y * recoverRatio));
             }
         }
@@ -213,5 +209,44 @@ public class Tap {
         Sampler.sample(mat);
         return Sampler.sampleCompleted();
     }
+
+    private static boolean preprocess(Mat im) {
+        // check time
+        if (!checkTime()) {
+            return false;
+        }
+
+        // resize to the standard size
+        recoverRatio = 1.0 / Util.resize(im);
+
+        Imgproc.cvtColor(im, im, Imgproc.COLOR_BGR2YCrCb);
+        Imgproc.blur(im, im, new Size(10, 10));
+
+        if (!Sampler.sampleCompleted()) {
+            sample(im);
+            return false;
+        }
+        return true;
+    }
+
+    private static void scaleResult(List<Point> result) {
+        for (Point pt : result) {
+            pt.x *= recoverRatio;
+            pt.y *= recoverRatio;
+        }
+    }
+
+    private static void updateResultCache(List<Point> result) {
+        resultCache.clear();
+        for (Point pt : result) {
+            resultCache.add(pt);
+        }
+    }
+
+    private static double recoverRatio = 0.0;
+    private static long lastProcess = 0;
+    private static long processInterval;
+    private static List<Point> resultCache = new ArrayList<>();
+    private static List<Point> sampleWindowContour = null;
 
 }

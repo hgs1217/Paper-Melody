@@ -20,11 +20,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <com.papermelody.widget.CameraDebugView
-        android:id="@+id/canvas_play"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
     <ImageView
         android:id="@+id/new_img_opern"
         android:layout_width="wrap_content"
@@ -98,6 +93,11 @@
         android:layout_marginTop="20dp"
         android:visibility="gone"
         android:textSize="25sp"/>
+
+    <com.papermelody.widget.CameraDebugView
+        android:id="@+id/canvas_play"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
     <!--FIXME: 先设置背景为空，用镜头内容代替-->
     <com.papermelody.widget.PlayView

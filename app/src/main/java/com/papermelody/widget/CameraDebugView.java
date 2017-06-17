@@ -80,7 +80,7 @@ public class CameraDebugView extends View {
                 color = Color.GRAY;
             }
 
-            CanvasUtil.drawPoint(canvas, p.getPoint(), color);
+            CanvasUtil.drawPoint(canvas, p, color);
         }
 
         String[] to_be_write = {

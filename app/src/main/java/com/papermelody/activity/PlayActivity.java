@@ -435,10 +435,10 @@ public class PlayActivity extends BaseActivity {
 
         long t1 = System.currentTimeMillis();
         List<Point> tapping = Tap.getAll(mat, canvasPlay.getHandContours(), canvasPlay.getFingerTips());
+        long t2 = System.currentTimeMillis();
 
         playView.addBean(tapping);
 
-        long t2 = System.currentTimeMillis();
 
         CanvasUtil.setScreenHeight(ViewUtil.getScreenHeight(this));
         canvasPlay.updateInfo(t2 - t1, 0, Tap.getProcessInterval());

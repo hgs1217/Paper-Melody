@@ -18,32 +18,26 @@ import org.opencv.core.Mat;
 
 public class TapDetector {
     enum FingerTipStatus {
-        NOT_CARE, FALLING, LINGER, TAPPING
+        NOT_CARE, FALLING, LINGER, TAPPING, PRESSING,
     }
 
-    public static class TapDetectPoint {
-        Point point = new Point();
+    public static class TapDetectPoint extends Point {
         FingerTipStatus status;
 
         TapDetectPoint(Point point, FingerTipStatus status) {
-            this.point.x = point.x;
-            this.point.y = point.y;
+            this.x = point.x;
+            this.y = point.y;
             this.status = status;
         }
 
         int distanceFrom(Point pt) {
-            return Math.abs((int) (point.x - pt.x)) / 2 + Math.abs((int) (point.y - pt.y));
+            return Math.abs((int) (x - pt.x)) / 2 + Math.abs((int) (y - pt.y));
         }
-
-        public Point getPoint() { return point; }
 
         public boolean isFalling() { return status == FingerTipStatus.FALLING;  }
         public boolean isLingering()  { return status == FingerTipStatus.LINGER;  }
         public boolean isTapping() { return status == FingerTipStatus.TAPPING;  }
-
-        public String toString() {
-            return "" + point;
-        }
+        public boolean isPressing() { return status == FingerTipStatus.PRESSING;  }
     }
 
     public static List<Point> getTapping(Mat im, List<Point> fingers) {
@@ -56,8 +50,25 @@ public class TapDetector {
         List<TapDetectPoint> all = getTappingAll(im, fingers);
         List<Point> result = new ArrayList<>();
         for (TapDetectPoint p: all) {
-            if (p.status == FingerTipStatus.TAPPING) {
-                result.add(p.point);
+            if (p.isTapping()) {
+                result.add(p);
+            }
+        }
+        return result;
+    }
+
+    public static List<Point> getPressing(Mat im, List<Point> fingers) {
+        /**
+         * @param: im: A YCrCb image
+         * @param: fingers: A list of points indicating the position of finger tips
+         * @return:
+         *      A list of points detected as being pressing
+         */
+        List<TapDetectPoint> all = getTappingAll(im, fingers);
+        List<Point> result = new ArrayList<>();
+        for (TapDetectPoint p: all) {
+            if (p.isPressing()) {
+                result.add(p);
             }
         }
         return result;
@@ -103,14 +114,16 @@ public class TapDetector {
             } else if (nearest_dist < Config.FINGER_TIP_LINGER_DIST_MAX) {
                 // has a point at last frame with almost a same position
                 lastFingerTips.remove(nearestPt); // can not be matched by other points
-                if (nearestPt.status == FingerTipStatus.FALLING && p.y > Config.TAP_THRESHOLD_ROW) {
+                if (nearestPt.isFalling() && p.y > Config.TAP_THRESHOLD_ROW) {
                     // last frame this is falling, and this frame it lingers
                     // Tap detected !
                     fingerTipsStatus.add(FingerTipStatus.TAPPING);
+                } else if (nearestPt.isPressing() || nearestPt.isTapping()) {
+                    fingerTipsStatus.add(FingerTipStatus.PRESSING);
                 } else {
                     fingerTipsStatus.add(FingerTipStatus.LINGER);
                 }
-            } else if (Math.abs(p.x - nearestPt.point.x) < p.y - nearestPt.point.y) {
+            } else if (Math.abs(p.x - nearestPt.x) < p.y - nearestPt.y) {
                 // has a point at last frame which is above this point and not too far
                 fingerTipsStatus.add(FingerTipStatus.FALLING);
                 lastFingerTips.remove(nearestPt); // can not be matched by other points

@@ -43,6 +43,7 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.papermelody.R;
@@ -121,6 +122,8 @@ public class PlayActivity extends BaseActivity {
     TextView startnotice;
     @BindView(R.id.notice_layout)
     LinearLayout noticelayout;
+    @BindView(R.id.firstBar)
+    ProgressBar noticebar;
 
     @BindView(R.id.text_time)
     TextView textTime;
@@ -188,6 +191,7 @@ public class PlayActivity extends BaseActivity {
     private boolean start_flag = false;
     private int number_count = 0;
     Timer pause_timer = new Timer();
+    private  int pro;
 
     /**
      * Activity主线程
@@ -258,25 +262,81 @@ public class PlayActivity extends BaseActivity {
 
         }
     };
+
+    private boolean barfirst=false;
+    private double step=0;
+    Handler barhandle = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            //处理消息
+
+            //设置滚动条和text的值
+            noticebar.setProgress(pro);
+
+
+
+        }
+    };
+    private void start()
+    {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                int max = noticebar.getMax();
+                try {
+                    //子线程循环间隔消息
+                    while (pro < max) {
+                        pro = (int)(step+pro);
+                        Message msg = new Message();
+
+                        barhandle.sendMessage(msg);
+                        Thread.sleep(100);
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
     private TimerTask secondTask = new TimerTask() {
         @Override
         public void run() {
-            runOnUiThread(new Runnable() {      // UI thread
+            runOnUiThread(new Runnable() {
+                // UI thread
+
+                int barmax = noticebar.getMax();
+
+
                 @Override
                 public void run() {
+
+
                     int remainTime = listTime.get(currentLine) + OPERN_SECOND_DELAYED - currentSecond;
+                    if (!barfirst){barfirst=true;pro=0;step=(900.0/remainTime)/9;}
                     if (remainTime == 0) {
                         currentLine++;
+
                         if (currentLine >= listTime.size()) {
                             Log.d("TESTT", "finish");
                             playOver();
                         } else {
                             remainTime = listTime.get(currentLine) + OPERN_SECOND_DELAYED - currentSecond;
+                            pro=0;
+                            step=(900.0/(remainTime)/9);
                         }
                     }
-                    textTime.setText(String.valueOf(remainTime));
+                    Log.d("TESTTttt", remainTime+"");
+                    Log.d("TESTTeee", noticebar.getProgress()+"");
+                    Log.d("TESTTttt", step+"");
+
+                    //textTime.setText(String.valueOf(remainTime));
                     currentSecond++;
+
+
                 }
+
             });
         }
     };
@@ -483,8 +543,12 @@ public class PlayActivity extends BaseActivity {
                 btnPlayOver.setVisibility(View.VISIBLE);
                 // calibrationtext.setVisibility(View.VISIBLE);
                 //calibrationtext.setText(String.valueOf("dfdfdfd"));
-                textTime.setVisibility(View.VISIBLE);
-                initOpernTimer();
+                //textTime.setVisibility(View.VISIBLE);
+                noticebar.setVisibility(View.VISIBLE);
+
+
+
+        initOpernTimer();
                 break;
         }
 
@@ -553,6 +617,7 @@ public class PlayActivity extends BaseActivity {
 
         secondTimer = new Timer();
         secondTimer.schedule(secondTask, 0, 1000);
+        start();
 
         Opern opern = new Opern(this, Opern.getOpernRaw(opernNum)); // FIXME: 暂时只有一首谱子
 

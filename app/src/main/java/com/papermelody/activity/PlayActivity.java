@@ -51,6 +51,10 @@ import com.papermelody.R;
 import com.papermelody.core.calibration.CalibrationResult;
 import com.papermelody.core.calibration.TransformResult;
 import com.papermelody.model.Opern;
+import com.papermelody.model.instrument.FluteWith7Holes;
+import com.papermelody.model.instrument.Instrument;
+import com.papermelody.model.instrument.PianoWith21KeysC3ToB5;
+import com.papermelody.model.instrument.PianoWith21KeysC4ToB6;
 import com.papermelody.util.CanvasUtil;
 import com.papermelody.util.ImageProcessor;
 import com.papermelody.util.ImageUtil;
@@ -187,43 +191,6 @@ public class PlayActivity extends BaseActivity {
     @BindView(R.id.text_calibration)
     TextView calibrationtext;
 
-    public static final int KEY_C3 = 0;
-    public static final int KEY_D3 = 1;
-    public static final int KEY_E3 = 2;
-    public static final int KEY_F3 = 3;
-    public static final int KEY_G3 = 4;
-    public static final int KEY_A3 = 5;
-    public static final int KEY_B3 = 6;
-    public static final int KEY_C4 = 7;
-    public static final int KEY_D4 = 8;
-    public static final int KEY_E4 = 9;
-    public static final int KEY_F4 = 10;
-    public static final int KEY_G4 = 11;
-    public static final int KEY_A4 = 12;
-    public static final int KEY_B4 = 13;
-    public static final int KEY_C5 = 14;
-    public static final int KEY_D5 = 15;
-    public static final int KEY_E5 = 16;
-    public static final int KEY_F5 = 17;
-    public static final int KEY_G5 = 18;
-    public static final int KEY_A5 = 19;
-    public static final int KEY_B5 = 20;
-    public static final int KEY_C3M = 21;
-    public static final int KEY_D3M = 22;
-    public static final int KEY_F3M = 23;
-    public static final int KEY_G3M = 24;
-    public static final int KEY_A3M = 25;
-    public static final int KEY_C4M = 26;
-    public static final int KEY_D4M = 27;
-    public static final int KEY_F4M = 28;
-    public static final int KEY_G4M = 29;
-    public static final int KEY_A4M = 30;
-    public static final int KEY_C5M = 31;
-    public static final int KEY_D5M = 32;
-    public static final int KEY_F5M = 33;
-    public static final int KEY_G5M = 34;
-    public static final int KEY_A5M = 35;
-
     public static final String EXTRA_MODE = "EXTRA_MODE";
     public static final String EXTRA_INSTRUMENT = "EXTRA_INSTRUMENT";
     public static final String EXTRA_CATIGORY = "EXTRA_CATIGORY";
@@ -257,15 +224,19 @@ public class PlayActivity extends BaseActivity {
         ORIENTATIONS.append(Surface.ROTATION_270, 180);
     }
 
-    private int mode, instrument, category, opern;
+
+    private int mode;
+    private int instrument;
+    private int category;
+    private int opern;
     private CalibrationResult calibrationResult;
     private LinearLayout[] keys = new LinearLayout[36];
-    private int[] voiceResId = new int[]{R.raw.c3, R.raw.d3, R.raw.e3, R.raw.f3, R.raw.g3, R.raw.a3, R.raw.b3,
-            R.raw.c4, R.raw.d4, R.raw.e4, R.raw.f4, R.raw.g4, R.raw.a4, R.raw.b4, R.raw.c5, R.raw.d5, R.raw.e5,
-            R.raw.f5, R.raw.g5, R.raw.a5, R.raw.b5, R.raw.c3m, R.raw.d3m, R.raw.f3m, R.raw.g3m, R.raw.a3m,
-            R.raw.c4m, R.raw.d4m, R.raw.f4m, R.raw.g4m, R.raw.a4m, R.raw.c5m, R.raw.d5m, R.raw.f5m, R.raw.g5m,
-            R.raw.a5m};
-    private int[] voiceId = new int[36];
+//    private int[] voiceResId = new int[]{R.raw.c3, R.raw.d3, R.raw.e3, R.raw.f3, R.raw.g3, R.raw.a3, R.raw.b3,
+//            R.raw.c4, R.raw.d4, R.raw.e4, R.raw.f4, R.raw.g4, R.raw.a4, R.raw.b4, R.raw.c5, R.raw.d5, R.raw.e5,
+//            R.raw.f5, R.raw.g5, R.raw.a5, R.raw.b5, R.raw.c3m, R.raw.d3m, R.raw.f3m, R.raw.g3m, R.raw.a3m,
+//            R.raw.c4m, R.raw.d4m, R.raw.f4m, R.raw.g4m, R.raw.a4m, R.raw.c5m, R.raw.d5m, R.raw.f5m, R.raw.g5m,
+//            R.raw.a5m};
+    private int[] voiceId;
     private SoundPool soundPool;
 
     private CameraManager cameraManager;
@@ -356,7 +327,6 @@ public class PlayActivity extends BaseActivity {
                         } else {
                             remainTime = listTime.get(currentLine) + OPERN_SECOND_DELAYED - currentSecond;
                         }
-
                     }
                     textTime.setText(String.valueOf(remainTime));
                     currentSecond++;
@@ -434,6 +404,9 @@ public class PlayActivity extends BaseActivity {
         opern = intent.getIntExtra(EXTRA_OPERN, 0);
         calibrationResult = (CalibrationResult) intent.getSerializableExtra(EXTRA_RESULT);
 
+        // 给ImageProcessor绑定乐器种类
+        ImageProcessor.setInstrumentType(category);
+
         // 开启子线程，绑定TextureView的响应事件
         startBackgroundThread();
         viewPlay.setSurfaceTextureListener(surfaceTextureListener);
@@ -485,12 +458,12 @@ public class PlayActivity extends BaseActivity {
          */
 
         switch (mode) {
-            case 0:
+            case MODE_FREE:
                 textViewModeName.setText(R.string.mode_free);
                 calibrationtext.setVisibility(View.VISIBLE);
                 //textViewOpern.setText("");
                 break;
-            case 1:
+            case MODE_OPERN:
                 textViewModeName.setText(R.string.mode_opern);
                 //textViewOpern.setText("曲谱：" + getResources().getStringArray(R.array.spinner_opern)[opern]);
                 newImgOpern.setVisibility(View.VISIBLE);
@@ -502,32 +475,38 @@ public class PlayActivity extends BaseActivity {
                 break;
         }
 
-        if (instrument == 0 && category == 0) {
-            textViewInstrumentName.setText(R.string.piano_with_21_keys);
-        } else if (instrument == 0 && category == 1) {
-            textViewInstrumentName.setText("乐器：15键钢琴");
-        } else {
-            textViewInstrumentName.setText("乐器：7孔笛");
+        switch (category) {
+            case Instrument.INSTRUMENT_PIANO21C3TOB5:
+                textViewInstrumentName.setText(R.string.piano_with_21_keys_c3_to_b5);
+                voiceId = new int [PianoWith21KeysC3ToB5.KEY_NUM];
+                for (int i = 0; i < voiceId.length; ++i) {
+                    voiceId[i] = soundPool.load(this, PianoWith21KeysC3ToB5.getVoiceResId(i), 1);
+                }
+                break;
+            case Instrument.INSTRUMENT_PIANO21C4TOB6:
+                textViewInstrumentName.setText(R.string.piano_with_21_keys_c4_to_b6);
+                voiceId = new int [PianoWith21KeysC4ToB6.KEY_NUM];
+                for (int i = 0; i < voiceId.length; ++i) {
+                    voiceId[i] = soundPool.load(this, PianoWith21KeysC4ToB6.getVoiceResId(i), 1);
+                }
+                break;
+            case Instrument.INSTRUMENT_FLUTE7:
+                textViewInstrumentName.setText(R.string.flute_with_7_holes);
+                voiceId = new int [FluteWith7Holes.KEY_NUM];
+                for (int i = 0; i < voiceId.length; ++i) {
+                    voiceId[i] = soundPool.load(this, FluteWith7Holes.getVoiceResId(i), 1);
+                }
+                break;
         }
 
         btnPlayOver.setOnClickListener((View v) -> {
             playOver();
         });
 
-        keys = new LinearLayout[]{keyC3, keyD3, keyE3, keyF3, keyG3, keyA3, keyB3, keyC4, keyD4,
-                keyE4, keyF4, keyG4, keyA4, keyB4, keyC5, keyD5, keyE5, keyF5, keyG5, keyA5, keyB5,
-                keyC3M, keyD3M, keyF3M, keyG3M, keyA3M, keyC4M, keyD4M, keyF4M, keyG4M, keyA4M,
-                keyC5M, keyD5M, keyF5M, keyG5M, keyA5M};
-
-        for (int i = 0; i < keys.length; ++i) {
-            voiceId[i] = soundPool.load(this, voiceResId[i], 1);
-
-            // FIXME: 动画暂时被关闭
-//            final int fi = i;
-//            keys[i].setOnClickListener((View v) -> {
-//                playSound(fi);
-//            });
-        }
+//        keys = new LinearLayout[]{keyC3, keyD3, keyE3, keyF3, keyG3, keyA3, keyB3, keyC4, keyD4,
+//                keyE4, keyF4, keyG4, keyA4, keyB4, keyC5, keyD5, keyE5, keyF5, keyG5, keyA5, keyB5,
+//                keyC3M, keyD3M, keyF3M, keyG3M, keyA3M, keyC4M, keyD4M, keyF4M, keyG4M, keyA4M,
+//                keyC5M, keyD5M, keyF5M, keyG5M, keyA5M};
     }
 
     private void initSoundPool() {

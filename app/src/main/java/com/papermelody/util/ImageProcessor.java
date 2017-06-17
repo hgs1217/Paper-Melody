@@ -104,5 +104,13 @@ public class ImageProcessor {
     public static int getCntOfCall() {
         return cntOfCall;
     }
+
+    /**
+     * 要预先给标定部分提供乐器种类，从而做出对应的按键策略
+     * @param instrumentType
+     */
+    public static void setInstrumentType(int instrumentType) {
+        Calibration.setInstrumentType(instrumentType);
+    }
 }
 

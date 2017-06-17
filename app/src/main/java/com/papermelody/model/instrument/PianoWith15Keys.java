@@ -8,4 +8,6 @@ public class PianoWith15Keys extends Piano {
     /**
      * 15键钢琴
      */
+
+
 }

@@ -8,4 +8,11 @@ public abstract class Instrument {
     /**
      * 乐器类
      */
+
+    public static final int INSTRUMENT_PIANO = 0;
+    public static final int INSTRUMENT_FLUTE = 1;
+
+    public static final int INSTRUMENT_PIANO21C3TOB5 = 0;
+    public static final int INSTRUMENT_PIANO21C4TOB6 = 1;
+    public static final int INSTRUMENT_FLUTE7 = 2;
 }

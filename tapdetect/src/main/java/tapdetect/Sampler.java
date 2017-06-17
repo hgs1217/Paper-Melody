@@ -121,6 +121,8 @@ public class Sampler {
         for (Point p : samplePixels) {
             for (int ch = 0; ch < 3; ++ch) { // channels
                 aver[ch] += im.get((int) p.y, (int) p.x)[ch];
+            }
+            for (int ch = 0; ch < 3; ++ch) { // channels
                 if (Math.abs(im.get((int) p.y, (int) p.x)[ch] - Config.FINGER_COLOR[ch])
                         >= Config.FINGER_COLOR_TOLERANCE[ch]) {
                     continue pixelLoop;
@@ -129,9 +131,10 @@ public class Sampler {
             pixelsToUpdate.add(p);
         }
         // FIXME: aver and ratio is only for debug, remove them for performance
-        aver[0] = (int) (aver[0] / samplePixels.size() * 100) / 100;
-        aver[1] = (int) (aver[1] / samplePixels.size() * 100) / 100;
-        aver[2] = (int) (aver[2] / samplePixels.size() * 100) / 100;
+        aver[0] = ((int) (aver[0] / (double) samplePixels.size() * 100)) / 100.0;
+        aver[1] = ((int) (aver[1] / (double) samplePixels.size() * 100)) / 100.0;
+        aver[2] = ((int) (aver[2] / (double) samplePixels.size() * 100)) / 100.0;
+
         ratio = (int) (((double) pixelsToUpdate.size() * 100) / (double) samplePixels.size()) / 100.0;
 
         if (pixelsToUpdate.size() < samplePixels.size() * Config.SAMPLE_PASS_THRESHOLD) {

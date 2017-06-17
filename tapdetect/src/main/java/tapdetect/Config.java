@@ -20,6 +20,8 @@ public class Config {
     // max distance the finger tip could move if to judge the point as lingering
     public static int FINGER_TIP_LINGER_DIST_MAX = 4;
 
+    public static int IM_BLUR_SIZE = 10;
+
     // min interval between 2 frame to avoid to slow the moving speed
     public static int PROCESS_INTERVAL_MS = 50;
 

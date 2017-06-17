@@ -220,7 +220,7 @@ public class Tap {
         recoverRatio = 1.0 / Util.resize(im);
 
         Imgproc.cvtColor(im, im, Imgproc.COLOR_BGR2YCrCb);
-        Imgproc.blur(im, im, new Size(10, 10));
+        Imgproc.blur(im, im, new Size(Config.IM_BLUR_SIZE, Config.IM_BLUR_SIZE));
 
         if (!Sampler.sampleCompleted()) {
             sample(im);

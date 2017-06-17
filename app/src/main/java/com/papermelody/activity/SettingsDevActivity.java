@@ -32,38 +32,20 @@ public class SettingsDevActivity extends BaseActivity {
      * Settings for tap detection algorithm     by gigaflw
      */
 
-    @BindView(R.id.edit_server_ip)  EditText editServerIP;
-    @BindView(R.id.btn_server_ip)   Button btnServerIP;
-    @BindView(R.id.btn_reset)       Button btnReset;
-    @BindView(R.id.btn_play_listen) Button btnPlayListen;
-    @BindView(R.id.btn_to_upload)   Button btnUpload;
-    @BindView(R.id.seekbar1)        SeekBar sb1;
-    @BindView(R.id.seekbar2)        SeekBar sb2;
-    @BindView(R.id.seekbar3)        SeekBar sb3;
-    @BindView(R.id.seekbar4)        SeekBar sb4;
-    @BindView(R.id.seekbar5)        SeekBar sb5;
-    @BindView(R.id.seekbar6)        SeekBar sb6;
-    @BindView(R.id.seekbar7)        SeekBar sb7;
-    @BindView(R.id.seekbar8)        SeekBar sb8;
-    @BindView(R.id.seekbar9)        SeekBar sb9;
-    @BindView(R.id.seekbar10)        SeekBar sb10;
-
-    @BindView(R.id.seekbar_caption1) TextView text1;
-    @BindView(R.id.seekbar_caption2) TextView text2;
-    @BindView(R.id.seekbar_caption3) TextView text3;
-    @BindView(R.id.seekbar_caption4) TextView text4;
-    @BindView(R.id.seekbar_caption5) TextView text5;
-    @BindView(R.id.seekbar_caption6) TextView text6;
-    @BindView(R.id.seekbar_caption7) TextView text7;
-    @BindView(R.id.seekbar_caption8) TextView text8;
-    @BindView(R.id.seekbar_caption9) TextView text9;
-    @BindView(R.id.seekbar_caption10) TextView text10;
+    @BindView(R.id.edit_server_ip)
+    EditText editServerIP;
+    @BindView(R.id.btn_server_ip)
+    Button btnServerIP;
+    @BindView(R.id.btn_reset)
+    Button btnReset;
+    @BindView(R.id.btn_play_listen)
+    Button btnPlayListen;
+    @BindView(R.id.btn_to_upload)
+    Button btnUpload;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        SeekBar[] seekbars = { sb1, sb2, sb3, sb4, sb5, sb6, sb7, sb8, sb9, sb10 };
-        TextView[] texts = { text1, text2, text3, text4, text5, text6, text7, text8, text9, text10 };
 
         // 初始化用于修改ip地址的编辑框和按钮
         editServerIP.setText(App.getServerIP());
@@ -71,7 +53,7 @@ public class SettingsDevActivity extends BaseActivity {
             String serverIP = editServerIP.getText().toString();
             App.setServerIP(serverIP);
             RetrofitClient.updateBaseUrl(serverIP);
-            ToastUtil.showShort("当前ip地址被修改为："+serverIP);
+            ToastUtil.showShort("当前ip地址被修改为：" + serverIP);
             editServerIP.clearFocus();
             closeInputKeyboard();
         });
@@ -107,30 +89,45 @@ public class SettingsDevActivity extends BaseActivity {
         // Use reflect to dynamically set the value of seek bars
         // according to values in `tapdetect.Config`
         Field[] parameters = Config.class.getDeclaredFields();
-
         int ind = 0;
-        for (Field field: parameters) {
-            if (field.getType() != int.class) { continue; }
-            final int index = ind;
+        for (Field field : parameters) {
+            if (field.getType() != int.class && field.getType() != double.class) {
+                continue;
+            }
+            int textViewId = getResources().getIdentifier("seekbar_caption" + (ind + 1), "id", getPackageName());
+            int seekBarId = getResources().getIdentifier("seekbar" + (ind + 1), "id", getPackageName());
+            final TextView textView = (TextView) findViewById(textViewId);
+            final SeekBar seekBar = (SeekBar) findViewById(seekBarId);
 
             final String paraName = field.getName().replace("_", " ").toLowerCase();
 
             try {
-                final int paraValue = field.getInt(Config.class);
-                texts[ind].setText(paraName + ": " + paraValue);
-                seekbars[ind].setMax(paraValue * 2);
-                seekbars[ind].setProgress(paraValue);
+                int paraValue;
+                if (field.getType() == double.class) {
+                    paraValue = (int) (field.getDouble(Config.class) * 100);
+                    textView.setText(paraName + ": " + (double) paraValue / 100.0);
+                } else {
+                    paraValue = field.getInt(Config.class);
+                    textView.setText(paraName + ": " + paraValue);
+                }
+                seekBar.setMax(Math.max(10, paraValue * 2));
+                seekBar.setProgress(paraValue);
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
                 // if this error happens, blame it on me     by gigaflw
             }
 
-            seekbars[index].setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                 @Override
                 public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                     try {
-                        field.set(Config.class, progress);
-                        texts[index].setText(paraName + ": " + field.getInt(Config.class));
+                        if (field.getType() == double.class) {
+                            field.set(Config.class, (double) progress / 100.0);
+                            textView.setText(paraName + ": " + field.getDouble(Config.class));
+                        } else {
+                            field.set(Config.class, progress);
+                            textView.setText(paraName + ": " + field.getInt(Config.class));
+                        }
                     } catch (IllegalAccessException e) {
                         e.printStackTrace();
                         // if this error happens, blame it on me     by gigaflw
@@ -138,10 +135,12 @@ public class SettingsDevActivity extends BaseActivity {
                 }
 
                 @Override
-                public void onStartTrackingTouch(SeekBar seekBar) {}
+                public void onStartTrackingTouch(SeekBar seekBar) {
+                }
 
                 @Override
-                public void onStopTrackingTouch(SeekBar seekBar) {}
+                public void onStopTrackingTouch(SeekBar seekBar) {
+                }
             });
             ind += 1;
         }

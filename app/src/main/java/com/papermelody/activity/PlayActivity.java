@@ -53,6 +53,8 @@ import com.papermelody.core.calibration.TransformResult;
 import com.papermelody.model.Opern;
 import com.papermelody.model.instrument.FluteWith7Holes;
 import com.papermelody.model.instrument.Instrument;
+import com.papermelody.model.instrument.PianoWith14KeysC3ToB4;
+import com.papermelody.model.instrument.PianoWith14KeysC4ToB5;
 import com.papermelody.model.instrument.PianoWith21KeysC3ToB5;
 import com.papermelody.model.instrument.PianoWith21KeysC4ToB6;
 import com.papermelody.util.CanvasUtil;
@@ -574,6 +576,20 @@ public class PlayActivity extends BaseActivity {
                 voiceId = new int [PianoWith21KeysC4ToB6.KEY_NUM];
                 for (int i = 0; i < voiceId.length; ++i) {
                     voiceId[i] = soundPool.load(this, PianoWith21KeysC4ToB6.getVoiceResId(i), 1);
+                }
+                break;
+            case Instrument.INSTRUMENT_PIANO14C3TOB4:
+                textViewInstrumentName.setText(R.string.piano_with_14_keys_c3_to_b4);
+                voiceId = new int [PianoWith14KeysC3ToB4.KEY_NUM];
+                for (int i = 0; i < voiceId.length; ++i) {
+                    voiceId[i] = soundPool.load(this, PianoWith14KeysC3ToB4.getVoiceResId(i), 1);
+                }
+                break;
+            case Instrument.INSTRUMENT_PIANO14C4TOB5:
+                textViewInstrumentName.setText(R.string.piano_with_14_keys_c4_to_b5);
+                voiceId = new int [PianoWith14KeysC4ToB5.KEY_NUM];
+                for (int i = 0; i < voiceId.length; ++i) {
+                    voiceId[i] = soundPool.load(this, PianoWith14KeysC4ToB5.getVoiceResId(i), 1);
                 }
                 break;
             case Instrument.INSTRUMENT_FLUTE7:

@@ -81,6 +81,8 @@
     <string name="instrument">乐器：</string>
     <string name="piano_with_21_keys_c3_to_b5">21键钢琴 C3-B5</string>
     <string name="piano_with_21_keys_c4_to_b6">21键钢琴 C4-B6</string>
+    <string name="piano_with_14_keys_c3_to_b4">14键钢琴 C3-B4</string>
+    <string name="piano_with_14_keys_c4_to_b5">14键钢琴 C4-B5</string>
     <string name="flute_with_7_holes">7孔笛子</string>
     <string-array name="spinner_instrument">
         <item>钢琴</item>

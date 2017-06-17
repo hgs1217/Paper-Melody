@@ -428,6 +428,7 @@ public class PlayActivity extends BaseActivity {
                     //if (!lastKeys.contains(keys.get(i))) {
 
                         playSound(keys.get(i));
+                        Log.d("TESTKEY", keys.get(i)+"");
                     //}
 
                 }
@@ -446,13 +447,9 @@ public class PlayActivity extends BaseActivity {
                 keys.add(0, FluteWith7Holes.holesToVoice(temp));
                 for (int i = 0; i < keys.size(); i++) {
                     // if (!lastKeys.contains(keys.get(i))) {
-
                     playSound(keys.get(i));
                     // }
-
                 }
-
-
                 break;
             }
             default:

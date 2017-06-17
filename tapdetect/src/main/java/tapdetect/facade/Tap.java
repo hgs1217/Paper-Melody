@@ -7,22 +7,26 @@
 
 package tapdetect.facade;
 
-import java.util.List;
-import java.util.ArrayList;
-// import java.util.stream.Collectors;
-
-import org.opencv.core.*;
+import org.opencv.core.Mat;
+import org.opencv.core.MatOfPoint;
+import org.opencv.core.Point;
+import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import tapdetect.ColorRange;
 import tapdetect.Config;
 import tapdetect.FingerDetector;
 import tapdetect.HandDetector;
 import tapdetect.ImgLogger;
+import tapdetect.Sampler;
 import tapdetect.TapDetector;
 import tapdetect.TapDetector.TapDetectPoint;
 import tapdetect.Util;
-import tapdetect.Sampler;
+
+// import java.util.stream.Collectors;
 
 public class Tap {
     /**
@@ -167,6 +171,62 @@ public class Tap {
 
         for (TapDetectPoint pt : taps) {
             if (pt.isTapping()) {
+  ret.add(pt);
+            }
+        }
+        updateResultCache(ret);
+
+        return ret;
+    }
+    public static List<Point> getFluteAll(Mat im,
+                                     List<List<Point>> contoursOutput,
+                                     List<TapDetectPoint> tapDetectPointsOutput
+    ) {
+        /**
+         * @param: im: A image in color space BGR
+         * @param: contoursOutput
+         *      if is not null, apexes of the contour of hand will be saved
+         * @param: tapDetectPointsOutput
+         *      if is not null, all results of detected points will be saved
+         * @retrun:
+         *      A list of points detected as being tapping
+         *      (nothing but `TapDetectPoint` with status `FALLING` in `tapDetectPointsOutput`)
+         *  This function will modify `im` into YCrCb as well as a smaller size
+         */
+
+        if (!preprocess(im)) {
+            return resultCache;
+        }
+        Mat hand = HandDetector.getHand(im);
+
+        List<MatOfPoint> contour = new ArrayList<>();
+        List<Point> fingers = FingerDetector.getFingers(im, hand, contour);
+        List<TapDetectPoint> taps = TapDetector.getTappingAll(im, fingers);
+
+        if (contoursOutput != null) {
+            contoursOutput.clear();
+            for (MatOfPoint cnt : contour) {
+                List<Point> cntPt = cnt.toList();
+                scaleResult(cntPt);
+                contoursOutput.add(cntPt);
+            }
+        }
+
+        for (TapDetectPoint pt : taps) {
+            pt.x *= recoverRatio;
+            pt.y *= recoverRatio;
+        }
+
+        if (contoursOutput != null) {
+            tapDetectPointsOutput.clear();
+            tapDetectPointsOutput.addAll(taps);
+        }
+
+        List<Point> ret = new ArrayList<>();
+
+        for (TapDetectPoint pt : taps) {
+            if (pt.isPressing()) {
+
                 ret.add(pt);
             }
         }

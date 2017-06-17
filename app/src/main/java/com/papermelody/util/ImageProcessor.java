@@ -6,6 +6,7 @@ import com.papermelody.core.calibration.Calibration;
 import com.papermelody.core.calibration.CalibrationResult;
 import com.papermelody.core.calibration.CalibrationResultsOfLatest5;
 import com.papermelody.core.calibration.TransformResult;
+import com.papermelody.model.instrument.Instrument;
 
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
@@ -25,6 +26,8 @@ public class ImageProcessor {
      */
 
     static { System.loadLibrary("opencv_java3"); }
+
+    private static int INSTRUMENT_TYPE = 0;
 
     private static int cntOfCall = 0;
     private static CalibrationResultsOfLatest5 calibrationResultsOfLatest5;
@@ -64,10 +67,11 @@ public class ImageProcessor {
         return Calibration.transform(result);
     }
 
-    public static List<Integer> getPlaySoundKey (Mat bgrMat, TransformResult result) {
-        return getPlaySoundKey(bgrMat, result, null);
+    public static List<Integer> getPlaySoundKey(Mat bgrMat, TransformResult result, boolean []judge) {
+        return getPlaySoundKey(bgrMat, result, null, judge);
     }
-    public static List<Integer> getPlaySoundKey (Mat bgrMat, TransformResult result, List<Point> tap) {
+
+    public static List<Integer> getPlaySoundKey(Mat bgrMat, TransformResult result, List<Point> tap, boolean[] judge) {
         /**
          * 获取坐标判定得到的按键结果
          */
@@ -84,15 +88,43 @@ public class ImageProcessor {
             return keys;
         }
         else {
-            for (int i = 0; i < tap.size(); i++) {
-                count[Calibration.Key(result, tap.get(i).x, tap.get(i).y)]++;
-            }
-            for (int i = 0; i < 36; i++) {
-                if (count[i] != 0) {
-                    keys.add(i);
+            switch (INSTRUMENT_TYPE) {
+                case Instrument.INSTRUMENT_PIANO14C3TOB4:
+                case Instrument.INSTRUMENT_PIANO14C4TOB5:
+                case Instrument.INSTRUMENT_PIANO21C3TOB5:
+                case Instrument.INSTRUMENT_PIANO21C4TOB6: {
+                    for (int i = 0; i < tap.size(); i++) {
+                        count[Calibration.Key(result, tap.get(i).x, tap.get(i).y)]++;
+                        if (Calibration.Key(result, tap.get(i).x, tap.get(i).y) < 36)
+                            judge[i] = true;
+                    }
+                    for (int i = 0; i < 36; i++) {
+                        if (count[i] != 0) {
+                            keys.add(i);
+                        }
+                    }
+                    return keys;
                 }
+                case Instrument.INSTRUMENT_FLUTE7: {
+
+                    for (int i = 0; i < tap.size(); i++) {
+                        count[Calibration.Key(result, tap.get(i).x, tap.get(i).y)]++;
+                        if (Calibration.Key(result, tap.get(i).x, tap.get(i).y) < 7)
+                            judge[i] = true;
+                    }
+                    for (int i = 0; i < 36; i++) {
+                        if (count[i] != 0) {
+                            keys.add(i);
+                        }
+                    }
+                    return keys;
+
+
+                }
+                default:return keys;
+
             }
-            return keys;
+
         }
     }
 
@@ -110,6 +142,7 @@ public class ImageProcessor {
      * @param instrumentType
      */
     public static void setInstrumentType(int instrumentType) {
+        INSTRUMENT_TYPE = instrumentType;
         Calibration.setInstrumentType(instrumentType);
     }
 }

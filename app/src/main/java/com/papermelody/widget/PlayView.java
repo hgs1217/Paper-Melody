@@ -139,7 +139,7 @@ public class PlayView extends View {
     }
 
 
-    public void addBean(List<Point> tapping,Boolean []judge) {
+    public void addBean(List<Point> tapping,boolean []judge) {
         if (tapping != null) {
             for (int i = 0; i < tapping.size(); i++) {
                 if (judge[i]) {

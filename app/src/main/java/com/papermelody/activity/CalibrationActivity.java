@@ -212,6 +212,12 @@ public class CalibrationActivity extends BaseActivity {
         category = intent.getIntExtra(PlayActivity.EXTRA_CATIGORY, 0);
         opern = intent.getIntExtra(PlayActivity.EXTRA_OPERN, 0);
 
+//        instrument = Instrument.INSTRUMENT_FLUTE;
+//        category = Instrument.INSTRUMENT_FLUTE7;
+
+        // 给ImageProcessor绑定乐器种类
+        ImageProcessor.setInstrumentType(category);
+
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,  WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON, WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 

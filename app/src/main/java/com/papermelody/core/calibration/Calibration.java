@@ -31,8 +31,236 @@ public class Calibration {
     }
 
     private static int INSTRUMENT_TYPE = 0;
+    private static CalibrationResult  flute(Mat srcImage, int upbound, int lowbound) {
+        Mat dstImage = new Mat();
+        Size dsize = new Size(srcImage.width() / 2, srcImage.height() / 2);
+        Imgproc.resize(srcImage, dstImage, dsize);
+        Mat dilateImage = new Mat();
+        Mat histImage;
+        Mat medianBlurImage = new Mat();
+        Mat bilateralFilterImage = new Mat();
+        Mat blurImage = new Mat();
+        Mat thresholdImage = new Mat();
+        List<MatOfPoint> contours = new ArrayList<MatOfPoint>();
 
+        //System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+        //Imgproc.cvtColor(srcImage, histImage, Imgproc.COLOR_BGR2GRAY);
+
+        histImage = ImgTransform.Hist(dstImage);
+        // Log.d("TESThist", histImage.rows() + " " + histImage.cols());
+        Mat element = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, (new Size(5, 5)));
+
+
+        //3、进行腐蚀
+
+
+        Imgproc.dilate(histImage, dilateImage, element);//膨胀
+        Imgproc.medianBlur(dilateImage, medianBlurImage, 5);
+        Imgproc.bilateralFilter(medianBlurImage, bilateralFilterImage, 9, 75, 75);
+        Imgproc.blur(bilateralFilterImage, blurImage, new Size(5, 5));
+        Imgproc.adaptiveThreshold(blurImage, thresholdImage, 255, Imgproc.ADAPTIVE_THRESH_GAUSSIAN_C, Imgproc.THRESH_BINARY, 11, 2);
+
+
+        Imgproc.findContours(thresholdImage, contours, new Mat(), Imgproc.RETR_TREE,
+                Imgproc.CHAIN_APPROX_SIMPLE);
+        int lencontour = contours.size();
+        Log.d("TESThisthei", lencontour + " ");
+
+        System.out.println(lencontour);
+        int[] a1 = new int[lencontour];
+        double[] allarea = new double[lencontour];
+        int[] allcy = new int[lencontour];
+        int[] a3 = new int[lencontour];
+        double[] avarea = new double[lencontour];
+        int[] avcy = new int[lencontour];
+        double[] contourarea = new double[lencontour];
+        int[] contourcy = new int[lencontour];
+        Moments[] contourmoment = new Moments[lencontour];
+        for (int j = 0; j < a1.length; j++) {
+
+            a1[j] = -1;
+            avarea[j] = 0;
+            avcy[j] = 0;
+            allarea[j] = 0;
+            allcy[j] = 0;
+            a3[j] = 0;
+        }
+
+        int nnn = 0;
+        int count = 0;
+        boolean flag = false;
+        for (int i = 0; i < lencontour; i++) {
+            MatOfPoint item = contours.get(i);
+            Moments m = Imgproc.moments(item);
+            contourmoment[i] = m;
+            if ((m.get_m00() != 0) && (contourArea(item) > 0)) {
+                double d1 = (m.get_m01() / m.get_m00());
+                Double D1 = new Double(d1);
+                int cy = D1.intValue();
+                contourcy[i] = cy;
+                double area = Imgproc.contourArea(item);
+                contourarea[i] = area;
+                if (cy > histImage.height() * 11 / 20 && cy < histImage.height() * 19 / 20 && area > histImage.height() * histImage.width() / 1000) {
+                    //Log.d("TESThist2",cy+" ");
+                    nnn += 1;
+                    flag = false;
+                    for (int j = 0; j < count; j++) {
+                        if (
+                               // Math.abs(area - avarea[j]) < avarea[j] * 4 / 7 &&
+                                        Math.abs(cy - avcy[j]) < histImage.height() / 17) {
+                            flag = true;
+                            a3[j] = a3[j] + 1;
+                            a1[i] = j;
+                            allarea[j] += area;
+                            avarea[j] = allarea[j] / a3[j];
+                            allcy[j] += cy;
+                            avcy[j] = allcy[j] / a3[j];
+                            break;
+
+                        }
+                    }
+                    if (!flag) {
+                        avarea[count] = area;
+                        allarea[count] = area;
+                        allcy[count] = cy;
+                        avcy[count] = cy;
+                        a3[count] = 1;
+                        a1[i] = count;
+                        count++;
+                    }
+
+                }
+            }
+        }
+        CalibrationResult out = new CalibrationResult();
+        out.setFlag(false);
+        if (nnn == 0) {
+            return out;
+        }
+
+        int temp_order = 0;
+        int temp = 0;
+
+        for (int i = 0; i < count; i++) {
+            if (a3[i] == 7) {
+                temp = a3[i];
+                temp_order = i;
+                break;
+
+            }
+        }
+        int temp1 = temp;
+        Log.d("TESTtemp2", temp + " ");
+        Log.d("TESTtemp3", temp_order + " ");
+        Log.d("TESTtemp4", a1[0] + " ");
+        Log.d("TESTtemp5", count + " ");
+        int ddd = 0;
+        int avercy = avcy[temp_order];
+        double averarea = avarea[temp_order];
+        int up = histImage.height(), down = 0, left = histImage.width(), right = 0;
+        int leftlow_x = histImage.width(), leftlow_y = 0, leftup_x = 0, leftup_y = 0, rightlow_x = 0, rightlow_y = 0, rightup_x = 0, rightup_y = 0, leftupright_x = 0, leftupright_y = 0, rightupleft_x = 0, rightupleft_y = 0;
+        System.out.println(leftlow_x);
+        for (int i = 0; i < lencontour; i++) {
+            if (a1[i] == temp_order) {
+                ddd++;
+                int cx, cy, uptemp;
+
+                MatOfPoint item = contours.get(i);
+                //Moments m = Imgproc.moments(item);
+                Moments m = contourmoment[i];
+                cy = contourcy[i];
+                double d2 = (m.get_m10() / m.get_m00());
+                Double D2 = new Double(d2);
+                cx = D2.intValue();
+                double area = contourarea[i];
+                if (Math.abs(cy - avercy) < histImage.height() / 20 && Math.abs(area - averarea) < averarea * 1 / 2) {
+
+                    org.opencv.core.Point[] points = item.toArray();
+                    org.opencv.core.Point leftmost = points[0];
+                    org.opencv.core.Point rightmost = points[0];
+
+                    for (int iii = 0; iii < points.length; iii++) {
+                        if (left > points[iii].x) {
+                            left = (int) points[iii].x;
+                        }
+                        if (right < points[iii].x) {
+                            right = (int) points[iii].x;
+                        }
+                        if (up > points[iii].y) {
+                            up = (int) points[iii].y;
+                        }
+                        if (down < points[iii].y) {
+                            down = (int) points[iii].y;
+                        }
+                    }
+                }
+            }
+
+        }
+        leftlow_x=left;
+        leftup_y=up;
+        leftlow_y=down;
+        leftup_x=left;
+        rightlow_x=right;
+        rightup_x=right;
+        rightlow_y=down;
+        rightup_y=up;
+        leftlow_x*=2;
+        leftlow_y*=2;
+        leftup_x*=2;
+        leftup_y*=2;
+        rightlow_x*=2;
+        rightlow_y*=2;
+        rightup_x*=2;
+        rightup_y*=2;
+        rightupleft_x=right-(right-left)/12;
+        out.setLeftLowX(leftlow_x);
+        out.setLeftLowY(leftlow_y);
+        out.setLeftUpX(leftup_x);
+        out.setLeftUpY(leftup_y);
+        out.setRightLowX(rightlow_x);
+        out.setRightLowY(rightlow_y);
+        out.setRightUpX(rightup_x);
+        out.setRightUpY(rightup_y);
+        out.setRightUpLeftX(rightupleft_x);
+        if (
+
+                Math.abs(rightlow_x - leftlow_x) > srcImage.width() / 2 &&
+                Math.abs(rightup_x - leftup_x) > srcImage.width() / 2 &&
+                temp1==7&&
+                leftup_y > upbound && rightup_y > upbound &&
+                leftlow_y < lowbound &&
+                rightlow_y < lowbound
+                &&leftlow_x<srcImage.width() / 4
+                &&rightlow_x>srcImage.width()*3/4
+                &&leftlow_x>0
+                &&rightlow_x<srcImage.width()
+
+
+
+                && down-up>5
+                )
+            out.setFlag(true);
+        return out;
+
+    }
     public static CalibrationResult main(Mat srcImage, int upbound, int lowbound) {
+        switch (INSTRUMENT_TYPE) {
+            case Instrument.INSTRUMENT_PIANO21C3TOB5:
+            case Instrument.INSTRUMENT_PIANO21C4TOB6:
+                return piano(srcImage, upbound, lowbound);
+            case Instrument.INSTRUMENT_FLUTE7:
+                return flute(srcImage, upbound, lowbound);
+
+        }
+        CalibrationResult out = new CalibrationResult();
+        out.setFlag(false);
+        return out;
+
+    }
+
+
+    private static CalibrationResult piano(Mat srcImage, int upbound, int lowbound) {
         Mat dstImage = new Mat();
         Size dsize = new Size(srcImage.width() /2, srcImage.height() /2);
         Imgproc.resize(srcImage,dstImage,dsize);
@@ -438,6 +666,19 @@ public class Calibration {
                     else return 36;
                 }
             case Instrument.INSTRUMENT_FLUTE7:
+                if (y<200&&y>-100){
+                    if (x>-22.5&&x<22.5)return 6;
+                    if (x>60.5&&x<104.5)return 5;
+                    if (x>143.5&&x<188.5)return 4;
+                    if (x>226.5&&x<271.5)return 3;
+                    if (x>309.5&&x<354.5)return 2;
+                    if (x>375.5&&x<428.5)return 1;
+                    if (x>475.5&&x<525.5)return 0;
+                    else return 7;
+
+                }
+                else return 7;
+
                 // TODO: 笛子的键对应设置
 
         }

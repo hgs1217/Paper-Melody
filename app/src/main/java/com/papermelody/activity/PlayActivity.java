@@ -324,15 +324,21 @@ public class PlayActivity extends BaseActivity {
         opernNum = intent.getIntExtra(EXTRA_OPERN, 0);
         opernNum = 1; // FIXME: opern默认
         calibrationResult = (CalibrationResult) intent.getSerializableExtra(EXTRA_RESULT);
-
-        // 给ImageProcessor绑定乐器种类
-        ImageProcessor.setInstrumentType(category);
+        initSoundPool();
+        initVoice();
 
         // 开启子线程，绑定TextureView的响应事件
         startBackgroundThread();
         viewPlay.setSurfaceTextureListener(surfaceTextureListener);
 
+
+
+
         Tap.reset();
+
+
+
+
     }
 
     public void processImage(Image image) {
@@ -379,7 +385,7 @@ public class PlayActivity extends BaseActivity {
                     startnotice.setVisibility(View.INVISIBLE);
                     canvasPlay.setVisibility(View.VISIBLE);
                     initMediaRecorder();
-                    initSoundPool();
+
                     initView();
                     start_flag = true;
                     break;
@@ -397,27 +403,72 @@ public class PlayActivity extends BaseActivity {
         TransformResult transformResult = ImageProcessor.getKeyTransform(calibrationResult);
 
         long t1 = System.currentTimeMillis();
-        List<Point> tapping = Tap.getAll(mat, canvasPlay.getHandContours(), canvasPlay.getFingerTips());
+        List<Point> tapping;
+
+        if (instrument == Instrument.INSTRUMENT_FLUTE) {
+            tapping = Tap.getFluteAll(mat, canvasPlay.getHandContours(), canvasPlay.getFingerTips());
+        } else {
+            tapping = Tap.getFluteAll(mat, canvasPlay.getHandContours(), canvasPlay.getFingerTips());
+        }
+
+
+        //List<Point> tapping = Tap.getAll(mat, canvasPlay.getHandContours(), canvasPlay.getFingerTips());
         long t2 = System.currentTimeMillis();
 
         //playView.addBean(tapping);
 
         CanvasUtil.setScreenHeight(ViewUtil.getScreenHeight(this));
         canvasPlay.updateInfo(t2 - t1, 0, Tap.getProcessInterval());
-        Boolean[] judge_in_area = new Boolean[tapping.size()];
-        for (int i = 0; i < tapping.size(); i++) {
-            judge_in_area[i] = false;
-        }
-        List<Integer> keys = ImageProcessor.getPlaySoundKey(mat.clone(), transformResult, tapping);
-        for (int i=0; i < keys.size(); i++) {
-            // if (!lastKeys.contains(keys.get(i))) {
-                judge_in_area[i]=true;
-                playSound(keys.get(i));
-            // }
 
+
+
+
+
+        boolean[] judge_in_area = new boolean[tapping.size()];
+        for (int i=0;i<tapping.size();i++){judge_in_area[i]=false;}
+        List<Integer> keys;
+        switch (instrument) {
+            case Instrument.INSTRUMENT_PIANO: {
+                keys = ImageProcessor.getPlaySoundKey(mat.clone(), transformResult, tapping, judge_in_area);
+                for (int i = 0; i < keys.size(); i++) {
+                    //if (!lastKeys.contains(keys.get(i))) {
+
+                        playSound(keys.get(i));
+                    //}
+
+                }
+                break;
+            }
+            case Instrument.INSTRUMENT_FLUTE: {
+                List<Integer> flute = ImageProcessor.getPlaySoundKey(mat.clone(), transformResult, tapping, judge_in_area);
+                boolean[] temp = new boolean[7];
+                for (int i = 0; i < 7; i++) temp[i] = true;
+                for (int i = 0; i < flute.size(); i++) {
+                    if (flute.get(i) < 7) temp[flute.get(i)] = false;
+
+
+                }
+                keys = new ArrayList<>();
+                keys.add(0, FluteWith7Holes.holesToVoice(temp));
+                for (int i = 0; i < keys.size(); i++) {
+                    // if (!lastKeys.contains(keys.get(i))) {
+
+                    playSound(keys.get(i));
+                    // }
+
+                }
+
+
+                break;
+            }
+            default:
+                keys = new ArrayList<>();
+                break;
         }
+
         playView.addBean(tapping, judge_in_area);
         // lastKeys = new ArrayList<>(keys);
+
     }
 
     private void initView() {
@@ -446,6 +497,14 @@ public class PlayActivity extends BaseActivity {
                 break;
         }
 
+
+        btnPlayOver.setOnClickListener((View v) -> {
+            playOver();
+        });
+
+
+    }
+    private void initVoice(){
         switch (category) {
             case Instrument.INSTRUMENT_PIANO21C3TOB5:
                 textViewInstrumentName.setText(R.string.piano_with_21_keys_c3_to_b5);
@@ -484,9 +543,6 @@ public class PlayActivity extends BaseActivity {
                 break;
         }
 
-        btnPlayOver.setOnClickListener((View v) -> {
-            playOver();
-        });
     }
 
     private void initSoundPool() {

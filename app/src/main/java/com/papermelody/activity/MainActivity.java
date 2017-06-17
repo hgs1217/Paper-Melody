@@ -157,27 +157,23 @@ public class MainActivity extends BaseActivity {
 
     private void initTabView() {
         bottomBar.setOnTabSelectListener((@IdRes int tabId) -> {
-            int currentPage;
             switch (tabId) {
                 case R.id.tab_1:
-                    currentPage = MAIN_HOME;
+                    updateFragment(MAIN_HOME);
                     break;
                 case R.id.tab_2:
-                    currentPage = MAIN_HALL;
+                    updateFragment(MAIN_HALL);
                     break;
                 case R.id.tab_3:
-                    currentPage = MAIN_USER;
+                    updateFragment(MAIN_USER);
                     break;
                 case R.id.tab_4:
-                    currentPage = MAIN_SETTINGS;
+                    updateFragment(MAIN_SETTINGS);
                     break;
                 default:
-                    currentPage = MAIN_HOME;
+                    updateFragment(MAIN_HOME);
                     break;
             }
-            updateToolbar(currentPage);
-            this.currentPage = currentPage;
-            container.setCurrentItem(currentPage, false);
         });
     }
 

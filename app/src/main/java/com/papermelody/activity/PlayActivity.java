@@ -323,6 +323,7 @@ public class PlayActivity extends BaseActivity {
         category = intent.getIntExtra(EXTRA_CATIGORY, 0);
         opernNum = intent.getIntExtra(EXTRA_OPERN, 0);
         opernNum = 1; // FIXME: opern默认
+        calibrationResult = (CalibrationResult) intent.getSerializableExtra(EXTRA_RESULT);
 
         initSoundPool();
         initVoice();

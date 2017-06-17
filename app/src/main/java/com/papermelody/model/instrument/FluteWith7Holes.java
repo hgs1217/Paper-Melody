@@ -1,5 +1,7 @@
 package com.papermelody.model.instrument;
 
+import android.util.Log;
+
 import com.papermelody.R;
 
 /**
@@ -94,6 +96,7 @@ public class FluteWith7Holes extends Flute {
     }
 
     public static int getVoiceResId (int keyNum) {
+        Log.d("TESTT", voiceResId[keyNum]+"");
         return voiceResId[keyNum];
     }
 }

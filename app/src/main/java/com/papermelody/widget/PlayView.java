@@ -139,37 +139,39 @@ public class PlayView extends View {
     }
 
 
-    public void addBean(List<Point> tapping) {
+    public void addBean(List<Point> tapping,Boolean []judge) {
         if (tapping != null) {
             for (int i = 0; i < tapping.size(); i++) {
-                Bean bean = new Bean();
+                if (judge[i]) {
 
-                bean.setRadius(0); //
+                    Bean bean = new Bean();
 
-                bean.setAlpha(MaxAlpha);
+                    bean.setRadius(0); //
 
-                bean.setX((int)CanvasUtil.transformX(tapping.get(i).x));
-                Log.d("xxxxxxx", bean.getX()+" ");
+                    bean.setAlpha(MaxAlpha);
 
-
-
-                bean.setY((int)CanvasUtil.transformY(tapping.get(i).y));
-                Log.d("xxxxxxx", bean.getY()+" ");
+                    bean.setX((int) CanvasUtil.transformX(tapping.get(i).x));
+                    Log.d("xxxxxxx", bean.getX() + " ");
 
 
-                bean.setPaint(initPaint(bean.getAlpha()));
-
-                if (list.size() == 0) {
-
-                    START = true;
-                }
-                list.add(bean);
+                    bean.setY((int) CanvasUtil.transformY(tapping.get(i).y));
+                    Log.d("xxxxxxx", bean.getY() + " ");
 
 
-                invalidate();
+                    bean.setPaint(initPaint(bean.getAlpha()));
 
-                if (START) {
-                    beanHandler.sendEmptyMessage(0);
+                    if (list.size() == 0) {
+
+                        START = true;
+                    }
+                    list.add(bean);
+
+
+                    invalidate();
+
+                    if (START) {
+                        beanHandler.sendEmptyMessage(0);
+                    }
                 }
             }
 

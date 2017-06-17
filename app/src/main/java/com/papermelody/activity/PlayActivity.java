@@ -515,18 +515,22 @@ public class PlayActivity extends BaseActivity {
         List<Point> tapping = Tap.getAll(mat, canvasPlay.getHandContours(), canvasPlay.getFingerTips());
         long t2 = System.currentTimeMillis();
 
-        playView.addBean(tapping);
+        //playView.addBean(tapping);
 
 
         CanvasUtil.setScreenHeight(ViewUtil.getScreenHeight(this));
         canvasPlay.updateInfo(t2 - t1, 0, Tap.getProcessInterval());
-
+          Boolean []judge_in_area=new Boolean [tapping.size()];
+        for (int i=0;i<tapping.size();i++){judge_in_area[i]=false;}
         List<Integer> keys = ImageProcessor.getPlaySoundKey(mat.clone(), transformResult, tapping);
-        for (Integer key : keys) {
-            if (!lastKeys.contains(key)) {
-                playSound(key);
+        for (int i=0;i<keys.size();i++) {
+            if (!lastKeys.contains(keys.get(i))) {
+                judge_in_area[i]=true;
+                playSound(keys.get(i));
             }
+
         }
+        playView.addBean(tapping,judge_in_area);
         lastKeys = new ArrayList<>(keys);
     }
 
@@ -736,14 +740,14 @@ public class PlayActivity extends BaseActivity {
             Log.i("nib", audioFile.getAbsolutePath());
             mediaRecorder.setOutputFile(audioFile.getAbsolutePath());
             mediaRecorder.prepare();
-            //mediaRecorder.start();
+            mediaRecorder.start();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     private void playOver() {
-        //mediaRecorder.stop();
+        mediaRecorder.stop();
         Intent intent = new Intent(this, PlayListenActivity.class);
         intent.putExtra(FILENAME, fileName);
         startActivity(intent);
@@ -798,7 +802,7 @@ public class PlayActivity extends BaseActivity {
 
 
         cameraManager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
-        cameraID = String.valueOf(CameraCharacteristics.LENS_FACING_FRONT);  //前摄像头
+        cameraID = String.valueOf(CameraCharacteristics.LENS_FACING_BACK);  //前摄像头
         ImageProcessor.initProcessor();
 
         try {
@@ -1015,7 +1019,9 @@ public class PlayActivity extends BaseActivity {
     }
 
     public void playSound(int keyID) {
-        soundPool.play(voiceId[keyID], 1, 1, 0, 0, 1);
+        if (keyID < voiceId.length) {
+            soundPool.play(voiceId[keyID], 1, 1, 0, 0, 1);
+        }
 
         // FIXME: 动画暂时被关闭
 //        new Thread(new Runnable() {
@@ -1043,7 +1049,7 @@ public class PlayActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         // TODO: @tth 做一个确认提示框，返回到首页
-        //mediaRecorder.stop();
+        mediaRecorder.stop();
         finish();
     }
 

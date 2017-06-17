@@ -214,6 +214,7 @@ public class CalibrationActivity extends BaseActivity {
 
 //        instrument = Instrument.INSTRUMENT_FLUTE;
 //        category = Instrument.INSTRUMENT_FLUTE7;
+//        category = Instrument.INSTRUMENT_PIANO14C4TOB5;
 
         // 给ImageProcessor绑定乐器种类
         ImageProcessor.setInstrumentType(category);

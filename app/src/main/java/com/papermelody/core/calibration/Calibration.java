@@ -248,6 +248,8 @@ public class Calibration {
         switch (INSTRUMENT_TYPE) {
             case Instrument.INSTRUMENT_PIANO21C3TOB5:
             case Instrument.INSTRUMENT_PIANO21C4TOB6:
+            case Instrument.INSTRUMENT_PIANO14C3TOB4:
+            case Instrument.INSTRUMENT_PIANO14C4TOB5:  // FIXME: 此处14键标定有bug
                 return piano(srcImage, upbound, lowbound);
             case Instrument.INSTRUMENT_FLUTE7:
                 return flute(srcImage, upbound, lowbound);

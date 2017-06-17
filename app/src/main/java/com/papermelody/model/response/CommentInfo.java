@@ -17,6 +17,8 @@ public class CommentInfo {
     private String author;
     @SerializedName("authorID")
     private Integer authorID;
+    @SerializedName("authorAvatar")
+    private String authorAvatar;
     @SerializedName("createTime")
     private String createTime;
     @SerializedName("comment")
@@ -36,6 +38,10 @@ public class CommentInfo {
 
     public String getAuthor() {
         return author;
+    }
+
+    public String getAuthorAvatar() {
+        return authorAvatar;
     }
 
     public String getCreateTime() {

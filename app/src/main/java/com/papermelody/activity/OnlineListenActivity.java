@@ -430,11 +430,13 @@ public class OnlineListenActivity extends BaseActivity {
                         Integer replyUserID = 0;
                         String author = "AnonymousUser"; // FIXME: 这里先方便上传，不然每次要登录
                         Integer authorID = 0;
+                        String authorAvatar = ""; // FIXME: 设定一下初始头像
                         Integer musicID = onlineMusic.getMusicID();
                         boolean hasUser = true;
                         try {
                             author = App.getUser().getUsername();
                             authorID = App.getUser().getUserID();
+                            authorAvatar = App.getUser().getAvatarName();
                         } catch (NullPointerException e) {
                             ToastUtil.showShort("登录了发表评论可以保存记录哦！");
                             hasUser = false;
@@ -451,7 +453,7 @@ public class OnlineListenActivity extends BaseActivity {
                             replyUserID = 0;
                         }
 
-                        addSubscription(api.uploadComment(musicID, author, authorID, replyUserID, comment, createtime)
+                        addSubscription(api.uploadComment(musicID, author, authorID, authorAvatar, replyUserID, comment, createtime)
                                 .flatMap(NetworkFailureHandler.httpFailureFilter)
                                 .subscribeOn(Schedulers.io())
                                 .observeOn(AndroidSchedulers.mainThread())

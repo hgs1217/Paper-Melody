@@ -121,6 +121,7 @@ public interface SocialSystemAPI {
     Observable<HttpResponse> uploadComment(@Field("musicID") Integer musicID,
                                            @Field("user") String user,
                                            @Field("userID") Integer userID,
+                                           @Field("userAvatarName") String userAvatarName,
                                            // 若不是评论回复，replyUserID 值取0
                                            @Field("replyUserID") Integer replyUserID,
                                            @Field("comment") String comment,

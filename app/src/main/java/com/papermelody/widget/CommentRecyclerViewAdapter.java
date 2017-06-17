@@ -140,7 +140,7 @@ public class CommentRecyclerViewAdapter extends RecyclerView.Adapter<CommentRecy
                 if (commentX[i] != "")
                     comment = commentX[i];
             }
-            Comment res = new Comment(-1, -1, info[0], info[1], comment);
+            Comment res = new Comment(-1, -1, info[0], info[1], comment, ""); // FIXME: 没检查过最后一项的正确性
             return res;
         }
 

@@ -133,7 +133,7 @@ public class CommentFragment extends BaseFragment {
                         commentList -> {
                             List<Comment> comments = new ArrayList<>();
                             for (CommentInfo info : commentList) {
-                                comments.add(new Comment(info));
+                                comments.add(new Comment(getActivity(), info));
                             }
                             Collections.sort(comments, new Comparator() {
                                 @Override
@@ -169,6 +169,7 @@ public class CommentFragment extends BaseFragment {
         } else {
             boolean hasCommented = false;
             for (Comment singleComment : list) {
+                Log.d("TESTR", singleComment.getAuthorAvatarUrl());
                 if (singleComment.getAuthor().equals(author)) {
                     hasCommented = true;
                     my_comment_overall.setVisibility(View.VISIBLE);

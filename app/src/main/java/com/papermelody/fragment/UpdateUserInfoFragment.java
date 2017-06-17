@@ -145,6 +145,7 @@ public class UpdateUserInfoFragment extends BaseFragment {
                         updateNickname(newNickname);
                     }
                 });
+                showKeyBoard(editText);
             });
             bottomDialog.show();
         });
@@ -168,6 +169,7 @@ public class UpdateUserInfoFragment extends BaseFragment {
                         updatePassword(editText.getText().toString(), editText2.getText().toString());
                     }
                 });
+                showKeyBoard(editText);
             });
             bottomDialog.show();
         });
@@ -188,6 +190,7 @@ public class UpdateUserInfoFragment extends BaseFragment {
                             User user = new User(result, context);
                             App.setUser(user);
                             textUserNickname.setText(App.getUser().getNickname());
+                            hideKeyBoard(editText);
                             bottomDialog.dismiss();
                             ToastUtil.showShort(R.string.edit_success);
                         }, NetworkFailureHandler.basicErrorHandler
@@ -205,6 +208,7 @@ public class UpdateUserInfoFragment extends BaseFragment {
                         result -> {
                             User user = new User(result, context);
                             App.setUser(user);
+                            hideKeyBoard(editText);
                             ToastUtil.showShort("密码修改为" + App.getUser().getPassword());
                             bottomDialog.dismiss();
                         }, NetworkFailureHandler.loginErrorHandler
@@ -282,5 +286,16 @@ public class UpdateUserInfoFragment extends BaseFragment {
                 }
                 break;
         }
+    }
+
+    private void showKeyBoard(EditText et) {
+        // TODO: 弹出输入框不起作用
+        InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.showSoftInput(et, InputMethodManager.SHOW_IMPLICIT);
+    }
+
+    private void hideKeyBoard(EditText et) {
+        InputMethodManager inputMethodManager = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(et.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
     }
 }

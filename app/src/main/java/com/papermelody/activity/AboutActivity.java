@@ -32,7 +32,6 @@ public class AboutActivity extends BaseActivity {
         settings.setSupportZoom(true);          //支持缩放
         settings.setBuiltInZoomControls(true);  //启用内置缩放装置
         settings.setJavaScriptEnabled(true);    //启用JS脚本
-
     }
 
     @Override

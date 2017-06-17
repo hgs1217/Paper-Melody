@@ -247,6 +247,7 @@ public class PlayActivity extends BaseActivity {
 //            R.raw.a5m};
     private int[] voiceId;
     private SoundPool soundPool;
+    private int soundPoolStreamId = 0;
 
     private CameraManager cameraManager;
     private CameraDevice cameraDevice;
@@ -488,7 +489,7 @@ public class PlayActivity extends BaseActivity {
                     noticetime.setVisibility(View.INVISIBLE);
                     startnotice.setVisibility(View.INVISIBLE);
                     canvasPlay.setVisibility(View.VISIBLE);
-                initMediaRecorder();
+                    initMediaRecorder();
                     initSoundPool();
                     initView();
                     start_flag=true;
@@ -665,10 +666,7 @@ public class PlayActivity extends BaseActivity {
                             Bitmap smallBitmap = Bitmap.createBitmap(sourceBitmap, x, y, width, height);
 
                             newImgOpern.setImageBitmap(smallBitmap);
-
                             newImgOpern.setImageAlpha(0);
-
-
 
                             isrung = true;
 
@@ -744,6 +742,40 @@ public class PlayActivity extends BaseActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void playSound(int keyID) {
+        switch (instrument) {
+            case Instrument.INSTRUMENT_PIANO:
+                soundPool.play(voiceId[keyID], 1, 1, 0, 0, 1);
+                break;
+            case Instrument.INSTRUMENT_FLUTE:
+                soundPool.stop(soundPoolStreamId);
+                soundPoolStreamId = soundPool.play(voiceId[keyID], 1, 1, 0, 0, 1);
+                break;
+        }
+
+        // FIXME: 动画暂时被关闭
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                try {
+//                    Message msg1 = new Message(), msg2 = new Message(), msg3 = new Message();
+//                    msg1.what = keyID;
+//                    msg2.what = keyID;
+//                    msg3.what = keyID;
+//                    viewStartHandler.sendMessage(msg1);
+//                    Log.d("TEST", "THREAD1");
+//                    Thread.sleep(100);
+//                    viewGoneHandler.sendMessage(msg2);
+//                    Log.d("TEST", "THREAD2");
+//                    Thread.sleep(100);
+//                    viewEndHandler.sendMessage(msg3);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }).start();
     }
 
     private void playOver() {
@@ -1016,34 +1048,6 @@ public class PlayActivity extends BaseActivity {
         backgroundThread.start();
         backgroundHandler = new Handler(backgroundThread.getLooper());
         mainHandler = new Handler(getMainLooper());
-    }
-
-    public void playSound(int keyID) {
-        if (keyID < voiceId.length) {
-            soundPool.play(voiceId[keyID], 1, 1, 0, 0, 1);
-        }
-
-        // FIXME: 动画暂时被关闭
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                try {
-//                    Message msg1 = new Message(), msg2 = new Message(), msg3 = new Message();
-//                    msg1.what = keyID;
-//                    msg2.what = keyID;
-//                    msg3.what = keyID;
-//                    viewStartHandler.sendMessage(msg1);
-//                    Log.d("TEST", "THREAD1");
-//                    Thread.sleep(100);
-//                    viewGoneHandler.sendMessage(msg2);
-//                    Log.d("TEST", "THREAD2");
-//                    Thread.sleep(100);
-//                    viewEndHandler.sendMessage(msg3);
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }).start();
     }
 
     @Override

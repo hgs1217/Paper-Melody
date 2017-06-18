@@ -3,6 +3,7 @@ package com.papermelody.activity;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.ImageFormat;
@@ -29,6 +30,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Message;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
@@ -503,7 +505,8 @@ public class PlayActivity extends BaseActivity {
                 keys = new ArrayList<>();
                 break;
         }
-
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
+        if (pref.getBoolean("heart_show", true))
         playView.addBean(tapping, judge_in_area);
         // lastKeys = new ArrayList<>(keys);
     }

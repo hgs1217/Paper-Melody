@@ -7,7 +7,6 @@ import android.preference.PreferenceFragment;
 
 import com.papermelody.R;
 import com.papermelody.activity.HistoryActivity;
-import com.papermelody.util.ToastUtil;
 
 
 public class SettingsPlayPreferenceFragment extends PreferenceFragment {
@@ -16,7 +15,7 @@ public class SettingsPlayPreferenceFragment extends PreferenceFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.settings_play_menu);
-       // initPreference();
+
     }
 
     public void initPreference() {

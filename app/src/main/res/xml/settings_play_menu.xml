@@ -9,7 +9,7 @@
         android:title="@string/performance">
         <CheckBoxPreference
             android:defaultValue="1"
-            android:key=""
+            android:key="high_performance"
             android:layout="@layout/preference_item"
             android:summary="一边弹奏一边录制"
             android:title="@string/high_performance" />
@@ -26,6 +26,7 @@
             android:dialogTitle="@string/choose_one"
             android:entries="@array/sensitivity_show"
             android:entryValues="@array/sensitivity_value"
+            android:key="skin_sensi"
             android:layout="@layout/preference_item"
             android:summary="检测系统的灵敏度"
             android:title="@string/skin_sensi" />
@@ -34,6 +35,7 @@
             android:dialogTitle="@string/choose_one"
             android:entries="@array/sensitivity_show"
             android:entryValues="@array/sensitivity_value"
+            android:key="motion_sensi"
             android:layout="@layout/preference_item"
             android:summary="检测系统的灵敏度"
             android:title="@string/motion_sensi" />
@@ -43,6 +45,7 @@
             android:dialogTitle="@string/choose_one"
             android:entries="@array/sensitivity_show"
             android:entryValues="@array/sensitivity_value"
+            android:key="color_sensi"
             android:layout="@layout/preference_item"
             android:summary="检测系统的灵敏度"
             android:title="@string/color_sensi" />
@@ -56,14 +59,14 @@
 
         <CheckBoxPreference
             android:defaultValue="1"
-            android:key=""
+            android:key="heart_show"
             android:layout="@layout/preference_item"
             android:summary="一边弹奏一边录制"
             android:title="@string/play_animation" />
 
         <CheckBoxPreference
             android:defaultValue="0"
-            android:key=""
+            android:key="debug_info"
             android:layout="@layout/preference_item"
             android:summary="一边弹奏一边录制"
             android:title="@string/debug_info_disp" />

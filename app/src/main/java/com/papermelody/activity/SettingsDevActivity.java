@@ -61,6 +61,7 @@ public class SettingsDevActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
         // 初始化用于修改ip地址的编辑框和按钮
         editServerIP.setText(App.getServerIP());
         btnServerIP.setOnClickListener((view) -> {
@@ -101,11 +102,11 @@ public class SettingsDevActivity extends BaseActivity {
         });
 
 
-        TextView[] colorRangeCaption = { seekBarCaptionY, seekBarCaptionCr, seekBarCaptionCb};
-        SeekBar[] colorRangeSeekBar = { seekBarY, seekBarCr, seekBarCb};
+        TextView[] colorRangeCaption = {seekBarCaptionY, seekBarCaptionCr, seekBarCaptionCb};
+        SeekBar[] colorRangeSeekBar = {seekBarY, seekBarCr, seekBarCb};
         String[] caption = {"Y", "Cr", "Cb"};
 
-        for (int i=0; i<3; ++i) {
+        for (int i = 0; i < 3; ++i) {
             final int index = i;
             double paraValue = Config.FINGER_COLOR[i];
             colorRangeCaption[i].setText(caption[i] + ": " + paraValue);

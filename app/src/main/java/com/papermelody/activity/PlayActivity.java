@@ -98,12 +98,8 @@ public class PlayActivity extends BaseActivity {
     CameraDebugView canvasPlay;
     @BindView(R.id.view_play)
     AutoFitTextureView viewPlay;
-    @BindView(R.id.text_mode)
-    TextView textViewMode;
-    @BindView(R.id.text_instrument)
-    TextView textViewInstrument;
-    @BindView(R.id.text_opern)
-    TextView textViewOpern;
+
+    
     @BindView(R.id.text_mode_name)
     TextView textViewModeName;
     @BindView(R.id.text_instrument_name)
@@ -521,7 +517,7 @@ public class PlayActivity extends BaseActivity {
             case MODE_FREE:
                 textViewModeName.setText(R.string.mode_free);
                 btnPlayOver.setVisibility(View.VISIBLE);
-                textViewOpern.setVisibility(View.GONE);
+
                 // calibrationtext.setVisibility(View.VISIBLE);
                 //textViewOpern.setText("");
                 initSecondTimer();
@@ -529,6 +525,7 @@ public class PlayActivity extends BaseActivity {
             case MODE_OPERN:
                 textViewModeName.setText(R.string.mode_opern);
                 textViewOpernName.setText(getResources().getStringArray(R.array.spinner_opern)[opernNum]);
+                textViewOpernName.setVisibility(View.VISIBLE);
                 newImgOpern.setVisibility(View.VISIBLE);
                 oldImgOpern.setVisibility(View.VISIBLE);
                 btnPlayOver.setVisibility(View.VISIBLE);

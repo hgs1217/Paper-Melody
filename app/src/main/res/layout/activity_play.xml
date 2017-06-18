@@ -129,64 +129,44 @@
 
 
     <LinearLayout
-       
+
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#ff000000"
+
         android:orientation="horizontal">
     <LinearLayout
 
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="100dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingTop="20dp"
 
-       >
-        <TextView
-            android:id="@+id/text_mode"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
 
-            android:text="@string/mode"
-            android:textColor="#ffffff"
-            android:textSize="14sp" />
-        </LinearLayout>
-    <LinearLayout
+        android:orientation="horizontal">
 
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
+        <LinearLayout
+
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+            android:layout_weight="0.25"
+
 
         >
         <TextView
             android:id="@+id/text_mode_name"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
-
+            android:layout_marginLeft="20dp"
             android:text="mode"
             android:textColor="#ffffff"
             android:textSize="14sp" />
         </LinearLayout>
-    <LinearLayout
 
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        <LinearLayout
 
-
-        >
-
-        <TextView
-            android:id="@+id/text_instrument"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/instrument"
-            android:textColor="#ffffff"
-            android:textSize="14sp" />
-        </LinearLayout>
-    <LinearLayout
-
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.25"
 
 
         >
@@ -195,33 +175,17 @@
             android:id="@+id/text_instrument_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
+            android:layout_marginLeft="20dp"
             android:text="instrument"
             android:textColor="#ffffff"
             android:textSize="14sp" />
         </LinearLayout>
-    <LinearLayout
 
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        <LinearLayout
 
-
-
-        >
-
-        <TextView
-            android:id="@+id/text_opern"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/opern"
-            android:textColor="#ffffff"
-            android:textSize="14sp" />
-        </LinearLayout>
-    <LinearLayout
-
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.25"
 
         >
 
@@ -229,17 +193,18 @@
             android:id="@+id/text_opern_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
+            android:layout_marginLeft="20dp"
+            android:visibility="gone"
+
             android:text=""
             android:textColor="#ffffff"
             android:textSize="14sp" />
         </LinearLayout>
     <LinearLayout
 
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="100dp"
-
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.25"
 
         >
 
@@ -249,13 +214,13 @@
             android:background="@android:color/transparent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
+        android:layout_marginLeft="20dp"
             android:visibility="gone"
             android:text="@string/play_over"
             android:textColor="#ffffff"
             android:textSize="14sp"/>
     </LinearLayout>
-
+</LinearLayout>
     </LinearLayout>
 
 </FrameLayout>

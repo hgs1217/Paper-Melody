@@ -92,7 +92,7 @@ public class ModeSettingsAdapter extends AnimatedExpandableListView.AnimatedExpa
         holder.arrow = (ImageView) convertView.findViewById(R.id.question_arrow_iv);
 
         if (isExpanded) {
-            holder.arrow.setBackgroundResource(R.drawable.ic_thumb_up_black_18dp);
+            holder.arrow.setBackgroundResource(R.drawable.ic);
         } else {
             holder.arrow.setBackgroundResource(R.drawable.ic_favorite_border_white_48dp);
         }

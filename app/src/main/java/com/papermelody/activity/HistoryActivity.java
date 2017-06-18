@@ -49,8 +49,8 @@ public class HistoryActivity extends BaseActivity {
     private void __TEST() {
         try {
             for (int i = 0; i < 5; ++i) {
-                File file = new File(Environment.getExternalStorageDirectory(),
-                        "Music" + Integer.toString(i) + musicExtendedName);
+                File file = new File(getExternalFilesDir(Environment.DIRECTORY_MUSIC).getAbsolutePath(),
+                        "Music" + Integer.toString(i) + "_mode_0_j_1_cat_2_" + musicExtendedName);
                 FileOutputStream fos = new FileOutputStream(file);
                 String info = "I am a chinese!";
                 fos.write(info.getBytes());
@@ -63,14 +63,16 @@ public class HistoryActivity extends BaseActivity {
         }
     }
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        context = getApplicationContext();
         // ctl.setExpandedTitleMarginBottom(5);
         __TEST();
         initToolbar();
         initRecyclerView();
-        getFileDir(Environment.getExternalStorageDirectory().getAbsolutePath());
+        getFileDir(getExternalFilesDir(Environment.DIRECTORY_MUSIC).getAbsolutePath());
         //Log.d("FILEPATH", Environment.getExternalStorageDirectory().getAbsolutePath());
     }
 
@@ -84,7 +86,7 @@ public class HistoryActivity extends BaseActivity {
 
 
     private void initRecyclerView() {
-        adapter = new HistoryItemRecyclerViewAdapter(musicCaption, historyMusic);
+        adapter = new HistoryItemRecyclerViewAdapter(musicCaption, historyMusic, context);
         //// TODO: 2017-6-10
         mRecyclerView.addItemDecoration(new HistoryItemRecyclerViewDecoration(1));
         mRecyclerView.setAdapter(adapter);

@@ -2,6 +2,7 @@ package com.papermelody.widget;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,7 @@ import android.widget.TextView;
 
 import com.papermelody.R;
 import com.papermelody.model.HistoryMusic;
+import com.papermelody.model.instrument.Instrument;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -29,14 +31,15 @@ public class HistoryItemRecyclerViewAdapter extends RecyclerView.Adapter<History
 
     public String[] datas = null;
     private List<HistoryMusic> musics;
-    private Context context;
+    protected Context context;
     // private LayoutInflater layoutInflater;
     private mOnItemClickListener onItemClickListener;
 
 
-    public HistoryItemRecyclerViewAdapter(String[] xdatas, List<HistoryMusic> musics) {
+    public HistoryItemRecyclerViewAdapter(String[] xdatas, List<HistoryMusic> musics, Context context) {
         this.datas = xdatas;
         this.musics = musics;
+        this.context = context;
     }
 
 
@@ -44,9 +47,10 @@ public class HistoryItemRecyclerViewAdapter extends RecyclerView.Adapter<History
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_history_music, viewGroup, false);
-        ViewHolder vh = new ViewHolder(view);
+        ViewHolder vh = new ViewHolder(view, context);
         return vh;
     }
+
 
     //将数据与界面进行绑定的操作
     @Override
@@ -87,16 +91,51 @@ public class HistoryItemRecyclerViewAdapter extends RecyclerView.Adapter<History
         TextView itemSize;
         @BindView(R.id.item_history_time)
         TextView itemModifiedTime;
+        Context context;
 
-        public ViewHolder(View view) {
+        public ViewHolder(View view, Context context) {
             super(view);
+            this.context = context;
             ButterKnife.bind(this, view);
         }
 
+        private int splitMusicInfo(String filename) {
+            try {
+                String info[] = filename.split("_");
+                int mode = Integer.parseInt(info[2]);
+                int cate = Integer.parseInt(info[6]);
+                return mode * 10 + cate;
+            } catch (Exception e) {
+                return 0;
+            }
+
+        }
 
         private void setView(String datas, HistoryMusic music) {
-            itemTitle.setText(music.getName());
-            itemCaption.setText(datas);
+            int tmp = splitMusicInfo(music.getName());
+            if (context == null)
+                Log.d("PYJ", "context=null");
+            if (tmp < 10)
+                itemCaption.setText("在" + context.getString(R.string.mode_free) + "下演奏");
+            else
+                itemCaption.setText("在" + context.getString(R.string.mode_opern) + "下演奏");
+            tmp = tmp % 10;
+            String title = "音乐 with xx";
+            switch (tmp) {
+                case Instrument.INSTRUMENT_PIANO14C3TOB4:
+                    title = title.replace("xx", context.getString(R.string.piano_with_14_keys_c3_to_b4));
+                    break;
+                case Instrument.INSTRUMENT_PIANO14C4TOB5:
+                    title = title.replace("xx", context.getString(R.string.piano_with_14_keys_c4_to_b5));
+                    break;
+                case Instrument.INSTRUMENT_PIANO21C3TOB5:
+                    title = title.replace("xx", context.getString(R.string.piano_with_21_keys_c3_to_b5));
+                    break;
+                case Instrument.INSTRUMENT_PIANO21C4TOB6:
+                    title = title.replace("xx", context.getString(R.string.piano_with_21_keys_c4_to_b6));
+                    break;
+            }
+            itemTitle.setText(title);
             itemModifiedTime.setText(timeLongToString(music.getCreateTime()));
             itemSize.setText(fileSizeToString(music.getSize()));
         }

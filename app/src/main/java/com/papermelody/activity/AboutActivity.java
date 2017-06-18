@@ -68,7 +68,6 @@ public class AboutActivity extends BaseActivity {
 //        pref.getBoolean("debug_info", false);
 //        SharedPreferences.Editor editor = pref.edit();
 //        editor.putString("s","22");
-        //祝大家毛概满分！
     }
 }
 

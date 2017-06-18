@@ -41,7 +41,7 @@ public class HistoryActivity extends BaseActivity {
 
     private String[] musicCaption = new String[]{"MUSIC 1", "MUSIC 2", "A", "B", "HGS", "ZB", "TTH"};
     private Context context;
-    private String musicExtendedName = ".txt";
+    private String musicExtendedName = ".m4a";
     private HistoryItemRecyclerViewAdapter adapter;
     private List<HistoryMusic> historyMusic = new ArrayList<HistoryMusic>();
 

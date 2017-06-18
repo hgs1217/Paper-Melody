@@ -194,7 +194,11 @@ public class CommentFragment extends BaseFragment {
                             singleComment.getCreateTime())));
                     myCommentName.setText(singleComment.getAuthor());
                     try {
-                        Picasso.with(context).load(singleComment.getAuthorAvatarUrl()).into(my_icon);
+                        Log.d("PYJ", "my_icon:" + singleComment.getAuthorAvatarUrl());
+                        if (singleComment.getAuthorAvatarUrl().length() < 3)
+                            my_icon.setBackground(getResources().getDrawable(R.drawable.ic_account_circle_black_24dp));
+                        else
+                            Picasso.with(context).load(singleComment.getAuthorAvatarUrl()).into(my_icon);
                     } catch (Exception e) {
                     }
                     break;

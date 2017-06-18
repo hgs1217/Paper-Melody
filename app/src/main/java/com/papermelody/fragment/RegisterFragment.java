@@ -132,9 +132,7 @@ public class RegisterFragment extends BaseFragment {
     }
 
     private void updateUser(UserResponse.UserInfo userInfo) {
-        User user = new User();
-        user.setUserID(userInfo.getUserID());
-        user.setUsername(userInfo.getName());
+        User user = new User(userInfo, getActivity());
         App.setUser(user);
         MainActivity mainActivity = (MainActivity) getActivity();
         mainActivity.updateFragment(MainActivity.MAIN_USER);

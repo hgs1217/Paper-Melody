@@ -57,9 +57,9 @@ public class OnlineMusic extends Music implements Serializable {
         musicCreateDate = info.getDate();
         musicAuthorID = info.getAuthorID();
         if (info.getAuthorAvatar().length() > 0) {
-            musicPhotoUrl = UrlUtil.getAvatarUrl(context, info.getAuthorAvatar());
+            musicAuthorAvatarUrl = UrlUtil.getAvatarUrl(context, info.getAuthorAvatar());
         } else {
-            musicPhotoUrl = "";
+            musicAuthorAvatarUrl = "";
         }
 
         /**

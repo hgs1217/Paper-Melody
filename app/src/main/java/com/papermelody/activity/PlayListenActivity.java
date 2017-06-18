@@ -69,10 +69,11 @@ public class PlayListenActivity extends BaseActivity {
     private ListenFragment fragment = null;
     private View.OnClickListener startPlay, pausePlay;
     private String fileName = "";
+    private int mode = 0;
+    private int instrument = 0;
+    private int category = 0;
     private LocalMusic localMusic;
     private long lastClickTime = 0;
-
-// TODO:   没有经过调试，可能会有bug
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +81,9 @@ public class PlayListenActivity extends BaseActivity {
 
         Intent intent = getIntent();
         fileName = intent.getStringExtra(PlayActivity.FILENAME);
+        mode = intent.getIntExtra(PlayActivity.MODE, -1);
+        instrument = intent.getIntExtra(PlayActivity.INSTRUMENT, -1);
+        category = intent.getIntExtra(PlayActivity.CATEGORY, -1);
         Log.i("nib", fileName);
 
 //        fileName = "Kissbye.mid";
@@ -152,8 +156,14 @@ public class PlayListenActivity extends BaseActivity {
             finish();
         });
         btnSaveToLocal.setOnClickListener((View v) -> {
+            String fullName =
+                    fileName.split("\\.")[0] +
+                            "_mode_" + String.valueOf(mode) +
+                            "_instru_" + String.valueOf(instrument) +
+                            "_cat_" + String.valueOf(category) +
+                            ".m4a";
             copyToAndroidData(getCacheDir().getAbsolutePath() + "/" + fileName,
-                    getExternalFilesDir(Environment.DIRECTORY_MUSIC).getAbsolutePath() + "/" + fileName);
+                    getExternalFilesDir(Environment.DIRECTORY_MUSIC).getAbsolutePath() + "/" + fullName);
         });
     }
 

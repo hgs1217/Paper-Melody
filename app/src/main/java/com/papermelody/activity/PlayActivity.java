@@ -136,6 +136,9 @@ public class PlayActivity extends BaseActivity {
     public static final String EXTRA_CATIGORY = "EXTRA_CATIGORY";
     public static final String EXTRA_OPERN = "EXTRA_OPERN";
     public static final String FILENAME = "FILENAME";
+    public static final String MODE = "MODE";
+    public static final String INSTRUMENT = "INSTRUMENT";
+    public static final String CATEGORY = "CATEGORY";
     public static final String EXTRA_RESULT = "EXTRA_RESULT";
 
     public static final int MODE_FREE = 0;
@@ -766,6 +769,9 @@ public class PlayActivity extends BaseActivity {
         mediaRecorder.stop();
         Intent intent = new Intent(this, PlayListenActivity.class);
         intent.putExtra(FILENAME, fileName);
+        intent.putExtra(MODE, mode);
+        intent.putExtra(INSTRUMENT, instrument);
+        intent.putExtra(CATEGORY, category);
         startActivity(intent);
         finish();
     }

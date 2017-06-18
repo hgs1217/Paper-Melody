@@ -29,18 +29,8 @@ public class LocalMusic extends Music {
     }
 
     @Override
-    public void setFilename(String filename) {
-        this.filename = filename;
-    }
-
-    @Override
     public String getPath() {
         return path;
-    }
-
-    @Override
-    public void setPath(String path) {
-        this.path = path;
     }
 
     @Override
@@ -48,25 +38,12 @@ public class LocalMusic extends Music {
         return musicName;
     }
 
-    @Override
-    public void setMusicName(String musicName) {
-        this.musicName = musicName;
-    }
-
     public String getMusicAuthor() {
         return musicAuthor;
     }
 
-    public void setMusicAuthor(String musicAuthor) {
-        this.musicAuthor = musicAuthor;
-    }
-
     public String getMusicInfo() {
         return musicInfo;
-    }
-
-    public void setMusicInfo(String musicInfo) {
-        this.musicInfo = musicInfo;
     }
 
     public long getCreateTime() {

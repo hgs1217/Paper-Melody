@@ -29,6 +29,8 @@ public class OnlineMusic extends Music implements Serializable {
     private Integer musicID;
     private String musicName;
     private String musicAuthor;
+    private Integer musicAuthorID;
+    private String musicAuthorAvatarUrl;
     private String musicInfo;
     private Date musicCreateDate;
 
@@ -54,6 +56,12 @@ public class OnlineMusic extends Music implements Serializable {
         musicInfo = info.getMusicInfo();
         musicAuthor = info.getAuthor();
         musicCreateDate = info.getDate();
+        musicAuthorID = info.getAuthorID();
+        if (info.getAuthorAvatar().length() > 0) {
+            musicPhotoUrl = UrlUtil.getAvatarUrl(context, info.getAuthorAvatar());
+        } else {
+            musicPhotoUrl = "";
+        }
 
         /**
          * getMusicName 获取到的是文件名
@@ -66,7 +74,7 @@ public class OnlineMusic extends Music implements Serializable {
         if (info.getImgName().length() > 0) {
             musicPhotoUrl = UrlUtil.getImageUrl(context, info.getImgName());
         } else {
-            musicPhotoUrl = null;
+            musicPhotoUrl = "";
         }
     }
 
@@ -76,18 +84,8 @@ public class OnlineMusic extends Music implements Serializable {
     }
 
     @Override
-    public void setFilename(String filename) {
-        this.filename = filename;
-    }
-
-    @Override
     public String getPath() {
         return path;
-    }
-
-    @Override
-    public void setPath(String path) {
-        this.path = path;
     }
 
     @Override
@@ -95,96 +93,59 @@ public class OnlineMusic extends Music implements Serializable {
         return musicName;
     }
 
-    @Override
-    public void setMusicName(String musicName) {
-        this.musicName = musicName;
-    }
-
     public String getMusicAuthor() {
         return musicAuthor;
-    }
-
-    public void setMusicAuthor(String musicAuthor) {
-        this.musicAuthor = musicAuthor;
     }
 
     public String getMusicInfo() {
         return musicInfo;
     }
 
-    public void setMusicInfo(String musicInfo) {
-        this.musicInfo = musicInfo;
-    }
-
     public Date getMusicCreateDate() {
         return musicCreateDate;
-    }
-
-    public void setMusicCreateDate(Date musicCreateDate) {
-        this.musicCreateDate = musicCreateDate;
     }
 
     public String getUploadName() {
         return uploadName;
     }
 
-    public void setUploadName(String uploadName) {
-        this.uploadName = uploadName;
-    }
-
     public String getUploadUser() {
         return uploadUser;
-    }
-
-    public void setUploadUser(String uploadUser) {
-        this.uploadUser = uploadUser;
     }
 
     public String getUploadInfo() {
         return uploadInfo;
     }
 
-    public void setUploadInfo(String uploadInfo) {
-        this.uploadInfo = uploadInfo;
-    }
-
     public ArrayList<Comment> getComments() {
         return comments;
-    }
-
-    public void setComments(ArrayList<Comment> comments) {
-        this.comments = comments;
     }
 
     public String getMusicPhotoUrl() {
         return musicPhotoUrl;
     }
 
-    public void setMusicPhotoUrl(String musicPhotoUrl) {
-        this.musicPhotoUrl = musicPhotoUrl;
-    }
-
     public Integer getMusicID() {
         return musicID;
-    }
-
-    public void setMusicID(Integer musicID) {
-        this.musicID = musicID;
     }
 
     public Integer getViewNum() {
         return viewNum;
     }
 
-    public void setViewNum(Integer viewNum) {
-        this.viewNum = viewNum;
-    }
-
     public Integer getUpvoteNum() {
         return upvoteNum;
     }
 
-    public void setUpvoteNum(Integer upvoteNum) {
-        this.upvoteNum = upvoteNum;
+    public static String getSerialOnlinemusic() {
+        return SERIAL_ONLINEMUSIC;
+    }
+
+    public Integer getMusicAuthorID() {
+        return musicAuthorID;
+    }
+
+    public String getMusicAuthorAvatarUrl() {
+        return musicAuthorAvatarUrl;
     }
 }

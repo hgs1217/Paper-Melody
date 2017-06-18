@@ -16,7 +16,7 @@ public class User {
 
     private Integer userID;
     private String username;
-    private String avatarUrl;
+    private String avatarUrl = "";
     private String avatarName;
     private String password;
     private String nickname;
@@ -34,7 +34,7 @@ public class User {
         if (info.getAvatarName().length() > 0) {
             avatarUrl = UrlUtil.getAvatarUrl(context, info.getAvatarName());
         } else {
-            avatarUrl = null;
+            avatarUrl = "";
         }
     }
 

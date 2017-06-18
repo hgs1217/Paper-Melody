@@ -56,8 +56,9 @@ public class UploadActivity extends BaseActivity {
     private SocialSystemAPI api;
     private String cacheName = null;  // 缓存的文件的名称
     private String name = null;
-    private String author = null;
+    private String author = "";
     private Integer authorId = -1;
+    private String authorAvatarName = "";
     private Date date = null;
     private String filePath = null;
     private String imgName = "";
@@ -126,9 +127,11 @@ public class UploadActivity extends BaseActivity {
         try {
             author = App.getUser().getNickname();
             authorId = App.getUser().getUserID();
+            authorAvatarName = App.getUser().getAvatarName();
         } catch (NullPointerException e) {
             author = "AnonymousUser";
             authorId = -1;
+            authorAvatarName = "";
             ToastUtil.showShort("没有登录，即将匿名上传");
         }
         uploadImg();
@@ -185,7 +188,7 @@ public class UploadActivity extends BaseActivity {
 
     private void uploadMusicInfo(String imgName, String musicName) {
         addSubscription(api.uploadMusic(editMusicTitle.getText().toString(), author,
-                authorId, new Date(), musicName, imgName, editMusicDes.getText().toString())
+                authorId, authorAvatarName, new Date(), musicName, imgName, editMusicDes.getText().toString())
                 .flatMap(NetworkFailureHandler.httpFailureFilter)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

@@ -27,7 +27,7 @@ public class Comment {
         if (info.getAuthorAvatar().length() > 0) {
             authorAvatarUrl = UrlUtil.getAvatarUrl(context, info.getAuthorAvatar());
         } else {
-            authorAvatarUrl = null;
+            authorAvatarUrl = "";
         }
         content = info.getComment();
         createTime = info.getCreateTime();

@@ -17,6 +17,10 @@ public class OnlineMusicInfo {
     private String name;
     @SerializedName("author")
     private String author;
+    @SerializedName("authorID")
+    private Integer authorID;
+    @SerializedName("authorAvatar")
+    private String authorAvatar;
     @SerializedName("date")
     private Date date;
     @SerializedName("musicName")
@@ -67,5 +71,13 @@ public class OnlineMusicInfo {
 
     public Integer getUpvoteNum() {
         return upvoteNum;
+    }
+
+    public Integer getAuthorID() {
+        return authorID;
+    }
+
+    public String getAuthorAvatar() {
+        return authorAvatar;
     }
 }

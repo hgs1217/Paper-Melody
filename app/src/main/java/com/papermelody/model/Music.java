@@ -12,11 +12,8 @@ public abstract class Music implements Serializable {
      */
 
     abstract public String getFilename();
-    abstract public void setFilename(String filename);
 
     abstract public String getPath();
-    abstract public void setPath(String path);
 
     abstract public String getMusicName();
-    abstract public void setMusicName(String musicName);
 }

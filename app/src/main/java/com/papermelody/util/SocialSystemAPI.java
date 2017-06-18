@@ -75,6 +75,7 @@ public interface SocialSystemAPI {
     Observable<UploadResponse> uploadMusic(@Field("name") String name,
                                            @Field("author") String author,
                                            @Field("authorID") Integer authorID,
+                                           @Field("authorAvatarName") String authorAvatarName,
                                            @Field("date") Date date,
                                            @Field("musicName") String musicName,
                                            @Field("imgName") String imgName,

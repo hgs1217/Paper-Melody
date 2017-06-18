@@ -1,11 +1,9 @@
 package com.papermelody.fragment;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,7 +12,6 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.papermelody.R;
@@ -30,8 +27,6 @@ import com.papermelody.util.ToastUtil;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -102,7 +97,12 @@ public class UpdateUserInfoFragment extends BaseFragment {
     private void initView() {
         textUserUsername.setText(App.getUser().getUsername());
         textUserNickname.setText(App.getUser().getNickname());
-        Picasso.with(context).load(App.getUser().getAvatarUrl()).into(imgUserAvatar);
+        String avatarUrl = App.getUser().getAvatarUrl();
+        if (avatarUrl != null && avatarUrl.length() > 0) {
+            Picasso.with(context).load(avatarUrl).into(imgUserAvatar);
+        } else {
+            imgUserAvatar.setImageDrawable(getResources().getDrawable(R.drawable.ic_tag_faces_black_48dp));
+        }
         cardUserAvatar.setOnClickListener((view) -> {
             chooseImg();
             bottomDialog = BottomDialog.create(getFragmentManager())

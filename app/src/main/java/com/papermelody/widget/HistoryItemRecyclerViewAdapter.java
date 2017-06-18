@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.papermelody.R;
-import com.papermelody.model.HistoryMusic;
+import com.papermelody.model.LocalMusic;
 import com.papermelody.model.instrument.Instrument;
 
 import java.text.DecimalFormat;
@@ -30,13 +30,13 @@ import butterknife.ButterKnife;
 public class HistoryItemRecyclerViewAdapter extends RecyclerView.Adapter<HistoryItemRecyclerViewAdapter.ViewHolder> {
 
     public String[] datas = null;
-    private List<HistoryMusic> musics;
+    private List<LocalMusic> musics;
     protected Context context;
     // private LayoutInflater layoutInflater;
     private mOnItemClickListener onItemClickListener;
 
 
-    public HistoryItemRecyclerViewAdapter(String[] xdatas, List<HistoryMusic> musics, Context context) {
+    public HistoryItemRecyclerViewAdapter(String[] xdatas, List<LocalMusic> musics, Context context) {
         this.datas = xdatas;
         this.musics = musics;
         this.context = context;
@@ -59,10 +59,10 @@ public class HistoryItemRecyclerViewAdapter extends RecyclerView.Adapter<History
             viewHolder.setView("Caption Fetch Failed", musics.get(position));
         else
             viewHolder.setView(datas[position], musics.get(position));
-        viewHolder.itemView.setOnClickListener((View view) ->
+            viewHolder.itemView.setOnClickListener((View view) ->
                 {
                     int pos = viewHolder.getLayoutPosition();
-                    //// TODO: 2017-6-14 0014 after click
+                    onItemClickListener.OnItemClick(musics.get(pos));
                 }
         );
     }
@@ -78,7 +78,7 @@ public class HistoryItemRecyclerViewAdapter extends RecyclerView.Adapter<History
     }
 
     public interface mOnItemClickListener {
-        void OnItemClick();
+        void OnItemClick(LocalMusic music);
     }
 
     //自定义的ViewHolder，持有每个Item的的所有界面元素
@@ -111,8 +111,8 @@ public class HistoryItemRecyclerViewAdapter extends RecyclerView.Adapter<History
 
         }
 
-        private void setView(String datas, HistoryMusic music) {
-            int tmp = splitMusicInfo(music.getName());
+        private void setView(String datas, LocalMusic music) {
+            int tmp = splitMusicInfo(music.getFilename());
             if (context == null)
                 Log.d("PYJ", "context=null");
             if (tmp < 10)

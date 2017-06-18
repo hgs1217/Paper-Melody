@@ -1,6 +1,7 @@
 package com.papermelody.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -12,13 +13,13 @@ import android.view.View;
 
 import com.papermelody.R;
 import com.papermelody.model.HistoryMusic;
+import com.papermelody.model.LocalMusic;
 import com.papermelody.util.ToastUtil;
 import com.papermelody.widget.HistoryItemRecyclerViewAdapter;
 import com.papermelody.widget.HistoryItemRecyclerViewDecoration;
 import com.papermelody.widget.HistoryItemRecyclerViewLayoutManager;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -43,33 +44,43 @@ public class HistoryActivity extends BaseActivity {
     private Context context;
     private String musicExtendedName = ".m4a";
     private HistoryItemRecyclerViewAdapter adapter;
-    private List<HistoryMusic> historyMusic = new ArrayList<HistoryMusic>();
+    private List<LocalMusic> localMusic = new ArrayList<>();
 
+    private HistoryItemRecyclerViewAdapter.mOnItemClickListener onItemClickListener = new
+            HistoryItemRecyclerViewAdapter.mOnItemClickListener() {
+                @Override
+                public void OnItemClick(LocalMusic music) {
+                    Log.d("TESTTT", music.getFilename());
+                    Intent intent = new Intent(context, LocalListenActivity.class);
+                    intent.putExtra(PlayActivity.FILENAME, music.getFilename());
+                    startActivity(intent);
+                }
+            };
 
-    private void __TEST() {
-        try {
-            for (int i = 0; i < 5; ++i) {
-                File file = new File(getExternalFilesDir(Environment.DIRECTORY_MUSIC).getAbsolutePath(),
-                        "Music" + Integer.toString(i) + "_mode_0_j_1_cat_2_" + musicExtendedName);
-                FileOutputStream fos = new FileOutputStream(file);
-                String info = "I am a chinese!";
-                fos.write(info.getBytes());
-                fos.close();
-                Log.d("FILEE", "写入成功");
-                Thread.sleep(10);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+//    private void __TEST() {
+//        try {
+//            for (int i = 0; i < 5; ++i) {
+//                File file = new File(getExternalFilesDir(Environment.DIRECTORY_MUSIC).getAbsolutePath(),
+//                        "Music" + Integer.toString(i) + "_mode_0_j_1_cat_2_" + musicExtendedName);
+//                FileOutputStream fos = new FileOutputStream(file);
+//                String info = "I am a chinese!";
+//                fos.write(info.getBytes());
+//                fos.close();
+//                Log.d("FILEE", "写入成功");
+//                Thread.sleep(10);
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        context = getApplicationContext();
+        context = this;
         // ctl.setExpandedTitleMarginBottom(5);
-        __TEST();
+//        __TEST();
         initToolbar();
         initRecyclerView();
         getFileDir(getExternalFilesDir(Environment.DIRECTORY_MUSIC).getAbsolutePath());
@@ -86,8 +97,8 @@ public class HistoryActivity extends BaseActivity {
 
 
     private void initRecyclerView() {
-        adapter = new HistoryItemRecyclerViewAdapter(musicCaption, historyMusic, context);
-        //// TODO: 2017-6-10
+        adapter = new HistoryItemRecyclerViewAdapter(musicCaption, localMusic, context);
+        adapter.setOnItemClickListener(onItemClickListener);
         mRecyclerView.addItemDecoration(new HistoryItemRecyclerViewDecoration(1));
         mRecyclerView.setAdapter(adapter);
         mRecyclerView.setLayoutManager(new HistoryItemRecyclerViewLayoutManager());
@@ -113,9 +124,8 @@ public class HistoryActivity extends BaseActivity {
                                 __name.substring(__name.length() - 4, __name.length()).equals(
                                         musicExtendedName)) {
                             Log.d("FILEE", "4");
-                            historyMusic.add(new HistoryMusic(
+                            localMusic.add(new LocalMusic(
                                     file.getName(), file.lastModified(), file.length()));
-                            historyMusic.get(historyMusic.size() - 1).__TEST();
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -123,7 +133,7 @@ public class HistoryActivity extends BaseActivity {
                     }
                 }
             }
-            Collections.sort(historyMusic, new Comparator() {
+            Collections.sort(localMusic, new Comparator() {
                 @Override
                 public int compare(Object o1, Object o2) {
                     HistoryMusic a = (HistoryMusic) o1;

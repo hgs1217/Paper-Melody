@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -33,8 +32,6 @@ public class HistoryActivity extends BaseActivity {
      * 方法：直接在本地读取记录
      * 路径：(File)Environment.getExternalStorageDirectory
      */
-    @BindView(R.id.collapsing_toolbar_history)
-    CollapsingToolbarLayout ctl;
     @BindView(R.id.history_item_list)
     RecyclerView mRecyclerView;
     @BindView(R.id.toolbar_history)
@@ -88,6 +85,7 @@ public class HistoryActivity extends BaseActivity {
     }
 
     private void initToolbar() {
+        toolbar.setTitle(getString(R.string.history_musics));
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.setNavigationOnClickListener((View v) -> {

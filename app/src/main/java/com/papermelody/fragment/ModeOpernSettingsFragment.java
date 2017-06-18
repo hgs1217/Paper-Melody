@@ -105,15 +105,15 @@ public class ModeOpernSettingsFragment extends BaseFragment {
     private void initExpandableList() {
         String[][] menu = {
                 {
-                        getString(R.string.flute),
-                        getString(R.string.flute_with_7_holes)
-                },
-                {
                         getString(R.string.piano),
                         getString(R.string.piano_with_14_keys_c3_to_b4),
                         getString(R.string.piano_with_14_keys_c4_to_b5),
                         getString(R.string.piano_with_21_keys_c3_to_b5),
                         getString(R.string.piano_with_21_keys_c4_to_b6)
+                },
+                {
+                        getString(R.string.flute),
+                        getString(R.string.flute_with_7_holes)
                 }
         };
 
@@ -144,8 +144,9 @@ public class ModeOpernSettingsFragment extends BaseFragment {
             @Override
             public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
                 Log.d("PYJ", Integer.toString(groupPosition));
-                btnOpernConfirm.setText(getString(R.string.confirm));
+                btnOpernConfirm.setText(getString(R.string.choose_instrument));
                 btnOpernConfirm.setTextColor(getResources().getColor(R.color.bb_inActiveBottomBarItemColor));
+                btnOpernConfirm.setBackgroundColor(getResources().getColor(R.color.btn_default));
                 instrument = -1;
                 category = -1;
                 if (listView.isGroupExpanded(groupPosition)) {
@@ -167,7 +168,7 @@ public class ModeOpernSettingsFragment extends BaseFragment {
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition,
                                         int childPosition, long id) {
 
-                if (groupPosition == 1) {
+                if (groupPosition == 0) {
                     instrument = Instrument.INSTRUMENT_PIANO;
                     switch (childPosition) {
                         case 0: {
@@ -188,14 +189,15 @@ public class ModeOpernSettingsFragment extends BaseFragment {
                         }
                     }
                 }
-                if (groupPosition == 0) {
+                if (groupPosition == 1) {
                     instrument = Instrument.INSTRUMENT_FLUTE;
                     if (childPosition == 0)
                         category = Instrument.INSTRUMENT_FLUTE7;
                 }
                 btnOpernConfirm.setText(getString(R.string.use_xx_to_play).replace(
                         "xx", menu[groupPosition][childPosition + 1]));
-                btnOpernConfirm.setTextColor(getResources().getColor(R.color.black));
+                btnOpernConfirm.setTextColor(getResources().getColor(R.color.white));
+                btnOpernConfirm.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
                 Log.d("PYJ", "CHOOSE: " + menu[groupPosition][childPosition + 1]);
                 Log.d("PYJ", Integer.toString(instrument * 100 + category));
                 return true;

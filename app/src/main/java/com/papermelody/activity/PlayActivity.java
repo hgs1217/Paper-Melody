@@ -102,10 +102,14 @@ public class PlayActivity extends BaseActivity {
     TextView textViewMode;
     @BindView(R.id.text_instrument)
     TextView textViewInstrument;
+    @BindView(R.id.text_opern)
+    TextView textViewOpern;
     @BindView(R.id.text_mode_name)
     TextView textViewModeName;
     @BindView(R.id.text_instrument_name)
     TextView textViewInstrumentName;
+    @BindView(R.id.text_opern_name)
+    TextView textViewOpernName;
     @BindView(R.id.btn_play_over)
     Button btnPlayOver;
     @BindView(R.id.dot_view)
@@ -517,13 +521,14 @@ public class PlayActivity extends BaseActivity {
             case MODE_FREE:
                 textViewModeName.setText(R.string.mode_free);
                 btnPlayOver.setVisibility(View.VISIBLE);
+                textViewOpern.setVisibility(View.GONE);
                 // calibrationtext.setVisibility(View.VISIBLE);
                 //textViewOpern.setText("");
                 initSecondTimer();
                 break;
             case MODE_OPERN:
                 textViewModeName.setText(R.string.mode_opern);
-                //textViewOpern.setText("曲谱：" + getResources().getStringArray(R.array.spinner_opern)[opern]);
+                textViewOpernName.setText(getResources().getStringArray(R.array.spinner_opern)[opernNum]);
                 newImgOpern.setVisibility(View.VISIBLE);
                 oldImgOpern.setVisibility(View.VISIBLE);
                 btnPlayOver.setVisibility(View.VISIBLE);

@@ -22,4 +22,5 @@
     <color name="colorCycleViewBannerBackground">#44222222</color>
     <color name="sign_out_0">#dcd14949</color>
     <color name="sign_out_1">#dc913030</color>
+    <color name="btn_default">#CCCCCC</color>
 </resources>

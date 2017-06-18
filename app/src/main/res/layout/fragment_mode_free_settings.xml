@@ -36,7 +36,8 @@
         android:id="@+id/btn_free_cfm"
         android:layout_width="230dp"
         android:layout_height="wrap_content"
-        android:text="@string/confirm"
+        android:background="@color/btn_default"
+        android:text="@string/choose_instrument"
         android:textColor="@color/bb_inActiveBottomBarItemColor" />
 
     <View

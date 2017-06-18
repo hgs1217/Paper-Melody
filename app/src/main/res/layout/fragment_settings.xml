@@ -198,8 +198,6 @@
         app:contentPaddingTop="-20dp">
 
 
-
-
     </android.support.v7.widget.CardView>
 
     <View

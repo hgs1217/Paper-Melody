@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="false"
+    android:orientation="vertical">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar3"
@@ -9,158 +12,172 @@
         android:layout_height="wrap_content"
         android:background="?attr/colorPrimary"
         android:minHeight="?attr/actionBarSize"
-        android:theme="?attr/actionBarTheme" />
+        android:paddingTop="20dp"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
             android:layout_marginTop="10dp"
+            android:gravity="center"
 
             android:orientation="horizontal">
-    <TextView
-        android:id="@+id/textView2"
 
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+            <TextView
+                android:id="@+id/textView2"
 
-        android:text="左上修定距离:" />
-        <TextView
-            android:id="@+id/textView7"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
 
-            android:layout_width="wrap_content"
+                android:text="左上修定距离:" />
+
+            <TextView
+                android:id="@+id/textView7"
+
+                android:layout_width="wrap_content"
 
 
-            android:layout_height="wrap_content"
-            android:text="0" />
+                android:layout_height="wrap_content"
+                android:text="0" />
         </LinearLayout>
 
-    <SeekBar
-        android:id="@+id/seekBar3"
-        android:paddingTop="10dp"
-        android:layout_width="match_parent"
-        android:max="100"
-        android:progress="50"
-        android:layout_height="wrap_content" />
+        <SeekBar
+            android:id="@+id/seekBar3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:max="100"
+            android:paddingTop="10dp"
+            android:progress="50" />
 
 
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
             android:layout_marginTop="10dp"
+            android:gravity="center"
             android:orientation="horizontal">
-    <TextView
-        android:id="@+id/textView3"
+
+            <TextView
+                android:id="@+id/textView3"
 
 
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="左下修定距离:" />
-        <TextView
-            android:id="@+id/textView8"
-            android:layout_width="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="左下修定距离:" />
+
+            <TextView
+                android:id="@+id/textView8"
+                android:layout_width="wrap_content"
 
 
+                android:layout_height="wrap_content"
+                android:text="0" />
+        </LinearLayout>
+
+        <SeekBar
+            android:id="@+id/seekBar4"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="0" />
-            </LinearLayout>
-
-    <SeekBar
-        android:id="@+id/seekBar4"
-        android:layout_width="match_parent"
-        android:paddingTop="10dp"
-        android:max="100"
-        android:progress="50"
-        android:layout_height="wrap_content" />
+            android:max="100"
+            android:paddingTop="10dp"
+            android:progress="50" />
 
 
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
 
         android:orientation="vertical">
+
         <LinearLayout
             android:layout_width="match_parent"
 
-            android:gravity="center"
-            android:layout_marginTop="10dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
             android:orientation="horizontal">
 
 
+            <TextView
+                android:id="@+id/textView4"
 
-    <TextView
-        android:id="@+id/textView4"
 
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="右上修定距离:" />
 
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="右上修定距离:" />
-        <TextView
-            android:id="@+id/textView12"
+            <TextView
+                android:id="@+id/textView12"
 
-            android:layout_width="wrap_content"
+                android:layout_width="wrap_content"
 
-            android:layout_height="wrap_content"
-            android:text="0" />
+                android:layout_height="wrap_content"
+                android:text="0" />
         </LinearLayout>
 
-    <SeekBar
-        android:id="@+id/seekBar5"
-        android:paddingTop="10dp"
-        android:layout_width="match_parent"
-        android:max="100"
+        <SeekBar
+            android:id="@+id/seekBar5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:max="100"
 
-        android:progress="50"
-        android:layout_height="wrap_content" />
+            android:paddingTop="10dp"
+            android:progress="50" />
 
 
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
             android:layout_marginTop="10dp"
+            android:gravity="center"
             android:orientation="horizontal">
 
 
+            <TextView
+                android:id="@+id/textView5"
 
-    <TextView
-        android:id="@+id/textView5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="右下修定距离:" />
 
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="右下修定距离:" />
-        <TextView
-            android:id="@+id/textView13"
+            <TextView
+                android:id="@+id/textView13"
 
-            android:layout_width="wrap_content"
+                android:layout_width="wrap_content"
 
-            android:layout_height="wrap_content"
-            android:text="0" />
+                android:layout_height="wrap_content"
+                android:text="0" />
         </LinearLayout>
 
-    <SeekBar
-        android:id="@+id/seekBar6"
-        android:layout_width="match_parent"
-        android:paddingTop="10dp"
-        android:max="100"
-        android:progress="50"
-        android:layout_height="wrap_content" />
+        <SeekBar
+            android:id="@+id/seekBar6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:max="100"
+            android:paddingTop="10dp"
+            android:progress="50" />
 
 
     </LinearLayout>

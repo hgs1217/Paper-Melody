@@ -3,6 +3,8 @@ package com.papermelody.activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -27,9 +29,9 @@ public class PositonCalibrationActivity extends BaseActivity {
     @BindView(seekBar3)
     SeekBar seek_bar3;
     @BindView(seekBar4)
-    SeekBar  seek_bar4;
+    SeekBar seek_bar4;
     @BindView(seekBar5)
-    SeekBar  seek_bar5;
+    SeekBar seek_bar5;
     @BindView(seekBar6)
     SeekBar seek_bar6;
     @BindView(textView7)
@@ -40,17 +42,21 @@ public class PositonCalibrationActivity extends BaseActivity {
     TextView tRightup;
     @BindView(textView13)
     TextView tRightdown;
+    @BindView(R.id.toolbar3)
+    Toolbar toolbar;
 
 
     SharedPreferences.Editor editor;
     //Context context=getApplicationContext();
     SharedPreferences pref;
 
-    private  int value_temp;
+    private int value_temp;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         initText();
+        initToolbar();
         seek_bar3.setOnSeekBarChangeListener(new OnSeekBarChangeListenerImp());
         seek_bar4.setOnSeekBarChangeListener(new OnSeekBarChangeListenerImp());
         seek_bar5.setOnSeekBarChangeListener(new OnSeekBarChangeListenerImp());
@@ -58,10 +64,22 @@ public class PositonCalibrationActivity extends BaseActivity {
 
     }
 
+
+    private void initToolbar() {
+        toolbar.setTitle("乐器位置标定设置");
+        toolbar.setTitleTextColor(getResources().getColor(R.color.white));
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.setNavigationOnClickListener((View v) -> {
+            finish();
+        });
+    }
+
     @Override
     protected int getContentViewId() {
         return R.layout.activity_position_calibration;
     }
+
     private class OnSeekBarChangeListenerImp implements
             SeekBar.OnSeekBarChangeListener {
 
@@ -69,8 +87,8 @@ public class PositonCalibrationActivity extends BaseActivity {
         public void onProgressChanged(SeekBar seekBar, int progress,
                                       boolean fromUser) {
             editor = pref.edit();
-            value_temp=progress;
-            switch (seekBar.getId()){
+            value_temp = progress;
+            switch (seekBar.getId()) {
                 case seekBar3: {
                     editor.putInt("leftup", value_temp - 50);
                     tLeftup.setText(String.valueOf(value_temp - 50));
@@ -95,7 +113,7 @@ public class PositonCalibrationActivity extends BaseActivity {
             }
             //text.layout((int) (progress * moveStep), 20, screenWidth, 80);
             //text.setText(getCheckTimeBySeconds(progress, startTimeStr));
-          editor.commit();
+            editor.commit();
         }
 
         // 表示进度条刚开始拖动，开始拖动时候触发的操作

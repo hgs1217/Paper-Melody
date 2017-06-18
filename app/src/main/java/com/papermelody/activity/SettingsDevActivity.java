@@ -43,20 +43,6 @@ public class SettingsDevActivity extends BaseActivity {
     @BindView(R.id.btn_to_upload)
     Button btnUpload;
 
-    @BindView(R.id.seekbarY)
-    SeekBar seekBarY;
-    @BindView(R.id.seekbarCr)
-    SeekBar seekBarCr;
-    @BindView(R.id.seekbarCb)
-    SeekBar seekBarCb;
-
-    @BindView(R.id.seekbar_captionY)
-    TextView seekBarCaptionY;
-    @BindView(R.id.seekbar_captionCr)
-    TextView seekBarCaptionCr;
-    @BindView(R.id.seekbar_captionCb)
-    TextView seekBarCaptionCb;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,44 +88,67 @@ public class SettingsDevActivity extends BaseActivity {
         });
 
 
-        TextView[] colorRangeCaption = {seekBarCaptionY, seekBarCaptionCr, seekBarCaptionCb};
-        SeekBar[] colorRangeSeekBar = {seekBarY, seekBarCr, seekBarCb};
-        String[] caption = {"Y", "Cr", "Cb"};
+        int seekbarInd = 0;
+        String[] colorChannelFieldNames = {"finger color", "color tolerance", "color expand"};
+        double[][] colorChannelFields = {Config.FINGER_COLOR, Config.FINGER_COLOR_TOLERANCE, Config.COLOR_RANGE_EXPAND};
+        String[] channelNames = {"Y", "Cr", "Cb"};
 
-        for (int i = 0; i < 3; ++i) {
-            final int index = i;
-            double paraValue = Config.FINGER_COLOR[i];
-            colorRangeCaption[i].setText(caption[i] + ": " + paraValue);
-            colorRangeSeekBar[i].setMax(255);
-            colorRangeSeekBar[i].setProgress((int) paraValue);
+        for (int i=0; i < colorChannelFields.length; ++i) {
+            final double[] field = colorChannelFields[i];
+            final boolean isExpand = i == 2;
 
-            colorRangeSeekBar[i].setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-                @Override
-                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                    Config.FINGER_COLOR[index] = (double) progress;
-                    colorRangeCaption[index].setText(caption[index] + ": " + Config.FINGER_COLOR[index]);
+            for (int j = 0; j < colorChannelFields[i].length; ++j) {
+                seekbarInd += 1;
+                int textViewId = getResources().getIdentifier("seekbar_caption" + seekbarInd, "id", getPackageName());
+                int seekBarId = getResources().getIdentifier("seekbar" + seekbarInd, "id", getPackageName());
+                final TextView textView = (TextView) findViewById(textViewId);
+                final SeekBar seekBar = (SeekBar) findViewById(seekBarId);
+                final String text = colorChannelFieldNames[i] + " " + channelNames[j];
+
+                double paraValue;
+                if (isExpand) {
+                    paraValue = field[j] * 100;
+                } else {
+                    paraValue = field[j];
                 }
+                textView.setText(text + ": " + field[j]);
+                seekBar.setMax(isExpand ? 300 : 255);
+                seekBar.setProgress((int) paraValue);
 
-                @Override
-                public void onStartTrackingTouch(SeekBar seekBar) {
-                }
+                final int index = j;
+                seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                    @Override
+                    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                        if (isExpand) {
+                            field[index] = (double) progress / 100;
+                        } else {
+                            field[index] = (double) progress;
+                        }
+                        textView.setText(text + ": " + field[index]);
+                    }
 
-                @Override
-                public void onStopTrackingTouch(SeekBar seekBar) {
-                }
-            });
+                    @Override
+                    public void onStartTrackingTouch(SeekBar seekBar) {
+                    }
+
+                    @Override
+                    public void onStopTrackingTouch(SeekBar seekBar) {
+                    }
+                });
+            }
         }
 
         // Use reflect to dynamically set the value of seek bars
         // according to values in `tapdetect.Config`
         Field[] parameters = Config.class.getDeclaredFields();
-        int ind = 0;
         for (Field field : parameters) {
             if (field.getType() != int.class && field.getType() != double.class) {
                 continue;
             }
-            int textViewId = getResources().getIdentifier("seekbar_caption" + (ind + 1), "id", getPackageName());
-            int seekBarId = getResources().getIdentifier("seekbar" + (ind + 1), "id", getPackageName());
+            seekbarInd += 1;
+
+            int textViewId = getResources().getIdentifier("seekbar_caption" + seekbarInd, "id", getPackageName());
+            int seekBarId = getResources().getIdentifier("seekbar" + seekbarInd, "id", getPackageName());
             final TextView textView = (TextView) findViewById(textViewId);
             final SeekBar seekBar = (SeekBar) findViewById(seekBarId);
 
@@ -186,7 +195,6 @@ public class SettingsDevActivity extends BaseActivity {
                 public void onStopTrackingTouch(SeekBar seekBar) {
                 }
             });
-            ind += 1;
         }
     }
 

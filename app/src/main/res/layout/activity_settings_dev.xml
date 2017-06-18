@@ -55,28 +55,6 @@
             android:layout_marginTop="20dp"
             android:text="上传界面"/>
 
-
-        <TextView
-            android:id="@+id/seekbar_captionY"
-            style="@style/SeekBarCaption" />
-        <SeekBar
-            android:id="@+id/seekbarY"
-            style="@style/SeekBar" />
-
-        <TextView
-            android:id="@+id/seekbar_captionCr"
-            style="@style/SeekBarCaption" />
-        <SeekBar
-            android:id="@+id/seekbarCr"
-            style="@style/SeekBar" />
-
-        <TextView
-            android:id="@+id/seekbar_captionCb"
-            style="@style/SeekBarCaption" />
-        <SeekBar
-            android:id="@+id/seekbarCb"
-            style="@style/SeekBar" />
-
         <TextView
             android:id="@+id/seekbar_caption1"
             style="@style/SeekBarCaption" />
@@ -145,6 +123,70 @@
             style="@style/SeekBarCaption" />
         <SeekBar
             android:id="@+id/seekbar10"
+            style="@style/SeekBar" />
+
+        <TextView
+            android:id="@+id/seekbar_caption11"
+            style="@style/SeekBarCaption" />
+        <SeekBar
+            android:id="@+id/seekbar11"
+            style="@style/SeekBar" />
+
+        <TextView
+            android:id="@+id/seekbar_caption12"
+            style="@style/SeekBarCaption" />
+        <SeekBar
+            android:id="@+id/seekbar12"
+            style="@style/SeekBar" />
+
+        <TextView
+            android:id="@+id/seekbar_caption13"
+            style="@style/SeekBarCaption" />
+        <SeekBar
+            android:id="@+id/seekbar13"
+            style="@style/SeekBar" />
+
+        <TextView
+            android:id="@+id/seekbar_caption14"
+            style="@style/SeekBarCaption" />
+        <SeekBar
+            android:id="@+id/seekbar14"
+            style="@style/SeekBar" />
+
+        <TextView
+            android:id="@+id/seekbar_caption15"
+            style="@style/SeekBarCaption" />
+        <SeekBar
+            android:id="@+id/seekbar15"
+            style="@style/SeekBar" />
+
+
+        <TextView
+            android:id="@+id/seekbar_caption16"
+            style="@style/SeekBarCaption" />
+        <SeekBar
+            android:id="@+id/seekbar16"
+            style="@style/SeekBar" />
+
+        <TextView
+            android:id="@+id/seekbar_caption17"
+            style="@style/SeekBarCaption" />
+        <SeekBar
+            android:id="@+id/seekbar17"
+            style="@style/SeekBar" />
+
+        <TextView
+            android:id="@+id/seekbar_caption18"
+            style="@style/SeekBarCaption" />
+        <SeekBar
+            android:id="@+id/seekbar18"
+            style="@style/SeekBar" />
+
+        <TextView
+            android:id="@+id/seekbar_caption19"
+            style="@style/SeekBarCaption" />
+        <SeekBar
+            android:id="@+id/seekbar19"
             style="@style/SeekBar" />
 
     </LinearLayout>

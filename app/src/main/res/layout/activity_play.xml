@@ -252,7 +252,7 @@
 
             android:visibility="gone"
             android:text="@string/play_over"
-            android:textColor="#fffffff"
+            android:textColor="#ffffff"
             android:textSize="14sp"/>
     </LinearLayout>
 

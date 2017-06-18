@@ -2,8 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/layout_background">
+    android:background="@color/layout_background"
+    android:orientation="vertical">
 
     <com.papermelody.widget.MainCycleViewPager
         android:id="@+id/mode_cycle_view_pager"
@@ -15,40 +15,30 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:gravity="center">
+        android:gravity="center"
+        android:orientation="vertical">
 
         <Button
             android:id="@+id/btn_mode_free"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@color/colorPrimaryLight"
+            android:foreground="?attr/selectableItemBackground"
             android:text="@string/mode_free"
-            android:textColor="@color/black"
-            android:textSize="12sp"/>
+            android:textColor="@color/white"
+            android:textSize="20sp" />
 
         <Button
             android:id="@+id/btn_mode_opern"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@color/colorPrimary"
+            android:foreground="?attr/selectableItemBackground"
             android:text="@string/mode_opern"
-            android:textColor="@color/black"
-            android:textSize="12sp"/>
-
-
-
-        <Button
-            android:id="@+id/btn_mode_camera_debug"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:text="Debug"
-            android:textColor="@color/black"
-            android:textSize="12sp"/>
+            android:textColor="@color/white"
+            android:textSize="20sp" />
 
     </LinearLayout>
 

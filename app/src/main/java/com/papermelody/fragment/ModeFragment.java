@@ -36,8 +36,8 @@ public class ModeFragment extends BaseFragment {
     Button btnModeFree;
     @BindView(R.id.btn_mode_opern)
     Button btnModeOpern;
-    @BindView(R.id.btn_mode_camera_debug)
-    Button btnModeCameraDebug;
+//    @BindView(R.id.btn_mode_camera_debug)
+//    Button btnModeCameraDebug;
 
     public static ModeFragment newInstance() {
         ModeFragment fragment = new ModeFragment();
@@ -77,9 +77,11 @@ public class ModeFragment extends BaseFragment {
 //            Intent intent = new Intent(getActivity(), UploadActivity.class);
 //            startActivity(intent);
         });
-        btnModeCameraDebug.setOnClickListener((View v) -> {
+        // 改为长按modefree进入debug模式
+        btnModeFree.setOnLongClickListener((View v) -> {
             Intent intent = new Intent(getActivity(), CameraDebugActivity.class);
             startActivity(intent);
+            return true;
         });
     }
 

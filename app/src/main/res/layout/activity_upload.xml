@@ -52,7 +52,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/input_layout_title"
             app:counterEnabled="true"
-            app:counterMaxLength="200">
+            app:counterMaxLength="64">
 
             <EditText
                 android:id="@+id/edit_music_des"

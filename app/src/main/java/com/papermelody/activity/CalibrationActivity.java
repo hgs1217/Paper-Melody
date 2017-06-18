@@ -287,7 +287,7 @@ public class CalibrationActivity extends BaseActivity {
         }
 
         Mat mat = ImageUtil.imageToBgr(image);
-        calibrationResult = ImageProcessor.getCalibrationCoordinate(mat, targetHeightStart, targetHeightEnd);
+        calibrationResult = ImageProcessor.getCalibrationCoordinate(this,mat, targetHeightStart, targetHeightEnd);
 
         canvasCalibration.updateCalibrationCoordinates(calibrationResult, CalibrationActivity.this, false);
 

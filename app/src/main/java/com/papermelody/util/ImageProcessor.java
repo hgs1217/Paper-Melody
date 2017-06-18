@@ -1,5 +1,6 @@
 package com.papermelody.util;
 
+import android.content.Context;
 import android.util.Log;
 
 import com.papermelody.core.calibration.Calibration;
@@ -32,7 +33,7 @@ public class ImageProcessor {
     private static int cntOfCall = 0;
     private static CalibrationResultsOfLatest5 calibrationResultsOfLatest5;
 
-    public static CalibrationResult getCalibrationCoordinate (Mat bgrMat, int targetHeightStart,
+    public static CalibrationResult getCalibrationCoordinate (Context context,Mat bgrMat, int targetHeightStart,
                                                               int targetHeightEnd) {
         /**
          * 传入照片（mat格式）获取标定得到的关键点结果
@@ -41,7 +42,7 @@ public class ImageProcessor {
         Log.d("TESTCAL", bgrMat.rows() + " " + bgrMat.cols());
 
         CalibrationResult a;
-        a = Calibration.main(bgrMat, targetHeightStart, targetHeightEnd);
+        a = Calibration.main( context,bgrMat, targetHeightStart, targetHeightEnd);
         Log.d("TESThist111", a.getLeftLowX() + " " + a.getLeftUpX());
 
         cntOfCall++;

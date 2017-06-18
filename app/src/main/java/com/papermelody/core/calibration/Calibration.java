@@ -4,6 +4,9 @@ package com.papermelody.core.calibration;
  * Created by tangtonghui on 17/5/9.
  */
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.papermelody.model.instrument.Instrument;
@@ -24,6 +27,8 @@ import static org.opencv.imgproc.Imgproc.contourArea;
 
 
 public class Calibration {
+
+
 
 
     static {
@@ -244,13 +249,13 @@ public class Calibration {
         return out;
 
     }
-    public static CalibrationResult main(Mat srcImage, int upbound, int lowbound) {
+    public static CalibrationResult main(Context context,Mat srcImage, int upbound, int lowbound) {
         switch (INSTRUMENT_TYPE) {
             case Instrument.INSTRUMENT_PIANO21C3TOB5:
             case Instrument.INSTRUMENT_PIANO21C4TOB6:
             case Instrument.INSTRUMENT_PIANO14C3TOB4:
             case Instrument.INSTRUMENT_PIANO14C4TOB5:  // FIXME: 此处14键标定有bug
-                return piano(srcImage, upbound, lowbound);
+                return piano(context,srcImage, upbound, lowbound);
             case Instrument.INSTRUMENT_FLUTE7:
                 return flute(srcImage, upbound, lowbound);
 
@@ -262,7 +267,16 @@ public class Calibration {
     }
 
 
-    private static CalibrationResult piano(Mat srcImage, int upbound, int lowbound) {
+    private static CalibrationResult piano(Context context,Mat srcImage, int upbound, int lowbound) {
+
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
+
+        //SharedPreferences.Editor editor = pref.edit();
+        int posleftup=pref.getInt("leftup",0);
+        int posleftdown=pref.getInt("leftdown",0);
+        int posrightup=pref.getInt("rightup",0);
+        int posrightdown=pref.getInt("rightdown",0);
+
         Mat dstImage = new Mat();
         Size dsize = new Size(srcImage.width() /2, srcImage.height() /2);
         Imgproc.resize(srcImage,dstImage,dsize);
@@ -472,17 +486,17 @@ public class Calibration {
         rightupleft_x*=2;
         rightupleft_y*=2;
         Log.d("TESTtemp6",ddd+" ");
-        out.setLeftLowX(leftlow_x);
+        out.setLeftLowX(leftlow_x+posleftdown);
         out.setLeftLowY(leftlow_y);
-        out.setLeftUpX(leftup_x);
+        out.setLeftUpX(leftup_x+posleftup);
         out.setLeftUpY(leftup_y);
-        out.setRightLowX(rightlow_x);
+        out.setRightLowX(rightlow_x+posrightdown);
         out.setRightLowY(rightlow_y);
-        out.setRightUpX(rightup_x);
+        out.setRightUpX(rightup_x+posrightup);
         out.setRightUpY(rightup_y);
-        out.setLeftUpRightX(leftupright_x);
+        out.setLeftUpRightX(leftupright_x+posleftup);
         out.setLeftUpRightY(leftupright_y);
-        out.setRightUpLeftX(rightupleft_x);
+        out.setRightUpLeftX(rightupleft_x+posrightup);
         out.setRightUpLeftY(rightupleft_y);
         Log.d("TESThistres",out.getLeftLowX()+"");
         Log.d("TESThistres",out.getLeftLowY()+"");

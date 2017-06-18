@@ -10,10 +10,10 @@ import com.papermelody.R;
 
 import butterknife.BindView;
 
-import static com.papermelody.R.id.seekbar3;
-import static com.papermelody.R.id.seekbar4;
-import static com.papermelody.R.id.seekbar5;
-import static com.papermelody.R.id.seekbar6;
+import static com.papermelody.R.id.seekBar3;
+import static com.papermelody.R.id.seekBar4;
+import static com.papermelody.R.id.seekBar5;
+import static com.papermelody.R.id.seekBar6;
 import static com.papermelody.R.id.textView12;
 import static com.papermelody.R.id.textView13;
 import static com.papermelody.R.id.textView7;
@@ -24,13 +24,13 @@ import static com.papermelody.R.id.textView8;
  */
 
 public class PositonCalibrationActivity extends BaseActivity {
-    @BindView(seekbar3)
+    @BindView(seekBar3)
     SeekBar seek_bar3;
-    @BindView(seekbar4)
+    @BindView(seekBar4)
     SeekBar  seek_bar4;
-    @BindView(seekbar5)
+    @BindView(seekBar5)
     SeekBar  seek_bar5;
-    @BindView(seekbar6)
+    @BindView(seekBar6)
     SeekBar seek_bar6;
     @BindView(textView7)
     TextView tLeftup;
@@ -40,14 +40,17 @@ public class PositonCalibrationActivity extends BaseActivity {
     TextView tRightup;
     @BindView(textView13)
     TextView tRightdown;
-    SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
 
-    SharedPreferences.Editor editor = pref.edit();
+
+    SharedPreferences.Editor editor;
+    //Context context=getApplicationContext();
+    SharedPreferences pref;
 
     private  int value_temp;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        initText();
         seek_bar3.setOnSeekBarChangeListener(new OnSeekBarChangeListenerImp());
         seek_bar4.setOnSeekBarChangeListener(new OnSeekBarChangeListenerImp());
         seek_bar5.setOnSeekBarChangeListener(new OnSeekBarChangeListenerImp());
@@ -65,12 +68,29 @@ public class PositonCalibrationActivity extends BaseActivity {
         // 触发操作，拖动
         public void onProgressChanged(SeekBar seekBar, int progress,
                                       boolean fromUser) {
+            editor = pref.edit();
             value_temp=progress;
             switch (seekBar.getId()){
-                case seekbar3:editor.putInt("leftup", value_temp-50);tLeftup.setText(String.valueOf(value_temp-50));break;
-                case seekbar4:editor.putInt("leftdown", value_temp-50);tLeftdown.setText(String.valueOf(value_temp-50));break;
-                case seekbar5:editor.putInt("rightup", value_temp-50);tRightup.setText(String.valueOf(value_temp-50));break;
-                case seekbar6:editor.putInt("rightdown",value_temp-50);tRightdown.setText(String.valueOf(value_temp-50));break;
+                case seekBar3: {
+                    editor.putInt("leftup", value_temp - 50);
+                    tLeftup.setText(String.valueOf(value_temp - 50));
+                    break;
+                }
+                case seekBar4: {
+                    editor.putInt("leftdown", value_temp - 50);
+                    tLeftdown.setText(String.valueOf(value_temp - 50));
+                    break;
+                }
+                case seekBar5: {
+                    editor.putInt("rightup", value_temp - 50);
+                    tRightup.setText(String.valueOf(value_temp - 50));
+                    break;
+                }
+                case seekBar6: {
+                    editor.putInt("rightdown", value_temp - 50);
+                    tRightdown.setText(String.valueOf(value_temp - 50));
+                    break;
+                }
 
             }
             //text.layout((int) (progress * moveStep), 20, screenWidth, 80);
@@ -89,6 +109,19 @@ public class PositonCalibrationActivity extends BaseActivity {
         }
     }
 
+    public void initText() {
+        pref = PreferenceManager.getDefaultSharedPreferences(this);
+
+        tLeftup.setText(String.valueOf(pref.getInt("leftup", 0)));
+        tLeftdown.setText(String.valueOf(pref.getInt("leftdown", 0)));
+        tRightdown.setText(String.valueOf(pref.getInt("rightdown", 0)));
+        tRightup.setText(String.valueOf(pref.getInt("rightup", 0)));
+        seek_bar3.setProgress(pref.getInt("leftup", 0) + 50);
+        seek_bar4.setProgress(pref.getInt("leftdown", 0) + 50);
+        seek_bar5.setProgress(pref.getInt("rightup", 0) + 50);
+        seek_bar6.setProgress(pref.getInt("rightdown", 0) + 50);
+
+    }
 
 
 }

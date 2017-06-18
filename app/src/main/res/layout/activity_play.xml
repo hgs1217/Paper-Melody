@@ -194,7 +194,7 @@
             android:layout_marginLeft="100dp"
             android:visibility="gone"
             android:text="@string/play_over"
-            android:textColor="@color/white"
+            android:textColor="#2fa881"
             android:textSize="14sp"/>
 
     </LinearLayout>

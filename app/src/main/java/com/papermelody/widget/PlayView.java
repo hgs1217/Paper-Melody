@@ -102,7 +102,7 @@ public class PlayView extends View {
         paint.setAlpha(alpha);// ͸����
         //paint.setColor(Color.RED);// ��ɫ
         Shader mShader = new LinearGradient(0, 0, 200, 200,
-                new int[]{Color.BLACK, Color.WHITE},
+                new int[]{Color.GREEN, Color.WHITE},
                 null, Shader.TileMode.REPEAT);
         paint.setShader(mShader);
         return paint;

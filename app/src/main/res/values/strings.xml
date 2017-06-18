@@ -7,8 +7,8 @@
     <string name="calibration_notice">请将琴谱完全放置于矩形选定框内</string>
     <string name="quit_save">放弃上传</string>
     <string name="play_start">播放</string>
-    <string name="cali_yes">Y</string>
-    <string name="cali_no">N</string>
+    <string name="cali_yes">完成标定</string>
+    <string name="cali_no">重新标定</string>
 
     <string name="comment">评论</string>
     <string name="zero">0</string>

@@ -1,15 +1,11 @@
 package com.papermelody.activity;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.papermelody.R;
 import com.papermelody.fragment.SettingsPlayPreferenceFragment;
-import com.papermelody.util.ToastUtil;
-
-import java.util.Map;
 
 import butterknife.BindView;
 
@@ -34,9 +30,7 @@ public class SettingsPlayActivity extends BaseActivity {
     private void initPreferenceMenu() {
         getFragmentManager().beginTransaction().replace(
                 R.id.frameLayout_settings_play, new SettingsPlayPreferenceFragment()).commit();
-        SharedPreferences sharedPreferences = getPreferences(MODE_PRIVATE);
-        Map in = sharedPreferences.getAll();
-        ToastUtil.showShort(in.toString());
+
     }
 
 

@@ -1,6 +1,8 @@
 package com.papermelody.activity;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.widget.Toolbar;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -32,11 +34,25 @@ public class AboutActivity extends BaseActivity {
         settings.setSupportZoom(true);          //支持缩放
         settings.setBuiltInZoomControls(true);  //启用内置缩放装置
         settings.setJavaScriptEnabled(true);    //启用JS脚本
+
+
     }
 
     @Override
     protected int getContentViewId() {
         return R.layout.activity_about;
+    }
+
+
+    private void xxx() {
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
+        //0:low  1:middle  2:high
+        pref.getString("skin_sensi", "-1");
+        pref.getString("motion_sensi", -1);
+        pref.getString("color_sensi", -1);
+        pref.getBoolean("high_performance", true);
+        pref.getBoolean("heart_show", true);
+        pref.getBoolean("debug_info", false);
     }
 
 

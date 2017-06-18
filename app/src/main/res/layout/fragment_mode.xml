@@ -1,45 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/layout_background"
     android:orientation="vertical">
 
-    <com.papermelody.widget.MainCycleViewPager
-        android:id="@+id/mode_cycle_view_pager"
-        android:layout_width="match_parent"
-        android:layout_height="300dp">
-
-    </com.papermelody.widget.MainCycleViewPager>
-
-    <LinearLayout
+    <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
-        android:orientation="vertical">
+        android:scaleType="centerCrop"
+        android:src="@drawable/testimg1" />
 
-        <Button
-            android:id="@+id/btn_mode_free"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:background="@color/colorPrimaryLight"
-            android:foreground="?attr/selectableItemBackground"
-            android:text="@string/mode_free"
-            android:textColor="@color/white"
-            android:textSize="20sp" />
+    <Button
+        android:id="@+id/btn_mode_free"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_alignBottom="@+id/btn_mode_opern"
+        android:layout_marginStart="50dp"
+        android:background="@drawable/btn_mode_select"
+        android:foreground="?attr/selectableItemBackground"
+        android:text="@string/mode_free"
+        android:textColor="@color/white"
+        android:textSize="15sp" />
 
-        <Button
-            android:id="@+id/btn_mode_opern"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:background="@color/colorPrimary"
-            android:foreground="?attr/selectableItemBackground"
-            android:text="@string/mode_opern"
-            android:textColor="@color/white"
-            android:textSize="20sp" />
+    <Button
+        android:id="@+id/btn_mode_opern"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="100dp"
+        android:layout_marginEnd="50dp"
+        android:background="@drawable/btn_mode_select"
+        android:backgroundTint="@color/colorPrimaryDark"
+        android:foreground="?attr/selectableItemBackground"
+        android:text="@string/mode_opern"
+        android:textColor="@color/white"
+        android:textSize="15sp" />
+    <!--<com.papermelody.widget.MainCycleViewPager-->
+    <!--android:id="@+id/mode_cycle_view_pager"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="300dp">-->
 
-    </LinearLayout>
+    <!--</com.papermelody.widget.MainCycleViewPager>-->
 
-</LinearLayout>
+    <!--<LinearLayout-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:gravity="center"-->
+    <!--android:orientation="vertical">-->
+
+    <!--<Button-->
+    <!--android:id="@+id/btn_mode_free"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="0dp"-->
+    <!--android:layout_weight="1"-->
+    <!--android:background="@color/colorPrimaryLight"-->
+    <!--android:foreground="?attr/selectableItemBackground"-->
+    <!--android:text="@string/mode_free"-->
+    <!--android:textColor="@color/white"-->
+    <!--android:textSize="20sp" />-->
+
+    <!--<Button-->
+    <!--android:id="@+id/btn_mode_opern"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="0dp"-->
+    <!--android:layout_weight="1"-->
+    <!--android:background="@color/colorPrimary"-->
+    <!--android:foreground="?attr/selectableItemBackground"-->
+    <!--android:text="@string/mode_opern"-->
+    <!--android:textColor="@color/white"-->
+    <!--android:textSize="20sp" />-->
+
+    <!--</LinearLayout>-->
+
+</RelativeLayout>

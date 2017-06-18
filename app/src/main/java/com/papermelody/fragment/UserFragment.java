@@ -114,8 +114,12 @@ public class UserFragment extends BaseFragment {
         });
 
         btnUserInfo.setOnClickListener((View v) -> {
-            MainActivity mainActivity = (MainActivity) getActivity();
-            mainActivity.updateFragment(MainActivity.USER_INFO);
+            if (App.getUser() == null) {
+                ToastUtil.showShort(R.string.not_logged_in);
+            } else {
+                MainActivity activity = (MainActivity) getActivity();
+                activity.updateFragment(MainActivity.UPDATE_USER_INFO);
+            }
         });
         btnUserHistory.setOnClickListener((View v) -> {
             Intent intent = new Intent(context, HistoryActivity.class);

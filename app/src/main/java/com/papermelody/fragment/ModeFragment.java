@@ -30,8 +30,8 @@ public class ModeFragment extends BaseFragment {
      * 主菜单开始演奏入口
      */
 
-    @BindView(R.id.mode_cycle_view_pager)
-    MainCycleViewPager cyclePoster;
+//    @BindView(R.id.mode_cycle_view_pager)
+//    MainCycleViewPager cyclePoster;
     @BindView(R.id.btn_mode_free)
     Button btnModeFree;
     @BindView(R.id.btn_mode_opern)
@@ -55,7 +55,7 @@ public class ModeFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_mode, container, false);
         ButterKnife.bind(this, view);
         initView();
-        initBannerView();
+//        initBannerView();
         return view;
     }
 
@@ -85,15 +85,15 @@ public class ModeFragment extends BaseFragment {
         });
     }
 
-    private void initBannerView() {
-        List<ImgBanner> banners = new ArrayList<>();
-        banners.add(new ImgBanner(R.drawable.testimg1));
-        banners.add(new ImgBanner(R.drawable.testimg2));
-        banners.add(new ImgBanner(R.drawable.testimg3));
-
-        cyclePoster.setIndicatorsSelected(R.drawable.shape_cycle_indicator_selected,
-                R.drawable.shape_cycle_indicator_unselected);
-        cyclePoster.setDelay(2000);
-        cyclePoster.setData(banners, null);
-    }
+//    private void initBannerView() {
+//        List<ImgBanner> banners = new ArrayList<>();
+//        banners.add(new ImgBanner(R.drawable.testimg1));
+//        banners.add(new ImgBanner(R.drawable.testimg2));
+//        banners.add(new ImgBanner(R.drawable.testimg3));
+//
+//        cyclePoster.setIndicatorsSelected(R.drawable.shape_cycle_indicator_selected,
+//                R.drawable.shape_cycle_indicator_unselected);
+//        cyclePoster.setDelay(2000);
+//        cyclePoster.setData(banners, null);
+//    }
 }

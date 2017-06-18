@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
 
     android:id="@+id/main_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:clickable="true"
+    android:onClick="main_window"
     tools:context="com.papermelody.fragment.LogInFragment">
 
 
@@ -26,16 +27,8 @@
         android:layout_weight="0.4"
         android:orientation="vertical">
 
-        <android.support.v7.widget.CardView
-            android:id="@+id/cv"
-            android:layout_width="300dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            app:cardCornerRadius="6dp"
-            app:cardElevation="3dp"
-            app:cardUseCompatPadding="true">
 
-            <LinearLayout
+        <LinearLayout
 
 
                 android:layout_width="match_parent"
@@ -49,34 +42,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="0.25"
-                    android:orientation="vertical">
-
-                    <TextView
-
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-
-                        android:layout_gravity="center"
-                        android:gravity="center"
-
-
-                        android:text="@string/log_in"
-                        android:textColor="#000000"
-                        android:textSize="18sp"
-
-                        />
-                </LinearLayout>
-
-                <LinearLayout
-
-
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="0.25"
                     android:focusable="true"
                     android:focusableInTouchMode="true"
-                    android:paddingEnd="50dp"
-                    android:paddingStart="50dp">
+                    android:paddingEnd="20dp"
+                    android:paddingStart="20dp"
+                    android:paddingTop="20dp">
 
                     <android.support.design.widget.TextInputLayout
                         android:id="@+id/ttl_username"
@@ -104,8 +74,8 @@
                     android:layout_weight="0.25"
                     android:focusable="true"
                     android:focusableInTouchMode="true"
-                    android:paddingEnd="50dp"
-                    android:paddingStart="50dp">
+                    android:paddingEnd="20dp"
+                    android:paddingStart="20dp">
 
                     <android.support.design.widget.TextInputLayout
 
@@ -136,26 +106,46 @@
                     android:layout_weight="0.25"
                     android:orientation="vertical">
 
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:paddingEnd="20dp"
+                        android:paddingStart="20dp">
                     <Button
-                        android:id="@+id/btn_go"
-                        android:layout_width="50dp"
+                        android:id="@+id/login_btn_go"
+                        android:layout_width="match_parent"
                         android:layout_height="25dp"
                         android:layout_gravity="center"
                         android:background="@drawable/log_reg_btn"
                         android:text="@string/go"
-                        android:textColor="#000000"></Button>
+                        android:textColor="#ffffff">
 
+                    </Button>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:paddingEnd="20dp"
+                        android:paddingStart="20dp">
                     <Button
-                        android:id="@+id/btn_register"
-                        android:layout_width="50dp"
+                        android:id="@+id/login_btn_register"
+                        android:layout_width="match_parent"
                         android:layout_height="25dp"
                         android:layout_gravity="center"
-                        android:background="@drawable/log_reg_btn"
+                        android:background="@android:color/transparent"
                         android:text="@string/register_english"
-                        android:textColor="#000000"></Button>
+                        android:textColor="#2fa881">
+
+                    </Button>
+                    </LinearLayout>
+
+
                 </LinearLayout>
             </LinearLayout>
-        </android.support.v7.widget.CardView>
+
     </LinearLayout>
 
     <LinearLayout

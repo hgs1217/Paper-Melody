@@ -127,7 +127,8 @@
 
     <string name="login_success">登录成功</string>
     <string name="login">登录</string>
-    <string name="register_english">注册</string>
+    <string name="register_english">没有账号？去注册</string>
+    <string name="go_english">已有账号？去登录</string>
     <string name="Username">用户名</string>
     <string name="less_than_6_chars">不得少于6个字符</string>
     <string name="more_than_20_chars">不得多于20个字符</string>

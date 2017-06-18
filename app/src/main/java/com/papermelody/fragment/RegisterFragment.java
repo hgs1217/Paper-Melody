@@ -1,12 +1,11 @@
 package com.papermelody.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -28,8 +27,6 @@ import butterknife.ButterKnife;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-import static android.content.Context.INPUT_METHOD_SERVICE;
-
 public class RegisterFragment extends BaseFragment {
 
     @BindView(R.id.ttl_username)
@@ -44,10 +41,13 @@ public class RegisterFragment extends BaseFragment {
     EditText editemail;
     @BindView(R.id.et_password)
     EditText editPassword;
-    @BindView(R.id.btn_register)
+    @BindView(R.id.register_btn_register)
     Button btnRegister;
+    @BindView(R.id.register_btn_login)
+    Button btnLogIn;
     @BindView(R.id.main_layout)
     LinearLayout mainlayout;
+    private Context context;
 
     public static RegisterFragment newInstance() {
         RegisterFragment fragment = new RegisterFragment();
@@ -67,6 +67,16 @@ public class RegisterFragment extends BaseFragment {
         //设置可以计数
 
         ButterKnife.bind(this, view);
+        context=getActivity();
+        mainlayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                InputMethodManager imm = (InputMethodManager)
+                        context.getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+
+            }
+        });
         pwTextInputLayoutUser.setCounterEnabled(true);
 
         //计数的最大值
@@ -110,14 +120,19 @@ public class RegisterFragment extends BaseFragment {
                     }
                 }
         );
-
-        mainlayout.setOnTouchListener(new OnTouchListener() {
-
-            public boolean onTouch(View arg0, MotionEvent arg1) {
-                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(INPUT_METHOD_SERVICE);
-                return imm.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
-            }
-        });
+        btnLogIn.setOnClickListener((View v) -> {
+                    MainActivity mainActivity = (MainActivity) getActivity();
+                    mainActivity.updateFragment(MainActivity.LOG_IN);
+                }
+        );
+//
+//        mainlayout.setOnTouchListener(new OnTouchListener() {
+//
+//            public boolean onTouch(View arg0, MotionEvent arg1) {
+//                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(INPUT_METHOD_SERVICE);
+//                return imm.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
+//            }
+//        });
     }
 
     private void updateUser(UserResponse.UserInfo userInfo) {

@@ -80,7 +80,7 @@ public class RegisterFragment extends BaseFragment {
         pwTextInputLayoutUser.setCounterEnabled(true);
 
         //计数的最大值
-        pwTextInputLayoutUser.setCounterMaxLength(20);
+        //pwTextInputLayoutUser.setCounterMaxLength(20);
 
         initView();
         return view;

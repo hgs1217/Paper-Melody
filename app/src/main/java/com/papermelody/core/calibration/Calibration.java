@@ -499,7 +499,7 @@ public class Calibration {
                 Math.abs(rightlow_y - rightup_y) > 10 &&
                 Math.abs(rightlow_x - leftlow_x) > srcImage.width() / 2 &&
                 Math.abs(rightup_x - leftup_x) > srcImage.width() / 2 &&
-                temp1>12&&temp1<=16&&
+
                 leftup_y > upbound && rightup_y > upbound &&
                 leftlow_y < lowbound &&
                 rightlow_y < lowbound
@@ -511,9 +511,28 @@ public class Calibration {
                 && leftlow_y -leftup_y>10
                 &&rightlow_x>rightup_x
                 && rightlow_y - rightup_y>10
-                )
-            out.setFlag(true);
+                ) {
+            switch (INSTRUMENT_TYPE) {
+                case Instrument.INSTRUMENT_PIANO21C3TOB5:
+                case Instrument.INSTRUMENT_PIANO21C4TOB6: {
+                    if (temp1 > 11 && temp1 <= 17) out.setFlag(true);
+                    return out;
 
+                }
+                case Instrument.INSTRUMENT_PIANO14C3TOB4:
+                case Instrument.INSTRUMENT_PIANO14C4TOB5: {
+                    if (temp1 > 7 && temp1 <= 15) out.setFlag(true);
+                    return out;
+
+
+                }
+                default:
+                    out.setFlag(false);
+                    break;
+
+            }
+
+        }
 
 
         return out;
@@ -586,7 +605,7 @@ public class Calibration {
             case Instrument.INSTRUMENT_PIANO21C3TOB5:
             case Instrument.INSTRUMENT_PIANO21C4TOB6: {
                 double whiteWidth = (500 - 20 * blackWidth) / 19;
-                if (y >= 100 && y <= 170) {
+                if (y >= 100 && y <= 185) {
                     if (x < blackWidth / 2 && x >= -whiteWidth) return PianoWith21KeysCToB.WHITE_B3;
                     if (x >= blackWidth * 0.5 && x < whiteWidth + blackWidth * 1.5)
                         return PianoWith21KeysCToB.WHITE_A3;
@@ -689,7 +708,7 @@ public class Calibration {
             case Instrument.INSTRUMENT_PIANO14C4TOB5:
             {
                 double whiteWidth=(500 - 13 * blackWidth) / 12;
-                if (y >= 100 && y <= 170) {
+                if (y >= 100 && y <= 185) {
                     if (x < blackWidth / 2 && x >= -whiteWidth) return PianoWith21KeysCToB.WHITE_B2;
                     if (x >= blackWidth * 0.5 && x < whiteWidth + blackWidth * 1.5)
                         return PianoWith21KeysCToB.WHITE_A2;

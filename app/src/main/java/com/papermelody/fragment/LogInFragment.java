@@ -83,11 +83,11 @@ public class LogInFragment extends BaseFragment {
             context = getActivity();
         userTextInputLayoutUser.setCounterEnabled(true);
         //计数的最大值
-        userTextInputLayoutUser.setCounterMaxLength(20);
+        //userTextInputLayoutUser.setCounterMaxLength(20);
         pwTextInputLayoutUser.setCounterEnabled(true);
 
         //计数的最大值
-        pwTextInputLayoutUser.setCounterMaxLength(20);
+       // pwTextInputLayoutUser.setCounterMaxLength(20);
         mainlayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

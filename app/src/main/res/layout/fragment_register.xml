@@ -73,6 +73,7 @@
             android:layout_height="0dp"
             android:layout_weight="0.25"
             android:paddingStart="20dp"
+            android:layout_marginTop="10dp"
             android:focusable="true"
             android:focusableInTouchMode="true"
             android:paddingEnd="20dp">
@@ -109,6 +110,7 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
                         android:paddingEnd="20dp"
+                        android:paddingTop="10dp"
                         android:paddingStart="20dp">
                         <Button
                             android:id="@+id/register_btn_register"

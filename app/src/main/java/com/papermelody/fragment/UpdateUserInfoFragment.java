@@ -130,9 +130,10 @@ public class UpdateUserInfoFragment extends BaseFragment {
                 editText = (EditText) v.findViewById(R.id.edit_user_nickname);
                 btnDialogConfirm = (Button) v.findViewById(R.id.btn_nickname_confirm);
                 btnDialogCancel = (Button) v.findViewById(R.id.btn_nickname_cancel);
-                btnDialogCancel.setOnClickListener((view1) ->
-                        bottomDialog.dismiss()
-                );
+                btnDialogCancel.setOnClickListener((view1) -> {
+                    hideKeyBoard(editText);
+                    bottomDialog.dismiss();
+                });
                 btnDialogConfirm.setOnClickListener((view2) -> {
                     String newNickname = editText.getText().toString();
                     Log.i("nib", newNickname);
@@ -158,9 +159,10 @@ public class UpdateUserInfoFragment extends BaseFragment {
                 editText2 = (EditText) v.findViewById(R.id.edit_new_password);
                 btnDialogConfirm = (Button) v.findViewById(R.id.btn_password_confirm);
                 btnDialogCancel = (Button) v.findViewById(R.id.btn_password_cancel);
-                btnDialogCancel.setOnClickListener((view1) ->
-                        bottomDialog.dismiss()
-                );
+                btnDialogCancel.setOnClickListener((view1) -> {
+                    hideKeyBoard(editText);
+                    bottomDialog.dismiss();
+                });
                 btnDialogConfirm.setOnClickListener((view2) -> {
                     String oldPassword = editText.getText().toString();
                     if (!oldPassword.equals(App.getUser().getPassword())) {

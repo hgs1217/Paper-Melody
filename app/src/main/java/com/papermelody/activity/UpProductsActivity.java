@@ -3,10 +3,13 @@ package com.papermelody.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.View;
 
 import com.papermelody.R;
 import com.papermelody.model.OnlineMusic;
@@ -36,6 +39,10 @@ public class UpProductsActivity extends BaseActivity {
 
     @BindView(R.id.up_products_recycler_view)
     RecyclerView viewUpProducts;
+    @BindView(R.id.toolbar_up_products)
+    Toolbar toolbarUpProducts;
+    @BindView(R.id.layout_products_refresh)
+    SwipeRefreshLayout productsRefresh;
 
     private Context context;
     private OnlineMusicRecyclerViewAdapter adapter;
@@ -57,13 +64,18 @@ public class UpProductsActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
 
         context = this;
-
+        setSupportActionBar(toolbarUpProducts);
+        if (getSupportActionBar() != null) getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbarUpProducts.setNavigationOnClickListener((View v) -> {
+            finish();
+        });
+        initSwipeRefreshView();
         initGetMusicList();
     }
 
     private void initGetMusicList() {
         SocialSystemAPI api = RetrofitClient.getSocialSystemAPI();
-        Log.d("TESTUSER", App.getUser().getUserID()+"");
+        Log.d("TESTUSER", App.getUser().getUserID() + "");
         addSubscription(api.getUploadMusicList(App.getUser().getUserID())
                 .flatMap(NetworkFailureHandler.httpFailureFilter)
                 .subscribeOn(Schedulers.io())
@@ -79,6 +91,17 @@ public class UpProductsActivity extends BaseActivity {
                         },
                         NetworkFailureHandler.basicErrorHandler
                 ));
+    }
+
+    private void initSwipeRefreshView() {
+        productsRefresh.setColorSchemeResources(R.color.colorAccent);
+        productsRefresh.setProgressBackgroundColorSchemeResource(R.color.white);
+        productsRefresh.setSize(SwipeRefreshLayout.DEFAULT);
+        productsRefresh.setProgressViewEndTarget(true, 100);
+        productsRefresh.setOnRefreshListener(() -> {
+            initGetMusicList();
+            productsRefresh.setRefreshing(false);
+        });
     }
 
     private void initRecyclerView(List<OnlineMusic> musics) {

@@ -3,9 +3,12 @@ package com.papermelody.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.view.View;
 
 import com.papermelody.R;
 import com.papermelody.model.OnlineMusic;
@@ -35,6 +38,10 @@ public class FavoriteActivity extends BaseActivity {
 
     @BindView(R.id.favorite_recycler_view)
     RecyclerView viewFavorite;
+    @BindView(R.id.toolbar_favor_products)
+    Toolbar toolbarFavorProducts;
+    @BindView(R.id.layout_favor_refresh)
+    SwipeRefreshLayout favorRefresh;
 
     private Context context;
     private OnlineMusicRecyclerViewAdapter adapter;
@@ -56,7 +63,12 @@ public class FavoriteActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
 
         context = this;
-
+        setSupportActionBar(toolbarFavorProducts);
+        if (getSupportActionBar() != null) getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbarFavorProducts.setNavigationOnClickListener((View v) -> {
+            finish();
+        });
+        initSwipeRefreshView();
         initGetMusicList();
     }
 
@@ -77,6 +89,17 @@ public class FavoriteActivity extends BaseActivity {
                         },
                         NetworkFailureHandler.basicErrorHandler
                 ));
+    }
+
+    private void initSwipeRefreshView() {
+        favorRefresh.setColorSchemeResources(R.color.colorAccent);
+        favorRefresh.setProgressBackgroundColorSchemeResource(R.color.white);
+        favorRefresh.setSize(SwipeRefreshLayout.DEFAULT);
+        favorRefresh.setProgressViewEndTarget(true, 100);
+        favorRefresh.setOnRefreshListener(() -> {
+            initGetMusicList();
+            favorRefresh.setRefreshing(false);
+        });
     }
 
     private void initRecyclerView(List<OnlineMusic> musics) {

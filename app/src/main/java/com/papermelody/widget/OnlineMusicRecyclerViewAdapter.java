@@ -103,6 +103,7 @@ public class OnlineMusicRecyclerViewAdapter extends RecyclerView.Adapter<OnlineM
             }
             String url = music.getMusicPhotoUrl();
             Log.d("TESTURL", String.valueOf(url));
+            Log.i("nib", String.valueOf(music.getMusicAuthorAvatarUrl()));
             try {
                 Picasso.with(context).load(url).into(imgOnlineMusic);
                 Picasso.with(context).load(music.getMusicAuthorAvatarUrl()).into(imgAvatar);

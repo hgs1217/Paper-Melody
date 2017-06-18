@@ -129,16 +129,17 @@
 
 
     <LinearLayout
-        android:layout_marginTop="20dp"
+       
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="#ff000000"
         android:orientation="horizontal">
     <LinearLayout
 
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="100dp"
-        android:background="#88000000"
+
        >
         <TextView
             android:id="@+id/text_mode"
@@ -146,7 +147,7 @@
             android:layout_height="wrap_content"
 
             android:text="@string/mode"
-            android:textColor="#2fa881"
+            android:textColor="#ffffff"
             android:textSize="14sp" />
         </LinearLayout>
     <LinearLayout
@@ -154,7 +155,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
-        android:background="#88000000"
+
         >
         <TextView
             android:id="@+id/text_mode_name"
@@ -162,14 +163,14 @@
             android:layout_height="wrap_content"
 
             android:text="mode"
-            android:textColor="#2fa881"
+            android:textColor="#ffffff"
             android:textSize="14sp" />
         </LinearLayout>
     <LinearLayout
 
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="#88000000"
+
 
         >
 
@@ -178,7 +179,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/instrument"
-            android:textColor="#2fa881"
+            android:textColor="#ffffff"
             android:textSize="14sp" />
         </LinearLayout>
     <LinearLayout
@@ -186,7 +187,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
-        android:background="#88000000"
+
 
         >
 
@@ -196,14 +197,14 @@
             android:layout_height="wrap_content"
 
             android:text="instrument"
-            android:textColor="#2fa881"
+            android:textColor="#ffffff"
             android:textSize="14sp" />
         </LinearLayout>
     <LinearLayout
 
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="#88000000"
+
 
 
         >
@@ -213,7 +214,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/opern"
-            android:textColor="#2fa881"
+            android:textColor="#ffffff"
             android:textSize="14sp" />
         </LinearLayout>
     <LinearLayout
@@ -221,7 +222,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
-        android:background="#88000000"
 
         >
 
@@ -231,7 +231,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
             android:text=""
-            android:textColor="#2fa881"
+            android:textColor="#ffffff"
             android:textSize="14sp" />
         </LinearLayout>
     <LinearLayout
@@ -239,7 +239,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="100dp"
-        android:background="#88000000"
+
 
         >
 
@@ -252,7 +252,7 @@
 
             android:visibility="gone"
             android:text="@string/play_over"
-            android:textColor="#2fa881"
+            android:textColor="#fffffff"
             android:textSize="14sp"/>
     </LinearLayout>
 

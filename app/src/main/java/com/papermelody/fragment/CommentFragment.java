@@ -128,6 +128,11 @@ public class CommentFragment extends BaseFragment {
 
 
     public void initGetCommentList() {
+        if (hasUser)
+            userNoComment.setText("数据正在拼命加载中...");
+        else
+            userNoComment.setText(getString(R.string.not_logged_in));
+        userNoComment.setVisibility(View.VISIBLE);
         String musicID = String.valueOf(onlineMusic.getMusicID());
         addSubscription(api.getComment(musicID)
                 .flatMap(NetworkFailureHandler.httpFailureFilter)

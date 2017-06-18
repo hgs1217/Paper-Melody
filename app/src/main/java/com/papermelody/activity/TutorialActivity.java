@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -70,7 +71,7 @@ public class TutorialActivity extends BaseActivity implements ViewPager.OnPageCh
         }
 
         LayoutInflater inflater = LayoutInflater.from(this);
-        LinearLayout guideFour = (LinearLayout) inflater.inflate(R.layout.tutorial_four, null);
+        FrameLayout guideFour = (FrameLayout) inflater.inflate(R.layout.tutorial_four, null);
         guideFour.findViewById(R.id.btn_to_main).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

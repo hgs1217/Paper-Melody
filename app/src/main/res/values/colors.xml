@@ -23,4 +23,8 @@
     <color name="sign_out_0">#dcd14949</color>
     <color name="sign_out_1">#dc913030</color>
     <color name="btn_default">#CCCCCC</color>
+    <color name="orange">#ff3d00</color>
+    <color name="indigo">#283593</color>
+    <color name="purple">#6a1b9a</color>
+    <color name="ttgreen">#00c853</color>
 </resources>

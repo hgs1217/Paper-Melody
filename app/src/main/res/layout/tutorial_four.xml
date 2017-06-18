@@ -1,20 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary"
-    android:orientation="vertical">
+    android:background="@color/ttgreen"
+    android:orientation="vertical"
+    android:weightSum="1">
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="88dp"
         android:gravity="center"
-        android:text="four"/>
+        android:text="音乐圈社交功能等你发现"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="23sp" />
 
-    <Button
+
+    <at.markushi.ui.CircleButton
         android:id="@+id/btn_to_main"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="go"/>
+        android:layout_width="46dp"
+        android:layout_height="46dp"
+        android:padding="9dp"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginBottom="40dp"
+        android:src="@drawable/high_up"
+        android:text="yes"
+        app:cb_color="@color/white"
+        app:cb_pressedRingWidth="8dip" />
 
-</LinearLayout>
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0"
+        android:padding="0dp"
+        app:srcCompat="@drawable/tutorial4" />
+
+
+</FrameLayout>

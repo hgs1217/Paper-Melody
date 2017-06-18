@@ -19,7 +19,7 @@
     <PreferenceCategory
         android:layout="@layout/preference_category_widget"
         android:title="@string/calibration">
-        <CheckBoxPreference
+        <Preference
             android:defaultValue="1"
             android:key="key_calibration"
             android:layout="@layout/preference_item"
@@ -27,6 +27,28 @@
             android:title="@string/key_calibration" />
 
     </PreferenceCategory>
+
+    <PreferenceCategory
+        android:layout="@layout/preference_category_widget"
+        android:title="@string/personal_displ">
+
+
+        <CheckBoxPreference
+            android:defaultValue="1"
+            android:key="heart_show"
+            android:layout="@layout/preference_item"
+            android:summary="一边弹奏一边录制"
+            android:title="@string/play_animation" />
+
+        <CheckBoxPreference
+            android:defaultValue="0"
+            android:key="debug_info"
+            android:layout="@layout/preference_item"
+            android:summary="一边弹奏一边录制"
+            android:title="@string/debug_info_disp" />
+
+    </PreferenceCategory>
+
 
     <PreferenceCategory
         android:layout="@layout/preference_category_widget"
@@ -60,27 +82,6 @@
             android:layout="@layout/preference_item"
             android:summary="检测系统的灵敏度"
             android:title="@string/color_sensi" />
-
-    </PreferenceCategory>
-
-    <PreferenceCategory
-        android:layout="@layout/preference_category_widget"
-        android:title="@string/personal_displ">
-
-
-        <CheckBoxPreference
-            android:defaultValue="1"
-            android:key="heart_show"
-            android:layout="@layout/preference_item"
-            android:summary="一边弹奏一边录制"
-            android:title="@string/play_animation" />
-
-        <CheckBoxPreference
-            android:defaultValue="0"
-            android:key="debug_info"
-            android:layout="@layout/preference_item"
-            android:summary="一边弹奏一边录制"
-            android:title="@string/debug_info_disp" />
 
     </PreferenceCategory>
 

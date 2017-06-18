@@ -67,6 +67,8 @@ public class CommentFragment extends BaseFragment {
     LinearLayout my_comment_overall;
     @BindView(R.id.all_comment_title)
     TextView refocusPos;
+    @BindView(R.id.cuurently_no_comment)
+    TextView noComment;
 
     private boolean hasUser;
     private String author = "AnnonymousUser";
@@ -177,6 +179,10 @@ public class CommentFragment extends BaseFragment {
     }
 
     private void refreshMyComment(List<Comment> list) {
+        if (list.size() > 0)
+            noComment.setVisibility(View.GONE);
+        else
+            noComment.setVisibility(View.VISIBLE);
         if (!hasUser) {
             userNoComment.setText(R.string.not_logged_in);
             my_comment_overall.setVisibility(View.GONE);

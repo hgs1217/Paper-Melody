@@ -176,4 +176,5 @@
     <string name="please_choose_music">请选择一首准备弹奏的曲子：</string>
     <string name="errorReadComment">读取评论时好像出错了: (</string>
     <string name="play_time_too_short">时间太短了，再多弹一会儿吧</string>
+    <string name="no_comment_now">暂时还没人评论，赶紧抢沙发~</string>
 </resources>

@@ -3,49 +3,91 @@
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:background="@color/layout_background">
+    android:background="@color/layout_background"
+    android:orientation="vertical">
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
         android:foreground="?attr/selectableItemBackground"
+        card_view:cardBackgroundColor="@color/card_view_background"
         card_view:cardCornerRadius="0dp"
-        card_view:cardElevation="@dimen/card_elevation"
-        card_view:cardBackgroundColor="@color/card_view_background">
+        card_view:cardElevation="@dimen/card_elevation">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="16dp">
 
-            <ImageView
-                android:id="@+id/item_img_online_music"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/item_img_online_avatar"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
-                android:layout_marginEnd="16dp"
-                android:contentDescription="@string/picture"
-                android:scaleType="centerCrop"
-                android:src="@drawable/ic_panorama_black_48dp" />
+                android:layout_marginEnd="5dp"
+                android:src="@drawable/ic_tag_faces_black_48dp" />
+
+            <TextView
+                android:id="@+id/item_text_online_music_author"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_toEndOf="@id/item_img_online_avatar"
+                android:text="@string/jackMa"
+                android:textColor="@color/colorPrimary" />
+
+            <TextView
+                android:id="@+id/item_text_online_release"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginEnd="3dp"
+                android:layout_marginStart="3dp"
+                android:layout_toEndOf="@id/item_text_online_music_author"
+                android:text="@string/release"
+                android:textColor="@color/textSecondary" />
 
             <TextView
                 android:id="@+id/item_text_online_music_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
-                android:layout_toEndOf="@id/item_img_online_music"
-                android:textSize="20sp" />
+                android:layout_toEndOf="@id/item_text_online_release"
+                android:text="@string/jackMa"
+                android:textColor="@color/textPrimary" />
 
             <TextView
-                android:id="@+id/item_text_online_music_author"
+                android:id="@+id/item_text_online_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/item_text_online_music_title"
-                android:layout_toEndOf="@id/item_img_online_music"
-                android:textSize="12sp" />
+                android:layout_below="@id/item_text_online_music_author"
+                android:layout_toEndOf="@id/item_img_online_avatar" />
+
+            <TextView
+                android:id="@+id/item_text_online_music_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/item_img_online_avatar"
+                android:layout_marginTop="5dp"
+                android:text="@string/test_long_text"
+                android:textColor="@color/textPrimary" />
+
+            <ImageView
+                android:id="@+id/item_img_online_music"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/item_text_online_music_info"
+                android:layout_marginTop="5dp"
+                android:contentDescription="@string/picture"
+                android:maxHeight="150dp"
+                android:maxWidth="200dp"
+                android:minHeight="80dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_panorama_black_48dp" />
+
+
         </RelativeLayout>
     </android.support.v7.widget.CardView>
 </LinearLayout>

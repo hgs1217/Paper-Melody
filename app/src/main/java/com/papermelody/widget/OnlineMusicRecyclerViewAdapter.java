@@ -13,17 +13,21 @@ import com.papermelody.R;
 import com.papermelody.model.OnlineMusic;
 import com.squareup.picasso.Picasso;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by HgS_1217_ on 2017/4/10.
  */
 
-public class OnlineMusicRecyclerViewAdapter extends RecyclerView.Adapter<OnlineMusicRecyclerViewAdapter.ViewHolder>  {
+public class OnlineMusicRecyclerViewAdapter extends RecyclerView.Adapter<OnlineMusicRecyclerViewAdapter.ViewHolder> {
     /**
      * 音乐圈用于显示作品的RecyclerView的Adapter，同时可以复用于上传作品页面和收藏作品页面
      */
@@ -76,6 +80,12 @@ public class OnlineMusicRecyclerViewAdapter extends RecyclerView.Adapter<OnlineM
         TextView textTitle;
         @BindView(R.id.item_text_online_music_author)
         TextView textAuthor;
+        @BindView(R.id.item_img_online_avatar)
+        CircleImageView imgAvatar;
+        @BindView(R.id.item_text_online_time)
+        TextView textTime;
+        @BindView(R.id.item_text_online_music_info)
+        TextView textInfo;
 
         public ViewHolder(View view) {
             super(view);
@@ -85,10 +95,13 @@ public class OnlineMusicRecyclerViewAdapter extends RecyclerView.Adapter<OnlineM
         private void setView(OnlineMusic music) {
             textTitle.setText(music.getMusicName());
             textAuthor.setText(music.getMusicAuthor());
+            textInfo.setText(music.getMusicInfo());
+            textTime.setText(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA).format(new Date()));
             String url = music.getMusicPhotoUrl();
             Log.d("TESTURL", String.valueOf(url));
             try {
                 Picasso.with(context).load(url).into(imgOnlineMusic);
+                Picasso.with(context).load(music.getMusicAuthorAvatarUrl()).into(imgAvatar);
             } catch (Exception e) {
                 e.printStackTrace();
             }

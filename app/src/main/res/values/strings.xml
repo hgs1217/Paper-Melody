@@ -29,6 +29,7 @@
     <string name="confirm_quit_upload">确定要放弃上传吗？</string>
     <string name="tip_download_before">先下载才能播放哦</string>
     <string name="save_to_local">保存到本地</string>
+    <string name="save_success">保存成功</string>
     <string name="picture">图片</string>
     <string name="downloading">下载中……</string>
     <string name="file_exist">文件已经存在啦</string>
@@ -57,6 +58,8 @@
     <string name="user_msg">消息通知</string>
     <string name="over99">99+</string>
     <string name="jackMa">马云</string>
+    <string name="release">发布了</string>
+    <string name="listen_first">先听听再做决定哦</string>
     <string name="avatar">头像</string>
     <string name="select_avatar">选择头像</string>
     <string name="edit_nickname">修改昵称</string>

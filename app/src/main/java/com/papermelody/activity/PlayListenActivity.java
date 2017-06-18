@@ -3,6 +3,7 @@ package com.papermelody.activity;
 import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.content.Intent;
+import android.icu.text.UnicodeSetSpanner;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -61,6 +62,8 @@ public class PlayListenActivity extends BaseActivity {
     RelativeLayout layoutPlayListen;
     @BindView(R.id.container_play_listen)
     LinearLayout containerPlayListen;
+    @BindView(R.id.tip_listen_first)
+    LinearLayout tipListenFirst;
 
     private static PlayListenActivity selfActivity;
 
@@ -121,6 +124,7 @@ public class PlayListenActivity extends BaseActivity {
             fragment.forwardPlay();
         });
         fab.setOnClickListener((View v) -> {
+            tipListenFirst.setVisibility(View.INVISIBLE);
             fragment.starPlay();
             int cx = (fab.getLeft() + fab.getRight()) / 2;
             int cy = (fab.getTop() + fab.getBottom()) / 2;
@@ -222,6 +226,8 @@ public class PlayListenActivity extends BaseActivity {
             }
             inputStream.close();
             outputStream.close();
+            ToastUtil.showShort(R.string.save_success);
+            btnSaveToLocal.setClickable(false);
             Log.i("nib", "复制完成");
         } catch (Exception e) {
             Log.i("nib", e.toString());

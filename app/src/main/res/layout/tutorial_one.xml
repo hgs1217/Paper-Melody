@@ -13,7 +13,7 @@
         android:layout_gravity="bottom"
         android:layout_marginBottom="88dp"
         android:gravity="center"
-        android:text="根据提示打印琴键"
+        android:text="下载PDF，打印琴键"
         android:textAlignment="center"
         android:textColor="@color/white"
         android:textSize="23sp" />

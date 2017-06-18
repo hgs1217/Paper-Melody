@@ -4,6 +4,7 @@
     android:layout_height="wrap_content"
     android:foreground="?attr/selectableItemBackgroundBorderless"
     android:orientation="vertical"
+    android:background="#D9D9D9"
     android:paddingLeft="40dp"
     android:paddingRight="10dp">
 
@@ -22,9 +23,10 @@
             android:layout_height="wrap_content"
             android:ellipsize="marquee"
             android:fadingEdge="horizontal"
+
             android:text="@string/instrument"
             android:textColor="@color/black"
-            android:textSize="14sp" />
+            android:textSize="16sp" />
 
         <TextView
             android:id="@+id/mode_setting_child_hint"

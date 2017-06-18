@@ -207,5 +207,6 @@
         <item>低</item>
     </string-array>
     <string name="title_activity_position_calibration">PositionCalibrationActivity</string>
+    <string name="version">Version 0.9.1</string>
 
 </resources>

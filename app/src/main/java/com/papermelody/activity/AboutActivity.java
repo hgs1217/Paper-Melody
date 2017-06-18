@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 
@@ -22,13 +23,14 @@ public class AboutActivity extends BaseActivity {
      */
     @BindView(R.id.webview)
     WebView webView;
-    @BindView(R.id.toolbar2)
-    Toolbar xx;
+    @BindView(R.id.toolbar_about)
+    Toolbar toolbar;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        xx.setTitle("Surprise!");
+        init();
         WebSettings settings = webView.getSettings();
         webView.loadUrl("https://yujiepan.github.io/fun.html");
         settings.setSupportZoom(true);          //支持缩放
@@ -37,6 +39,17 @@ public class AboutActivity extends BaseActivity {
 
 
     }
+
+    private void init() {
+        toolbar.setTitle("关于本应用");
+        toolbar.setTitleTextColor(getResources().getColor(R.color.white));
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.setNavigationOnClickListener((View v) -> {
+            finish();
+        });
+    }
+
 
     @Override
     protected int getContentViewId() {

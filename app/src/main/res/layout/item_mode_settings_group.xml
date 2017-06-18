@@ -30,12 +30,12 @@
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="18dp"
             android:layout_weight="1"
-            android:paddingBottom="10dp"
-            android:paddingTop="10dp"
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp"
             android:text="@string/__labelForSplit"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="@color/white"
-            android:textSize="20sp" />
+            android:textSize="16sp" />
 
         <ImageView
             android:id="@+id/question_arrow_iv"

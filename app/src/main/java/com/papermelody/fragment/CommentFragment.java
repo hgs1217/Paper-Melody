@@ -161,6 +161,15 @@ public class CommentFragment extends BaseFragment {
 
     }
 
+    private String removeLabel(String labels, String label, String ready) {
+        if (!ready.contains(label) && !ready.contains(labels)) return ready;
+        String[] x = ready.split(label);
+        for (int i = 0; i < x.length; ++i) {
+            if (x[i] != "" || x[i].length() > 0) return x[i];
+        }
+        return getString(R.string.errorReadComment);
+    }
+
     private void refreshMyComment(List<Comment> list) {
         if (!hasUser) {
             userNoComment.setText(R.string.not_logged_in);
@@ -174,7 +183,7 @@ public class CommentFragment extends BaseFragment {
                     hasCommented = true;
                     my_comment_overall.setVisibility(View.VISIBLE);
                     userNoComment.setVisibility(View.GONE);
-                    myCommentContext.setText(singleComment.getContent());
+                    myCommentContext.setText(removeLabel(getString(R.string.__labelForSplit), getString(R.string.__label), singleComment.getContent()));
                     myCommentTime.setText(timeLongToString(Long.parseLong(
                             singleComment.getCreateTime())));
                     myCommentName.setText(singleComment.getAuthor());

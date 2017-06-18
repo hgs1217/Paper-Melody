@@ -24,7 +24,7 @@
             android:fadingEdge="horizontal"
             android:text="@string/instrument"
             android:textColor="@color/black"
-            android:textSize="17sp" />
+            android:textSize="14sp" />
 
         <TextView
             android:id="@+id/mode_setting_child_hint"

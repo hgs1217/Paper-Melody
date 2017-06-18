@@ -95,6 +95,10 @@
             android:name=".activity.UploadActivity"
             android:label="@string/title_activity_upload"
             android:theme="@style/AppTheme" />
+
+        <activity
+            android:name=".activity.PositonCalibrationActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

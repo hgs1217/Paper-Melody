@@ -166,9 +166,12 @@ public class CommentFragment extends BaseFragment {
 
     private String removeLabel(String labels, String label, String ready) {
         if (!ready.contains(label) && !ready.contains(labels)) return ready;
-        String[] x = ready.split(label);
+        String[] x = ready.split(labels);
         for (int i = 0; i < x.length; ++i) {
-            if (x[i] != "" || x[i].length() > 0) return x[i];
+            if (x[i] != "" || x[i].length() > 0) {
+                Log.d("PYJ", x[i]);
+                return x[i];
+            }
         }
         return getString(R.string.errorReadComment);
     }

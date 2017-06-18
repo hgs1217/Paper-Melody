@@ -82,6 +82,7 @@
                 android:layout_marginTop="5dp"
                 android:contentDescription="@string/picture"
                 android:maxHeight="150dp"
+                android:adjustViewBounds="true"
                 android:maxWidth="200dp"
                 android:scaleType="centerCrop"
                 android:src="@drawable/ic_panorama_black_48dp" />

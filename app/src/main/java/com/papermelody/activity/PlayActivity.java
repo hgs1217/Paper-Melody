@@ -384,7 +384,6 @@ public class PlayActivity extends BaseActivity {
         instrument = intent.getIntExtra(EXTRA_INSTRUMENT, 0);
         category = intent.getIntExtra(EXTRA_CATIGORY, 0);
         opernNum = intent.getIntExtra(EXTRA_OPERN, 0);
-        opernNum = 1; // FIXME: opern默认
         calibrationResult = (CalibrationResult) intent.getSerializableExtra(EXTRA_RESULT);
 
         initSoundPool();
@@ -551,7 +550,6 @@ public class PlayActivity extends BaseActivity {
                 ToastUtil.showShort(R.string.play_time_too_short);
             }
         });
-
     }
 
     private void initVoice() {
@@ -779,11 +777,13 @@ public class PlayActivity extends BaseActivity {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            for (int i = 0; i < timers.length; ++i) {
-                try {
-                    timers[i].cancel();
-                } catch (Exception e) {
-                    e.printStackTrace();
+            if (timers != null) {
+                for (int i = 0; i < timers.length; ++i) {
+                    try {
+                        timers[i].cancel();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         }

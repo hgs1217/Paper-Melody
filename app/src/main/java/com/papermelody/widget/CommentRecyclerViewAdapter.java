@@ -7,12 +7,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.papermelody.R;
 import com.papermelody.activity.OnlineListenActivity;
 import com.papermelody.model.Comment;
+import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -84,6 +86,7 @@ public class CommentRecyclerViewAdapter extends RecyclerView.Adapter<CommentRecy
         void OnItemClick();
     }
 
+
     class ViewHolder extends RecyclerView.ViewHolder {
         /* 持有每个item的所有界面元素 */
 
@@ -103,6 +106,10 @@ public class CommentRecyclerViewAdapter extends RecyclerView.Adapter<CommentRecy
         TextView textCommentTine2;
         @BindView(R.id.subComment)
         CardView subComment;
+        @BindView(R.id.item_user_head_icon)
+        ImageView user_icon;
+        @BindView(R.id.item_user_head_icon2)
+        ImageView user_icon2;
 
         Context contextViewH = null;
         //@BindView User ICON
@@ -142,6 +149,16 @@ public class CommentRecyclerViewAdapter extends RecyclerView.Adapter<CommentRecy
             }
             Comment res = new Comment(-1, -1, info[0], info[1], comment, ""); // FIXME: 没检查过最后一项的正确性
             return res;
+        }
+
+        private String findAvatarUrl(String username) {
+            String url = "";
+            for (int i = comments.size() - 1; i >= 0; --i) {
+                if (comments.get(i).getAuthor().equals(username))
+                    url = comments.get(i).getAuthorAvatarUrl();
+            }
+            if (url.length() > 2) return url;
+            return "";
         }
 
         private void setView(Comment comment) {
@@ -193,6 +210,10 @@ public class CommentRecyclerViewAdapter extends RecyclerView.Adapter<CommentRecy
                     textUserName2.setText(replyToThis.getAuthor());
                     date.setTime(Long.parseLong(replyToThis.getCreateTime()));
                     textCommentTine2.setText(sDateFormat.format(date));
+                    try {
+                        Picasso.with(contextViewH).load(findAvatarUrl(replyToThis.getAuthor())).into(user_icon2);
+                    } catch (Exception e) {
+                    }
                     subComment.setVisibility(View.VISIBLE);
                 } else {
                     subComment.setVisibility(View.GONE);
@@ -207,6 +228,11 @@ public class CommentRecyclerViewAdapter extends RecyclerView.Adapter<CommentRecy
             date.setTime(Long.parseLong(comment.getCreateTime()));
             textCommentTime.setText(sDateFormat.format(date));
             textUserName.setText(comment.getAuthor());
+            try {
+                Log.d("PYJ", comment.getAuthorAvatarUrl());
+                Picasso.with(contextViewH).load(comment.getAuthorAvatarUrl()).into(user_icon);
+            } catch (Exception e) {
+            }
         }
     }
 }

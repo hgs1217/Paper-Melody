@@ -487,7 +487,9 @@ public class OnlineListenActivity extends BaseActivity {
                                 this.cancel();
                             }
                         }, 800);
+
                         freshCommentFragment();
+
                         refocusPos.requestFocus();
                         Log.d("TAG-ref", "OKKKKKK");
                     }

@@ -38,6 +38,8 @@
             android:textColor="@color/black"
             android:textSize="12sp"/>
 
+
+
         <Button
             android:id="@+id/btn_mode_camera_debug"
             android:layout_width="wrap_content"

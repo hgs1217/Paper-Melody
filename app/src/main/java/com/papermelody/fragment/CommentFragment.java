@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -23,6 +24,7 @@ import com.papermelody.util.NetworkFailureHandler;
 import com.papermelody.util.RetrofitClient;
 import com.papermelody.util.SocialSystemAPI;
 import com.papermelody.widget.CommentRecyclerViewAdapter;
+import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -59,7 +61,8 @@ public class CommentFragment extends BaseFragment {
     TextView myCommentContext;
     @BindView(R.id.my_comment_time)
     TextView myCommentTime;
-
+    @BindView(R.id.my_comment_icon)
+    ImageView my_icon;
     @BindView(R.id.my_comment_overall)
     LinearLayout my_comment_overall;
     @BindView(R.id.all_comment_title)
@@ -178,7 +181,7 @@ public class CommentFragment extends BaseFragment {
         } else {
             boolean hasCommented = false;
             for (Comment singleComment : list) {
-                Log.d("TESTR", singleComment.getAuthorAvatarUrl());
+                //Log.d("TESTR", singleComment.getAuthorAvatarUrl());
                 if (singleComment.getAuthor().equals(author)) {
                     hasCommented = true;
                     my_comment_overall.setVisibility(View.VISIBLE);
@@ -187,6 +190,10 @@ public class CommentFragment extends BaseFragment {
                     myCommentTime.setText(timeLongToString(Long.parseLong(
                             singleComment.getCreateTime())));
                     myCommentName.setText(singleComment.getAuthor());
+                    try {
+                        Picasso.with(context).load(singleComment.getAuthorAvatarUrl()).into(my_icon);
+                    } catch (Exception e) {
+                    }
                     break;
                 }
             }
@@ -201,6 +208,7 @@ public class CommentFragment extends BaseFragment {
     private void initRecyclerView(List<Comment> comments) {
         adapter = new CommentRecyclerViewAdapter(context, comments);
         adapter.setOnItemClickListener(commentOnItemClickListener);
+
         commentList.setAdapter(adapter);
         commentList.setLayoutManager(new LinearLayoutManager(context));
         commentList.setItemAnimator(new DefaultItemAnimator());
@@ -210,6 +218,7 @@ public class CommentFragment extends BaseFragment {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss");
         String time = sdf.format(new Date(m));
         return time;
+
     }
 
     private void initView() {

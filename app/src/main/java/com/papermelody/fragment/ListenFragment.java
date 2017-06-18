@@ -1,5 +1,7 @@
 package com.papermelody.fragment;
 
+import android.content.Context;
+import android.media.Image;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Environment;
@@ -7,10 +9,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.SeekBar;
 
 import com.papermelody.R;
 import com.papermelody.util.ToastUtil;
+import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 import java.util.Timer;
@@ -31,20 +35,23 @@ public class ListenFragment extends BaseFragment {
      */
     @BindView(R.id.seekBar)
     SeekBar seekBar;
-//    @BindView(R.id.btn_pause)
-//    Button btnPause;
+    @BindView(R.id.img_music)
+    ImageView imgMusic;
 
-    private static final String FILEPATH = "";
+    private static final String FILEPATH = "FILEPATH";
+    private static final String IMAGEURL = "IMAGEURL";
     private static MediaPlayer mediaPlayer;
     private TimerTask timerTask;
     private Timer timer;
     private boolean playState;
     private static String filepath;
+    private static String imageUrl;
 
-    public static ListenFragment newInstance(String fn) {
+    public static ListenFragment newInstance(String fn, String imgUrl) {
         ListenFragment fragment = new ListenFragment();
         Bundle bundle = new Bundle();
         bundle.putString(FILEPATH, fn);
+        bundle.putString(IMAGEURL, imgUrl);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -54,6 +61,7 @@ public class ListenFragment extends BaseFragment {
         super.onCreate(savedInstanceState);
         mediaPlayer = new MediaPlayer();
         filepath = getArguments().getString(FILEPATH);
+        imageUrl = getArguments().getString(IMAGEURL);
         playState = false;
         try {
             mediaPlayer.setDataSource(filepath);
@@ -74,6 +82,8 @@ public class ListenFragment extends BaseFragment {
     }
 
     private void initView() {
+        if (imageUrl != null)
+            Picasso.with(getContext()).load(imageUrl).into(imgMusic);
         seekBar.setMax(100);
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override

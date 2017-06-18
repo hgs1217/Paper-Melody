@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.ContactsContract;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -22,6 +23,7 @@ import android.view.animation.AccelerateInterpolator;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -37,6 +39,7 @@ import com.papermelody.util.NetworkFailureHandler;
 import com.papermelody.util.RetrofitClient;
 import com.papermelody.util.SocialSystemAPI;
 import com.papermelody.util.ToastUtil;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -370,7 +373,10 @@ public class OnlineListenActivity extends BaseActivity {
 
     private void initListenFragment() {
         ToastUtil.showShort("下载完成");
-        fragment = ListenFragment.newInstance(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS) + "/" + fileName);
+        fragment = ListenFragment.newInstance(
+                getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS) + "/" + fileName,
+                onlineMusic.getMusicPhotoUrl()
+        );
         fragmentManager.beginTransaction().add(R.id.container_online_listen, fragment).commit();
         fab.setOnClickListener(startPlayFirst);
     }

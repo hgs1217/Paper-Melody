@@ -98,7 +98,7 @@ public class PlayListenActivity extends BaseActivity {
         });
         fragmentManager = getSupportFragmentManager();
         transaction = fragmentManager.beginTransaction();
-        fragment = ListenFragment.newInstance(getCacheDir().getAbsolutePath() + "/" + fileName);
+        fragment = ListenFragment.newInstance(getCacheDir().getAbsolutePath() + "/" + fileName, null);
         transaction.add(R.id.container_play_listen, fragment);
         transaction.commit();
         startPlay = (View v) -> {

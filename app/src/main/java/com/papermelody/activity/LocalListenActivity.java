@@ -76,7 +76,7 @@ public class LocalListenActivity extends BaseActivity {
         });
         fragmentManager = getSupportFragmentManager();
         transaction = fragmentManager.beginTransaction();
-        fragment = ListenFragment.newInstance(getExternalFilesDir(Environment.DIRECTORY_MUSIC).getAbsolutePath() + "/" + fileName);
+        fragment = ListenFragment.newInstance(getExternalFilesDir(Environment.DIRECTORY_MUSIC).getAbsolutePath() + "/" + fileName, null);
 
         transaction.add(R.id.container_local_listen, fragment);
         transaction.commit();

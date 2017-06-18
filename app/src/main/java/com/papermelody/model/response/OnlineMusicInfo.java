@@ -22,7 +22,7 @@ public class OnlineMusicInfo {
     @SerializedName("authorAvatar")
     private String authorAvatar;
     @SerializedName("date")
-    private Date date;
+    private String date;
     @SerializedName("musicName")
     private String musicName;
     @SerializedName("musicInfo")
@@ -45,7 +45,7 @@ public class OnlineMusicInfo {
         return author;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 

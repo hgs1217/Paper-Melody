@@ -77,8 +77,8 @@ public class ModeFragment extends BaseFragment {
 //            Intent intent = new Intent(getActivity(), UploadActivity.class);
 //            startActivity(intent);
         });
-        // 改为长按modefree进入debug模式
-        btnModeFree.setOnLongClickListener((View v) -> {
+        // 改为长按modeOpern进入debug模式
+        btnModeOpern.setOnLongClickListener((View v) -> {
             Intent intent = new Intent(getActivity(), CameraDebugActivity.class);
             startActivity(intent);
             return true;

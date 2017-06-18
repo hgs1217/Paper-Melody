@@ -32,7 +32,7 @@ public class OnlineMusic extends Music implements Serializable {
     private Integer musicAuthorID;
     private String musicAuthorAvatarUrl;
     private String musicInfo;
-    private Date musicCreateDate;
+    private String musicCreateDate;
 
     /**
      * musicPhotoUrl: 服务器端存放的图片URL
@@ -101,7 +101,7 @@ public class OnlineMusic extends Music implements Serializable {
         return musicInfo;
     }
 
-    public Date getMusicCreateDate() {
+    public String getMusicCreateDate() {
         return musicCreateDate;
     }
 

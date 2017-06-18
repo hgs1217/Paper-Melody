@@ -210,6 +210,7 @@ public class CalibrationActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        System.gc();
 
         super.onCreate(savedInstanceState);
 

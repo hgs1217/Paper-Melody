@@ -19,7 +19,12 @@ public class UserInfoFragment extends BaseFragment  {
      * 查看用户个人信息页面
      */
 
+    private static UserInfoFragment fragment;
+
     public static UserInfoFragment newInstance() {
+        if (fragment != null) {
+            return fragment;
+        }
         UserInfoFragment fragment = new UserInfoFragment();
         return fragment;
     }

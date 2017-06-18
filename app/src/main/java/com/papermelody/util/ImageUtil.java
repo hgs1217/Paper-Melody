@@ -59,7 +59,6 @@ public class ImageUtil {
     }
 
     public static Bitmap imageToBitmap(Mat bgr) {
-        Log.d("TESTB", bgr.rows() + " " + bgr.cols());
         Mat rgbaMat = new Mat(bgr.cols(), bgr.rows(), CvType.CV_8U, new Scalar(4));
         Imgproc.cvtColor(bgr, rgbaMat, Imgproc.COLOR_BGR2RGBA, 0);
         Bitmap bmp = Bitmap.createBitmap(rgbaMat.cols(), rgbaMat.rows(), Bitmap.Config.ARGB_8888);

@@ -72,7 +72,12 @@ public class MusicHallFragment extends BaseFragment {
                 }
             };
 
+    private static MusicHallFragment fragment;
+
     public static MusicHallFragment newInstance() {
+        if (fragment != null) {
+            return fragment;
+        }
         MusicHallFragment fragment = new MusicHallFragment();
         return fragment;
     }

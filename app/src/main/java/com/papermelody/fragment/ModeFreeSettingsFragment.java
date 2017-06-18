@@ -45,8 +45,14 @@ public class ModeFreeSettingsFragment extends BaseFragment {
     private int instrument;
     private int category;
 
+    private static ModeFreeSettingsFragment fragment;
+
     public static ModeFreeSettingsFragment newInstance() {
-        return new ModeFreeSettingsFragment();
+        if (fragment != null) {
+            return fragment;
+        }
+        ModeFreeSettingsFragment fragment = new ModeFreeSettingsFragment();
+        return fragment;
     }
 
     @Override

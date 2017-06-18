@@ -34,7 +34,12 @@ public class SettingsFragment extends BaseFragment {
     @BindView(R.id.cardView_viewTurorial)
     CardView btn_viewTutorial;
 
+    private static SettingsFragment fragment;
+
     public static SettingsFragment newInstance() {
+        if (fragment != null) {
+            return fragment;
+        }
         SettingsFragment fragment = new SettingsFragment();
         return fragment;
     }

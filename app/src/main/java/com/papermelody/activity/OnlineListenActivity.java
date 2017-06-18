@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.ContactsContract;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -23,7 +22,6 @@ import android.view.animation.AccelerateInterpolator;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -39,7 +37,6 @@ import com.papermelody.util.NetworkFailureHandler;
 import com.papermelody.util.RetrofitClient;
 import com.papermelody.util.SocialSystemAPI;
 import com.papermelody.util.ToastUtil;
-import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -110,6 +107,8 @@ public class OnlineListenActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        System.gc();
+
         super.onCreate(savedInstanceState);
 
         setSupportActionBar(toolbar);

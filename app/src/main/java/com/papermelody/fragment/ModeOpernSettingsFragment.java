@@ -50,7 +50,12 @@ public class ModeOpernSettingsFragment extends BaseFragment {
 
     private ModeSettingsAdapter adapter;
 
+    private static ModeOpernSettingsFragment fragment;
+
     public static ModeOpernSettingsFragment newInstance() {
+        if (fragment != null) {
+            return fragment;
+        }
         ModeOpernSettingsFragment fragment = new ModeOpernSettingsFragment();
         return fragment;
     }

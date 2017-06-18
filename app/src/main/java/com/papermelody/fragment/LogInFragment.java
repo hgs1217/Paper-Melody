@@ -56,7 +56,12 @@ public class LogInFragment extends BaseFragment {
 
     private Context context;
 
+    private static LogInFragment fragment;
+
     public static LogInFragment newInstance() {
+        if (fragment != null) {
+            return fragment;
+        }
         LogInFragment fragment = new LogInFragment();
         return fragment;
     }
@@ -75,12 +80,7 @@ public class LogInFragment extends BaseFragment {
 
         ButterKnife.bind(this, view);
 
-
-
-
-
-
-            context = getActivity();
+        context = getActivity();
         userTextInputLayoutUser.setCounterEnabled(true);
         //计数的最大值
         //userTextInputLayoutUser.setCounterMaxLength(20);

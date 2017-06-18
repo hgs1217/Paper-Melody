@@ -374,6 +374,8 @@ public class PlayActivity extends BaseActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        System.gc();
+
         super.onCreate(savedInstanceState);
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);

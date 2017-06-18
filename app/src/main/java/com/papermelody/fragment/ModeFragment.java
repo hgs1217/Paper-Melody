@@ -2,7 +2,6 @@ package com.papermelody.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,7 +38,12 @@ public class ModeFragment extends BaseFragment {
 //    @BindView(R.id.btn_mode_camera_debug)
 //    Button btnModeCameraDebug;
 
+    private static ModeFragment fragment;
+
     public static ModeFragment newInstance() {
+        if (fragment != null) {
+            return fragment;
+        }
         ModeFragment fragment = new ModeFragment();
         return fragment;
     }

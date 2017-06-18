@@ -71,7 +71,12 @@ public class UserFragment extends BaseFragment {
     private ArrayList<Message> messages;
     private int newsNum = 0;
 
+    private static UserFragment fragment;
+
     public static UserFragment newInstance() {
+        if (fragment != null) {
+            return fragment;
+        }
         UserFragment fragment = new UserFragment();
         return fragment;
     }

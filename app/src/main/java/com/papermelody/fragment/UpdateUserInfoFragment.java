@@ -73,7 +73,12 @@ public class UpdateUserInfoFragment extends BaseFragment {
     private BottomDialog bottomDialog;
     private EditText editText, editText2;
 
+    private static UpdateUserInfoFragment fragment;
+
     public static UpdateUserInfoFragment newInstance() {
+        if (fragment != null) {
+            return fragment;
+        }
         UpdateUserInfoFragment fragment = new UpdateUserInfoFragment();
         return fragment;
     }

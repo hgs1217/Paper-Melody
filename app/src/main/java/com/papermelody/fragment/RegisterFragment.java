@@ -47,9 +47,15 @@ public class RegisterFragment extends BaseFragment {
     Button btnLogIn;
     @BindView(R.id.main_layout)
     LinearLayout mainlayout;
+
     private Context context;
 
+    private static RegisterFragment fragment;
+
     public static RegisterFragment newInstance() {
+        if (fragment != null) {
+            return fragment;
+        }
         RegisterFragment fragment = new RegisterFragment();
         return fragment;
     }

@@ -97,7 +97,6 @@ public class MainActivity extends BaseActivity {
     }
 
     private void updateToolbar(int position) {
-        // TODO: back图标太丑，不合设计风格
         switch (position) {
             case MAIN_HOME:
                 toolbarTitle.setText(R.string.tab_mode);
@@ -144,7 +143,7 @@ public class MainActivity extends BaseActivity {
             case REGISTER:
             case MESSAGE:
             case UPDATE_USER_INFO:
-                toolbarIcon.setImageDrawable(getDrawable(R.drawable.back));
+                toolbarIcon.setImageDrawable(getDrawable(R.drawable.ic_arrow_back_white_48dp));
                 toolbarIcon.setOnClickListener((view) -> {
                     onBackPressed();
                 });

@@ -100,7 +100,7 @@ public class OnlineMusicRecyclerViewAdapter extends RecyclerView.Adapter<OnlineM
                 textTime.setText(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA)
                         .format(new Date(music.getMusicCreateDate())));
             } catch (Exception e) {
-                textTime.setText("未知时间");
+                textTime.setText("1970-01-01 00:00:00");
             }
             String url = music.getMusicPhotoUrl();
             Log.d("TESTURL", String.valueOf(url));

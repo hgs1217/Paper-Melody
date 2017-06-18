@@ -62,9 +62,7 @@ public class ModeFragment extends BaseFragment {
     public void initView() {
         btnModeFree.setOnClickListener((View v) -> {
             // TODO: 当设置完成后需修改
-            FragmentTransaction trans = getFragmentManager().beginTransaction();
-            trans.setCustomAnimations(R.anim.comment_show, R.anim.comment_gone);
-            trans.show(new ModeFreeSettingsFragment()).commit();
+
 
             MainActivity mainActivity = (MainActivity) getActivity();
 

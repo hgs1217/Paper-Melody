@@ -5,24 +5,6 @@
     android:gravity="center"
     android:orientation="vertical">
 
-    <Spinner
-        android:id="@+id/spinner_opern"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center" />
-
-    <Spinner
-        android:id="@+id/spinner_opern_instrument"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center" />
-
-    <Spinner
-        android:id="@+id/spinner_opern_category"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center" />
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -32,14 +14,37 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="55dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="35dp"
+            android:gravity="center_horizontal"
+            android:text="@string/please_choose_music"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="15sp" />
+
+        <Spinner
+            android:id="@+id/spinner_opern"
+            android:padding="4dp"
+            android:layout_width="match_parent"
+            android:layout_height="31dp"
+            android:layout_marginLeft="33dp"
+            android:layout_marginRight="33dp"
+            android:background="@color/colorPrimary"
+            android:gravity="center_horizontal"
+            android:textAlignment="center"
+            android:textColor="@color/white" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
             android:gravity="center_horizontal"
             android:text="@string/please_choose_instrument"
             android:textColor="@color/colorPrimaryDark"
             android:textSize="15sp" />
 
+
         <com.idunnololz.widgets.AnimatedExpandableListView
-            android:id="@+id/listView"
+            android:id="@+id/listView_opern"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginBottom="10dp"
@@ -58,14 +63,14 @@
 
         <Button
             android:id="@+id/btn_opern_cfm"
-            android:layout_width="200dp"
+            android:layout_width="230dp"
             android:layout_height="wrap_content"
             android:text="@string/confirm"
             android:textColor="@color/bb_inActiveBottomBarItemColor" />
 
         <View
             android:layout_width="wrap_content"
-            android:layout_height="30dp" />
+            android:layout_height="20dp" />
 
 
     </LinearLayout>

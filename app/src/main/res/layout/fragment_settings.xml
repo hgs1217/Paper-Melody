@@ -164,7 +164,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@android:id/title"
-                android:text="颜色灵敏度+运动灵敏度+弹奏动画+高性能模式+肤色标定准确度"
+                android:text=""
                 android:textColor="#AAAAAA"
                 android:textSize="14sp" />
 

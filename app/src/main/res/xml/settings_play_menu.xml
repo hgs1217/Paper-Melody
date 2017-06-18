@@ -16,6 +16,17 @@
 
     </PreferenceCategory>
 
+    <PreferenceCategory
+        android:layout="@layout/preference_category_widget"
+        android:title="@string/calibration">
+        <CheckBoxPreference
+            android:defaultValue="1"
+            android:key="key_calibration"
+            android:layout="@layout/preference_item"
+            android:summary="一边弹奏一边录制"
+            android:title="@string/key_calibration" />
+
+    </PreferenceCategory>
 
     <PreferenceCategory
         android:layout="@layout/preference_category_widget"

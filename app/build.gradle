@@ -36,6 +36,9 @@ dependencies {
     compile project(':tapdetect')
     compile project(':openCVLibrary320')
     compile project(':tapdetect')
+
+    //compile 'com.android.support.constraint:constraint-layout:1.0.2'
+
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.jakewharton:butterknife:8.5.1'
     compile 'com.android.support:appcompat-v7:25.3.0'
@@ -57,11 +60,8 @@ dependencies {
     compile 'com.bartoszlipinski:recyclerviewheader2:2.0.1'
     compile 'com.github.traex.expandablelayout:library:1.2.2'
     compile 'com.github.markushi:circlebutton:1.1'
-
-
-    //compile 'com.android.support.constraint:constraint-layout:1.0.2'
-
+    compile 'com.android.support:support-v4:25.3.0'
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
     testCompile 'junit:junit:4.12'
     apt 'com.jakewharton:butterknife-compiler:8.5.1'
-    compile 'com.android.support:support-v4:25.3.0'
 }

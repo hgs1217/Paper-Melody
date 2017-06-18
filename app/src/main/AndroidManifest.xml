@@ -58,9 +58,7 @@
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustUnspecified|stateHidden" />
-
         <activity
-
             android:name=".activity.TutorialActivity"
             android:screenOrientation="portrait" />
         <activity
@@ -75,7 +73,6 @@
         <activity
             android:name=".activity.UpProductsActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".activity.CameraDebugActivity"
             android:screenOrientation="landscape" />
@@ -98,7 +95,6 @@
             android:name=".activity.UploadActivity"
             android:label="@string/title_activity_upload"
             android:theme="@style/AppTheme" />
-
     </application>
 
 </manifest>

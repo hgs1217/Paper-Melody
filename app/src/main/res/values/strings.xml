@@ -183,7 +183,7 @@
     <string name="errorReadComment">读取评论时好像出错了: (</string>
     <string name="play_time_too_short">时间太短了，再多弹一会儿吧</string>
     <string name="no_comment_now">暂时还没人评论，赶紧抢沙发~</string>
-    <string name="sensitivity">灵敏度</string>
+    <string name="sensitivity">识别灵敏度</string>
     <string name="skin_sensi">肤色灵敏度</string>
     <string name="choose_one">请选择</string>
     <string name="motion_sensi">运动灵敏度</string>
@@ -193,6 +193,8 @@
     <string name="personal_displ">个性化显示</string>
     <string name="debug_info_disp">显示调试数据信息</string>
     <string name="performance">性能</string>
+    <string name="calibration">校准</string>
+    <string name="key_calibration">乐器位置校准设定</string>
     <string-array name="sensitivity_value">
         <item>2</item>
         <item>1</item>
@@ -204,5 +206,6 @@
         <item>中</item>
         <item>低</item>
     </string-array>
+    <string name="title_activity_position_calibration">PositionCalibrationActivity</string>
 
 </resources>

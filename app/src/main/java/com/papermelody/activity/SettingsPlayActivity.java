@@ -44,6 +44,7 @@ public class SettingsPlayActivity extends BaseActivity {
         });
     }
 
+
     @Override
     protected int getContentViewId() {
 

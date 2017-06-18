@@ -81,10 +81,10 @@ public class LogInFragment extends BaseFragment {
         ButterKnife.bind(this, view);
 
         context = getActivity();
-        userTextInputLayoutUser.setCounterEnabled(true);
+        userTextInputLayoutUser.setCounterEnabled(false);
         //计数的最大值
         //userTextInputLayoutUser.setCounterMaxLength(20);
-        pwTextInputLayoutUser.setCounterEnabled(true);
+        pwTextInputLayoutUser.setCounterEnabled(false);
 
         //计数的最大值
        // pwTextInputLayoutUser.setCounterMaxLength(20);

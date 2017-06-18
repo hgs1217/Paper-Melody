@@ -83,7 +83,7 @@ public class RegisterFragment extends BaseFragment {
 
             }
         });
-        pwTextInputLayoutUser.setCounterEnabled(true);
+        pwTextInputLayoutUser.setCounterEnabled(false);
 
         //计数的最大值
         //pwTextInputLayoutUser.setCounterMaxLength(20);

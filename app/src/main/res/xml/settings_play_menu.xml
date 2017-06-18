@@ -6,39 +6,31 @@
     android:title="设置">
     <PreferenceCategory
         android:layout="@layout/preference_category_widget"
-        android:title="@string/personal_displ">
+        android:title="@string/performance">
         <CheckBoxPreference
+            android:defaultValue="1"
             android:key=""
             android:layout="@layout/preference_item"
             android:summary="一边弹奏一边录制"
             android:title="@string/high_performance" />
 
-        <CheckBoxPreference
-            android:key=""
-            android:layout="@layout/preference_item"
-            android:summary="一边弹奏一边录制"
-            android:title="@string/play_animation" />
-
-        <CheckBoxPreference
-            android:key=""
-            android:layout="@layout/preference_item"
-            android:summary="一边弹奏一边录制"
-            android:title="@string/debug_info_disp" />
-
     </PreferenceCategory>
+
 
     <PreferenceCategory
         android:layout="@layout/preference_category_widget"
         android:title="@string/sensitivity">
+
         <ListPreference
+            android:defaultValue="1"
             android:dialogTitle="@string/choose_one"
             android:entries="@array/sensitivity_show"
             android:entryValues="@array/sensitivity_value"
             android:layout="@layout/preference_item"
             android:summary="检测系统的灵敏度"
             android:title="@string/skin_sensi" />
-
         <ListPreference
+            android:defaultValue="1"
             android:dialogTitle="@string/choose_one"
             android:entries="@array/sensitivity_show"
             android:entryValues="@array/sensitivity_value"
@@ -47,12 +39,34 @@
             android:title="@string/motion_sensi" />
 
         <ListPreference
+            android:defaultValue="1"
             android:dialogTitle="@string/choose_one"
             android:entries="@array/sensitivity_show"
             android:entryValues="@array/sensitivity_value"
             android:layout="@layout/preference_item"
             android:summary="检测系统的灵敏度"
             android:title="@string/color_sensi" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:layout="@layout/preference_category_widget"
+        android:title="@string/personal_displ">
+
+
+        <CheckBoxPreference
+            android:defaultValue="1"
+            android:key=""
+            android:layout="@layout/preference_item"
+            android:summary="一边弹奏一边录制"
+            android:title="@string/play_animation" />
+
+        <CheckBoxPreference
+            android:defaultValue="0"
+            android:key=""
+            android:layout="@layout/preference_item"
+            android:summary="一边弹奏一边录制"
+            android:title="@string/debug_info_disp" />
 
     </PreferenceCategory>
 

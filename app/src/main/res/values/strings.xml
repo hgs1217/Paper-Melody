@@ -191,6 +191,7 @@
     <string name="color_sensi">颜色灵敏度</string>
     <string name="personal_displ">个性化显示</string>
     <string name="debug_info_disp">显示调试数据信息</string>
+    <string name="performance">性能</string>
     <string-array name="sensitivity_value">
         <item>2</item>
         <item>1</item>

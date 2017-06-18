@@ -140,6 +140,10 @@ public class CalibrationActivity extends BaseActivity {
 
     private String cameraID;
     private CameraCaptureSession cameraCaptureSession;
+    /**
+     * 标定精度修改
+     */
+
 
     /**
      * imageReader：用于装载预览的图片流
@@ -171,6 +175,7 @@ public class CalibrationActivity extends BaseActivity {
     private int instrument;
     private int category;
     private int opern;
+
 
     private Bitmap bitmap;
 

@@ -48,8 +48,8 @@ public class AboutActivity extends BaseActivity {
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
         //0:low  1:middle  2:high
         pref.getString("skin_sensi", "-1");
-        pref.getString("motion_sensi", -1);
-        pref.getString("color_sensi", -1);
+        pref.getString("motion_sensi", "-1");
+        pref.getString("color_sensi", "-1");
         pref.getBoolean("high_performance", true);
         pref.getBoolean("heart_show", true);
         pref.getBoolean("debug_info", false);

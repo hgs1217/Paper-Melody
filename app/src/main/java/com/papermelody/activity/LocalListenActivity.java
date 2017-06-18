@@ -48,7 +48,7 @@ public class LocalListenActivity extends BaseActivity {
     Button btnPlayFor;
     @BindView(R.id.layout_local_listen)
     RelativeLayout layoutLocalListen;
-    @BindView(R.id.container_play_listen)
+    @BindView(R.id.container_local_listen)
     LinearLayout containerLocalListen;
 
     private FragmentManager fragmentManager;

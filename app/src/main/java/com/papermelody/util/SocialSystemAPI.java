@@ -77,7 +77,8 @@ public interface SocialSystemAPI {
                                            @Field("authorID") Integer authorID,
                                            @Field("date") Date date,
                                            @Field("musicName") String musicName,
-                                           @Field("imgName") String imgName);
+                                           @Field("imgName") String imgName,
+                                           @Field("musicInfo") String musicInfo);
 
     // 上传作品图片，上传作品前调用
     @Multipart

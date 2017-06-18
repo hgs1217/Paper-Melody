@@ -359,6 +359,7 @@ public class MainActivity extends BaseActivity {
             }
         }
     }
+
     public boolean isContainChinese(String str) {
 
 

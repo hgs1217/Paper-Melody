@@ -7,6 +7,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -126,12 +127,15 @@ public class MusicHallFragment extends BaseFragment {
     }
 
     private void initBannerView(List<OnlineMusic> musics) {
-        // TODO: 此处后期需修改为MusicBanner与某些音乐绑定数据
+
         List<MusicBanner> banners = new ArrayList<>();
-        int sz = musics.size();
-        banners.add(new MusicBanner(musics.get(sz - 1).getMusicName(), musics.get(sz - 1).getMusicPhotoUrl()));
-        banners.add(new MusicBanner(musics.get(sz - 2).getMusicName(), musics.get(sz - 2).getMusicPhotoUrl()));
-        banners.add(new MusicBanner(musics.get(sz - 3).getMusicName(), musics.get(sz - 3).getMusicPhotoUrl()));
+        try {
+            banners.add(new MusicBanner(musics.get(0).getMusicName(), musics.get(0).getMusicPhotoUrl()));
+            banners.add(new MusicBanner(musics.get(1).getMusicName(), musics.get(1).getMusicPhotoUrl()));
+            banners.add(new MusicBanner(musics.get(2).getMusicName(), musics.get(2).getMusicPhotoUrl()));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         cyclePoster.setIndicatorsSelected(R.drawable.shape_cycle_indicator_selected,
                 R.drawable.shape_cycle_indicator_unselected);
@@ -166,21 +170,5 @@ public class MusicHallFragment extends BaseFragment {
 
             }
         });
-    }
-
-    private List<OnlineMusic> testCreateMusics() {
-        ArrayList<OnlineMusic> musics = new ArrayList<>();
-        OnlineMusic testMusic1 = new OnlineMusic(), testMusic2 = new OnlineMusic(),
-                testMusic3 = new OnlineMusic();
-        testMusic1.setMusicName("国歌");
-        testMusic1.setMusicAuthor("作者：zb");
-        testMusic2.setMusicName("共青团团歌");
-        testMusic2.setMusicAuthor("作者：pyj");
-        testMusic3.setMusicName("少先队队歌");
-        testMusic3.setMusicAuthor("作者：tth");
-        musics.add(testMusic1);
-        musics.add(testMusic2);
-        musics.add(testMusic3);
-        return musics;
     }
 }

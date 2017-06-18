@@ -51,7 +51,7 @@ public class OnlineMusic extends Music implements Serializable {
          * getName 获取到的是作品名
          */
         musicName = info.getName();
-
+        musicInfo = info.getMusicInfo();
         musicAuthor = info.getAuthor();
         musicCreateDate = info.getDate();
 

@@ -26,8 +26,6 @@ import com.papermelody.util.ToastUtil;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
 
 import butterknife.BindView;
 
@@ -64,6 +62,8 @@ public class PlayListenActivity extends BaseActivity {
     @BindView(R.id.container_play_listen)
     LinearLayout containerPlayListen;
 
+    private static PlayListenActivity selfActivity;
+
     private FragmentManager fragmentManager;
     private FragmentTransaction transaction;
     private ListenFragment fragment = null;
@@ -78,6 +78,8 @@ public class PlayListenActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        selfActivity = this;
 
         Intent intent = getIntent();
         fileName = intent.getStringExtra(PlayActivity.FILENAME);
@@ -192,6 +194,15 @@ public class PlayListenActivity extends BaseActivity {
         // 再次点击退出
         Log.i("nib", "back pressed");
         confirmQuit();
+    }
+
+    public static void uploadSucess() {
+        try {
+            selfActivity.finish();
+            selfActivity = null;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

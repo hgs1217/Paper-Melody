@@ -84,7 +84,6 @@ public class LogInFragment extends BaseFragment {
         //计数的最大值
         pwTextInputLayoutUser.setCounterMaxLength(20);
 
-
         initView();
         return view;
     }
@@ -95,18 +94,13 @@ public class LogInFragment extends BaseFragment {
             String name = editUsername.getText().toString();
             userTextInputLayoutUser.setErrorEnabled(false);
             MainActivity activity = (MainActivity) getActivity();
+
             if (TextUtils.isEmpty(name)) userTextInputLayoutUser.setError("用户名不能为空");
-            if ( activity.isContainChinese(name)) {  // FIXME: 此处需和register统一
-
-
+            if ( activity.isContainChinese(name)) {
                 userTextInputLayoutUser.setError("不能包含中文");
-
             }
-
-            if (TextUtils.isEmpty(name) || name.length() < 2) {  // FIXME: 此处需和register统一
-
+            if (TextUtils.isEmpty(name) || name.length() < 2) {
                 userTextInputLayoutUser.setError("用户名过短");
-
             } else {
                 String pw = editPassword.getText().toString();
                 pwTextInputLayoutUser.setErrorEnabled(false);
@@ -129,20 +123,6 @@ public class LogInFragment extends BaseFragment {
                                     NetworkFailureHandler.loginErrorHandler
                             ));
                 }
-            /*String name = editUsername.getText().toString();
-            String pw = editPassword.getText().toString();
-            addSubscription(api.register(name, pw)
-                    .flatMap(NetworkFailureHandler.httpFailureFilter)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .map(response -> ((UserResponse) response).getResult())
-                    .subscribe(
-                            userInfo -> {
-                                ToastUtil.showShort(R.string.register_success);
-                                updateUser(userInfo);
-                            },
-                            NetworkFailureHandler.loginErrorHandler
-                    ));*/
             }
         });
         btnRegister.setOnClickListener((View v) -> {

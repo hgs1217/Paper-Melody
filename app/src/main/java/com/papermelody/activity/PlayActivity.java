@@ -194,7 +194,7 @@ public class PlayActivity extends BaseActivity {
     private boolean start_flag = false;
     private int number_count = 0;
     Timer pause_timer = new Timer();
-    private  int pro;
+    private int pro;
 
     /**
      * Activity主线程
@@ -266,9 +266,9 @@ public class PlayActivity extends BaseActivity {
         }
     };
 
-    private boolean barfirst=false;
-    private double step=0;
-    Handler barhandle = new Handler(){
+    private boolean barfirst = false;
+    private double step = 0;
+    Handler barhandle = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
@@ -276,13 +276,10 @@ public class PlayActivity extends BaseActivity {
 
             //设置滚动条和text的值
             noticebar.setProgress(pro);
-
-
-
         }
     };
-    private void start()
-    {
+
+    private void start() {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -290,7 +287,7 @@ public class PlayActivity extends BaseActivity {
                 try {
                     //子线程循环间隔消息
                     while (pro < max) {
-                        pro = (int)(step+pro);
+                        pro = (int) (step + pro);
                         Message msg = new Message();
 
                         barhandle.sendMessage(msg);
@@ -308,38 +305,35 @@ public class PlayActivity extends BaseActivity {
         public void run() {
             runOnUiThread(new Runnable() {
                 // UI thread
-
-                int barmax = noticebar.getMax();
-
-
                 @Override
                 public void run() {
-
-
-                    int remainTime = listTime.get(currentLine) + OPERN_SECOND_DELAYED - currentSecond;
-                    if (!barfirst){barfirst=true;pro=0;step=(900.0/remainTime)/9;}
-                    if (remainTime == 0) {
-                        currentLine++;
-
-                        if (currentLine >= listTime.size()) {
-                            Log.d("TESTT", "finish");
-                            playOver();
-                        } else {
-                            remainTime = listTime.get(currentLine) + OPERN_SECOND_DELAYED - currentSecond;
-                            pro=0;
-                            step=(900.0/(remainTime)/9);
+                    if (mode == MODE_OPERN) {
+                        int remainTime = listTime.get(currentLine) + OPERN_SECOND_DELAYED - currentSecond;
+                        if (!barfirst) {
+                            barfirst = true;
+                            pro = 0;
+                            step = (900.0 / remainTime) / 9;
                         }
+                        if (remainTime == 0) {
+                            currentLine++;
+
+                            if (currentLine >= listTime.size()) {
+                                Log.d("TESTT", "finish");
+                                playOver();
+                            } else {
+                                remainTime = listTime.get(currentLine) + OPERN_SECOND_DELAYED - currentSecond;
+                                pro = 0;
+                                step = (900.0 / (remainTime) / 9);
+                            }
+                        }
+                        Log.d("TESTTttt", remainTime + "");
+                        Log.d("TESTTeee", noticebar.getProgress() + "");
+                        Log.d("TESTTttt", step + "");
                     }
-                    Log.d("TESTTttt", remainTime+"");
-                    Log.d("TESTTeee", noticebar.getProgress()+"");
-                    Log.d("TESTTttt", step+"");
 
                     //textTime.setText(String.valueOf(remainTime));
                     currentSecond++;
-
-
                 }
-
             });
         }
     };
@@ -477,23 +471,17 @@ public class PlayActivity extends BaseActivity {
         CanvasUtil.setScreenHeight(ViewUtil.getScreenHeight(this));
         canvasPlay.updateInfo(t2 - t1, 0, Tap.getProcessInterval());
 
-
-
-
-
         boolean[] judge_in_area = new boolean[tapping.size()];
-        for (int i=0;i<tapping.size();i++){judge_in_area[i]=false;}
+        for (int i = 0; i < tapping.size(); i++) {
+            judge_in_area[i] = false;
+        }
         List<Integer> keys;
         switch (instrument) {
             case Instrument.INSTRUMENT_PIANO: {
                 keys = ImageProcessor.getPlaySoundKey(mat.clone(), transformResult, tapping, judge_in_area);
                 for (int i = 0; i < keys.size(); i++) {
-                    //if (!lastKeys.contains(keys.get(i))) {
-
-                        playSound(keys.get(i));
-                        Log.d("TESTKEY", keys.get(i)+"");
-                    //}
-
+                    playSound(keys.get(i));
+                    Log.d("TESTKEY", keys.get(i) + "");
                 }
                 break;
             }
@@ -503,15 +491,11 @@ public class PlayActivity extends BaseActivity {
                 for (int i = 0; i < 7; i++) temp[i] = true;
                 for (int i = 0; i < flute.size(); i++) {
                     if (flute.get(i) < 7) temp[flute.get(i)] = false;
-
-
                 }
                 keys = new ArrayList<>();
                 keys.add(0, FluteWith7Holes.holesToVoice(temp));
                 for (int i = 0; i < keys.size(); i++) {
-                    // if (!lastKeys.contains(keys.get(i))) {
                     playSound(keys.get(i));
-                    // }
                 }
                 break;
             }
@@ -522,7 +506,6 @@ public class PlayActivity extends BaseActivity {
 
         playView.addBean(tapping, judge_in_area);
         // lastKeys = new ArrayList<>(keys);
-
     }
 
     private void initView() {
@@ -534,9 +517,9 @@ public class PlayActivity extends BaseActivity {
             case MODE_FREE:
                 textViewModeName.setText(R.string.mode_free);
                 btnPlayOver.setVisibility(View.VISIBLE);
-
                 // calibrationtext.setVisibility(View.VISIBLE);
                 //textViewOpern.setText("");
+                initSecondTimer();
                 break;
             case MODE_OPERN:
                 textViewModeName.setText(R.string.mode_opern);
@@ -548,21 +531,22 @@ public class PlayActivity extends BaseActivity {
                 //calibrationtext.setText(String.valueOf("dfdfdfd"));
                 //textTime.setVisibility(View.VISIBLE);
                 noticebar.setVisibility(View.VISIBLE);
-
-
-
-        initOpernTimer();
+                initSecondTimer();
+                initOpernTimer();
                 break;
         }
 
-
         btnPlayOver.setOnClickListener((View v) -> {
-            playOver();
+            if (currentSecond >= 3) {
+                playOver();
+            } else {
+                ToastUtil.showShort(R.string.play_time_too_short);
+            }
         });
 
-
     }
-    private void initVoice(){
+
+    private void initVoice() {
         switch (category) {
             case Instrument.INSTRUMENT_PIANO21C3TOB5:
                 textViewInstrumentName.setText(R.string.piano_with_21_keys_c3_to_b5);
@@ -600,7 +584,6 @@ public class PlayActivity extends BaseActivity {
                 }
                 break;
         }
-
     }
 
     private void initSoundPool() {
@@ -612,14 +595,17 @@ public class PlayActivity extends BaseActivity {
         soundPool = spb.build();
     }
 
+    private void initSecondTimer() {
+        secondTimer = new Timer();
+        secondTimer.schedule(secondTask, 0, 1000);
+    }
+
     /**
      * 在跟谱模式中，需要从原始txt格式谱子中设置所有行谱子的截取坐标与跳转时间，因此每行都需要一个计时器来跳转，
      * 同时还需要设置一个全局的秒钟计时器，来统计下一次跳转的剩余时间
      */
     private void initOpernTimer() {
 
-        secondTimer = new Timer();
-        secondTimer.schedule(secondTask, 0, 1000);
         start();
 
         Opern opern = new Opern(this, Opern.getOpernRaw(opernNum)); // FIXME: 暂时只有一首谱子
@@ -783,7 +769,7 @@ public class PlayActivity extends BaseActivity {
         if (mode == MODE_OPERN) {
             try {
                 secondTimer.cancel();
-            }  catch (Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
             for (int i = 0; i < timers.length; ++i) {
@@ -1052,7 +1038,7 @@ public class PlayActivity extends BaseActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        
+
         finish();
     }
 

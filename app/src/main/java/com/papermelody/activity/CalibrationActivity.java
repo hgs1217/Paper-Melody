@@ -172,6 +172,8 @@ public class CalibrationActivity extends BaseActivity {
     private int category;
     private int opern;
 
+    private Bitmap bitmap;
+
     /**
      * previewSize: 预览区域的尺寸
      */
@@ -295,7 +297,7 @@ public class CalibrationActivity extends BaseActivity {
             Log.d("TESThistres",calibrationResult.isFlag()+"");*/
             canvasCalibration.updateCalibrationCoordinates(calibrationResult, CalibrationActivity.this, true);
 
-            Bitmap bitmap = ImageUtil.imageToBitmap(mat);
+            bitmap = ImageUtil.imageToBitmap(mat);
 
             viewCalibration.setVisibility(View.GONE);
             layoutContainer.setVisibility(View.GONE);

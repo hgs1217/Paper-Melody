@@ -240,6 +240,9 @@ public class PlayActivity extends BaseActivity {
      */
     private Bitmap sourceBitmap;
 
+    private Bitmap osmallBitmap;
+    private Bitmap smallBitmap;
+
     /**
      * drawable读入之后与原来的像素情况会有一定程度的放大，用长宽两个scalar记录放大比例
      */
@@ -657,11 +660,11 @@ public class PlayActivity extends BaseActivity {
                                 int oy = (int) (listY.get(ofi) * heightScalar);
                                 int owidth = (int) (listWidth.get(ofi) * widthScalar);
                                 int oheight = (int) (listHeight.get(ofi) * heightScalar);
-                                Bitmap osmallBitmap = Bitmap.createBitmap(sourceBitmap, ox, oy, owidth, oheight);
+                                osmallBitmap = Bitmap.createBitmap(sourceBitmap, ox, oy, owidth, oheight);
                                 oldImgOpern.setImageBitmap(osmallBitmap);
                                 oldImgOpern.setImageAlpha(image_alpha);
                             }
-                            Bitmap smallBitmap = Bitmap.createBitmap(sourceBitmap, x, y, width, height);
+                            smallBitmap = Bitmap.createBitmap(sourceBitmap, x, y, width, height);
 
                             newImgOpern.setImageBitmap(smallBitmap);
                             newImgOpern.setImageAlpha(0);
@@ -716,7 +719,6 @@ public class PlayActivity extends BaseActivity {
 
         Drawable drawable = getDrawable(Opern.getOpernDrawable(opernNum));
         sourceBitmap = ImageUtil.drawableToBitmap(drawable);
-//        sourceBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.opern_pugongyingdeyueding);
         widthScalar = (double) drawable.getIntrinsicWidth() / opern.getWidth();
         heightScalar = (double) drawable.getIntrinsicHeight() / opern.getHeight();
     }

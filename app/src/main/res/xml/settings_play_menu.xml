@@ -4,32 +4,57 @@
     android:layout_height="match_parent"
     android:layout="@layout/preference_item"
     android:title="设置">
-
     <PreferenceCategory
         android:layout="@layout/preference_category_widget"
-        android:title="演奏模式">
+        android:title="@string/personal_displ">
         <CheckBoxPreference
+            android:key=""
             android:layout="@layout/preference_item"
             android:summary="一边弹奏一边录制"
-            android:title="边弹边录" />
-        <Preference
+            android:title="@string/high_performance" />
+
+        <CheckBoxPreference
+            android:key=""
             android:layout="@layout/preference_item"
-            android:summary="默认的演奏模式"
-            android:title="默认模式" />
+            android:summary="一边弹奏一边录制"
+            android:title="@string/play_animation" />
+
+        <CheckBoxPreference
+            android:key=""
+            android:layout="@layout/preference_item"
+            android:summary="一边弹奏一边录制"
+            android:title="@string/debug_info_disp" />
+
     </PreferenceCategory>
 
     <PreferenceCategory
         android:layout="@layout/preference_category_widget"
-        android:title="技术设置">
-        <Preference
+        android:title="@string/sensitivity">
+        <ListPreference
+            android:dialogTitle="@string/choose_one"
+            android:entries="@array/sensitivity_show"
+            android:entryValues="@array/sensitivity_value"
             android:layout="@layout/preference_item"
             android:summary="检测系统的灵敏度"
-            android:title="灵敏度" />
-        <Preference
-            android:key="test_pref"
+            android:title="@string/skin_sensi" />
+
+        <ListPreference
+            android:dialogTitle="@string/choose_one"
+            android:entries="@array/sensitivity_show"
+            android:entryValues="@array/sensitivity_value"
             android:layout="@layout/preference_item"
-            android:summary="支持最大到10个手指哦"
-            android:title="最多的手指识别数量" />
+            android:summary="检测系统的灵敏度"
+            android:title="@string/motion_sensi" />
+
+        <ListPreference
+            android:dialogTitle="@string/choose_one"
+            android:entries="@array/sensitivity_show"
+            android:entryValues="@array/sensitivity_value"
+            android:layout="@layout/preference_item"
+            android:summary="检测系统的灵敏度"
+            android:title="@string/color_sensi" />
+
     </PreferenceCategory>
+
 
 </PreferenceScreen>

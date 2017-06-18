@@ -3,17 +3,19 @@
     <PreferenceCategory
         android:layout="@layout/preference_category_widget"
         android:title="@string/setting_title_all">
-        <Preference
-            android:key="btn_developer"
-            android:layout="@layout/preference_item"
-            android:summary=""
-            android:title="@string/developer" />
 
         <Preference
             android:key="btn_play_setting"
             android:layout="@layout/preference_item"
             android:summary=""
             android:title="@string/settings_play" />
+
+        <Preference
+            android:key="btn_developer"
+            android:layout="@layout/preference_item"
+            android:summary=""
+            android:title="@string/developer" />
+
 
     </PreferenceCategory>
 

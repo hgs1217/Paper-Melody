@@ -16,7 +16,7 @@ public class SettingsPlayPreferenceFragment extends PreferenceFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.settings_play_menu);
-        initPreference();
+       // initPreference();
     }
 
     public void initPreference() {

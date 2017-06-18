@@ -83,7 +83,6 @@
                 android:contentDescription="@string/picture"
                 android:maxHeight="150dp"
                 android:maxWidth="200dp"
-                android:minHeight="80dp"
                 android:scaleType="centerCrop"
                 android:src="@drawable/ic_panorama_black_48dp" />
 

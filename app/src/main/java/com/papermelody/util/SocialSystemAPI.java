@@ -10,8 +10,6 @@ import com.papermelody.model.response.UploadResponse;
 import com.papermelody.model.response.UpvoteResponse;
 import com.papermelody.model.response.UserResponse;
 
-import java.util.Date;
-
 import okhttp3.MultipartBody;
 import okhttp3.ResponseBody;
 import retrofit2.http.Field;
@@ -76,7 +74,7 @@ public interface SocialSystemAPI {
                                            @Field("author") String author,
                                            @Field("authorID") Integer authorID,
                                            @Field("authorAvatarName") String authorAvatarName,
-                                           @Field("date") Date date,
+                                           @Field("date") String date,
                                            @Field("musicName") String musicName,
                                            @Field("imgName") String imgName,
                                            @Field("musicInfo") String musicInfo);

@@ -2,8 +2,6 @@ package com.papermelody.model.response;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.Date;
-
 /**
  * Created by HgS_1217_ on 2017/5/4.
  */

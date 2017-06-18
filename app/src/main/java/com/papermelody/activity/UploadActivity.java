@@ -21,13 +21,8 @@ import com.papermelody.util.StorageUtil;
 import com.papermelody.util.ToastUtil;
 import com.squareup.picasso.Picasso;
 
-import java.io.DataOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import butterknife.BindView;
@@ -187,8 +182,10 @@ public class UploadActivity extends BaseActivity {
     }
 
     private void uploadMusicInfo(String imgName, String musicName) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss");
+        String date = sdf.format(new Date());
         addSubscription(api.uploadMusic(editMusicTitle.getText().toString(), author,
-                authorId, authorAvatarName, new Date(), musicName, imgName, editMusicDes.getText().toString())
+                authorId, authorAvatarName, date, musicName, imgName, editMusicDes.getText().toString())
                 .flatMap(NetworkFailureHandler.httpFailureFilter)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

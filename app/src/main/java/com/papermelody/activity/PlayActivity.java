@@ -292,11 +292,16 @@ public class PlayActivity extends BaseActivity {
                 try {
                     //子线程循环间隔消息
                     while (pro < max) {
+
                         pro = (int) (step + pro);
+                        if (pro>=900){pro=0; Thread.sleep(100);continue;}
                         Message msg = new Message();
 
                         barhandle.sendMessage(msg);
                         Thread.sleep(100);
+                        Log.d("TESTTttt",   "pro" +pro);
+
+
                     }
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -326,6 +331,7 @@ public class PlayActivity extends BaseActivity {
                                 Log.d("TESTT", "finish");
                                 playOver();
                             } else {
+                                Log.d("TESTT", "newcircle");
                                 remainTime = listTime.get(currentLine) + OPERN_SECOND_DELAYED - currentSecond;
                                 pro = 0;
                                 step = (900.0 / (remainTime) / 9);

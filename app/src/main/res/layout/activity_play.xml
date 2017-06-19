@@ -152,7 +152,7 @@
             android:id="@+id/text_mode_name"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-
+            android:visibility="gone"
             android:layout_marginLeft="20dp"
             android:gravity="center"
             android:textColor="#ffffff"
@@ -173,6 +173,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginLeft="20dp"
+            android:visibility="gone"
 
             android:gravity="center"
             android:layout_gravity="center"

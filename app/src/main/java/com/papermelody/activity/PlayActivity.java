@@ -444,6 +444,7 @@ public class PlayActivity extends BaseActivity {
                     initMediaRecorder();
 
                     initView();
+                    initCategory();
                     start_flag = true;
                     break;
                 }
@@ -514,12 +515,30 @@ public class PlayActivity extends BaseActivity {
         playView.addBean(tapping, judge_in_area);
         // lastKeys = new ArrayList<>(keys);
     }
+    private void initCategory(){
+        textViewInstrumentName.setVisibility(View.VISIBLE);
+        switch (category) {case Instrument.INSTRUMENT_PIANO21C3TOB5:
+            textViewInstrumentName.setText(R.string.piano_with_21_keys_c3_to_b5);break;
+            case Instrument.INSTRUMENT_PIANO21C4TOB6:
+                textViewInstrumentName.setText(R.string.piano_with_21_keys_c4_to_b6);break;
+            case Instrument.INSTRUMENT_PIANO14C3TOB4:
+                textViewInstrumentName.setText(R.string.piano_with_14_keys_c3_to_b4);break;
+            case Instrument.INSTRUMENT_PIANO14C4TOB5:
+                textViewInstrumentName.setText(R.string.piano_with_14_keys_c4_to_b5);break;
+            case Instrument.INSTRUMENT_FLUTE7:
+                textViewInstrumentName.setText(R.string.flute_with_7_holes);break;
+
+
+    }
+
+
+    }
 
     private void initView() {
         /**
          * 初始化界面上的文字标签、按键响应等等
          */
-
+        textViewModeName.setVisibility(View.VISIBLE);
         switch (mode) {
             case MODE_FREE:
                 textViewModeName.setText(R.string.mode_free);
@@ -557,28 +576,28 @@ public class PlayActivity extends BaseActivity {
     private void initVoice() {
         switch (category) {
             case Instrument.INSTRUMENT_PIANO21C3TOB5:
-                textViewInstrumentName.setText(R.string.piano_with_21_keys_c3_to_b5);
+               // textViewInstrumentName.setText(R.string.piano_with_21_keys_c3_to_b5);
                 voiceId = new int[PianoWith21KeysC3ToB5.KEY_NUM];
                 for (int i = 0; i < voiceId.length; ++i) {
                     voiceId[i] = soundPool.load(this, PianoWith21KeysC3ToB5.getVoiceResId(i), 1);
                 }
                 break;
             case Instrument.INSTRUMENT_PIANO21C4TOB6:
-                textViewInstrumentName.setText(R.string.piano_with_21_keys_c4_to_b6);
+               // textViewInstrumentName.setText(R.string.piano_with_21_keys_c4_to_b6);
                 voiceId = new int[PianoWith21KeysC4ToB6.KEY_NUM];
                 for (int i = 0; i < voiceId.length; ++i) {
                     voiceId[i] = soundPool.load(this, PianoWith21KeysC4ToB6.getVoiceResId(i), 1);
                 }
                 break;
             case Instrument.INSTRUMENT_PIANO14C3TOB4:
-                textViewInstrumentName.setText(R.string.piano_with_14_keys_c3_to_b4);
+                //textViewInstrumentName.setText(R.string.piano_with_14_keys_c3_to_b4);
                 voiceId = new int[PianoWith14KeysC3ToB4.KEY_NUM];
                 for (int i = 0; i < voiceId.length; ++i) {
                     voiceId[i] = soundPool.load(this, PianoWith14KeysC3ToB4.getVoiceResId(i), 1);
                 }
                 break;
             case Instrument.INSTRUMENT_PIANO14C4TOB5:
-                textViewInstrumentName.setText(R.string.piano_with_14_keys_c4_to_b5);
+               // textViewInstrumentName.setText(R.string.piano_with_14_keys_c4_to_b5);
                 voiceId = new int[PianoWith14KeysC4ToB5.KEY_NUM];
                 for (int i = 0; i < voiceId.length; ++i) {
                     voiceId[i] = soundPool.load(this, PianoWith14KeysC4ToB5.getVoiceResId(i), 1);

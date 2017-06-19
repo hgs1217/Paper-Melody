@@ -10,6 +10,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.papermelody.model.instrument.Instrument;
+import com.papermelody.model.instrument.PianoWith14KeysCToB;
 import com.papermelody.model.instrument.PianoWith21KeysCToB;
 
 import org.opencv.core.Core;
@@ -723,59 +724,59 @@ public class Calibration {
             {
                 double whiteWidth=(500 - 13 * blackWidth) / 12;
                 if (y >= 100 && y <= 185) {
-                    if (x < blackWidth / 2 && x >= -whiteWidth) return PianoWith21KeysCToB.WHITE_B2;
+                    if (x < blackWidth / 2 && x >= -whiteWidth) return PianoWith14KeysCToB.WHITE_B2;
                     if (x >= blackWidth * 0.5 && x < whiteWidth + blackWidth * 1.5)
-                        return PianoWith21KeysCToB.WHITE_A2;
+                        return PianoWith14KeysCToB.WHITE_A2;
                     if (x >= whiteWidth + blackWidth * 1.5 && x < whiteWidth * 2 + blackWidth * 2.5)
-                        return PianoWith21KeysCToB.WHITE_G2;
+                        return PianoWith14KeysCToB.WHITE_G2;
                     if (x >= whiteWidth * 2 + blackWidth * 2.5 && x < whiteWidth * 3 + blackWidth * 3.5)
-                        return PianoWith21KeysCToB.WHITE_F2;
+                        return PianoWith14KeysCToB.WHITE_F2;
                     if (x >= whiteWidth * 3 + blackWidth * 3.5 && x < whiteWidth * 4 + blackWidth * 4.5)
-                        return PianoWith21KeysCToB.WHITE_E2;
+                        return PianoWith14KeysCToB.WHITE_E2;
                     if (x >= whiteWidth * 4 + blackWidth * 4.5 && x < whiteWidth * 5 + blackWidth * 5.5)
-                        return PianoWith21KeysCToB.WHITE_D2;
+                        return PianoWith14KeysCToB.WHITE_D2;
                     if (x >= whiteWidth * 5 + blackWidth * 5.5 && x < whiteWidth * 6 + blackWidth * 6.5)
-                        return PianoWith21KeysCToB.WHITE_C2;
+                        return PianoWith14KeysCToB.WHITE_C2;
                     if (x >= whiteWidth * 6 + blackWidth * 6.5 && x < whiteWidth * 7 + blackWidth * 7.5)
-                        return PianoWith21KeysCToB.WHITE_B1;
+                        return PianoWith14KeysCToB.WHITE_B1;
                     if (x >= whiteWidth * 7 + blackWidth * 7.5 && x < whiteWidth * 8 + blackWidth * 8.5)
-                        return PianoWith21KeysCToB.WHITE_A1;
+                        return PianoWith14KeysCToB.WHITE_A1;
                     if (x >= whiteWidth * 8 + blackWidth * 8.5 && x < whiteWidth * 9 + blackWidth * 9.5)
-                        return PianoWith21KeysCToB.WHITE_G1;
+                        return PianoWith14KeysCToB.WHITE_G1;
                     if (x >= whiteWidth * 9 + blackWidth * 9.5 && x < whiteWidth * 10 + blackWidth * 10.5)
-                        return PianoWith21KeysCToB.WHITE_F1;
+                        return PianoWith14KeysCToB.WHITE_F1;
                     if (x >= whiteWidth * 10 + blackWidth * 10.5 && x < whiteWidth * 11 + blackWidth * 11.5)
-                        return PianoWith21KeysCToB.WHITE_E1;
+                        return PianoWith14KeysCToB.WHITE_E1;
                     if (x >= whiteWidth * 11 + blackWidth * 11.5 && x < whiteWidth * 12 + blackWidth * 12.5)
-                        return PianoWith21KeysCToB.WHITE_D1;
+                        return PianoWith14KeysCToB.WHITE_D1;
                     if (x >= whiteWidth * 12 + blackWidth * 12.5 && x < whiteWidth * 13 + blackWidth * 13.5)
-                        return PianoWith21KeysCToB.WHITE_C1;
+                        return PianoWith14KeysCToB.WHITE_C1;
 
                     else return 36;
                 } else {
                     if (y >= 0 && y < 100) {
                         if (x < 0 && x >= -0.5 * blackWidth + whiteWidth)
-                            return PianoWith21KeysCToB.BLACK_A2M;
+                            return PianoWith14KeysCToB.BLACK_A2M;
                         if (x < blackWidth + 0.5 * whiteWidth && x >= 0)
-                            return PianoWith21KeysCToB.BLACK_A2M;
+                            return PianoWith14KeysCToB.BLACK_A2M;
                         if (x < 2 * blackWidth + 1.5 * whiteWidth && x >= blackWidth + 0.5 * whiteWidth)
-                            return PianoWith21KeysCToB.BLACK_G2M;
+                            return PianoWith14KeysCToB.BLACK_G2M;
                         if (x < 3.5 * blackWidth + 3 * whiteWidth && x >= 2 * blackWidth + 1.5 * whiteWidth)
-                            return PianoWith21KeysCToB.BLACK_F2M;
+                            return PianoWith14KeysCToB.BLACK_F2M;
                         if (x < 5 * blackWidth + 4.5 * whiteWidth && x >= 3.5 * blackWidth + 3 * whiteWidth)
-                            return PianoWith21KeysCToB.BLACK_D2M;
+                            return PianoWith14KeysCToB.BLACK_D2M;
                         if (x < 6.5 * blackWidth + 6 * whiteWidth && x >= 5 * blackWidth + 4.5 * whiteWidth)
-                            return PianoWith21KeysCToB.BLACK_C2M;
+                            return PianoWith14KeysCToB.BLACK_C2M;
                         if (x < 8 * blackWidth + 7.5 * whiteWidth && x >= 6.5 * blackWidth + 6 * whiteWidth)
-                            return PianoWith21KeysCToB.BLACK_A1M;
+                            return PianoWith14KeysCToB.BLACK_A1M;
                         if (x < 9 * blackWidth + 8.5 * whiteWidth && x >= 8 * blackWidth + 7.5 * whiteWidth)
-                            return PianoWith21KeysCToB.BLACK_G1M;
+                            return PianoWith14KeysCToB.BLACK_G1M;
                         if (x < 10.5 * blackWidth + 10 * whiteWidth && x >= 9 * blackWidth + 8.5 * whiteWidth)
-                            return PianoWith21KeysCToB.BLACK_F1M;
+                            return PianoWith14KeysCToB.BLACK_F1M;
                         if (x < 12 * blackWidth + 11.5 * whiteWidth && x >= 10.5 * blackWidth + 10 * whiteWidth)
-                            return PianoWith21KeysCToB.BLACK_D1M;
+                            return PianoWith14KeysCToB.BLACK_D1M;
                         if (x < 13.5 * blackWidth + 13 * whiteWidth && x >= 12 * blackWidth + 11.5 * whiteWidth)
-                            return PianoWith21KeysCToB.BLACK_C1M;
+                            return PianoWith14KeysCToB.BLACK_C1M;
 
 
                         else return 36;

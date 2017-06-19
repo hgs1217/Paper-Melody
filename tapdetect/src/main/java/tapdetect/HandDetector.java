@@ -49,8 +49,8 @@ public class HandDetector {
 
         // 2. Ignore face
         // Ignore first 1/3 in height to ignore face
-        // We assume fingers only appear at between 1/3 and bottom
-        mask.submat(new Range(0, (int) mask.size().height / 3), new Range(0, (int) mask.size().width)).setTo(Util.SCALAR_BLACK);
+        // We assume fingers only appear at between 1/4 and bottom
+        mask.submat(new Range(0, (int) mask.size().height / 4), new Range(0, (int) mask.size().width)).setTo(Util.SCALAR_BLACK);
 
         // 3. remove noise
         // Morphology Open

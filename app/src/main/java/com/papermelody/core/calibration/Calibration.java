@@ -620,7 +620,7 @@ public class Calibration {
             case Instrument.INSTRUMENT_PIANO21C3TOB5:
             case Instrument.INSTRUMENT_PIANO21C4TOB6: {
                 double whiteWidth = (500 - 20 * blackWidth) / 19;
-                if (y >= 100 && y <= 185) {
+                if (y >= 100 && y <= 220) {
                     if (x < blackWidth / 2 && x >= -whiteWidth) return PianoWith21KeysCToB.WHITE_B3;
                     if (x >= blackWidth * 0.5 && x < whiteWidth + blackWidth * 1.5)
                         return PianoWith21KeysCToB.WHITE_A3;

@@ -109,8 +109,7 @@ public class CanvasUtil {
         return (float) (y * getHeightScalar() - getHeightOffset());
     }
 
-    public static void writeText(Canvas canvas, String[] text) {
-        int top = 50;
+    public static void writeText(Canvas canvas, String[] text, int top) {
         for (String t : text) {
             canvas.drawText(t, 50, top, textPaint);
             top += 50;

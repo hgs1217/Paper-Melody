@@ -129,8 +129,11 @@ public class CameraDebugView extends View {
                     "Aver: " + Arrays.toString(Sampler.aver),
                     "ratio: " + Sampler.ratio
             };
-
-            CanvasUtil.writeText(canvas, to_be_write);
+            if (!Tap.sampleCompleted()) {
+                CanvasUtil.writeText(canvas, to_be_write, 50);
+            } else {
+                CanvasUtil.writeText(canvas, to_be_write, 200);
+            }
         }
     }
 

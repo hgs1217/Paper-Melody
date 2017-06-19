@@ -89,6 +89,22 @@
 
     </RelativeLayout>
 
+    <LinearLayout
+        android:id="@+id/tip_listen_first"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|top"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="@string/listen_first"
+            android:textAlignment="center"
+            android:textSize="15sp" />
+    </LinearLayout>
+
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_local_listen"
         android:layout_width="wrap_content"

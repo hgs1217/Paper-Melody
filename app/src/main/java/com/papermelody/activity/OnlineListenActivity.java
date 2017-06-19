@@ -363,6 +363,7 @@ public class OnlineListenActivity extends BaseActivity {
                 if (outputStream != null) {
                     outputStream.close();
                 }
+                ToastUtil.showShort("下载完成");
             }
         } catch (IOException e) {
             Log.d("DownloadOnlineListen", "Error2");
@@ -371,7 +372,6 @@ public class OnlineListenActivity extends BaseActivity {
     }
 
     private void initListenFragment() {
-        ToastUtil.showShort("下载完成");
         fragment = ListenFragment.newInstance(
                 getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS) + "/" + fileName,
                 onlineMusic.getMusicPhotoUrl()

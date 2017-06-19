@@ -50,6 +50,8 @@ public class LocalListenActivity extends BaseActivity {
     RelativeLayout layoutLocalListen;
     @BindView(R.id.container_local_listen)
     LinearLayout containerLocalListen;
+    @BindView(R.id.tip_listen_first)
+    LinearLayout tipListenFirst;
 
     private FragmentManager fragmentManager;
     private FragmentTransaction transaction;
@@ -98,6 +100,7 @@ public class LocalListenActivity extends BaseActivity {
             fragment.forwardPlay();
         });
         fab.setOnClickListener((View v) -> {
+            tipListenFirst.setVisibility(View.INVISIBLE);
             fragment.starPlay();
             int cx = (fab.getLeft() + fab.getRight()) / 2;
             int cy = (fab.getTop() + fab.getBottom()) / 2;

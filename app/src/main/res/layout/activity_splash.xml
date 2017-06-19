@@ -13,8 +13,8 @@
         android:layout_height="0dp"
         android:layout_weight="20"
         android:adjustViewBounds="true"
-        android:scaleType="fitXY"
-        android:src="@drawable/testimg1" />
+        android:scaleType="centerCrop"
+        android:src="@drawable/feng_mian_2" />
 
     <RelativeLayout
         android:layout_width="match_parent"

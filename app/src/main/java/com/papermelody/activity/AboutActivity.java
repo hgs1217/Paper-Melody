@@ -52,7 +52,10 @@ public class AboutActivity extends BaseActivity {
             finish();
         });
         egg.setOnClickListener((View v) -> {
-                    webView.setVisibility(View.VISIBLE);
+                    if (webView.getVisibility() == View.GONE)
+                        webView.setVisibility(View.VISIBLE);
+                    else
+                        webView.setVisibility(View.GONE);
                 }
         );
     }

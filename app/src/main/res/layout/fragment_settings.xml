@@ -32,6 +32,7 @@
         app:contentPaddingTop="-20dp">
 
         <LinearLayout
+            android:id="@+id/dev_menu_insider"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"

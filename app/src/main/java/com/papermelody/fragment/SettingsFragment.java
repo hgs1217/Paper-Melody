@@ -1,11 +1,15 @@
 package com.papermelody.fragment;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 
 import com.papermelody.R;
 import com.papermelody.activity.AboutActivity;
@@ -13,6 +17,7 @@ import com.papermelody.activity.SettingsDevActivity;
 import com.papermelody.activity.SettingsPlayActivity;
 import com.papermelody.activity.SettingsPrivacyActivity;
 import com.papermelody.activity.TutorialActivity;
+import com.papermelody.util.ToastUtil;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -33,6 +38,8 @@ public class SettingsFragment extends BaseFragment {
     CardView btn_privacy;
     @BindView(R.id.cardView_viewTurorial)
     CardView btn_viewTutorial;
+    @BindView(R.id.dev_menu_insider)
+    LinearLayout dev_menu;
 
     private static SettingsFragment fragment;
 
@@ -67,8 +74,25 @@ public class SettingsFragment extends BaseFragment {
 
 
         btn_developer.setOnClickListener((View v) -> {
-            Intent intent = new Intent(getActivity(), SettingsDevActivity.class);
-            startActivity(intent);
+            final EditText et = new EditText(getContext());
+
+            new AlertDialog.Builder(getContext()).setTitle("输入开发者权限密码：")
+                    .setIcon(R.drawable.ic_settings_black_24dp)
+                    .setView(et)
+                    .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            String input = et.getText().toString();
+                            if (input.equals("admin")) {
+
+                                Intent intent = new Intent(getActivity(), SettingsDevActivity.class);
+                                startActivity(intent);
+                            } else {
+                                ToastUtil.showShort("密码错误");
+                            }
+                        }
+                    })
+                    .setNegativeButton("取消", null)
+                    .show();
         });
 
         btn_privacy.setOnClickListener((View v) -> {

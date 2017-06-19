@@ -16,7 +16,7 @@ public class Config {
     // max distance the finger tip could move between 2 frames
     public static int FINGER_TIP_MOVE_DIST_MAX = 25;
     // max distance the finger tip could move if to judge the point as lingering
-    public static int FINGER_TIP_LINGER_DIST_MAX = 4;
+    public static int FINGER_TIP_LINGER_DIST_MAX = 2;
 
     public static int IM_BLUR_SIZE = 10;
 
@@ -27,7 +27,7 @@ public class Config {
     public static double[] FINGER_COLOR = {128, 150, 100};
     public static double[] FINGER_COLOR_TOLERANCE = {128, 17, 20};
 
-    public static double SAMPLE_PASS_THRESHOLD = 0.85;
+    public static double SAMPLE_PASS_THRESHOLD = 0.8;
     public static double[] COLOR_RANGE_EXPAND = {3, 1.6, 3};
     public static int SAMPLE_STABLE_CNT = 5;
 }

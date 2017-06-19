@@ -2,12 +2,17 @@ package com.papermelody.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import com.papermelody.R;
 import com.papermelody.util.App;
@@ -42,6 +47,9 @@ public class SettingsDevActivity extends BaseActivity {
     Button btnPlayListen;
     @BindView(R.id.btn_to_upload)
     Button btnUpload;
+
+    @BindView(R.id.togglebtn_use_dev_setting)
+    ToggleButton toggleBtnUseDevSetting;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +95,19 @@ public class SettingsDevActivity extends BaseActivity {
             startActivity(intent);
         });
 
+
+        // Algorithm settings
+        /////////////////////////
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
+        final SharedPreferences.Editor editor = pref.edit();
+
+        toggleBtnUseDevSetting.setChecked(pref.getBoolean("use_dev_setting", true));
+        toggleBtnUseDevSetting.setOnCheckedChangeListener(
+                (buttonView, isChecked) -> {
+                    editor.putBoolean("use_dev_setting", isChecked);
+                    editor.apply();
+                }
+        );
 
         int seekbarInd = 0;
         String[] colorChannelFieldNames = {"finger color", "color tolerance", "color expand"};
@@ -196,6 +217,9 @@ public class SettingsDevActivity extends BaseActivity {
                 }
             });
         }
+        /////////////////////////
+        // Algorithm setting ends
+
     }
 
     private void closeInputKeyboard() {

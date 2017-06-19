@@ -55,6 +55,15 @@
             android:layout_marginTop="20dp"
             android:text="上传界面"/>
 
+        <ToggleButton
+            android:id="@+id/togglebtn_use_dev_setting"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textOn="使用下面的参数"
+            android:textOff="禁用下面的参数"
+            />
+
         <TextView
             android:id="@+id/seekbar_caption1"
             style="@style/SeekBarCaption" />

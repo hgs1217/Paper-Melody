@@ -1,8 +1,10 @@
 package com.papermelody.widget;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.preference.PreferenceManager;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
@@ -26,11 +28,13 @@ import tapdetect.facade.Tap;
  * Draw on the canvas as you wish
  */
 
+// FIXME: edit this, no debug any more
 public class CameraDebugView extends View {
 
     private List<List<Point>> handContours = new ArrayList<>();
     private List<TapDetectPoint> fingerTips = new ArrayList<>();
     private long processDelay, cameraInterval, processInterval;
+    private boolean showTextInfo = true, showContourInfo = true, showPointInfo = true;
 
     public CameraDebugView(Context c) {
         super(c);
@@ -49,8 +53,31 @@ public class CameraDebugView extends View {
     }
 
     public List<List<Point>> getHandContours() {
-
         return handContours;
+    }
+
+    public void hideTextInfo() {
+        showTextInfo = false;
+    }
+
+    public void showTextInfo() {
+        showTextInfo = true;
+    }
+
+    public void hideContourInfo() {
+        showContourInfo = false;
+    }
+
+    public void showContourInfo() {
+        showContourInfo = true;
+    }
+
+    public void hidePointInfo() {
+        showPointInfo = false;
+    }
+
+    public void showPointInfo() {
+        showPointInfo = true;
     }
 
 
@@ -62,47 +89,49 @@ public class CameraDebugView extends View {
             CanvasUtil.drawContour(canvas, Tap.getSampleWindowContour(), Color.MAGENTA);
         }
 
-        if (!handContours.isEmpty()) {
-            CanvasUtil.drawContours(canvas, handContours, Color.RED);
-        }
-
-        int cnt[] = {0, 0, 0};
-
-        for (TapDetectPoint p: fingerTips) {
-            int color;
-            if (p.isFalling()) {
-                color = Color.rgb(0, 160, 0); // dark green
-                cnt[0] += 1;
-            } else if (p.isTapping()) {
-                color = Color.GREEN;
-                cnt[1] += 1;
-            } else if (p.isPressing()) {
-                color = Color.rgb(255, 170, 50);
-            } else if (p.isLingering()) {
-                color = Color.BLUE;
-                cnt[2] += 1;
-            } else {
-                color = Color.GRAY;
+        if (showContourInfo) {
+            if (!handContours.isEmpty()) {
+                CanvasUtil.drawContours(canvas, handContours, Color.RED);
             }
-
-            CanvasUtil.drawPoint(canvas, p, color);
         }
 
-        String[] to_be_write = {
-                "Camera interval: " + cameraInterval + " ms",
-                "Process interval: " + processInterval + " ms",
-                "Time consumed: " + processDelay + " ms",
-                // "Hand contour: " + handContours.size() + " pts",
-                // "Finger tip: " + fingerTips.size() + " pts",
-                // "Falling: " + cnt[0] + " pts",
-                // "Tapping: " + cnt[1] + " pts",
-                // "Lingering: " + cnt[2] + " pts",
-                "ColorRange: " + ColorRange.getRange()[0],
-                "ColorRange: " + ColorRange.getRange()[1],
-                "Aver: " + Arrays.toString(Sampler.aver),
-                "ratio: " + Sampler.ratio
-        };
-        CanvasUtil.writeText(canvas, to_be_write);
+        if (showPointInfo) {
+            for (TapDetectPoint p : fingerTips) {
+                int color;
+                if (p.isFalling()) {
+                    color = Color.rgb(0, 160, 0); // dark green
+                } else if (p.isTapping()) {
+                    color = Color.GREEN;
+                } else if (p.isPressing()) {
+                    color = Color.rgb(255, 170, 50);
+                } else if (p.isLingering()) {
+                    color = Color.BLUE;
+                } else {
+                    color = Color.GRAY;
+                }
+
+                CanvasUtil.drawPoint(canvas, p, color);
+            }
+        }
+
+        if (showTextInfo) {
+            String[] to_be_write = {
+                    "Camera interval: " + cameraInterval + " ms",
+                    "Process interval: " + processInterval + " ms",
+                    "Time consumed: " + processDelay + " ms",
+                    // "Hand contour: " + handContours.size() + " pts",
+                    // "Finger tip: " + fingerTips.size() + " pts",
+                    // "Falling: " + cnt[0] + " pts",
+                    // "Tapping: " + cnt[1] + " pts",
+                    // "Lingering: " + cnt[2] + " pts",
+                    "ColorRange: " + ColorRange.getRange()[0],
+                    "ColorRange: " + ColorRange.getRange()[1],
+                    "Aver: " + Arrays.toString(Sampler.aver),
+                    "ratio: " + Sampler.ratio
+            };
+
+            CanvasUtil.writeText(canvas, to_be_write);
+        }
     }
 
     public void updateInfo(long processDelay, long cameraInterval, long processInterval) {

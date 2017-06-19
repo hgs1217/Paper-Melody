@@ -403,7 +403,27 @@ public class PlayActivity extends BaseActivity {
         startBackgroundThread();
         viewPlay.setSurfaceTextureListener(surfaceTextureListener);
 
+
+        // update setting
         Tap.reset();
+
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
+        if (!pref.getBoolean("use_dev_setting", true)) {
+            // 0:low  1:middle  2:high
+            Tap.setHighPerformance(pref.getBoolean("high_performance", true));
+            Tap.setMotionSensibility(Integer.parseInt(pref.getString("motion_sensi", "1")));
+            Tap.setSkinColorSensibility(Integer.parseInt(pref.getString("skin_sensi", "1")));
+            Tap.setCalibritionColorSensibility(Integer.parseInt(pref.getString("color_sensi", "1")));
+        }
+        if (pref.getBoolean("heart_show", true)) {
+            // @tangtonghui
+        }
+
+        if (pref.getBoolean("debug_info", true)) {
+            canvasPlay.showTextInfo();
+        } else {
+            canvasPlay.hideTextInfo();
+        }
     }
 
     public void processImage(Image image) {

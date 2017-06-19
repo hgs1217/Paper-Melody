@@ -171,16 +171,17 @@ public class Tap {
 
         for (TapDetectPoint pt : taps) {
             if (pt.isTapping()) {
-  ret.add(pt);
+                ret.add(pt);
             }
         }
         updateResultCache(ret);
 
         return ret;
     }
+
     public static List<Point> getFluteAll(Mat im,
-                                     List<List<Point>> contoursOutput,
-                                     List<TapDetectPoint> tapDetectPointsOutput
+                                          List<List<Point>> contoursOutput,
+                                          List<TapDetectPoint> tapDetectPointsOutput
     ) {
         /**
          * @param: im: A image in color space BGR
@@ -309,4 +310,76 @@ public class Tap {
     private static List<Point> resultCache = new ArrayList<>();
     private static List<Point> sampleWindowContour = null;
 
+
+    // Configs
+    public static void setHighPerformance(boolean highPerformance) {
+        if (highPerformance) {
+            Config.PROCESS_INTERVAL_MS = 50;
+        } else {
+            Config.PROCESS_INTERVAL_MS = 100;
+        }
+    }
+
+    public static void setMotionSensibility(int motionSensibility) {
+        switch (motionSensibility) {
+            case 0:
+                // sensitive to small move
+                Config.FINGER_TIP_MOVE_DIST_MAX = 20;
+                Config.FINGER_TIP_LINGER_DIST_MAX = 1;
+                break;
+            case 1:
+                Config.FINGER_TIP_MOVE_DIST_MAX = 25;
+                Config.FINGER_TIP_LINGER_DIST_MAX = 2;
+                break;
+            case 2:
+                // sensitive to big move
+                Config.FINGER_TIP_MOVE_DIST_MAX = 35;
+                Config.FINGER_TIP_LINGER_DIST_MAX = 4;
+                break;
+        }
+    }
+
+    public static void setSkinColorSensibility(int colorSensibility) {
+        switch (colorSensibility) {
+            case 0:
+                // a small range of color is considered as skin color
+                Config.COLOR_RANGE_EXPAND[0] = 2;
+                Config.COLOR_RANGE_EXPAND[1] = 1.4;
+                Config.COLOR_RANGE_EXPAND[2] = 2;
+                break;
+            case 1:
+                Config.COLOR_RANGE_EXPAND[0] = 3;
+                Config.COLOR_RANGE_EXPAND[1] = 1.6;
+                Config.COLOR_RANGE_EXPAND[2] = 3;
+                break;
+            case 2:
+                // a large range of color is considered as skin color
+                Config.COLOR_RANGE_EXPAND[0] = 3;
+                Config.COLOR_RANGE_EXPAND[1] = 1.8;
+                Config.COLOR_RANGE_EXPAND[2] = 3;
+                break;
+        }
+    }
+
+    public static void setCalibritionColorSensibility(int calibritionColorSensibility) {
+        switch (calibritionColorSensibility) {
+            case 0:
+                // have a coarse sampling
+                Config.SAMPLE_PASS_THRESHOLD = 0.75;
+                Config.FINGER_COLOR_TOLERANCE[1] = 25;
+                Config.FINGER_COLOR_TOLERANCE[2] = 25;
+                break;
+            case 1:
+                Config.SAMPLE_PASS_THRESHOLD = 0.85;
+                Config.FINGER_COLOR_TOLERANCE[1] = 17;
+                Config.FINGER_COLOR_TOLERANCE[2] = 20;
+                break;
+            case 2:
+                // have a precise sampling
+                Config.SAMPLE_PASS_THRESHOLD = 0.9;
+                Config.FINGER_COLOR_TOLERANCE[1] = 15;
+                Config.FINGER_COLOR_TOLERANCE[2] = 15;
+                break;
+        }
+    }
 }

@@ -164,7 +164,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@android:id/title"
-                android:text=""
+                android:text="关于本应用"
                 android:textColor="#AAAAAA"
                 android:textSize="14sp" />
 

@@ -32,7 +32,7 @@
         <Preference
             android:key="btn_about"
             android:layout="@layout/preference_item"
-            android:summary=""
+            android:summary="关于本应用"
             android:title="@string/about" />
         <Preference
             android:key="btn_viewTutorial"

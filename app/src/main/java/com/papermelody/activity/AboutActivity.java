@@ -7,6 +7,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.widget.ImageView;
 
 import com.papermelody.R;
 
@@ -25,6 +26,8 @@ public class AboutActivity extends BaseActivity {
     WebView webView;
     @BindView(R.id.toolbar_about)
     Toolbar toolbar;
+    @BindView(R.id.easter_egg)
+    ImageView egg;
 
 
     @Override
@@ -48,6 +51,10 @@ public class AboutActivity extends BaseActivity {
         toolbar.setNavigationOnClickListener((View v) -> {
             finish();
         });
+        egg.setOnClickListener((View v) -> {
+                    webView.setVisibility(View.VISIBLE);
+                }
+        );
     }
 
 
@@ -68,7 +75,7 @@ public class AboutActivity extends BaseActivity {
 //        pref.getBoolean("debug_info", false);
 //        SharedPreferences.Editor editor = pref.edit();
 //        editor.putString("s","22");
-        //祝大家毛概满分！
+        //祝大家毛概满分！！！！
     }
 }
 

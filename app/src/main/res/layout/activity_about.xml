@@ -32,11 +32,12 @@
 
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:id="@+id/easter_egg"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:layout_gravity="center"
             android:layout_margin="6dp"
-            android:background="@drawable/ic_play_arrow_black_48dp" />
+            android:background="@drawable/appicon_white" />
 
         <TextView
 
@@ -48,41 +49,80 @@
             android:text="@string/app_name"
             android:textAlignment="center"
             android:textColor="@color/white"
-            android:textSize="20sp" />
+            android:textSize="19sp" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_margin="8dp"
+            android:layout_margin="0dp"
+            android:gravity="center"
+            android:text="@string/chinesename"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="15sp" />
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="6dp"
             android:gravity="center"
             android:text="@string/version"
             android:textAlignment="center"
             android:textColor="@color/white"
-            android:textSize="14sp" />
+            android:textSize="11sp" />
 
 
     </LinearLayout>
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:background="@color/white">
+        android:layout_height="wrap_content">
 
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="20dp"
-            android:text="@string/test_long_text"
-            android:textColor="@color/black" />
+            android:layout_margin="8dp"
+            android:layout_weight="1"
+            android:background="@color/white"
+            android:orientation="vertical">
 
-    </LinearLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:background="@drawable/comment_edit"
+                android:lineSpacingMultiplier="1.2"
+                android:padding="7dp"
+                android:text="一款有趣的模拟弹琴软件。\n利用前置摄像头即可在纸上弹奏！"
+                android:textColor="@color/black"
+                android:textSize="13sp" />
 
-    <WebView
-        android:id="@+id/webview"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/about_paragraph"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:background="@drawable/comment_edit"
+                android:gravity="center_vertical"
+                android:lineSpacingMultiplier="1.2"
+                android:padding="7dp"
+                android:text="@string/main_desciption"
+                android:textColor="@color/black"
+                android:textSize="13sp" />
+
+            <WebView
+                android:id="@+id/webview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone" />
+
+        </LinearLayout>
 
 
+    </ScrollView>
 </LinearLayout>
+

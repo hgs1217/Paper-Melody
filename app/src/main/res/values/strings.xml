@@ -208,5 +208,8 @@
     </string-array>
     <string name="title_activity_position_calibration">PositionCalibrationActivity</string>
     <string name="version">Version 0.9.1</string>
+    <string name="chinesename">纸韵</string>
+    <string name="test_short_text">TEST</string>
+    <string name="main_desciption">开发人员：\n\t胡国盛 周奔 孙随彬 潘宇杰 汤同辉\n\n项目地址：\n\thttps://github.com/hgs1217/Paper-Melody\n\n制作时间：\n\t2017.3-2017.6</string>
 
 </resources>

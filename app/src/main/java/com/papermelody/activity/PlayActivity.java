@@ -294,7 +294,9 @@ public class PlayActivity extends BaseActivity {
                     while (pro < max) {
 
                         pro = (int) (step + pro);
-                        if (pro>=900){pro=0; Thread.sleep(100);continue;}
+                        if (pro>=900){pro=0;
+                           // Thread.sleep(100);
+                            continue;}
                         Message msg = new Message();
 
                         barhandle.sendMessage(msg);

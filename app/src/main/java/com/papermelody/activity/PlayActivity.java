@@ -530,7 +530,9 @@ public class PlayActivity extends BaseActivity {
                 keys = new ArrayList<>();
                 keys.add(0, FluteWith7Holes.holesToVoice(temp));
                 for (int i = 0; i < keys.size(); i++) {
-                    playSound(keys.get(i));
+                    if (!lastKeys.contains(keys.get(i))) {
+                        playSound(keys.get(i));
+                    }
                 }
                 break;
             }
@@ -541,7 +543,7 @@ public class PlayActivity extends BaseActivity {
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
         if (pref.getBoolean("heart_show", true))
         playView.addBean(tapping, judge_in_area);
-        // lastKeys = new ArrayList<>(keys);
+        lastKeys = new ArrayList<>(keys);
     }
     private void initCategory(){
         textViewInstrumentName.setVisibility(View.VISIBLE);

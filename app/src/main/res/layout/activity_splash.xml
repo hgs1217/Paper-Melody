@@ -14,7 +14,7 @@
         android:layout_weight="20"
         android:adjustViewBounds="true"
         android:scaleType="centerCrop"
-        android:src="@drawable/feng_mian_2" />
+        android:src="@drawable/this_must_pass" />
 
     <RelativeLayout
         android:layout_width="match_parent"

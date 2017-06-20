@@ -1,14 +1,11 @@
 package com.papermelody.activity;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -16,16 +13,12 @@ import android.widget.ToggleButton;
 
 import com.papermelody.R;
 import com.papermelody.util.App;
-import com.papermelody.util.NetworkFailureHandler;
 import com.papermelody.util.RetrofitClient;
-import com.papermelody.util.SocialSystemAPI;
 import com.papermelody.util.ToastUtil;
 
 import java.lang.reflect.Field;
 
 import butterknife.BindView;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 import tapdetect.Config;
 
 /**
@@ -41,12 +34,6 @@ public class SettingsDevActivity extends BaseActivity {
     EditText editServerIP;
     @BindView(R.id.btn_server_ip)
     Button btnServerIP;
-    @BindView(R.id.btn_reset)
-    Button btnReset;
-    @BindView(R.id.btn_play_listen)
-    Button btnPlayListen;
-    @BindView(R.id.btn_to_upload)
-    Button btnUpload;
 
     @BindView(R.id.togglebtn_use_dev_setting)
     ToggleButton toggleBtnUseDevSetting;
@@ -66,35 +53,6 @@ public class SettingsDevActivity extends BaseActivity {
             editServerIP.clearFocus();
             closeInputKeyboard();
         });
-
-        btnReset.setOnClickListener((view) -> {
-            SocialSystemAPI api = RetrofitClient.getSocialSystemAPI();
-            addSubscription(api.reset()
-                    .flatMap(NetworkFailureHandler.httpFailureFilter)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .map(response -> response)
-                    .subscribe(
-                            response -> {
-                                if (response.getError() == 0) {
-                                    ToastUtil.showShort("服务器已重置");
-                                }
-                            },
-                            NetworkFailureHandler.basicErrorHandler
-                    ));
-        });
-
-        btnPlayListen.setOnClickListener((view) -> {
-            Intent intent = new Intent(this, PlayListenActivity.class);
-            startActivity(intent);
-        });
-
-        btnUpload.setOnClickListener((view) -> {
-            Intent intent = new Intent(this, UploadActivity.class);
-            intent.putExtra(PlayActivity.FILENAME, "Kissbye.mid");
-            startActivity(intent);
-        });
-
 
         // Algorithm settings
         /////////////////////////

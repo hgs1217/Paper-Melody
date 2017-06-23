@@ -12,11 +12,11 @@ URL：https://github.com/gigaflw/Paper-Melody.server
 
 ## Milestone
 
-- [√] PlayInstrument 用例
-- [√] Register & Login 用例
-- [√] BrowseInMusicHall 用例
-- [√] CommentByUser 用例
-- [√] ListenByUser 用例
+- [x] PlayInstrument 用例
+- [x] Register & Login 用例
+- [x] BrowseInMusicHall 用例
+- [x] CommentByUser 用例
+- [x] ListenByUser 用例
 
 - [ ] 界面
 - [ ] 算法优化

@@ -15,8 +15,18 @@ import org.opencv.core.Point;
 import org.opencv.core.Size;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+
+
+/**
+ * Sampler to get a approximate range of skin color.
+ * <br>This class defines a polygon called sampling window with a shape of hand
+ * <br>and will use the pixels to update the color range used in tap detection algorithm
+ * <br>sample will not succeed until enough percentage of pixels have a color near skin color
+ * <br>You can modify the threshold in `Config.java` and
+ * <br>get the ratio of passed pixels by `getRatio()`, and
+ * <br>get the average color of passed pixels by `getAver()`
+ */
 
 public class Sampler {
     // apexes defining a polygon in hand shape
@@ -48,8 +58,8 @@ public class Sampler {
     // tap-detection algorithm
     private static List<Point> sampleWindowContour = new ArrayList<>();
     private static List<Point> samplePixels = new ArrayList<>();
-    static int rowOffset = 0;
-    static int colOffset = 0;
+    private static int rowOffset = 0;
+    private static int colOffset = 0;
 
     static {
         for (int[] samplePt : sampleWindowApex) {
@@ -104,6 +114,15 @@ public class Sampler {
             p.x += colOffset;
             p.y += rowOffset;
         }
+    }
+
+
+    public static double[] getAver() {
+        return aver;
+    }
+
+    public static double getRatio() {
+        return ratio;
     }
 
     public static void sample(Mat im) {

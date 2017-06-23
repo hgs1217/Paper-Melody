@@ -179,20 +179,12 @@ public class Tap {
         return ret;
     }
 
-    public static List<Point> getFluteAll(Mat im,
+    public static List<Point> getPressAll(Mat im,
                                           List<List<Point>> contoursOutput,
                                           List<TapDetectPoint> tapDetectPointsOutput
     ) {
         /**
-         * @param: im: A image in color space BGR
-         * @param: contoursOutput
-         *      if is not null, apexes of the contour of hand will be saved
-         * @param: tapDetectPointsOutput
-         *      if is not null, all results of detected points will be saved
-         * @retrun:
-         *      A list of points detected as being tapping
-         *      (nothing but `TapDetectPoint` with status `FALLING` in `tapDetectPointsOutput`)
-         *  This function will modify `im` into YCrCb as well as a smaller size
+         * Same with `getAll` but returns a list of `pressing` points
          */
 
         if (!preprocess(im)) {
@@ -227,7 +219,6 @@ public class Tap {
 
         for (TapDetectPoint pt : taps) {
             if (pt.isPressing()) {
-
                 ret.add(pt);
             }
         }

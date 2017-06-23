@@ -18,8 +18,6 @@ import java.util.ArrayList;
 import org.opencv.core.Point;
 import org.opencv.core.Mat;
 
-import tapdetect.facade.Tap;
-
 public class TapDetector {
     enum FingerTipStatus {
         NOT_CARE, FALLING, LINGER, TAPPING, PRESSING,
@@ -42,10 +40,21 @@ public class TapDetector {
             return Math.abs((int) (x - pt.x)) / 2 + Math.abs((int) (y - pt.y));
         }
 
-        public boolean isFalling() { return status == FingerTipStatus.FALLING;  }
-        public boolean isLingering()  { return status == FingerTipStatus.LINGER;  }
-        public boolean isTapping() { return status == FingerTipStatus.TAPPING;  }
-        public boolean isPressing() { return status == FingerTipStatus.PRESSING;  }
+        public boolean isFalling() {
+            return status == FingerTipStatus.FALLING;
+        }
+
+        public boolean isLingering() {
+            return status == FingerTipStatus.LINGER;
+        }
+
+        public boolean isTapping() {
+            return status == FingerTipStatus.TAPPING;
+        }
+
+        public boolean isPressing() {
+            return status == FingerTipStatus.PRESSING;
+        }
     }
 
     public static List<Point> getTapping(Mat im, List<Point> fingers) {
@@ -57,7 +66,7 @@ public class TapDetector {
          */
         List<TapDetectPoint> all = getTappingAll(im, fingers);
         List<Point> result = new ArrayList<>();
-        for (TapDetectPoint p: all) {
+        for (TapDetectPoint p : all) {
             if (p.isTapping()) {
                 result.add(p);
             }
@@ -74,7 +83,7 @@ public class TapDetector {
          */
         List<TapDetectPoint> all = getTappingAll(im, fingers);
         List<Point> result = new ArrayList<>();
-        for (TapDetectPoint p: all) {
+        for (TapDetectPoint p : all) {
             if (p.isPressing()) {
                 result.add(p);
             }
@@ -144,14 +153,14 @@ public class TapDetector {
 
         // update lastFingerTips
         lastFingerTips.clear();
-        for (TapDetectPoint p: nextFingers) {
+        for (TapDetectPoint p : nextFingers) {
             lastFingerTips.add(new TapDetectPoint(p));
         }
         return nextFingers;
     }
 
-    private static void noNeighborAdd (List<TapDetectPoint> points, TapDetectPoint toAdd) {
-        for (TapDetectPoint p: points) {
+    private static void noNeighborAdd(List<TapDetectPoint> points, TapDetectPoint toAdd) {
+        for (TapDetectPoint p : points) {
             if (p.isTapping() && p.distanceFrom(toAdd) < 7) {
                 p.x = (p.x + toAdd.x) * 0.5;
                 p.y = (p.y + toAdd.y) * 0.5;

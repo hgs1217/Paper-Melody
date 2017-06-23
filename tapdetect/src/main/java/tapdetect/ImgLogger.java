@@ -12,7 +12,9 @@ import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.core.Mat;
 
 /**
- * Logger to record the immediate/final result of image processing
+ * Logger to record the immediate/final result of image processing.
+ * <br> Only for debug use on PC,
+ * and should be called `silent` on mobile phone
  * <br> Usage:
  * <code>
  * <br>  ImgLogger.setLevel(ImgLogger.LOG_LEVEL_DEBUG);   // save all image with importance above 'debug' level

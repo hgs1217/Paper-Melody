@@ -126,8 +126,8 @@ public class CameraDebugView extends View {
                     // "Lingering: " + cnt[2] + " pts",
                     "ColorRange: " + ColorRange.getRange()[0],
                     "ColorRange: " + ColorRange.getRange()[1],
-                    "Aver: " + Arrays.toString(Sampler.aver),
-                    "ratio: " + Sampler.ratio
+                    "Aver: " + Arrays.toString(Sampler.getAver()),
+                    "ratio: " + Sampler.getRatio()
             };
             if (!Tap.sampleCompleted()) {
                 CanvasUtil.writeText(canvas, to_be_write, 50);
